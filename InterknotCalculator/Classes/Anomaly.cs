@@ -32,7 +32,8 @@ public record Anomaly(double Scale, Element Element, Stat[] Bonuses, bool CanCri
         Element.Fire => Default[AnomalyType.Burn],
         Element.Physical => Default[AnomalyType.Assault],
         Element.Electric => Default[AnomalyType.Shock],
-        Element.Ether => Default[AnomalyType.Corruption]
+        Element.Ether => Default[AnomalyType.Corruption],
+        _ => throw new ArgumentOutOfRangeException(nameof(element), element, "This was supposed to be impossible...")
     };
     
     
