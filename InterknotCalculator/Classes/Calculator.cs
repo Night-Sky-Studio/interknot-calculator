@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using InterknotCalculator.Classes.Agents;
+using InterknotCalculator.Classes.Extensions;
 using InterknotCalculator.Enums;
-using NCalc;
 
 namespace InterknotCalculator.Classes;
 
@@ -127,12 +127,7 @@ public class Calculator {
             double anomalyCritRate = 0.05, anomalyCritDamage = 0.5;
             foreach (var bonus in data.Bonuses) {
                 if (bonus is { Expression: not null, Value: 0 }) {
-                    var expr = new Expression(bonus.Expression) {
-                        Parameters = ExpressionParams
-                    };
-                    if (expr.Evaluate() is double value) {
-                        bonus.Value = value;
-                    }
+                    bonus.Value = bonus.Expression.EvaluateExpression(ExpressionParams);
                 }
 
                 switch (bonus.Affix) {
@@ -160,7 +155,7 @@ public class Calculator {
                * dmgBonusMultiplier * GetEnemyDefMultiplier() * resMultiplier;
     }
     
-    private IDictionary<string, object?> ExpressionParams => new Dictionary<string, object?> {
+    private Dictionary<string, double> ExpressionParams => new() {
         { "Atk", TotalAtk },
         { "CritRate", CritRate },
         { "CritDamage", CritDamage },

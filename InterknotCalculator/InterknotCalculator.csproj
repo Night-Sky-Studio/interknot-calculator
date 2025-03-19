@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="NCalcSync" Version="5.4.1" />
+      <PackageReference Include="ILMath" Version="1.5.0" />
     </ItemGroup>
 
 </Project>

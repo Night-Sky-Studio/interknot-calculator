@@ -1,5 +1,4 @@
-﻿using InterknotCalculator.Classes.Agents;
-using InterknotCalculator.Enums;
+﻿using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Classes;
 
@@ -41,5 +40,4 @@ public class Helpers {
             _ => Affix.Unknown,
         };
     }
-    
 }
