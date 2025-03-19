@@ -1,4 +1,6 @@
+using System.Net.Mime;
 using InterknotCalculator.Classes;
+using InterknotCalculator.Classes.Server;
 using InterknotCalculator.Enums;
 
 namespace InterknotCalculator;
@@ -55,61 +57,79 @@ public static class Program {
         */
 
         
-        var janeDoe = calc.Calculate(1261, 14126, [
-            new(31300, 1, Rarity.S, Stat.Stats[Affix.Hp], [
-                (3, Stat.SubStats[Affix.AnomalyProficiency]),
-                (2, Stat.SubStats[Affix.HpRatio]),
-                (1, Stat.SubStats[Affix.DefRatio]),
-                (3, Stat.SubStats[Affix.CritDamage])
-            ]),
-            new(31300, 2, Rarity.S, Stat.Stats[Affix.Atk], [
-                (3, Stat.SubStats[Affix.AnomalyProficiency]),
-                (1, Stat.SubStats[Affix.HpRatio]),
-                (3, Stat.SubStats[Affix.AtkRatio]),
-                (1, Stat.SubStats[Affix.CritRate])
-            ]),
-            new(32600, 3, Rarity.S, Stat.Stats[Affix.Def], [
-                (1, Stat.SubStats[Affix.CritDamage]),
-                (3, Stat.SubStats[Affix.AtkRatio]),
-                (2, Stat.SubStats[Affix.AnomalyProficiency]),
-                (2, Stat.SubStats[Affix.Atk])
-            ]),
-            new(32600, 4, Rarity.S, Stat.Stats[Affix.AnomalyProficiency], [
-                (4, Stat.SubStats[Affix.CritRate]),
-                (2, Stat.SubStats[Affix.CritDamage]),
-                (1, Stat.SubStats[Affix.Hp]),
-                (2, Stat.SubStats[Affix.HpRatio])
-            ]),
-            new(32600, 5, Rarity.S, Stat.Stats[Affix.PhysicalDmgBonus], [
-                (1, Stat.SubStats[Affix.CritDamage]),
-                (2, Stat.SubStats[Affix.HpRatio]),
-                (2, Stat.SubStats[Affix.AnomalyProficiency]),
-                (3, Stat.SubStats[Affix.Pen])
-            ]),
-            new(32600, 6, Rarity.S, Stat.Stats[Affix.AnomalyMasteryRatio], [
-                (2, Stat.SubStats[Affix.HpRatio]),
-                (2, Stat.SubStats[Affix.CritRate]),
-                (3, Stat.SubStats[Affix.AtkRatio]),
-                (1, Stat.SubStats[Affix.DefRatio])
-            ]),
-        ], [
-            "flowers_of_sin", "phantom_thrust", "salchow_jump 1", "assault", "salchow_jump 2",
-            "aerial_sweep_cleanout", "aerial_sweep_cleanout", "assault",
-            "phantom_thrust", "final_curtain", "assault",
-            "salchow_jump 1", "salchow_jump 2"
-        ]);
-
-        Console.WriteLine(string.Join('\n', janeDoe.PerAction));
-        Console.WriteLine($"Total: {janeDoe.Total}");
+        // var janeDoe = calc.Calculate(1261, 14126, [
+        //     new(31300, 1, Rarity.S, Stat.Stats[Affix.Hp], [
+        //         (3, Stat.SubStats[Affix.AnomalyProficiency]),
+        //         (2, Stat.SubStats[Affix.HpRatio]),
+        //         (1, Stat.SubStats[Affix.DefRatio]),
+        //         (3, Stat.SubStats[Affix.CritDamage])
+        //     ]),
+        //     new(31300, 2, Rarity.S, Stat.Stats[Affix.Atk], [
+        //         (3, Stat.SubStats[Affix.AnomalyProficiency]),
+        //         (1, Stat.SubStats[Affix.HpRatio]),
+        //         (3, Stat.SubStats[Affix.AtkRatio]),
+        //         (1, Stat.SubStats[Affix.CritRate])
+        //     ]),
+        //     new(32600, 3, Rarity.S, Stat.Stats[Affix.Def], [
+        //         (1, Stat.SubStats[Affix.CritDamage]),
+        //         (3, Stat.SubStats[Affix.AtkRatio]),
+        //         (2, Stat.SubStats[Affix.AnomalyProficiency]),
+        //         (2, Stat.SubStats[Affix.Atk])
+        //     ]),
+        //     new(32600, 4, Rarity.S, Stat.Stats[Affix.AnomalyProficiency], [
+        //         (4, Stat.SubStats[Affix.CritRate]),
+        //         (2, Stat.SubStats[Affix.CritDamage]),
+        //         (1, Stat.SubStats[Affix.Hp]),
+        //         (2, Stat.SubStats[Affix.HpRatio])
+        //     ]),
+        //     new(32600, 5, Rarity.S, Stat.Stats[Affix.PhysicalDmgBonus], [
+        //         (1, Stat.SubStats[Affix.CritDamage]),
+        //         (2, Stat.SubStats[Affix.HpRatio]),
+        //         (2, Stat.SubStats[Affix.AnomalyProficiency]),
+        //         (3, Stat.SubStats[Affix.Pen])
+        //     ]),
+        //     new(32600, 6, Rarity.S, Stat.Stats[Affix.AnomalyMasteryRatio], [
+        //         (2, Stat.SubStats[Affix.HpRatio]),
+        //         (2, Stat.SubStats[Affix.CritRate]),
+        //         (3, Stat.SubStats[Affix.AtkRatio]),
+        //         (1, Stat.SubStats[Affix.DefRatio])
+        //     ]),
+        // ], [
+        //     "flowers_of_sin", "phantom_thrust", "salchow_jump 1", "assault", "salchow_jump 2",
+        //     "aerial_sweep_cleanout", "aerial_sweep_cleanout", "assault",
+        //     "phantom_thrust", "final_curtain", "assault",
+        //     "salchow_jump 1", "salchow_jump 2"
+        // ]);
+        //
+        // Console.WriteLine(string.Join('\n', janeDoe.PerAction));
+        // Console.WriteLine($"Total: {janeDoe.Total}");
 
         
-        // var builder = WebApplication.CreateSlimBuilder(args);
-        //
-        // var app = builder.Build();
-        //
-        // app.MapGet("/", () => Results.Ok("Inter-Knot Calculator"));
-        // app.MapPost("/damage", () => { });
-        //
-        // await app.RunAsync();
+        var builder = WebApplication.CreateSlimBuilder(args);
+        
+        builder.Services.AddCors(options => {
+            options.AddPolicy("AllowAll",
+                policy => {
+                    policy.AllowAnyOrigin()   // Allow requests from any origin
+                        .AllowAnyMethod()   // Allow any HTTP method (GET, POST, etc.)
+                        .AllowAnyHeader();  // Allow any headers
+                });
+        });
+        
+        var app = builder.Build();
+        
+        app.UseCors("AllowAll");
+        
+        app.MapGet("/", () => Results.Text("Inter-Knot Calculator"));
+        app.MapPost("/damage", async ctx => {
+            var data = await ctx.Request.ReadFromJsonAsync<CalcRequest>(SerializerContext.Default.CalcRequest);
+            if (data is null) {
+                Results.BadRequest("Bad request");
+            } else {
+                Results.Created("Data received", "text/plain");
+            }
+        });
+        
+        await app.RunAsync();
     }
 }
