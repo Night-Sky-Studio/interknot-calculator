@@ -1,0 +1,11 @@
+{
+    "PartialBonus": [{
+        "Affix": "AnomalyProficiency",
+        "Value": 30
+    }],
+    "FullBonus": [{
+        "Affix": "AnomalyMasteryRatio",
+        "SkillTag": "ExSpecial",
+        "Value": 0.2
+    }]
+}

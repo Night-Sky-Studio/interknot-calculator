@@ -1,0 +1,11 @@
+﻿{
+    "PartialBonus": [{
+        "Affix": "AtkRatio",
+        "Value": 0.1
+    }],
+    "FullBonus": [{
+        "Affix": "DmgBonus",
+        "Tag": "QuickAssist",
+        "Value": 0.24
+    }]
+}

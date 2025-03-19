@@ -1,0 +1,18 @@
+{
+    "Speciality": "Anomaly",
+    "Rarity": "S",
+    "MainStat": {
+        "Affix": "Atk",
+        "Value": 743.0
+    },
+    "SecondaryStat": {
+        "Affix": "AnomalyProficiency",
+        "Value": 90
+    },
+    "Passive": [
+        {
+            "Affix": "PhysicalDmgBonus",
+            "Value": 0.36
+        }
+    ]
+}

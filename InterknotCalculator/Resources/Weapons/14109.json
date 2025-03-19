@@ -1,0 +1,22 @@
+﻿{
+    "Speciality": "Anomaly",
+    "Rarity": "S",
+    "MainStat": {
+        "Affix": "Atk",
+        "Value": 743.0
+    },
+    "SecondaryStat": {
+        "Affix": "CritRate",
+        "Value": 0.24
+    },
+    "Passive": [
+        {
+            "Affix": "CritDamage",
+            "Value": 0.5
+        },
+        {
+            "Affix": "IceDmgBonus",
+            "Value": 0.4
+        }
+    ]
+}

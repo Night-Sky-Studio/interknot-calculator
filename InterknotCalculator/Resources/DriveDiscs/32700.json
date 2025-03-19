@@ -1,0 +1,17 @@
+﻿{
+    "PartialBonus": [{
+        "Affix": "CritDamage",
+        "Tag": "BasicAtk",
+        "Value": 0.16
+    }],
+    "FullBonus": [
+        {
+            "Affix": "CritDamage",
+            "Value": 0.3
+        },
+        {
+            "Affix": "CritRate",
+            "Value": 0.12
+        }
+    ]
+}
