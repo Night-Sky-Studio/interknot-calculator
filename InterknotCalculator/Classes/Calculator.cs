@@ -95,6 +95,18 @@ public class Calculator {
     private double AnomalyMastery { get; set; }
     private Dictionary<Affix, double> AttributeDmgBonus { get; } = new();
     private Dictionary<Affix, double> AttributeDmgRes { get; } = new();
+
+    public void Reset() {
+        TotalAtk = 0;
+        CritRate = 0;
+        CritDamage = 0;
+        Pen = 0;
+        PenRatio = 0;
+        AnomalyProficiency = 0;
+        AnomalyMastery = 0;
+        AttributeDmgBonus.Clear();
+        AttributeDmgRes.Clear();
+    }
     
     private double GetEnemyDefMultiplier() {
         const double enemyDef = 953, levelFactor = 794;
