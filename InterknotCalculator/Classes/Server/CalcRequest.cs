@@ -11,10 +11,13 @@ public class DriveDiscRequest {
     public Rarity Rarity { get; set; }
 
     [JsonPropertyName("stats")] 
-    public uint[] Stats { get; set; } = [];
+    public Affix[] Stats { get; set; } = [];
     
     [JsonPropertyName("levels")] 
     public uint[] Levels { get; set; } = [];
+    
+    [JsonIgnore]
+    public Dictionary<Affix, uint> StatsLevels => new (Stats.Zip(Levels, (k, v) => new KeyValuePair<Affix, uint>(k ,v)));
 }
 
 public class CalcRequest {
