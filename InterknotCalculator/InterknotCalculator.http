@@ -1,7 +1,9 @@
-GET http://localhost:5101/
+@hostname = http://localhost:5101
+
+GET {{hostname}}/
 
 ###
-POST http://127.0.0.1:5101/damage
+POST {{hostname}}/damage
 Content-Type: application/json
 
 {
