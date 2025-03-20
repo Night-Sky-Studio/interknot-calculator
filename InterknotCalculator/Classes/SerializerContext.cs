@@ -10,4 +10,5 @@ namespace InterknotCalculator.Classes;
 [JsonSerializable(typeof(Weapon))]
 [JsonSerializable(typeof(DriveDiscSet))]
 [JsonSerializable(typeof(CalcRequest))]
+[JsonSerializable(typeof(CalcResult))]
 internal partial class SerializerContext : JsonSerializerContext { }
