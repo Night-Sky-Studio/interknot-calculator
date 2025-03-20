@@ -1,8 +1,36 @@
 ﻿# Inter-Knot Calculator
-Temporary solution for damage calculations. Once the real solution in [Night-Sky-Studio/3ZCalculator](https://github.com/Night-Sky-Studio/3ZCalculator) will be ready, this repository and all its contents will be archived and never updated.
+Temporary solution for damage calculations. Once the real solution in [Night-Sky-Studio/3ZCalculator](https://github.com/Night-Sky-Studio/3ZCalculator) will be
+ready, this repository and all its contents will be archived and never updated. I am not competent enough to make
+a really accurate and close-to-the-game calculator, but I am competent enough to make one that won't SEGFAULT when fed
+incompatible data and one that won't send back 500 errors if it can't process something.
+
+## Project Structure
+Calculator is made to automatically load **Agents**, **Weapons** and **Drive Discs** from `Resources` folder.
+All configurations are in JSON format and named with IDs of the corresponding objects. These IDs can be found in
+[interknot-calculator/IDs.md](IDs.md) file.
+
+## Current Progress
+### Agents
+- Miyabi (1091)
+- Jane Doe (1261)
+
+### Weapons
+- Hailstorm Shrine (14109)
+- Sharpened Stinger (14126)
+
+### Drive Disc Sets
+- Woodpecker Electro (31000)
+- Freedom Blues (31300)
+- Polar Metal (32500)
+- Fanged Metal (32600)
+- Branch & Blade Song (32700)
+- Astral Voice (32800)
+
 
 ## Contributing
-This project uses .NET NativeAOT compilation, so if you want to introduce any library that uses it, your Pull Request might be rejected. Other than that, feel free to contribute and help with this project.
+This project uses .NET NativeAOT compilation, so if you want to introduce any library that uses dynamic code that
+conflicts with NativeAOT, your Pull Request might be rejected. Other than that, feel free to contribute and help 
+with this project.
 
 ## License
 ```
