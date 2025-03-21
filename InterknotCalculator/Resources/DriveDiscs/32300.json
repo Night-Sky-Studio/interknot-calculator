@@ -1,0 +1,17 @@
+{
+    "PartialBonus": [{
+        "Affix": "EtherDmgBonus",
+        "Value": 0.1
+    }],
+    "FullBonus": [
+        {
+            "Affix": "CritDamage",
+            "Value": 0.2
+        }, 
+        {
+            "Affix": "CritDamage",
+            "Tags": ["AttributeAnomaly"],
+            "Value": 0.33
+        }
+    ]
+}
