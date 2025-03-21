@@ -20,11 +20,23 @@ All configurations are in JSON format and named with IDs of the corresponding ob
 
 ### Drive Disc Sets
 - Woodpecker Electro (31000)
+- Puffer Electro (31100)
+- Shockstar Disco (31200)
 - Freedom Blues (31300)
+- Hormone Punk (31400)
+- Soul Rock (31500)
+- Swing Jazz (31600)
+- Chaos Jazz (31800)
+- Proto Punk (31900)
+- Inferno Metal (32200)
+- Chaotic Metal (32300)
+- Thunder Metal (32400)
 - Polar Metal (32500)
 - Fanged Metal (32600)
 - Branch & Blade Song (32700)
 - Astral Voice (32800)
+- Shadow Harmony (32900)
+- Phaethon's Melody (33000)
 
 
 ## Contributing
