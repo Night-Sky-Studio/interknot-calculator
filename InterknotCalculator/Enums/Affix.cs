@@ -19,5 +19,7 @@ public enum Affix {
     
     EnergyRegen,
     
+    DazeBonus,
+    
     Unknown = -1
 }
