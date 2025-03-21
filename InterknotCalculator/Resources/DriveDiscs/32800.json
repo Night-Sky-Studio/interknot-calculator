@@ -5,7 +5,7 @@
     }],
     "FullBonus": [{
         "Affix": "DmgBonus",
-        "Tag": "QuickAssist",
+        "Tags": ["QuickAssist"],
         "Value": 0.24
     }]
 }

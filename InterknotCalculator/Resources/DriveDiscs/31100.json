@@ -6,7 +6,7 @@
     "FullBonus": [
         {
             "Affix": "DmgBonus",
-            "SkillTag": "Ultimate",
+            "Tags": ["Ultimate"],
             "Value": 0.2
         },
         {

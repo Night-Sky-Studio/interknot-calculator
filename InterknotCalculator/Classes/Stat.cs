@@ -6,7 +6,7 @@ public record Stat(
     double Value,
     Affix Affix,
     string? Expression = null,
-    SkillTag? Tag = null
+    IEnumerable<SkillTag>? Tags = null
 ) {
     public double Value { get; set; } = Value;
     public static Dictionary<Affix, Stat> SubStats { get; } = new() {

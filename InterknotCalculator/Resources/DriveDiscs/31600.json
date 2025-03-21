@@ -3,16 +3,9 @@
         "Affix": "EnergyRegen",
         "Value": 0.2
     }],
-    "FullBonus": [
-        {
-            "Affix": "DmgBonus",
-            "SkillTag": "Chain",
-            "Value": 0.15
-        },
-        {
-            "Affix": "DmgBonus",
-            "SkillTag": "Ultimate",
-            "Value": 0.15
-        }
-    ]
+    "FullBonus": [{
+        "Affix": "DmgBonus",
+        "Tags": ["Chain", "Ultimate"],
+        "Value": 0.15
+    }]
 }

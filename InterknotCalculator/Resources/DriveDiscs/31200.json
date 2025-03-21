@@ -3,21 +3,9 @@
         "Affix": "Impact",
         "Value": 0.06
     }],
-    "FullBonus": [
-        {
-            "Affix": "DazeBonus",
-            "SkillTag": "BasicAtk",
-            "Value": 0.2
-        },    
-        {
-            "Affix": "DazeBonus",
-            "SkillTag": "Dash",
-            "Value": 0.2
-        },    
-        {
-            "Affix": "DazeBonus",
-            "SkillTag": "Counter",
-            "Value": 0.2
-        }
-    ]
+    "FullBonus": [{
+        "Affix": "DazeBonus",
+        "Tags": ["BasicAtk", "Dash", "Counter"],
+        "Value": 0.2
+    }]
 }
