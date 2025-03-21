@@ -67,18 +67,27 @@ public class Calculator {
             var dds = DriveDiscs[set];
             if (count >= 2) {
                 foreach (var bonus in dds.PartialBonus) {
-                    result[bonus.Affix] += bonus.Value;
+                    if (bonus.SkillTags.Length != 0) {
+                        foreach (var tag in bonus.SkillTags) {
+                            TagDamageBonus[tag] = bonus;
+                        }
+                    } else 
+                        result[bonus.Affix] += bonus;
                 }
             }
 
             if (count >= 4) {
                 foreach (var bonus in dds.FullBonus) {
-                    result[bonus.Affix] += bonus.Value;
+                    if (bonus.SkillTags.Length != 0) {
+                        foreach (var tag in bonus.SkillTags) {
+                            TagDamageBonus[tag] = bonus;
+                        }
+                    } else 
+                        result[bonus.Affix] += bonus;
                 }
                 break;
             }
         }
-        
         
         return result;
     }
@@ -93,9 +102,13 @@ public class Calculator {
     private double PenRatio { get; set; } 
     private double AnomalyProficiency { get; set; }
     private double AnomalyMastery { get; set; }
-    private Dictionary<Affix, double> AttributeDmgBonus { get; } = new();
-    private Dictionary<Affix, double> AttributeDmgRes { get; } = new();
-
+    private SafeDictionary<Affix, double> AttributeDmgBonus { get; } = new();
+    private SafeDictionary<Affix, double> AttributeDmgRes { get; } = new();
+    private SafeDictionary<SkillTag, Stat> TagDamageBonus { get; } = new();
+    
+    private SkillTag CurrentTag { get; set; }
+    private SkillTag PreviousTag { get; set; }
+    
     public void Reset() {
         TotalAtk = 0;
         CritRate = 0;
@@ -106,6 +119,7 @@ public class Calculator {
         AnomalyMastery = 0;
         AttributeDmgBonus.Clear();
         AttributeDmgRes.Clear();
+        TagDamageBonus.Clear();
     }
     
     private double GetEnemyDefMultiplier() {
@@ -115,19 +129,32 @@ public class Calculator {
 
     private double GetStandardDamage(string skill, Index scale) {
         var data = Agent.Skills[skill];
+        CurrentTag = data.Tag;
         var attribute = data.Scales[scale].Element ?? Agent.Element;
+        var relatedAffixDmg = Helpers.GetRelatedAffixDmg(attribute);
+        var relatedAffixRes = Helpers.GetRelatedAffixRes(attribute);
 
+        var tagDmgBonus = new SafeDictionary<Affix, double>();
+        foreach (var (tag, stat) in TagDamageBonus) {
+            if (CurrentTag == tag || PreviousTag == SkillTag.AttributeAnomaly) {
+                tagDmgBonus[stat.Affix] += stat.Value;
+            }
+        }
+        
         var baseDmgAttacker = data.Scales[scale].Damage / 100 * TotalAtk;
-        var dmgBonusMultiplier = 1 + AttributeDmgBonus[Helpers.GetRelatedAffixDmg(attribute)] + data.Affixes[Affix.DmgBonus];
-        var critMultiplier = 1 + CritRate * CritDamage;
-        var resMultiplier = 1 + data.Affixes[Helpers.GetRelatedAffixRes(attribute)] 
-                              + AttributeDmgRes[Helpers.GetRelatedAffixRes(attribute)] + AttributeDmgRes[Affix.ResPen];
-
+        var dmgBonusMultiplier = 1 + AttributeDmgBonus[relatedAffixDmg] + tagDmgBonus[relatedAffixDmg] 
+                                 + data.Affixes[Affix.DmgBonus]  + tagDmgBonus[Affix.DmgBonus];
+        var critMultiplier = 1 + (CritRate + tagDmgBonus[Affix.CritRate]) * (CritDamage + tagDmgBonus[Affix.CritDamage]);
+        var resMultiplier = 1 + data.Affixes[relatedAffixRes] + tagDmgBonus[relatedAffixRes]
+                              + AttributeDmgRes[relatedAffixRes] + AttributeDmgRes[Affix.ResPen] + tagDmgBonus[Affix.ResPen];
+        
+        PreviousTag = CurrentTag;
         return baseDmgAttacker * dmgBonusMultiplier * critMultiplier * GetEnemyDefMultiplier() * resMultiplier *
                DamageTakenMultiplier * StunMultiplier;
     }
 
     private double GetAnomalyDamage(string anomaly) {
+        CurrentTag = SkillTag.AttributeAnomaly;
         Anomaly data;
         if (!Agent.Anomalies.TryGetValue(anomaly, out data!)) {
             data = Anomaly.GetAnomalyByElement(Agent.Element);
@@ -138,10 +165,6 @@ public class Calculator {
         if (data.CanCrit) {
             double anomalyCritRate = 0.05, anomalyCritDamage = 0.5;
             foreach (var bonus in data.Bonuses) {
-                if (bonus is { Expression: not null, Value: 0 }) {
-                    bonus.Value = bonus.Expression.EvaluateExpression(ExpressionParams);
-                }
-
                 switch (bonus.Affix) {
                     case Affix.CritRate:
                         anomalyCritRate = bonus.Value;
@@ -163,19 +186,10 @@ public class Calculator {
         var dmgBonusMultiplier = 1 + AttributeDmgBonus[Helpers.GetRelatedAffixDmg(attribute)] + AttributeDmgBonus[Affix.DmgBonus];
         var resMultiplier = 1 + AttributeDmgRes[Helpers.GetRelatedAffixRes(attribute)] + AttributeDmgRes[Affix.ResPen];
 
+        PreviousTag = CurrentTag;
         return anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier 
                * dmgBonusMultiplier * GetEnemyDefMultiplier() * resMultiplier;
     }
-    
-    private Dictionary<string, double> ExpressionParams => new() {
-        { "Atk", TotalAtk },
-        { "CritRate", CritRate },
-        { "CritDamage", CritDamage },
-        { "Pen", Pen },
-        { "PenRatio", PenRatio },
-        { "AnomalyProficiency", AnomalyProficiency },
-        { "AnomalyMastery", AnomalyMastery }
-    };
     
     public (IEnumerable<double> PerAction, double Total) Calculate(uint characterId, uint weaponId, IEnumerable<DriveDisc> driveDiscs, IEnumerable<string> rotation) {
         AgentId = characterId;
@@ -208,6 +222,16 @@ public class Calculator {
         var relatedAffixRes = Helpers.GetRelatedAffixRes(Agent.Element);
         AttributeDmgRes[relatedAffixRes] = Agent.Stats[relatedAffixRes] + bonusStats[relatedAffixRes];
         AttributeDmgRes[Affix.ResPen] = Agent.Stats[Affix.ResPen] + bonusStats[Affix.ResPen];
+
+        StringExtensions.Variables = new() {
+            { "Atk", TotalAtk },
+            { "CritRate", CritRate },
+            { "CritDamage", CritDamage },
+            { "Pen", Pen },
+            { "PenRatio", PenRatio },
+            { "AnomalyProficiency", AnomalyProficiency },
+            { "AnomalyMastery", AnomalyMastery }
+        };
         
         var result = new List<double>();
         var total = 0d;
