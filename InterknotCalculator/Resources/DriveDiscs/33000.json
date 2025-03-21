@@ -1,0 +1,17 @@
+{
+    "PartialBonus": [{
+        "Affix": "AnomalyMasteryRatio",
+        "Value": 0.08
+    }],
+    "FullBonus": [
+        {
+            "Affix": "AnomalyProficiency",
+            "Tags": ["ExSpecial"],
+            "Value": 45
+        },
+        {
+            "Affix": "EtherDmgBonus",
+            "Value": 0.25
+        }
+    ]
+}
