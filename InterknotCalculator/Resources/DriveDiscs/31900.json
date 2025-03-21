@@ -1,0 +1,8 @@
+{
+    "PartialBonus": [],
+    "FullBonus": [{
+        "Affix": "DmgBonus",
+        "Tags": ["DefensiveAssist", "EvasiveAssist"],
+        "Value": 0.15
+    }]
+}

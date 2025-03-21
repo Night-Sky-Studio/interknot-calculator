@@ -3,21 +3,9 @@
         "Affix": "IceDmgBonus",
         "Value": 0.1
     }],
-    "FullBonus": [
-        {
-            "Affix": "DmgBonus",
-            "Tag": "BasicAtk",
-            "Value": 0.2
-        },
-        {
-            "Affix": "DmgBonus",
-            "Tag": "Dash",
-            "Value": 0.2
-        },
-        {
-            "Affix": "DmgBonus",
-            "Tag": "AttributeAnomaly",
-            "Value": 0.2
-        }
-    ]
+    "FullBonus": [{
+        "Affix": "DmgBonus",
+        "Tags": ["BasicAtk", "Dash", "AttributeAnomaly"],
+        "Value": 0.2
+    }]
 }

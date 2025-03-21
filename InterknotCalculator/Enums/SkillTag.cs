@@ -5,5 +5,6 @@ public enum SkillTag {
     QuickAssist, DefensiveAssist, EvasiveAssist, FollowUpAssist,
     Special, ExSpecial, Chain, Ultimate,
     
-    AttributeAnomaly
+    AttributeAnomaly,
+    Aftershock
 }

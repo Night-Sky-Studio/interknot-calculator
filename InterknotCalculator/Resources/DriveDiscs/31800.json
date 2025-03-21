@@ -1,0 +1,27 @@
+{
+    "PartialBonus": [{
+        "Affix": "AnomalyProficiency",
+        "Value": 30
+    }],
+    "FullBonus": [
+        {
+            "Affix": "FireDmgBonus",
+            "Value": 0.15
+        },
+        {
+            "Affix": "ElectricDmgBonus",
+            "Value": 0.15
+        },
+        {
+            "Affix": "DmgBonus",
+            "Tags": [
+                "ExSpecial", 
+                "QuickAssist",
+                "DefensiveAssist",
+                "EvasiveAssist",
+                "FollowUpAssist"
+            ],
+            "Value": 0.2
+        }
+    ]
+}
