@@ -13,11 +13,13 @@ public static class StringExtensions {
         });
     }
 
-    private static EvaluationContext EvalContext { get; } = EvaluationContext.CreateDefault();
+    public static EvaluationContext EvalContext { get; } = EvaluationContext.CreateDefault();
+
+    public static SafeDictionary<string, double> Variables { get; set; } = new();
     
-    public static double EvaluateExpression(this string expression, Dictionary<string, double> variables) {
+    public static double EvaluateExpression(this string expression) {
         var eval = MathEvaluation.CompileExpression("tmp", 
-            expression.ProcessVariables(variables), CompilationMethod.ExpressionTree);
+            expression.ProcessVariables(Variables), CompilationMethod.ExpressionTree);
         return eval.Invoke(EvalContext);
     }
 }
