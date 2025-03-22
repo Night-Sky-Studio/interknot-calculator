@@ -11,7 +11,7 @@ public static class Program {
         
         
         var builder = WebApplication.CreateSlimBuilder(args);
-        builder.WebHost.UseUrls($"http://localhost:5101/");
+        builder.WebHost.UseUrls("http://localhost:5101/");
         builder.Services.AddCors(options => {
             options.AddPolicy("AllowAll",
                 policy => {
@@ -41,12 +41,12 @@ public static class Program {
                     d.StatsLevels.Skip(1).Select(p => (p.Value, Stat.SubStats[p.Key])))
             );
             
-            var calcResult = calc.Calculate(result.AgentId, result.WeaponId, discs, result.Rotation);
+            var actions = calc.Calculate(result.AgentId, result.WeaponId, discs, result.Rotation);
             calc.Reset();
             
             return Results.Json(new CalcResult {
-                PerAction = calcResult.PerAction.ToArray(), 
-                Total = calcResult.Total
+                PerAction = actions, 
+                Total = actions.Sum(action => action.Damage)
             }, SerializerContext.Default.CalcResult);
         });
         

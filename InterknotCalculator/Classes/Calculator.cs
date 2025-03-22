@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using InterknotCalculator.Classes.Agents;
 using InterknotCalculator.Classes.Extensions;
+using InterknotCalculator.Classes.Server;
 using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Classes;
@@ -124,7 +125,7 @@ public class Calculator {
         return levelFactor / (Math.Max(enemyDef * (1 - PenRatio) - Pen, 0) + levelFactor);
     }
 
-    private double GetStandardDamage(string skill, Index scale) {
+    private AgentAction GetStandardDamage(string skill, Index scale) {
         var data = Agent.Skills[skill];
         var attribute = data.Scales[scale].Element ?? Agent.Element;
         var relatedAffixDmg = Helpers.GetRelatedAffixDmg(attribute);
@@ -144,11 +145,17 @@ public class Calculator {
         var resMultiplier = 1 + data.Affixes[relatedAffixRes] + tagDmgBonus[relatedAffixRes]
                               + AttributeDmgRes[relatedAffixRes] + AttributeDmgRes[Affix.ResPen] + tagDmgBonus[Affix.ResPen];
         
-        return baseDmgAttacker * dmgBonusMultiplier * critMultiplier * GetEnemyDefMultiplier() * resMultiplier *
+        var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * GetEnemyDefMultiplier() * resMultiplier *
                DamageTakenMultiplier * StunMultiplier;
+        
+        return new() {
+            Name = $"{skill} {scale}",
+            Tag = SkillTag.AttributeAnomaly,
+            Damage = total
+        };
     }
 
-    private double GetAnomalyDamage(string anomaly) {
+    private AgentAction GetAnomalyDamage(string anomaly) {
         Anomaly data;
         if (!Agent.Anomalies.TryGetValue(anomaly, out data!)) {
             data = Anomaly.GetAnomalyByElement(Agent.Element);
@@ -180,11 +187,17 @@ public class Calculator {
         var dmgBonusMultiplier = 1 + AttributeDmgBonus[Helpers.GetRelatedAffixDmg(attribute)] + AttributeDmgBonus[Affix.DmgBonus];
         var resMultiplier = 1 + AttributeDmgRes[Helpers.GetRelatedAffixRes(attribute)] + AttributeDmgRes[Affix.ResPen];
 
-        return anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier 
+        var total = anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier 
                * dmgBonusMultiplier * GetEnemyDefMultiplier() * resMultiplier;
+
+        return new() {
+            Name = anomaly,
+            Tag = SkillTag.AttributeAnomaly,
+            Damage = total
+        };
     }
     
-    public (IEnumerable<double> PerAction, double Total) Calculate(uint characterId, uint weaponId, IEnumerable<DriveDisc> driveDiscs, IEnumerable<string> rotation) {
+    public List<AgentAction> Calculate(uint characterId, uint weaponId, IEnumerable<DriveDisc> driveDiscs, IEnumerable<string> rotation) {
         AgentId = characterId;
         WeaponId = weaponId;
         
@@ -226,23 +239,21 @@ public class Calculator {
             { "AnomalyMastery", AnomalyMastery }
         };
         
-        var result = new List<double>();
-        var total = 0d;
+        var result = new List<AgentAction>();
         foreach (var action in rotation) {
-            var localDmg = 0d;
+            AgentAction localDmg;
             if (Agent.Anomalies.ContainsKey(action) || Anomaly.DefaultByNames.ContainsKey(action)) {
-                localDmg += GetAnomalyDamage(action);
+                localDmg = GetAnomalyDamage(action);
             } else {
                 var attack = action.Split(' ');
                 var name = attack[0];
                 var idx = attack.Length == 1 ? 1 : int.Parse(attack[1]);
 
-                localDmg += GetStandardDamage(name, idx - 1);
+                localDmg = GetStandardDamage(name, idx - 1);
             }
             result.Add(localDmg);
-            total += localDmg;
         }
         
-        return (result, total);
+        return result;
     }
 }
