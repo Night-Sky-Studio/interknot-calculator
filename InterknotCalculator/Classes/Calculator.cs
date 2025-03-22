@@ -106,9 +106,6 @@ public class Calculator {
     private SafeDictionary<Affix, double> AttributeDmgRes { get; } = new();
     private SafeDictionary<SkillTag, Stat> TagDamageBonus { get; } = new();
     
-    private SkillTag CurrentTag { get; set; }
-    private SkillTag PreviousTag { get; set; }
-    
     public void Reset() {
         TotalAtk = 0;
         CritRate = 0;
@@ -129,14 +126,13 @@ public class Calculator {
 
     private double GetStandardDamage(string skill, Index scale) {
         var data = Agent.Skills[skill];
-        CurrentTag = data.Tag;
         var attribute = data.Scales[scale].Element ?? Agent.Element;
         var relatedAffixDmg = Helpers.GetRelatedAffixDmg(attribute);
         var relatedAffixRes = Helpers.GetRelatedAffixRes(attribute);
 
         var tagDmgBonus = new SafeDictionary<Affix, double>();
         foreach (var (tag, stat) in TagDamageBonus) {
-            if (CurrentTag == tag || PreviousTag == SkillTag.AttributeAnomaly) {
+            if (data.Tag == tag) {
                 tagDmgBonus[stat.Affix] += stat.Value;
             }
         }
@@ -148,13 +144,11 @@ public class Calculator {
         var resMultiplier = 1 + data.Affixes[relatedAffixRes] + tagDmgBonus[relatedAffixRes]
                               + AttributeDmgRes[relatedAffixRes] + AttributeDmgRes[Affix.ResPen] + tagDmgBonus[Affix.ResPen];
         
-        PreviousTag = CurrentTag;
         return baseDmgAttacker * dmgBonusMultiplier * critMultiplier * GetEnemyDefMultiplier() * resMultiplier *
                DamageTakenMultiplier * StunMultiplier;
     }
 
     private double GetAnomalyDamage(string anomaly) {
-        CurrentTag = SkillTag.AttributeAnomaly;
         Anomaly data;
         if (!Agent.Anomalies.TryGetValue(anomaly, out data!)) {
             data = Anomaly.GetAnomalyByElement(Agent.Element);
@@ -186,7 +180,6 @@ public class Calculator {
         var dmgBonusMultiplier = 1 + AttributeDmgBonus[Helpers.GetRelatedAffixDmg(attribute)] + AttributeDmgBonus[Affix.DmgBonus];
         var resMultiplier = 1 + AttributeDmgRes[Helpers.GetRelatedAffixRes(attribute)] + AttributeDmgRes[Affix.ResPen];
 
-        PreviousTag = CurrentTag;
         return anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier 
                * dmgBonusMultiplier * GetEnemyDefMultiplier() * resMultiplier;
     }
