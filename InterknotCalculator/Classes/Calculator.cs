@@ -150,7 +150,7 @@ public class Calculator {
         
         return new() {
             Name = $"{skill} {scale}",
-            Tag = SkillTag.AttributeAnomaly,
+            Tag = data.Tag,
             Damage = total
         };
     }
