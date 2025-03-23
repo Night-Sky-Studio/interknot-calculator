@@ -125,7 +125,7 @@ public class Calculator {
         return levelFactor / (Math.Max(enemyDef * (1 - PenRatio) - Pen, 0) + levelFactor);
     }
 
-    private AgentAction GetStandardDamage(string skill, Index scale) {
+    private AgentAction GetStandardDamage(string skill, int scale) {
         var data = Agent.Skills[skill];
         var attribute = data.Scales[scale].Element ?? Agent.Element;
         var relatedAffixDmg = Helpers.GetRelatedAffixDmg(attribute);
@@ -149,7 +149,7 @@ public class Calculator {
                DamageTakenMultiplier * StunMultiplier;
         
         return new() {
-            Name = $"{skill} {scale}",
+            Name = $"{skill} { (scale == 0 && data.Scales.Count > 1 ? "" : scale + 1) }".Trim(),
             Tag = data.Tag,
             Damage = total
         };
