@@ -1,14 +1,30 @@
-﻿using InterknotCalculator.Enums;
+﻿using System.Text.Json.Serialization;
+using InterknotCalculator.Classes.Extensions;
+using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Classes;
 
-public record Stat(
-    double Value,
-    Affix Affix,
-    string? Expression = null,
-    IEnumerable<SkillTag>? Tags = null
-) {
-    public double Value { get; set; } = Value;
+public struct Stat {
+    public double Value { get; set; }
+    public Affix Affix { get; set; }
+    public string? Expression { get; set; }
+    public IEnumerable<SkillTag>? Tags { get; set; } = null;
+    
+    [JsonIgnore]
+    public SkillTag[] SkillTags => Tags?.ToArray() ?? [];
+    
+    public Stat(double value, Affix affix, string? expression = null, IEnumerable<SkillTag>? tags = null) {
+        Expression = expression;
+        
+        if (Expression is not null && value == 0d) {
+            Value = Expression.EvaluateExpression();
+        } else {
+            Value = value;
+        }
+        
+        Affix = affix;
+        Tags = tags?.ToArray() ?? [];
+    }
     public static Dictionary<Affix, Stat> SubStats { get; } = new() {
         { Affix.Hp,                 new (112, Affix.Hp) },
         { Affix.Atk,                new (19, Affix.Atk) },

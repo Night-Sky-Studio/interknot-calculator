@@ -10,7 +10,6 @@
         }, 
         {
             "Affix": "CritDamage",
-            "Tags": ["AttributeAnomaly"],
             "Value": 0.33
         }
     ]

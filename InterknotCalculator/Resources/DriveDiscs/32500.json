@@ -5,7 +5,7 @@
     }],
     "FullBonus": [{
         "Affix": "DmgBonus",
-        "Tags": ["BasicAtk", "Dash", "AttributeAnomaly"],
-        "Value": 0.2
+        "Tags": ["BasicAtk", "Dash"],
+        "Value": 0.4
     }]
 }
