@@ -149,7 +149,7 @@ public class Calculator {
                DamageTakenMultiplier * StunMultiplier;
         
         return new() {
-            Name = $"{skill} { (scale == 0 && data.Scales.Count > 1 ? "" : scale + 1) }".Trim(),
+            Name = $"{skill} { (scale == 0 && data.Scales.Count == 1 ? "" : scale + 1) }".Trim(),
             Tag = data.Tag,
             Damage = total
         };
