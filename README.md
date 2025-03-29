@@ -18,6 +18,7 @@ All configurations are in JSON format and named with IDs of the corresponding ob
 
 ### Weapons
 - Hailstorm Shrine (14109)
+- Riot Suppressor Mark VI (14124)
 - Sharpened Stinger (14126)
 
 ### Drive Disc Sets
