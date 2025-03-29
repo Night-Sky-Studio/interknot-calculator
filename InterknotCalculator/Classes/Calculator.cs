@@ -98,6 +98,7 @@ public class Calculator {
     private SafeDictionary<SkillTag, Stat> TagDamageBonus { get; } = new();
     
     public void Reset() {
+        Agent = null;
         TagDamageBonus.Clear();
     }
     
