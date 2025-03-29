@@ -1,0 +1,23 @@
+﻿{
+    "Speciality": "Attack",
+    "Rarity": "S",
+    "MainStat": {
+        "Affix": "Atk",
+        "Value": 713.0
+    },
+    "SecondaryStat": {
+        "Affix": "CritDamage",
+        "Value": 0.48
+    },
+    "Passive": [
+        {
+            "Affix": "CritRate",
+            "Value": 0.15
+        },
+        {
+            "Affix": "DmgBonus",
+            "Tags": ["Special", "ExSpecial"],
+            "Value": 0.35
+        }
+    ]
+}
