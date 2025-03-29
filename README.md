@@ -5,13 +5,15 @@ a really accurate and close-to-the-game calculator, but I am competent enough to
 incompatible data.
 
 ## Project Structure
-Calculator is made to automatically load **Agents**, **Weapons** and **Drive Discs** from `Resources` folder.
+Calculator is made to automatically load **Weapons** and **Drive Discs** from `Resources` folder.
+Agents are hard-coded, because it's easier to calculate relative stats that way.
 All configurations are in JSON format and named with IDs of the corresponding objects. These IDs can be found in
 [interknot-calculator/IDs.md](IDs.md) file.
 
 ## Current Progress
 ### Agents
 - Miyabi (1091)
+- Zhu Yuan (1241)
 - Jane Doe (1261)
 
 ### Weapons

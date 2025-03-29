@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using InterknotCalculator.Classes.Agents;
 using InterknotCalculator.Classes.Extensions;
 using InterknotCalculator.Classes.Server;
@@ -7,14 +8,11 @@ using InterknotCalculator.Enums;
 namespace InterknotCalculator.Classes;
 
 public class Calculator {
-    private string AgentsPath { get; } = Path.Combine(Environment.CurrentDirectory, "Resources", "Agents");
     private string WeaponsPath { get; } = Path.Combine(Environment.CurrentDirectory, "Resources", "Weapons");
     private string DriveDiscsPath { get; } = Path.Combine(Environment.CurrentDirectory, "Resources", "DriveDiscs");
-
-    private Dictionary<uint, Agent> Agents { get; set; } = new();
-    private Dictionary<uint, DriveDiscSet> DriveDiscs { get; set; } = new();
-    private Dictionary<uint, Weapon> Weapons { get; set; } = new();
-
+    private Dictionary<uint, DriveDiscSet> DriveDiscs { get; } = new();
+    private Dictionary<uint, Weapon> Weapons { get; } = new();
+    
     private string[] GetFilesSafe(string path) {
         if (path == "") return [];
         try {
@@ -25,12 +23,6 @@ public class Calculator {
     }
     
     public async Task Init() {
-        var agents = GetFilesSafe(AgentsPath);
-        foreach (var agent in agents) {
-            if (JsonSerializer.Deserialize(await File.ReadAllTextAsync(agent), SerializerContext.Default.Agent) is { } json)
-                Agents.Add(uint.Parse(Path.GetFileNameWithoutExtension(agent)), json);
-        }
-        
         var weapons = GetFilesSafe(WeaponsPath);
         foreach (var weapon in weapons) {
             if (JsonSerializer.Deserialize(await File.ReadAllTextAsync(weapon), SerializerContext.Default.Weapon) is { } json)
@@ -43,12 +35,19 @@ public class Calculator {
                 DriveDiscs.Add(uint.Parse(Path.GetFileNameWithoutExtension(driveDisc)), json);
         }
         
-        Console.WriteLine($"Loaded {Agents.Count} agents, {Weapons.Count} weapons and {DriveDiscs.Count} drive disc sets.");
+        Console.WriteLine($"Loaded {Weapons.Count} weapons and {DriveDiscs.Count} drive disc sets.");
     }
 
-    private uint AgentId { get; set; }
-    private Agent Agent => Agents[AgentId];
-
+    private Agent CreateAgentInstance(uint agentId) {
+        return agentId switch {
+            1091 => new Miyabi(),
+            1241 => new ZhuYuan(),
+            1261 => new JaneDoe(),
+            _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent wasn't found.")
+        };
+    }
+    [NotNull]
+    private Agent? Agent { get; set;  }
     private uint WeaponId { get; set; }
     private Weapon Weapon => Weapons[WeaponId];
 
@@ -96,33 +95,16 @@ public class Calculator {
     private const double DamageTakenMultiplier = 1;
     private const double StunMultiplier = 1;
     
-    private double TotalAtk { get; set; } 
-    private double CritRate { get; set; } 
-    private double CritDamage { get; set; } 
-    private double Pen { get; set; } 
-    private double PenRatio { get; set; } 
-    private double AnomalyProficiency { get; set; }
-    private double AnomalyMastery { get; set; }
-    private SafeDictionary<Affix, double> AttributeDmgBonus { get; } = new();
-    private SafeDictionary<Affix, double> AttributeDmgRes { get; } = new();
     private SafeDictionary<SkillTag, Stat> TagDamageBonus { get; } = new();
     
     public void Reset() {
-        TotalAtk = 0;
-        CritRate = 0;
-        CritDamage = 0;
-        Pen = 0;
-        PenRatio = 0;
-        AnomalyProficiency = 0;
-        AnomalyMastery = 0;
-        AttributeDmgBonus.Clear();
-        AttributeDmgRes.Clear();
         TagDamageBonus.Clear();
     }
     
     private double GetEnemyDefMultiplier() {
         const double enemyDef = 953, levelFactor = 794;
-        return levelFactor / (Math.Max(enemyDef * (1 - PenRatio) - Pen, 0) + levelFactor);
+        return levelFactor / (Math.Max(enemyDef * (1 - Agent.Stats[Affix.PenRatio])
+            - Agent.Stats[Affix.Pen], 0) + levelFactor);
     }
 
     private AgentAction GetStandardDamage(string skill, int scale) {
@@ -138,15 +120,17 @@ public class Calculator {
             }
         }
         
-        var baseDmgAttacker = data.Scales[scale].Damage / 100 * TotalAtk;
-        var dmgBonusMultiplier = 1 + AttributeDmgBonus[relatedAffixDmg] + tagDmgBonus[relatedAffixDmg] 
+        var baseDmgAttacker = data.Scales[scale].Damage / 100 * Agent.Stats[Affix.Atk];
+        var dmgBonusMultiplier = 1 + Agent.Stats[relatedAffixDmg] + tagDmgBonus[relatedAffixDmg] 
                                  + data.Affixes[Affix.DmgBonus]  + tagDmgBonus[Affix.DmgBonus];
-        var critMultiplier = 1 + (CritRate + tagDmgBonus[Affix.CritRate]) * (CritDamage + tagDmgBonus[Affix.CritDamage]);
+        var critMultiplier = 1 + (Agent.Stats[Affix.CritRate] + tagDmgBonus[Affix.CritRate]) 
+            * (Agent.Stats[Affix.CritDamage] + tagDmgBonus[Affix.CritDamage]);
         var resMultiplier = 1 + data.Affixes[relatedAffixRes] + tagDmgBonus[relatedAffixRes]
-                              + AttributeDmgRes[relatedAffixRes] + AttributeDmgRes[Affix.ResPen] + tagDmgBonus[Affix.ResPen];
+                              + Agent.Stats[relatedAffixRes] + Agent.Stats[Affix.ResPen] 
+                              + tagDmgBonus[Affix.ResPen];
         
-        var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * GetEnemyDefMultiplier() * resMultiplier *
-               DamageTakenMultiplier * StunMultiplier;
+        var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * GetEnemyDefMultiplier() 
+            * resMultiplier * DamageTakenMultiplier * StunMultiplier;
         
         return new() {
             Name = $"{skill} { (scale == 0 && data.Scales.Count == 1 ? "" : scale + 1) }".Trim(),
@@ -181,11 +165,11 @@ public class Calculator {
 
         var attribute = data.Element;
 
-        var anomalyBaseDmg = data.Scale / 100 * TotalAtk;
-        var anomalyProficiencyMultiplier = AnomalyProficiency / 100;
+        var anomalyBaseDmg = data.Scale / 100 * Agent.Stats[Affix.Atk];
+        var anomalyProficiencyMultiplier = Agent.Stats[Affix.AnomalyProficiency] / 100;
         const double anomalyLevelMultiplier = 2;
-        var dmgBonusMultiplier = 1 + AttributeDmgBonus[Helpers.GetRelatedAffixDmg(attribute)] + AttributeDmgBonus[Affix.DmgBonus];
-        var resMultiplier = 1 + AttributeDmgRes[Helpers.GetRelatedAffixRes(attribute)] + AttributeDmgRes[Affix.ResPen];
+        var dmgBonusMultiplier = 1 + Agent.Stats[Helpers.GetRelatedAffixDmg(attribute)] + Agent.Stats[Affix.DmgBonus];
+        var resMultiplier = 1 + Agent.Stats[Helpers.GetRelatedAffixRes(attribute)] + Agent.Stats[Affix.ResPen];
 
         var total = anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier 
                * dmgBonusMultiplier * GetEnemyDefMultiplier() * resMultiplier;
@@ -198,7 +182,7 @@ public class Calculator {
     }
     
     public List<AgentAction> Calculate(uint characterId, uint weaponId, IEnumerable<DriveDisc> driveDiscs, IEnumerable<string> rotation) {
-        AgentId = characterId;
+        Agent = CreateAgentInstance(characterId);
         WeaponId = weaponId;
         
         var bonusStats = CollectDriveDiscStats(driveDiscs);
@@ -209,34 +193,36 @@ public class Calculator {
             bonusStats[passive.Affix] += passive.Value;
         }
 
-        TotalAtk = (Agent.Stats[Affix.Atk] + Weapon.MainStat.Value) 
+        Agent.Stats[Affix.Atk] = (Agent.Stats[Affix.Atk] + Weapon.MainStat.Value) 
             * (1 + bonusStats[Affix.AtkRatio]) + bonusStats[Affix.Atk];
         
-        CritRate = Agent.Stats[Affix.CritRate] + bonusStats[Affix.CritRate];
-        CritDamage = Agent.Stats[Affix.CritDamage] + bonusStats[Affix.CritDamage];
-        Pen = Agent.Stats[Affix.Pen] + bonusStats[Affix.Pen];
-        PenRatio = Agent.Stats[Affix.PenRatio] + bonusStats[Affix.PenRatio];
+        Agent.Stats[Affix.CritRate] += bonusStats[Affix.CritRate];
+        Agent.Stats[Affix.CritDamage] += bonusStats[Affix.CritDamage];
+        Agent.Stats[Affix.Pen] += bonusStats[Affix.Pen];
+        Agent.Stats[Affix.PenRatio] += bonusStats[Affix.PenRatio];
         
-        AnomalyProficiency = Agent.Stats[Affix.AnomalyProficiency] + bonusStats[Affix.AnomalyProficiency];
-        AnomalyMastery = Agent.Stats[Affix.AnomalyMastery] 
-                         + 1 * bonusStats[Affix.AnomalyMasteryRatio] + bonusStats[Affix.AnomalyMastery];
+        Agent.Stats[Affix.AnomalyProficiency] += bonusStats[Affix.AnomalyProficiency];
+        Agent.Stats[Affix.AnomalyMastery] += Agent.Stats[Affix.AnomalyMastery] * bonusStats[Affix.AnomalyMasteryRatio] 
+            + bonusStats[Affix.AnomalyMastery];
 
         var relatedAffixDmg = Helpers.GetRelatedAffixDmg(Agent.Element);
-        AttributeDmgBonus[relatedAffixDmg] = Agent.Stats[relatedAffixDmg] + bonusStats[relatedAffixDmg];
-        AttributeDmgBonus[Affix.DmgBonus] = Agent.Stats[Affix.DmgBonus] + bonusStats[Affix.DmgBonus];
+        Agent.Stats[relatedAffixDmg] += bonusStats[relatedAffixDmg];
+        Agent.Stats[Affix.DmgBonus] += bonusStats[Affix.DmgBonus];
         
         var relatedAffixRes = Helpers.GetRelatedAffixRes(Agent.Element);
-        AttributeDmgRes[relatedAffixRes] = Agent.Stats[relatedAffixRes] + bonusStats[relatedAffixRes];
-        AttributeDmgRes[Affix.ResPen] = Agent.Stats[Affix.ResPen] + bonusStats[Affix.ResPen];
-
+        Agent.Stats[relatedAffixRes] += bonusStats[relatedAffixRes];
+        Agent.Stats[Affix.ResPen] += bonusStats[Affix.ResPen];
+        
+        Agent.ApplyPassive();
+        
         StringExtensions.Variables = new() {
-            { "Atk", TotalAtk },
-            { "CritRate", CritRate },
-            { "CritDamage", CritDamage },
-            { "Pen", Pen },
-            { "PenRatio", PenRatio },
-            { "AnomalyProficiency", AnomalyProficiency },
-            { "AnomalyMastery", AnomalyMastery }
+            { "Atk", Agent.Stats[Affix.Atk] },
+            { "CritRate", Agent.Stats[Affix.CritRate] },
+            { "CritDamage", Agent.Stats[Affix.CritDamage] },
+            { "Pen", Agent.Stats[Affix.Pen] },
+            { "PenRatio", Agent.Stats[Affix.PenRatio] },
+            { "AnomalyProficiency", Agent.Stats[Affix.AnomalyProficiency] },
+            { "AnomalyMastery", Agent.Stats[Affix.AnomalyMastery] }
         };
         
         var result = new List<AgentAction>();
