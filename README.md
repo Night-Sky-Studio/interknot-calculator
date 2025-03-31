@@ -20,6 +20,10 @@ All configurations are in JSON format and named with IDs of the corresponding ob
 - Hailstorm Shrine (14109)
 - Riot Suppressor Mark VI (14124)
 - Sharpened Stinger (14126)
+- Electro-Lip Gloss (13009)
+- Fusion Compiler (14118)
+- The Brimstone (14104)
+- Canon Rotor (14001)
 
 ### Drive Disc Sets
 - Woodpecker Electro (31000)
