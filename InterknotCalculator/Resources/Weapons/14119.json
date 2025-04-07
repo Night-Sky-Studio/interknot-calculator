@@ -1,0 +1,23 @@
+﻿{
+    "Speciality": "Attack",
+    "Rarity": "S",
+    "MainStat": {
+        "Affix": "Atk",
+        "Value": 713
+    },
+    "SecondaryStat": {
+        "Affix": "CritRate",
+        "Value": 0.24
+    },
+    "Passive": [
+        {
+            "Affix": "IceDmgBonus",
+            "Value": 0.25
+        },
+        {
+            "Affix": "CritRate",
+            "Tags": ["BasicAtk", "Dash"],
+            "Value": 0.10
+        }
+    ]
+}

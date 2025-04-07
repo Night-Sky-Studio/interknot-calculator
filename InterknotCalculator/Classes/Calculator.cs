@@ -39,6 +39,7 @@ public class Calculator {
     private static Agent CreateAgentInstance(uint agentId) {
         return agentId switch {
             1091 => new Miyabi(),
+            1191 => new Ellen(),
             1241 => new ZhuYuan(),
             1261 => new JaneDoe(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent wasn't found.")
