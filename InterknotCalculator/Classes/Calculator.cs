@@ -1,7 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
+﻿using System.Text.Json;
 using InterknotCalculator.Classes.Agents;
-using InterknotCalculator.Classes.Extensions;
 using InterknotCalculator.Classes.Server;
 using InterknotCalculator.Enums;
 
@@ -112,6 +110,11 @@ public class Calculator {
             }
         }
 
+        var abilityPassive = agent.ApplyAbilityPassive(skill);
+        if (abilityPassive is { } passive) {
+            tagDmgBonus.Add(passive.Affix, passive.Value);
+        }
+
         var baseDmgAttacker = data.Scales[scale].Damage / 100 * agent.Stats[Affix.Atk];
         var dmgBonusMultiplier = 1 + agent.Stats[relatedAffixDmg] + tagDmgBonus[relatedAffixDmg]
                                  + data.Affixes[Affix.DmgBonus]  + tagDmgBonus[Affix.DmgBonus];
@@ -207,16 +210,6 @@ public class Calculator {
         agent.Stats[Affix.ResPen] += bonusStats[Affix.ResPen];
 
         agent.ApplyPassive();
-
-        StringExtensions.Variables = new() {
-            { "Atk", agent.Stats[Affix.Atk] },
-            { "CritRate", agent.Stats[Affix.CritRate] },
-            { "CritDamage", agent.Stats[Affix.CritDamage] },
-            { "Pen", agent.Stats[Affix.Pen] },
-            { "PenRatio", agent.Stats[Affix.PenRatio] },
-            { "AnomalyProficiency", agent.Stats[Affix.AnomalyProficiency] },
-            { "AnomalyMastery", agent.Stats[Affix.AnomalyMastery] }
-        };
 
         var result = new List<AgentAction>();
         foreach (var action in rotation) {

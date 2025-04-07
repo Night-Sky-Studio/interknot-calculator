@@ -11,4 +11,6 @@ public abstract class Agent {
     public Dictionary<string, Skill> Skills { get; set; } = new();
 
     public virtual void ApplyPassive() { }
+
+    public virtual Stat? ApplyAbilityPassive(string ability) => null;
 }
