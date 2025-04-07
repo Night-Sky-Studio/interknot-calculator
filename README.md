@@ -13,6 +13,7 @@ All configurations are in JSON format and named with IDs of the corresponding ob
 ## Current Progress
 ### Agents
 - Miyabi (1091)
+- Ellen Joe (1191)
 - Zhu Yuan (1241)
 - Jane Doe (1261)
 
@@ -20,6 +21,11 @@ All configurations are in JSON format and named with IDs of the corresponding ob
 - Hailstorm Shrine (14109)
 - Riot Suppressor Mark VI (14124)
 - Sharpened Stinger (14126)
+- Electro-Lip Gloss (13009)
+- Fusion Compiler (14118)
+- The Brimstone (14104)
+- Canon Rotor (14001)
+- Deep Sea Visitor (14119)
 
 ### Drive Disc Sets
 - Woodpecker Electro (31000)

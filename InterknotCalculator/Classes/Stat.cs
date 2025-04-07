@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using InterknotCalculator.Classes.Extensions;
 using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Classes;
@@ -7,21 +6,13 @@ namespace InterknotCalculator.Classes;
 public struct Stat {
     public double Value { get; set; }
     public Affix Affix { get; set; }
-    public string? Expression { get; set; }
     public IEnumerable<SkillTag>? Tags { get; set; } = null;
     
     [JsonIgnore]
     public SkillTag[] SkillTags => Tags?.ToArray() ?? [];
     
-    public Stat(double value, Affix affix, string? expression = null, IEnumerable<SkillTag>? tags = null) {
-        Expression = expression;
-        
-        if (Expression is not null && value == 0d) {
-            Value = Expression.EvaluateExpression();
-        } else {
-            Value = value;
-        }
-        
+    public Stat(double value, Affix affix, IEnumerable<SkillTag>? tags = null) {
+        Value = value;
         Affix = affix;
         Tags = tags?.ToArray() ?? [];
     }
