@@ -89,7 +89,6 @@ public class Calculator {
     }
 
     private const double DamageTakenMultiplier = 1;
-    private const double StunMultiplier = 1;
 
     private static double GetEnemyDefMultiplier(Agent agent) {
         const double enemyDef = 953, levelFactor = 794;
@@ -98,7 +97,7 @@ public class Calculator {
     }
 
     private static AgentAction GetStandardDamage(Agent agent, string skill, int scale, 
-        SafeDictionary<SkillTag, Stat> tagDamageBonus) {
+        SafeDictionary<SkillTag, Stat> tagDamageBonus, double stunMultiplier = 1d) {
         var data = agent.Skills[skill];
         var attribute = data.Scales[scale].Element ?? agent.Element;
         var relatedAffixDmg = Helpers.GetRelatedAffixDmg(attribute);
@@ -126,7 +125,7 @@ public class Calculator {
                               + tagDmgBonus[Affix.ResPen];
 
         var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * GetEnemyDefMultiplier(agent)
-            * resMultiplier * DamageTakenMultiplier * StunMultiplier;
+            * resMultiplier * DamageTakenMultiplier * stunMultiplier;
 
         return new() {
             Name = $"{skill} { (scale == 0 && data.Scales.Count == 1 ? "" : scale + 1) }".Trim(),
@@ -177,7 +176,7 @@ public class Calculator {
         };
     }
 
-    public List<AgentAction> Calculate(uint characterId, uint weaponId, IEnumerable<DriveDisc> driveDiscs, IEnumerable<string> rotation) {
+    public List<AgentAction> Calculate(uint characterId, uint weaponId, double stunMultiplier, IEnumerable<DriveDisc> driveDiscs, IEnumerable<string> rotation) {
         var agent = CreateAgentInstance(characterId);
         var weapon = Weapons[weaponId];
         var tagDamageBonus = new SafeDictionary<SkillTag, Stat>();
@@ -222,7 +221,7 @@ public class Calculator {
                 var name = attack[0];
                 var idx = attack.Length == 1 ? 1 : int.Parse(attack[1]);
 
-                localDmg = GetStandardDamage(agent, name, idx - 1, tagDamageBonus);
+                localDmg = GetStandardDamage(agent, name, idx - 1, tagDamageBonus, stunMultiplier);
             }
             result.Add(localDmg);
         }
