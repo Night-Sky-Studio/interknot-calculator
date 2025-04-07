@@ -10,8 +10,4 @@
         <PublishTrimmed>true</PublishTrimmed>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="ILMath" Version="1.5.0" />
-    </ItemGroup>
-
 </Project>
