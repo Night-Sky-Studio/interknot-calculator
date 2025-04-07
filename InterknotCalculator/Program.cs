@@ -9,7 +9,6 @@ public static class Program {
         var calc = new Calculator();
         await calc.Init();
         
-        
         var builder = WebApplication.CreateSlimBuilder(args);
         builder.WebHost.UseUrls("http://localhost:5101/");
         builder.Services.AddCors(options => {
@@ -42,7 +41,6 @@ public static class Program {
             );
             
             var actions = calc.Calculate(result.AgentId, result.WeaponId, discs, result.Rotation);
-            calc.Reset();
             
             return Results.Json(new CalcResult {
                 PerAction = actions, 

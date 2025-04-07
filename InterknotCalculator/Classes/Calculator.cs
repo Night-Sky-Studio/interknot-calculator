@@ -12,7 +12,7 @@ public class Calculator {
     private string DriveDiscsPath { get; } = Path.Combine(Environment.CurrentDirectory, "Resources", "DriveDiscs");
     private Dictionary<uint, DriveDiscSet> DriveDiscs { get; } = new();
     private Dictionary<uint, Weapon> Weapons { get; } = new();
-    
+
     private string[] GetFilesSafe(string path) {
         if (path == "") return [];
         try {
@@ -21,24 +21,24 @@ public class Calculator {
             return [];
         }
     }
-    
+
     public async Task Init() {
         var weapons = GetFilesSafe(WeaponsPath);
         foreach (var weapon in weapons) {
             if (JsonSerializer.Deserialize(await File.ReadAllTextAsync(weapon), SerializerContext.Default.Weapon) is { } json)
                 Weapons.Add(uint.Parse(Path.GetFileNameWithoutExtension(weapon)), json);
         }
-        
+
         var driveDiscs = GetFilesSafe(DriveDiscsPath);
         foreach (var driveDisc in driveDiscs) {
             if (JsonSerializer.Deserialize(await File.ReadAllTextAsync(driveDisc), SerializerContext.Default.DriveDiscSet) is { } json)
                 DriveDiscs.Add(uint.Parse(Path.GetFileNameWithoutExtension(driveDisc)), json);
         }
-        
+
         Console.WriteLine($"Loaded {Weapons.Count} weapons and {DriveDiscs.Count} drive disc sets.");
     }
 
-    private Agent CreateAgentInstance(uint agentId) {
+    private static Agent CreateAgentInstance(uint agentId) {
         return agentId switch {
             1091 => new Miyabi(),
             1241 => new ZhuYuan(),
@@ -46,15 +46,12 @@ public class Calculator {
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent wasn't found.")
         };
     }
-    [NotNull]
-    private Agent? Agent { get; set;  }
-    private uint WeaponId { get; set; }
-    private Weapon Weapon => Weapons[WeaponId];
 
-    private SafeDictionary<Affix, double> CollectDriveDiscStats(IEnumerable<DriveDisc> driveDiscs) {
+    private SafeDictionary<Affix, double> CollectDriveDiscStats(IEnumerable<DriveDisc> driveDiscs, 
+        SafeDictionary<SkillTag, Stat> tagDamageBonus) {
         var result = new SafeDictionary<Affix, double>();
         var setCounts = new SafeDictionary<uint, uint>();
-        
+
         foreach (var disc in driveDiscs) {
             setCounts[disc.SetId] += 1;
             result[disc.MainStat.Affix] += disc.MainStat.Value;
@@ -62,16 +59,16 @@ public class Calculator {
                 result[subStat.Stat.Affix] += subStat.Level * subStat.Stat.Value;
             }
         }
-        
+
         foreach (var (set, count) in setCounts) {
             var dds = DriveDiscs[set];
             if (count >= 2) {
                 foreach (var bonus in dds.PartialBonus) {
                     if (bonus.SkillTags.Length != 0) {
                         foreach (var tag in bonus.SkillTags) {
-                            TagDamageBonus[tag] = bonus;
+                            tagDamageBonus[tag] = bonus;
                         }
-                    } else 
+                    } else
                         result[bonus.Affix] += bonus;
                 }
             }
@@ -80,59 +77,53 @@ public class Calculator {
                 foreach (var bonus in dds.FullBonus) {
                     if (bonus.SkillTags.Length != 0) {
                         foreach (var tag in bonus.SkillTags) {
-                            TagDamageBonus[tag] = bonus;
+                            tagDamageBonus[tag] = bonus;
                         }
-                    } else 
+                    } else
                         result[bonus.Affix] += bonus;
                 }
                 break;
             }
         }
-        
+
         return result;
     }
 
     private const double DamageTakenMultiplier = 1;
     private const double StunMultiplier = 1;
-    
-    private SafeDictionary<SkillTag, Stat> TagDamageBonus { get; } = new();
-    
-    public void Reset() {
-        Agent = null;
-        TagDamageBonus.Clear();
-    }
-    
-    private double GetEnemyDefMultiplier() {
+
+    private static double GetEnemyDefMultiplier(Agent agent) {
         const double enemyDef = 953, levelFactor = 794;
-        return levelFactor / (Math.Max(enemyDef * (1 - Agent.Stats[Affix.PenRatio])
-            - Agent.Stats[Affix.Pen], 0) + levelFactor);
+        return levelFactor / (Math.Max(enemyDef * (1 - agent.Stats[Affix.PenRatio])
+            - agent.Stats[Affix.Pen], 0) + levelFactor);
     }
 
-    private AgentAction GetStandardDamage(string skill, int scale) {
-        var data = Agent.Skills[skill];
-        var attribute = data.Scales[scale].Element ?? Agent.Element;
+    private static AgentAction GetStandardDamage(Agent agent, string skill, int scale, 
+        SafeDictionary<SkillTag, Stat> tagDamageBonus) {
+        var data = agent.Skills[skill];
+        var attribute = data.Scales[scale].Element ?? agent.Element;
         var relatedAffixDmg = Helpers.GetRelatedAffixDmg(attribute);
         var relatedAffixRes = Helpers.GetRelatedAffixRes(attribute);
 
         var tagDmgBonus = new SafeDictionary<Affix, double>();
-        foreach (var (tag, stat) in TagDamageBonus) {
+        foreach (var (tag, stat) in tagDamageBonus) {
             if (data.Tag == tag) {
                 tagDmgBonus[stat.Affix] += stat.Value;
             }
         }
-        
-        var baseDmgAttacker = data.Scales[scale].Damage / 100 * Agent.Stats[Affix.Atk];
-        var dmgBonusMultiplier = 1 + Agent.Stats[relatedAffixDmg] + tagDmgBonus[relatedAffixDmg] 
+
+        var baseDmgAttacker = data.Scales[scale].Damage / 100 * agent.Stats[Affix.Atk];
+        var dmgBonusMultiplier = 1 + agent.Stats[relatedAffixDmg] + tagDmgBonus[relatedAffixDmg]
                                  + data.Affixes[Affix.DmgBonus]  + tagDmgBonus[Affix.DmgBonus];
-        var critMultiplier = 1 + (Agent.Stats[Affix.CritRate] + tagDmgBonus[Affix.CritRate]) 
-            * (Agent.Stats[Affix.CritDamage] + tagDmgBonus[Affix.CritDamage]);
+        var critMultiplier = 1 + (agent.Stats[Affix.CritRate] + tagDmgBonus[Affix.CritRate])
+            * (agent.Stats[Affix.CritDamage] + tagDmgBonus[Affix.CritDamage]);
         var resMultiplier = 1 + data.Affixes[relatedAffixRes] + tagDmgBonus[relatedAffixRes]
-                              + Agent.Stats[relatedAffixRes] + Agent.Stats[Affix.ResPen] 
+                              + agent.Stats[relatedAffixRes] + agent.Stats[Affix.ResPen]
                               + tagDmgBonus[Affix.ResPen];
-        
-        var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * GetEnemyDefMultiplier() 
+
+        var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * GetEnemyDefMultiplier(agent)
             * resMultiplier * DamageTakenMultiplier * StunMultiplier;
-        
+
         return new() {
             Name = $"{skill} { (scale == 0 && data.Scales.Count == 1 ? "" : scale + 1) }".Trim(),
             Tag = data.Tag,
@@ -140,14 +131,14 @@ public class Calculator {
         };
     }
 
-    private AgentAction GetAnomalyDamage(string anomaly) {
+    private static AgentAction GetAnomalyDamage(Agent agent, string anomaly) {
         Anomaly data;
-        if (!Agent.Anomalies.TryGetValue(anomaly, out data!)) {
-            data = Anomaly.GetAnomalyByElement(Agent.Element);
+        if (!agent.Anomalies.TryGetValue(anomaly, out data!)) {
+            data = Anomaly.GetAnomalyByElement(agent.Element);
         }
 
         double anomalyCritMultiplier = 1;
-        
+
         if (data.CanCrit) {
             double anomalyCritRate = 0.05, anomalyCritDamage = 0.5;
             foreach (var bonus in data.Bonuses) {
@@ -160,20 +151,20 @@ public class Calculator {
                         break;
                 }
             }
-            
+
             anomalyCritMultiplier = 1 + anomalyCritRate * anomalyCritDamage;
         }
 
         var attribute = data.Element;
 
-        var anomalyBaseDmg = data.Scale / 100 * Agent.Stats[Affix.Atk];
-        var anomalyProficiencyMultiplier = Agent.Stats[Affix.AnomalyProficiency] / 100;
+        var anomalyBaseDmg = data.Scale / 100 * agent.Stats[Affix.Atk];
+        var anomalyProficiencyMultiplier = agent.Stats[Affix.AnomalyProficiency] / 100;
         const double anomalyLevelMultiplier = 2;
-        var dmgBonusMultiplier = 1 + Agent.Stats[Helpers.GetRelatedAffixDmg(attribute)] + Agent.Stats[Affix.DmgBonus];
-        var resMultiplier = 1 + Agent.Stats[Helpers.GetRelatedAffixRes(attribute)] + Agent.Stats[Affix.ResPen];
+        var dmgBonusMultiplier = 1 + agent.Stats[Helpers.GetRelatedAffixDmg(attribute)] + agent.Stats[Affix.DmgBonus];
+        var resMultiplier = 1 + agent.Stats[Helpers.GetRelatedAffixRes(attribute)] + agent.Stats[Affix.ResPen];
 
-        var total = anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier 
-               * dmgBonusMultiplier * GetEnemyDefMultiplier() * resMultiplier;
+        var total = anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier
+               * dmgBonusMultiplier * GetEnemyDefMultiplier(agent) * resMultiplier;
 
         return new() {
             Name = anomaly,
@@ -181,66 +172,67 @@ public class Calculator {
             Damage = total
         };
     }
-    
-    public List<AgentAction> Calculate(uint characterId, uint weaponId, IEnumerable<DriveDisc> driveDiscs, IEnumerable<string> rotation) {
-        Agent = CreateAgentInstance(characterId);
-        WeaponId = weaponId;
-        
-        var bonusStats = CollectDriveDiscStats(driveDiscs);
-        
-        bonusStats[Weapon.SecondaryStat.Affix] += Weapon.SecondaryStat.Value;
 
-        foreach (var passive in Weapon.Passive) {
+    public List<AgentAction> Calculate(uint characterId, uint weaponId, IEnumerable<DriveDisc> driveDiscs, IEnumerable<string> rotation) {
+        var agent = CreateAgentInstance(characterId);
+        var weapon = Weapons[weaponId];
+        var tagDamageBonus = new SafeDictionary<SkillTag, Stat>();
+
+        var bonusStats = CollectDriveDiscStats(driveDiscs, tagDamageBonus);
+
+        bonusStats[weapon.SecondaryStat.Affix] += weapon.SecondaryStat.Value;
+
+        foreach (var passive in weapon.Passive) {
             bonusStats[passive.Affix] += passive.Value;
         }
 
-        Agent.Stats[Affix.Atk] = (Agent.Stats[Affix.Atk] + Weapon.MainStat.Value) 
+        agent.Stats[Affix.Atk] = (agent.Stats[Affix.Atk] + weapon.MainStat.Value)
             * (1 + bonusStats[Affix.AtkRatio]) + bonusStats[Affix.Atk];
-        
-        Agent.Stats[Affix.CritRate] += bonusStats[Affix.CritRate];
-        Agent.Stats[Affix.CritDamage] += bonusStats[Affix.CritDamage];
-        Agent.Stats[Affix.Pen] += bonusStats[Affix.Pen];
-        Agent.Stats[Affix.PenRatio] += bonusStats[Affix.PenRatio];
-        
-        Agent.Stats[Affix.AnomalyProficiency] += bonusStats[Affix.AnomalyProficiency];
-        Agent.Stats[Affix.AnomalyMastery] += Agent.Stats[Affix.AnomalyMastery] * bonusStats[Affix.AnomalyMasteryRatio] 
+
+        agent.Stats[Affix.CritRate] += bonusStats[Affix.CritRate];
+        agent.Stats[Affix.CritDamage] += bonusStats[Affix.CritDamage];
+        agent.Stats[Affix.Pen] += bonusStats[Affix.Pen];
+        agent.Stats[Affix.PenRatio] += bonusStats[Affix.PenRatio];
+
+        agent.Stats[Affix.AnomalyProficiency] += bonusStats[Affix.AnomalyProficiency];
+        agent.Stats[Affix.AnomalyMastery] += agent.Stats[Affix.AnomalyMastery] * bonusStats[Affix.AnomalyMasteryRatio]
             + bonusStats[Affix.AnomalyMastery];
 
-        var relatedAffixDmg = Helpers.GetRelatedAffixDmg(Agent.Element);
-        Agent.Stats[relatedAffixDmg] += bonusStats[relatedAffixDmg];
-        Agent.Stats[Affix.DmgBonus] += bonusStats[Affix.DmgBonus];
-        
-        var relatedAffixRes = Helpers.GetRelatedAffixRes(Agent.Element);
-        Agent.Stats[relatedAffixRes] += bonusStats[relatedAffixRes];
-        Agent.Stats[Affix.ResPen] += bonusStats[Affix.ResPen];
-        
-        Agent.ApplyPassive();
-        
+        var relatedAffixDmg = Helpers.GetRelatedAffixDmg(agent.Element);
+        agent.Stats[relatedAffixDmg] += bonusStats[relatedAffixDmg];
+        agent.Stats[Affix.DmgBonus] += bonusStats[Affix.DmgBonus];
+
+        var relatedAffixRes = Helpers.GetRelatedAffixRes(agent.Element);
+        agent.Stats[relatedAffixRes] += bonusStats[relatedAffixRes];
+        agent.Stats[Affix.ResPen] += bonusStats[Affix.ResPen];
+
+        agent.ApplyPassive();
+
         StringExtensions.Variables = new() {
-            { "Atk", Agent.Stats[Affix.Atk] },
-            { "CritRate", Agent.Stats[Affix.CritRate] },
-            { "CritDamage", Agent.Stats[Affix.CritDamage] },
-            { "Pen", Agent.Stats[Affix.Pen] },
-            { "PenRatio", Agent.Stats[Affix.PenRatio] },
-            { "AnomalyProficiency", Agent.Stats[Affix.AnomalyProficiency] },
-            { "AnomalyMastery", Agent.Stats[Affix.AnomalyMastery] }
+            { "Atk", agent.Stats[Affix.Atk] },
+            { "CritRate", agent.Stats[Affix.CritRate] },
+            { "CritDamage", agent.Stats[Affix.CritDamage] },
+            { "Pen", agent.Stats[Affix.Pen] },
+            { "PenRatio", agent.Stats[Affix.PenRatio] },
+            { "AnomalyProficiency", agent.Stats[Affix.AnomalyProficiency] },
+            { "AnomalyMastery", agent.Stats[Affix.AnomalyMastery] }
         };
-        
+
         var result = new List<AgentAction>();
         foreach (var action in rotation) {
             AgentAction localDmg;
-            if (Agent.Anomalies.ContainsKey(action) || Anomaly.DefaultByNames.ContainsKey(action)) {
-                localDmg = GetAnomalyDamage(action);
+            if (agent.Anomalies.ContainsKey(action) || Anomaly.DefaultByNames.ContainsKey(action)) {
+                localDmg = GetAnomalyDamage(agent, action);
             } else {
                 var attack = action.Split(' ');
                 var name = attack[0];
                 var idx = attack.Length == 1 ? 1 : int.Parse(attack[1]);
 
-                localDmg = GetStandardDamage(name, idx - 1);
+                localDmg = GetStandardDamage(agent, name, idx - 1, tagDamageBonus);
             }
             result.Add(localDmg);
         }
-        
+
         return result;
     }
 }
