@@ -147,7 +147,7 @@ public class Calculator {
             foreach (var bonus in data.Bonuses) {
                 switch (bonus.Affix) {
                     case Affix.CritRate:
-                        anomalyCritRate = bonus.Value;
+                        anomalyCritRate = Math.Min(bonus.Value, 1);
                         break;
                     case Affix.CritDamage:
                         anomalyCritDamage = bonus.Value;
@@ -209,6 +209,10 @@ public class Calculator {
         agent.Stats[relatedAffixRes] += bonusStats[relatedAffixRes];
         agent.Stats[Affix.ResPen] += bonusStats[Affix.ResPen];
 
+        if (agent.Stats[Affix.CritRate] > 1) {
+            agent.Stats[Affix.CritRate] = 1;
+        }
+        
         agent.ApplyPassive();
 
         var result = new List<AgentAction>();
