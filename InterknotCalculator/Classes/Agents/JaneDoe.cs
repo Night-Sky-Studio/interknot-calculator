@@ -17,14 +17,6 @@ public class JaneDoe : Agent {
         Stats[Affix.AnomalyMastery] = 148;
         Stats[Affix.AnomalyProficiency] = 114;
 
-        Anomalies["assault"] = Anomaly.Default[AnomalyType.Assault] with {
-            Bonuses = [
-                new(0.4 + Stats[Affix.AnomalyProficiency] * 0.0016, Affix.CritRate),
-                new(0.5, Affix.CritDamage)
-            ],
-            CanCrit = true
-        };
-
         Skills["dancing_blades"] = new(SkillTag.BasicAtk, [
             new(72.4, 23.0),
             new(125.0, 67.4),
@@ -61,6 +53,14 @@ public class JaneDoe : Agent {
     }
 
     public override void ApplyPassive() {
+        Anomalies["assault"] = Anomaly.Default[AnomalyType.Assault] with {
+            Bonuses = [
+                new(0.4 + Stats[Affix.AnomalyProficiency] * 0.0016, Affix.CritRate),
+                new(0.5, Affix.CritDamage)
+            ],
+            CanCrit = true
+        };
+        
         if (Stats[Affix.AnomalyProficiency] > 120) {
             Stats[Affix.Atk] += (Stats[Affix.AnomalyProficiency] - 120) * 2;
         }
