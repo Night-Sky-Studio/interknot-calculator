@@ -12,6 +12,7 @@ All configurations are in JSON format and named with IDs of the corresponding ob
 
 ## Current Progress
 ### Agents
+- Soldier 11 (1041)
 - Miyabi (1091)
 - Ellen Joe (1191)
 - Zhu Yuan (1241)
@@ -26,6 +27,7 @@ All configurations are in JSON format and named with IDs of the corresponding ob
 - The Brimstone (14104)
 - Canon Rotor (14001)
 - Deep Sea Visitor (14119)
+- Heartstring Nocturne (14132)
 
 ### Drive Disc Sets
 - Woodpecker Electro (31000)
