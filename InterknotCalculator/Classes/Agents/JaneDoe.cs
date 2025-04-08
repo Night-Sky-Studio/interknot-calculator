@@ -17,11 +17,12 @@ public class JaneDoe : Agent {
         Stats[Affix.AnomalyMastery] = 148;
         Stats[Affix.AnomalyProficiency] = 114;
 
-        Anomalies["shatter"] = Anomaly.Default[AnomalyType.Assault] with {
+        Anomalies["assault"] = Anomaly.Default[AnomalyType.Assault] with {
             Bonuses = [
                 new(0.4 + Stats[Affix.AnomalyProficiency] * 0.0016, Affix.CritRate),
                 new(0.5, Affix.CritDamage)
-            ]
+            ],
+            CanCrit = true
         };
 
         Skills["dancing_blades"] = new(SkillTag.BasicAtk, [
