@@ -10,7 +10,7 @@ public class Ellen : Agent {
 
         Stats[Affix.Hp] = 7673;
         Stats[Affix.Def] = 606;
-        Stats[Affix.Atk] = 863;
+        Stats[Affix.Atk] = 863 + 75;
         Stats[Affix.CritRate] = 0.05 + 0.144;
         Stats[Affix.CritDamage] = 0.5;
         Stats[Affix.Impact] = 93;
