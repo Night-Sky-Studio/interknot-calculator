@@ -177,7 +177,7 @@ public class Calculator {
         };
     }
 
-    public List<AgentAction> Calculate(uint characterId, uint weaponId, double stunMultiplier, IEnumerable<DriveDisc> driveDiscs, IEnumerable<string> rotation) {
+    public List<AgentAction> Calculate(uint characterId, uint weaponId, double stunMultiplier, IEnumerable<DriveDisc> driveDiscs, IEnumerable<uint> team, IEnumerable<string> rotation) {
         var agent = CreateAgentInstance(characterId);
         var weapon = Weapons[weaponId];
         var tagDamageBonus = new SafeDictionary<SkillTag, Stat>();
@@ -215,6 +215,13 @@ public class Calculator {
         }
         
         agent.ApplyPassive();
+
+        var t = team.Select(CreateAgentInstance).ToList();
+        foreach (var stat in agent.ApplyTeamPassive(t)) {
+            foreach (var tag in stat.SkillTags) {
+                tagDamageBonus.Add(tag, stat);
+            }
+        }
 
         var result = new List<AgentAction>();
         foreach (var action in rotation) {

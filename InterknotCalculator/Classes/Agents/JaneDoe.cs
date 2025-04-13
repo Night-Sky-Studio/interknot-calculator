@@ -7,6 +7,7 @@ public class JaneDoe : Agent {
         Speciality = Speciality.Anomaly;
         Element = Element.Physical;
         Rarity = Rarity.S;
+        Faction = Faction.CriminalInvestigationResponseTeam;
 
         Stats[Affix.Hp] = 7788;
         Stats[Affix.Def] = 606;

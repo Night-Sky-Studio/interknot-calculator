@@ -7,6 +7,7 @@ public class Miyabi : Agent {
         Speciality = Speciality.Anomaly;
         Element = Element.Ice;
         Rarity = Rarity.S;
+        Faction = Faction.HollowSpecialOperationsSection6;
 
         Stats[Affix.Hp] = 7673;
         Stats[Affix.Def] = 606;
@@ -89,5 +90,19 @@ public class Miyabi : Agent {
             Tag = SkillTag.Ultimate,
             Scales = [new(4776.1, 556.3)]
         };
+    }
+
+    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
+        if (team.Count == 0) return [];
+
+        if (team.Any(a => a.Speciality == Speciality.Support) ||
+            team.Any(a => a.Faction == Faction)) {
+            return [
+                new (0.6, Affix.DmgBonus, [SkillTag.BasicAtk]),
+                new(0.3, Affix.IceResPen, [SkillTag.BasicAtk])
+            ];
+        }
+
+        return [];
     }
 }

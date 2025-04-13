@@ -7,6 +7,7 @@ public class ZhuYuan : Agent {
         Speciality = Speciality.Attack;
         Element = Element.Ether;
         Rarity = Rarity.S;
+        Faction = Faction.CriminalInvestigationResponseTeam;
 
         Stats[Affix.Hp] = 7482;
         Stats[Affix.Def] = 600;
@@ -48,5 +49,16 @@ public class ZhuYuan : Agent {
         Skills["full_barrage"] = new(SkillTag.ExSpecial, [new(1174.8, 720.9)]);
         Skills["eradication_mode"] = new(SkillTag.Chain, [new(1174, 223.4)]);
         Skills["max_eradication_mode"] = new(SkillTag.Ultimate, [new(3955.4, 194)]);
+    }
+
+    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
+        if (team.Count == 0) return [];
+
+        if (team.Any(a => a.Speciality == Speciality.Support) ||
+            team.Any(a => a.Faction == Faction)) {
+            return [new(0.3, Affix.CritRate)];
+        }
+
+        return [];
     }
 }

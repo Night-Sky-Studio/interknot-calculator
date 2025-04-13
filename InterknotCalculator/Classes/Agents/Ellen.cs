@@ -7,6 +7,7 @@ public class Ellen : Agent {
         Speciality = Speciality.Attack;
         Element = Element.Ice;
         Rarity = Rarity.S;
+        Faction = Faction.VictoriaHousekeeping;
 
         Stats[Affix.Hp] = 7673;
         Stats[Affix.Def] = 606;
@@ -122,5 +123,16 @@ public class Ellen : Agent {
             default:
                 return null;
         }
+    }
+
+    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
+        if (team.Count == 0) return [];
+
+        if (team.Any(a => a.Element == Element) ||
+            team.Any(a => a.Faction == Faction)) {
+            return [new(0.3, Affix.IceDmgBonus)];
+        }
+        
+        return [];
     }
 }

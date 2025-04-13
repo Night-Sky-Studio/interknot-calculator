@@ -7,6 +7,7 @@ public class Soldier11 : Agent {
         Speciality = Speciality.Attack;
         Element = Element.Fire;
         Rarity = Rarity.S;
+        Faction = Faction.NewEriduDefenseForce;
 
         Stats[Affix.Hp] = 7673;
         Stats[Affix.Def] = 612;
@@ -107,5 +108,16 @@ public class Soldier11 : Agent {
                 new(4206.2, 428)
             ]
         };
+    }
+
+    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
+        if (team.Count == 0) return [];
+
+        if (team.Any(a => a.Element == Element) ||
+            team.Any(a => a.Faction == Faction)) {
+            return [new(0.325, Affix.FireDmgBonus)];
+        }
+
+        return [];
     }
 }
