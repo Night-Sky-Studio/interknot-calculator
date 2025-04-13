@@ -13,6 +13,8 @@ public class Calculator {
             1191 => new Ellen(),
             1241 => new ZhuYuan(),
             1261 => new JaneDoe(),
+            1311 => AstraYao.Reference(),
+            1321 => new Evelyn(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent wasn't found.")
         };
     }
