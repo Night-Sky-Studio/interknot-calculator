@@ -6,36 +6,6 @@ using InterknotCalculator.Enums;
 namespace InterknotCalculator.Classes;
 
 public class Calculator {
-    private string WeaponsPath { get; } = Path.Combine(Environment.CurrentDirectory, "Resources", "Weapons");
-    private string DriveDiscsPath { get; } = Path.Combine(Environment.CurrentDirectory, "Resources", "DriveDiscs");
-    private Dictionary<uint, DriveDiscSet> DriveDiscs { get; } = new();
-    private Dictionary<uint, Weapon> Weapons { get; } = new();
-
-    private string[] GetFilesSafe(string path) {
-        if (path == "") return [];
-        try {
-            return Directory.GetFiles(path);
-        } catch (Exception) {
-            return [];
-        }
-    }
-
-    public async Task Init() {
-        var weapons = GetFilesSafe(WeaponsPath);
-        foreach (var weapon in weapons) {
-            if (JsonSerializer.Deserialize(await File.ReadAllTextAsync(weapon), SerializerContext.Default.Weapon) is { } json)
-                Weapons.Add(uint.Parse(Path.GetFileNameWithoutExtension(weapon)), json);
-        }
-
-        var driveDiscs = GetFilesSafe(DriveDiscsPath);
-        foreach (var driveDisc in driveDiscs) {
-            if (JsonSerializer.Deserialize(await File.ReadAllTextAsync(driveDisc), SerializerContext.Default.DriveDiscSet) is { } json)
-                DriveDiscs.Add(uint.Parse(Path.GetFileNameWithoutExtension(driveDisc)), json);
-        }
-
-        Console.WriteLine($"Loaded {Weapons.Count} weapons and {DriveDiscs.Count} drive disc sets.");
-    }
-
     private static Agent CreateAgentInstance(uint agentId) {
         return agentId switch {
             1041 => new Soldier11(),
@@ -61,7 +31,7 @@ public class Calculator {
         }
 
         foreach (var (set, count) in setCounts) {
-            var dds = DriveDiscs[set];
+            var dds = Resources.Current.GetDriveDiscSet(set);
             if (count >= 2) {
                 foreach (var bonus in dds.PartialBonus) {
                     if (bonus.SkillTags.Length != 0) {
@@ -179,7 +149,7 @@ public class Calculator {
 
     public List<AgentAction> Calculate(uint characterId, uint weaponId, double stunMultiplier, IEnumerable<DriveDisc> driveDiscs, IEnumerable<uint> team, IEnumerable<string> rotation) {
         var agent = CreateAgentInstance(characterId);
-        var weapon = Weapons[weaponId];
+        var weapon = Resources.Current.GetWeapon(weaponId);
         var tagDamageBonus = new SafeDictionary<SkillTag, Stat>();
 
         var bonusStats = CollectDriveDiscStats(driveDiscs, tagDamageBonus);
