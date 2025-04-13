@@ -179,16 +179,24 @@ public class Calculator {
         var relatedAffixRes = Helpers.GetRelatedAffixRes(agent.Element);
         agent.Stats[relatedAffixRes] += bonusStats[relatedAffixRes];
         agent.Stats[Affix.ResPen] += bonusStats[Affix.ResPen];
-
-        if (agent.Stats[Affix.CritRate] > 1) {
-            agent.Stats[Affix.CritRate] = 1;
-        }
         
         agent.ApplyPassive();
-
-        var t = team.Select(CreateAgentInstance).ToList();
-        foreach (var stat in agent.ApplyTeamPassive(t)) {
+        
+        agent.Stats[Affix.CritRate] = Math.Min(agent.Stats[Affix.CritRate], 1);
+        
+        List<Agent> fullTeam = [agent ,..team.Select(CreateAgentInstance).ToList()];
+        foreach (var stat in agent.ApplyTeamPassive(fullTeam)) {
             foreach (var tag in stat.SkillTags) {
+                tagDamageBonus.Add(tag, stat);
+            }
+        }
+
+        foreach (var a in fullTeam) {
+            foreach (var (afx, bonus) in a.ExternalBonus) {
+                agent.Stats[afx] += bonus;
+            }
+
+            foreach (var (tag, stat) in a.ExternalTagBonus) {
                 tagDamageBonus.Add(tag, stat);
             }
         }

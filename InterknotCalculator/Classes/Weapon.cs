@@ -9,4 +9,5 @@ public record Weapon {
     public required Stat MainStat { get; set; }
     public required Stat SecondaryStat { get; set; }
     public IEnumerable<Stat> Passive { get; set; } = [];
+    public IEnumerable<Stat> ExternalBonus { get; set; } = [];
 }

@@ -8,6 +8,8 @@ public abstract class Agent {
     public Rarity Rarity { get; set; }
     public Faction Faction { get; set; }
     public SafeDictionary<Affix, double> Stats { get; set; } = new();
+    public SafeDictionary<Affix, double> ExternalBonus { get; set; } = new();
+    public SafeDictionary<SkillTag, Stat> ExternalTagBonus { get; set; } = new();
     public Dictionary<string, Anomaly> Anomalies { get; set; } = new();
     public Dictionary<string, Skill> Skills { get; set; } = new();
 
