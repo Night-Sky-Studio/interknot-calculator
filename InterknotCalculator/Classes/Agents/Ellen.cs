@@ -2,7 +2,7 @@
 
 namespace InterknotCalculator.Classes.Agents;
 
-public class Ellen : Agent {
+public sealed class Ellen : Agent {
     public Ellen() {
         Speciality = Speciality.Attack;
         Element = Element.Ice;

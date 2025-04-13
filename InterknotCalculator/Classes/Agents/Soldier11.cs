@@ -2,7 +2,7 @@ using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Classes.Agents;
 
-public class Soldier11 : Agent {
+public sealed class Soldier11 : Agent {
     public Soldier11() {
         Speciality = Speciality.Attack;
         Element = Element.Fire;
