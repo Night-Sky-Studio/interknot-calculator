@@ -6,8 +6,9 @@ namespace InterknotCalculator;
 
 public static class Program {
     public static async Task Main(string[] args) {
+        await Resources.Current.Init();
+        
         var calc = new Calculator();
-        await calc.Init();
         
         var builder = WebApplication.CreateSlimBuilder(args);
         builder.WebHost.UseUrls("http://localhost:5101/");
