@@ -126,7 +126,7 @@ public sealed class Ellen : Agent {
     }
 
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count == 0) return [];
+        if (team.Count < 2) return [];
 
         if (team.Any(a => a.Element == Element) ||
             team.Any(a => a.Faction == Faction)) {

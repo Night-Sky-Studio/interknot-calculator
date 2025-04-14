@@ -108,7 +108,7 @@ public class Evelyn : Agent {
     }
 
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count == 0) return [];
+        if (team.Count < 2) return [];
 
         if (team.All(a => a.Speciality != Speciality.Support) && 
             team.All(a => a.Speciality != Speciality.Stun)) 
