@@ -10,6 +10,28 @@ Agents are hard-coded, because it's easier to calculate relative stats that way.
 All configurations are in JSON format and named with IDs of the corresponding objects. These IDs can be found in
 [interknot-calculator/IDs.md](IDs.md) file.
 
+## How damage is being calculated
+Before everything, the important stuff:
+- All characters are assumed to be at level 70 with maxed out skills (lvl. 12) and Core Skill (lvl. 7).
+- All S-rank characters are assumed to be at M0. All A-rank characters are assumed to be at M6. (TODO)
+- All S-rank W-Engines are at P0, A-rank W-Engines are at P6. (TODO)
+- **Only your currently equipped Drive Discs are taken into account** for the damage calculation.
+- If you've calculated damage to be higher/lower than the one this program produced - check your calculations and
+make sure you've accounted for EVERYTHING. If you did and you are absolutely sure that the calculator is wrong -
+**open an issue** and provide as much information as possible (your UID and character in question with your calculations 
+should be enough). Also make sure that the drive discs you have currently equipped are the same as the ones
+you've used in your calculations.
+- **We never said anywhere that the calculations should be taken as gospel.** The idea was for them to be replicable 
+externally and be as close as possible to the in-game results without going into the rabbit hole of making an entire
+game combat simulation engine.
+
+Damage of each action is calculated independently (previous or future rotation actions don't
+have any effect on the damage). Calculator uses damage formulas and information described in
+[this document](https://docs.google.com/document/d/e/2PACX-1vSo82Ac3HqdI_G5_BoAqYJToK6LX4FGLPJxjPZEbhMQ-wSyFyxDFl1dr8i5czcCLJmYwxWfsXkCXN6v/pub).
+Those formulas could be found in the `Calculator`'s `GetStandardDamage()` and `GetAnomalyDamage()` functions.
+The Calculator also accounts for all possible passives or buffs/enemy debuffs. When a team is specified, all 
+`ExternalBonus` and `ExternalTagBonus` of the teammate will also be accounted for.
+
 ## Current Progress
 ### Agents
 - Soldier 11 (1041)
@@ -17,6 +39,8 @@ All configurations are in JSON format and named with IDs of the corresponding ob
 - Ellen Joe (1191)
 - Zhu Yuan (1241)
 - Jane Doe (1261)
+- Astra Yao (1311)
+- Evelyn (1321)
 
 ### Weapons
 - Hailstorm Shrine (14109)
@@ -27,6 +51,7 @@ All configurations are in JSON format and named with IDs of the corresponding ob
 - The Brimstone (14104)
 - Canon Rotor (14001)
 - Deep Sea Visitor (14119)
+- Elegant Vanity (14131)
 - Heartstring Nocturne (14132)
 
 ### Drive Disc Sets
