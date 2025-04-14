@@ -52,4 +52,12 @@ public struct Stat {
     public static implicit operator double(Stat v) {
         return v.Value;
     }
+    
+    public static Stat operator +(Stat a, Stat b) {
+        if (a.Affix != b.Affix)
+            throw new ArgumentException("Stats must be of the same affix to be combined");
+        return a with {
+            Value = a.Value + b.Value
+        };
+    }
 }
