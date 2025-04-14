@@ -54,7 +54,6 @@ public class Calculator {
                     } else
                         result[bonus.Affix] += bonus;
                 }
-                break;
             }
         }
 
@@ -199,7 +198,11 @@ public class Calculator {
             }
 
             foreach (var (tag, stat) in a.ExternalTagBonus) {
-                tagDamageBonus.Add(tag, stat);
+                if (tagDamageBonus.ContainsKey(tag)) {
+                    tagDamageBonus[tag] += stat;
+                } else {
+                    tagDamageBonus[tag] = stat;
+                }
             }
         }
 
