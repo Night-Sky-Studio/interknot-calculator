@@ -15,9 +15,13 @@ Before everything, the important stuff:
 - All characters are assumed to be at level 70 with maxed out skills (lvl. 12) and Core Skill (lvl. 7).
 - All S-rank characters are assumed to be at M0. All A-rank characters are assumed to be at M6. (TODO)
 - All S-rank W-Engines are at P0, A-rank W-Engines are at P6. (TODO)
+- All Support characters have their reference builds that assume maximum supportive bonus and maximum uptime
+of any passives.
 - **Only your currently equipped Drive Discs are taken into account** for the damage calculation.
+- All passives that depend on character swapping, specific attacks combinations or attribute anomalies are
+considered to have 100% uptime.
 - If you've calculated damage to be higher/lower than the one this program produced - check your calculations and
-make sure you've accounted for EVERYTHING. If you did and you are absolutely sure that the calculator is wrong -
+make sure you've accounted for EVERYTHING. If you did, and you are absolutely sure that the calculator is wrong -
 **open an issue** and provide as much information as possible (your UID and character in question with your calculations 
 should be enough). Also make sure that the drive discs you have currently equipped are the same as the ones
 you've used in your calculations.
@@ -25,7 +29,7 @@ you've used in your calculations.
 externally and be as close as possible to the in-game results without going into the rabbit hole of making an entire
 game combat simulation engine.
 
-Damage of each action is calculated independently (previous or future rotation actions don't
+The damage of each action is calculated independently (previous or future rotation actions don't
 have any effect on the damage). Calculator uses damage formulas and information described in
 [this document](https://docs.google.com/document/d/e/2PACX-1vSo82Ac3HqdI_G5_BoAqYJToK6LX4FGLPJxjPZEbhMQ-wSyFyxDFl1dr8i5czcCLJmYwxWfsXkCXN6v/pub).
 Those formulas could be found in the `Calculator`'s `GetStandardDamage()` and `GetAnomalyDamage()` functions.
