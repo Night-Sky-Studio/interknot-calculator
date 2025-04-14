@@ -20,11 +20,14 @@ public sealed class AstraYao : Agent {
 
         var astralVoice = Resources.Current.GetDriveDiscSet(32800);
 
-        foreach (var stat in astralVoice.FullBonus) {
-            foreach (var tag in stat.SkillTags) {
-                astraYao.ExternalTagBonus[tag] = stat;
-            }
+        var qaBonus = astralVoice.FullBonus.First();
+        foreach (var tag in qaBonus.SkillTags) {
+            astraYao.ExternalTagBonus[tag] = qaBonus;
         }
+
+        astraYao.ExternalTagBonus[SkillTag.Chain] = qaBonus with {
+            Tags = [SkillTag.Chain]
+        };
         
         return astraYao;
     }
