@@ -6,36 +6,6 @@ using InterknotCalculator.Enums;
 namespace InterknotCalculator.Classes;
 
 public class Calculator {
-    private string WeaponsPath { get; } = Path.Combine(Environment.CurrentDirectory, "Resources", "Weapons");
-    private string DriveDiscsPath { get; } = Path.Combine(Environment.CurrentDirectory, "Resources", "DriveDiscs");
-    private Dictionary<uint, DriveDiscSet> DriveDiscs { get; } = new();
-    private Dictionary<uint, Weapon> Weapons { get; } = new();
-
-    private string[] GetFilesSafe(string path) {
-        if (path == "") return [];
-        try {
-            return Directory.GetFiles(path);
-        } catch (Exception) {
-            return [];
-        }
-    }
-
-    public async Task Init() {
-        var weapons = GetFilesSafe(WeaponsPath);
-        foreach (var weapon in weapons) {
-            if (JsonSerializer.Deserialize(await File.ReadAllTextAsync(weapon), SerializerContext.Default.Weapon) is { } json)
-                Weapons.Add(uint.Parse(Path.GetFileNameWithoutExtension(weapon)), json);
-        }
-
-        var driveDiscs = GetFilesSafe(DriveDiscsPath);
-        foreach (var driveDisc in driveDiscs) {
-            if (JsonSerializer.Deserialize(await File.ReadAllTextAsync(driveDisc), SerializerContext.Default.DriveDiscSet) is { } json)
-                DriveDiscs.Add(uint.Parse(Path.GetFileNameWithoutExtension(driveDisc)), json);
-        }
-
-        Console.WriteLine($"Loaded {Weapons.Count} weapons and {DriveDiscs.Count} drive disc sets.");
-    }
-
     private static Agent CreateAgentInstance(uint agentId) {
         return agentId switch {
             1041 => new Soldier11(),
@@ -43,6 +13,8 @@ public class Calculator {
             1191 => new Ellen(),
             1241 => new ZhuYuan(),
             1261 => new JaneDoe(),
+            1311 => AstraYao.Reference(),
+            1321 => new Evelyn(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent wasn't found.")
         };
     }
@@ -61,7 +33,7 @@ public class Calculator {
         }
 
         foreach (var (set, count) in setCounts) {
-            var dds = DriveDiscs[set];
+            var dds = Resources.Current.GetDriveDiscSet(set);
             if (count >= 2) {
                 foreach (var bonus in dds.PartialBonus) {
                     if (bonus.SkillTags.Length != 0) {
@@ -82,7 +54,6 @@ public class Calculator {
                     } else
                         result[bonus.Affix] += bonus;
                 }
-                break;
             }
         }
 
@@ -177,9 +148,9 @@ public class Calculator {
         };
     }
 
-    public List<AgentAction> Calculate(uint characterId, uint weaponId, double stunMultiplier, IEnumerable<DriveDisc> driveDiscs, IEnumerable<string> rotation) {
+    public List<AgentAction> Calculate(uint characterId, uint weaponId, double stunMultiplier, IEnumerable<DriveDisc> driveDiscs, IEnumerable<uint> team, IEnumerable<string> rotation) {
         var agent = CreateAgentInstance(characterId);
-        var weapon = Weapons[weaponId];
+        var weapon = Resources.Current.GetWeapon(weaponId);
         var tagDamageBonus = new SafeDictionary<SkillTag, Stat>();
 
         var bonusStats = CollectDriveDiscStats(driveDiscs, tagDamageBonus);
@@ -209,12 +180,31 @@ public class Calculator {
         var relatedAffixRes = Helpers.GetRelatedAffixRes(agent.Element);
         agent.Stats[relatedAffixRes] += bonusStats[relatedAffixRes];
         agent.Stats[Affix.ResPen] += bonusStats[Affix.ResPen];
-
-        if (agent.Stats[Affix.CritRate] > 1) {
-            agent.Stats[Affix.CritRate] = 1;
-        }
         
         agent.ApplyPassive();
+        
+        agent.Stats[Affix.CritRate] = Math.Min(agent.Stats[Affix.CritRate], 1);
+        
+        List<Agent> fullTeam = [agent ,..team.Select(CreateAgentInstance).ToList()];
+        foreach (var stat in agent.ApplyTeamPassive(fullTeam)) {
+            foreach (var tag in stat.SkillTags) {
+                tagDamageBonus.Add(tag, stat);
+            }
+        }
+
+        foreach (var a in fullTeam) {
+            foreach (var (afx, bonus) in a.ExternalBonus) {
+                agent.Stats[afx] += bonus;
+            }
+
+            foreach (var (tag, stat) in a.ExternalTagBonus) {
+                if (tagDamageBonus.ContainsKey(tag)) {
+                    tagDamageBonus[tag] += stat;
+                } else {
+                    tagDamageBonus[tag] = stat;
+                }
+            }
+        }
 
         var result = new List<AgentAction>();
         foreach (var action in rotation) {

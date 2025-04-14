@@ -6,8 +6,9 @@ namespace InterknotCalculator;
 
 public static class Program {
     public static async Task Main(string[] args) {
+        await Resources.Current.Init();
+        
         var calc = new Calculator();
-        await calc.Init();
         
         var builder = WebApplication.CreateSlimBuilder(args);
         builder.WebHost.UseUrls("http://localhost:5101/");
@@ -40,7 +41,7 @@ public static class Program {
                     d.StatsLevels.Skip(1).Select(p => (p.Value, Stat.SubStats[p.Key])))
             );
             
-            var actions = calc.Calculate(result.AgentId, result.WeaponId, result.StunBonus, discs, result.Rotation);
+            var actions = calc.Calculate(result.AgentId, result.WeaponId, result.StunBonus, discs, result.Team, result.Rotation);
             
             return Results.Json(new CalcResult {
                 PerAction = actions, 

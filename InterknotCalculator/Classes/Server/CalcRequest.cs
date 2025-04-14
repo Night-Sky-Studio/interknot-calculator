@@ -29,6 +29,9 @@ public class CalcRequest {
 
     [JsonPropertyName("discs")]
     public DriveDiscRequest[] Discs { get; set; } = [];
+    
+    [JsonPropertyName("team")]
+    public uint[] Team { get; set; } = [];
 
     [JsonPropertyName("stun_bonus")]
     public double StunBonus { get; set; }
