@@ -148,7 +148,9 @@ public class Calculator {
         };
     }
 
-    public List<AgentAction> Calculate(uint characterId, uint weaponId, double stunMultiplier, IEnumerable<DriveDisc> driveDiscs, IEnumerable<uint> team, IEnumerable<string> rotation) {
+    public (List<AgentAction>, Dictionary<Affix, double>) Calculate(uint characterId, uint weaponId, 
+        double stunMultiplier, IEnumerable<DriveDisc> driveDiscs, IEnumerable<uint> team, 
+        IEnumerable<string> rotation) {
         var agent = CreateAgentInstance(characterId);
         var weapon = Resources.Current.GetWeapon(weaponId);
         var tagDamageBonus = new SafeDictionary<SkillTag, Stat>();
@@ -221,6 +223,6 @@ public class Calculator {
             result.Add(localDmg);
         }
 
-        return result;
+        return (result, agent.Stats);
     }
 }
