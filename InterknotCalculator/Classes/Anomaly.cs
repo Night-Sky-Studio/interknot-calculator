@@ -11,6 +11,9 @@ public enum AnomalyType {
 }
 
 public record Anomaly(double Scale, Element Element, Stat[] Bonuses, bool CanCrit = false) {
+    /// <summary>
+    /// Default anomalies with default scales
+    /// </summary>
     public static readonly Dictionary<AnomalyType, Anomaly> Default = new () {
         { AnomalyType.Assault,    new Anomaly(731.0,      Element.Physical, []) },
         { AnomalyType.Burn,       new Anomaly(50.0 * 20,  Element.Fire,     []) },
@@ -19,6 +22,9 @@ public record Anomaly(double Scale, Element Element, Stat[] Bonuses, bool CanCri
         { AnomalyType.Corruption, new Anomaly(62.5 * 20,  Element.Ether,    []) }
     };
 
+    /// <summary>
+    /// Default anomalies by name
+    /// </summary>
     public static readonly Dictionary<string, Anomaly> DefaultByNames = new () {
         { "assault", Default[AnomalyType.Assault] },
         { "burn", Default[AnomalyType.Burn] },
@@ -27,7 +33,13 @@ public record Anomaly(double Scale, Element Element, Stat[] Bonuses, bool CanCri
         { "corruption", Default[AnomalyType.Corruption] },
     };
     
-    public static Anomaly GetAnomalyByElement(Enums.Element element) => element switch {
+    /// <summary>
+    /// Returns the default anomaly by element
+    /// </summary>
+    /// <param name="element">Anomaly Element</param>
+    /// <returns>Anomaly instance</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Anomaly not found for given element</exception>
+    public static Anomaly GetAnomalyByElement(Element element) => element switch {
         Element.Ice => Default[AnomalyType.Shatter],
         Element.Fire => Default[AnomalyType.Burn],
         Element.Physical => Default[AnomalyType.Assault],
