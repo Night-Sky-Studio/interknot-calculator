@@ -148,7 +148,7 @@ public class Calculator {
         };
     }
 
-    public (List<AgentAction>, Dictionary<Affix, double>) Calculate(uint characterId, uint weaponId, 
+    public CalcResult Calculate(uint characterId, uint weaponId, 
         double stunMultiplier, IEnumerable<DriveDisc> driveDiscs, IEnumerable<uint> team, 
         IEnumerable<string> rotation) {
         var agent = CreateAgentInstance(characterId);
@@ -208,7 +208,7 @@ public class Calculator {
             }
         }
 
-        var result = new List<AgentAction>();
+        var actions = new List<AgentAction>();
         foreach (var action in rotation) {
             AgentAction localDmg;
             if (agent.Anomalies.ContainsKey(action) || Anomaly.DefaultByNames.ContainsKey(action)) {
@@ -220,9 +220,13 @@ public class Calculator {
 
                 localDmg = GetStandardDamage(agent, name, idx - 1, tagDamageBonus, stunMultiplier);
             }
-            result.Add(localDmg);
+            actions.Add(localDmg);
         }
 
-        return (result, agent.Stats);
+        return new CalcResult {
+            FinalStats = agent.Stats,
+            PerAction = actions,
+            Total = actions.Sum(action => action.Damage)
+        };
     }
 }
