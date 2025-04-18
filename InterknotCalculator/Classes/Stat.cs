@@ -16,6 +16,9 @@ public struct Stat {
         Affix = affix;
         Tags = tags?.ToArray() ?? [];
     }
+    /// <summary>
+    /// Default Drive Discs sub stats
+    /// </summary>
     public static Dictionary<Affix, Stat> SubStats { get; } = new() {
         { Affix.Hp,                 new (112, Affix.Hp) },
         { Affix.Atk,                new (19, Affix.Atk) },
@@ -28,6 +31,10 @@ public struct Stat {
         { Affix.CritDamage,         new (0.048, Affix.CritDamage) },
         { Affix.AnomalyProficiency, new (9, Affix.AnomalyProficiency) },
     };
+    
+    /// <summary>
+    /// Default Drive Disc Main Stats at lvl. 15
+    /// </summary>
     public static Dictionary<Affix, Stat> Stats { get; } = new() {
         { Affix.Hp,                  new (2200, Affix.Hp) },
         { Affix.Atk,                 new (316, Affix.Atk) },

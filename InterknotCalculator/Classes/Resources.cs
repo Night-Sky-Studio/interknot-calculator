@@ -2,6 +2,10 @@
 
 namespace InterknotCalculator.Classes;
 
+/// <summary>
+/// Calculator Resource Manager
+/// Provides global access to loaded Weapons and Drive Discs
+/// </summary>
 public class Resources {
     private bool _isInitialized = false;
     private string WeaponsPath { get; } = Path.Combine(Environment.CurrentDirectory, "Resources", "Weapons");
@@ -9,6 +13,12 @@ public class Resources {
     private Dictionary<uint, DriveDiscSet> DriveDiscs { get; } = new();
     private Dictionary<uint, Weapon> Weapons { get; } = new();
     
+    /// <summary>
+    /// <inheritdoc cref="Directory.GetFiles(string)"/>
+    /// Does not throw.
+    /// </summary>
+    /// <param name="path"><inheritdoc cref="Directory.GetFiles(string)"/></param>
+    /// <returns><inheritdoc cref="Directory.GetFiles(string)"/></returns>
     private string[] GetFilesSafe(string path) {
         if (path == "") return [];
         try {
@@ -18,6 +28,10 @@ public class Resources {
         }
     }
     
+    /// <summary>
+    /// Initializes resource manager.
+    /// Loads Weapons and Drive Discs definitions from <see cref="WeaponsPath"/> and <see cref="DriveDiscsPath"/> 
+    /// </summary>
     public async Task Init() {
         var weapons = GetFilesSafe(WeaponsPath);
         foreach (var weapon in weapons) {
@@ -35,14 +49,31 @@ public class Resources {
         _isInitialized = true;
     }
 
-    public static Resources Current = new();
+    /// <summary>
+    /// Current instance of Resource Manager
+    /// </summary>
+    public static readonly Resources Current = new();
 
+    /// <summary>
+    /// Returns weapon data from loaded weapons
+    /// </summary>
+    /// <param name="id">Weapon ID</param>
+    /// <returns><see cref="Weapon"/> instance</returns>
+    /// <exception cref="Exception">Manager not initialized</exception>
+    /// <exception cref="KeyNotFoundException">Weapon is not implemented</exception>
     public Weapon GetWeapon(uint id) {
         if (!_isInitialized)
             throw new Exception("Resources not yet initialized.");
         return Weapons[id];
     }
 
+    /// <summary>
+    /// Returns drive disc set data from loaded sets
+    /// </summary>
+    /// <param name="id">Drive Disc Set ID</param>
+    /// <returns><see cref="DriveDiscSet"/> instance</returns>
+    /// <exception cref="Exception">Manager not initialized</exception>
+    /// <exception cref="KeyNotFoundException">Drive Discs Set is not implemented</exception>
     public DriveDiscSet GetDriveDiscSet(uint id) {
         if (!_isInitialized)
             throw new Exception("Resources not yet initialized.");

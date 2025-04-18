@@ -2,7 +2,11 @@
 
 namespace InterknotCalculator.Classes;
 
-public class Helpers {
+public static class Helpers {
+    
+    /// <summary>
+    /// Returns the related element for the given DmgBonus or ResPen.
+    /// </summary>
     public static Element? GetRelatedElement(Affix affix) {
         return affix switch {
             Affix.IceDmgBonus => Element.Ice,
@@ -19,6 +23,9 @@ public class Helpers {
         };
     }
 
+    /// <summary>
+    /// Returns the related DmgBonus for the given element.
+    /// </summary>
     public static Affix GetRelatedAffixDmg(Element? element) {
         return element switch {
             Element.Ice => Affix.IceDmgBonus,
@@ -30,6 +37,9 @@ public class Helpers {
         };
     }
     
+    /// <summary>
+    /// Returns the related ResPen for the given element.
+    /// </summary>
     public static Affix GetRelatedAffixRes(Element? element) {
         return element switch {
             Element.Ice => Affix.IceResPen,
