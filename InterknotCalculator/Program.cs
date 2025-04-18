@@ -47,9 +47,11 @@ public static class Program {
                     d.StatsLevels.Skip(1).Select(p => (p.Value, Stat.SubStats[p.Key])))
             );
             
-            var actions = calc.Calculate(result.AgentId, result.WeaponId, result.StunBonus, discs, result.Team, result.Rotation);
+            var (actions, finalStats) = calc.Calculate(result.AgentId, 
+                result.WeaponId, result.StunBonus, discs, result.Team, result.Rotation);
             
             return Results.Json(new CalcResult {
+                FinalStats = finalStats,//.ToDictionary(kvp => (int) kvp.Key, kvp => kvp.Value),
                 PerAction = actions, 
                 Total = actions.Sum(action => action.Damage)
             }, SerializerContext.Default.CalcResult);

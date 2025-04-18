@@ -195,6 +195,7 @@ public class Calculator {
         };
     }
 
+
     /// <summary>
     /// Main damage calculation function
     /// </summary>
@@ -205,7 +206,9 @@ public class Calculator {
     /// <param name="team">Team members IDs collection (except current agent)</param>
     /// <param name="rotation">Collection of agent skills/anomalies</param>
     /// <returns>A collection of agent actions</returns>
-    public List<AgentAction> Calculate(uint characterId, uint weaponId, double stunMultiplier, IEnumerable<DriveDisc> driveDiscs, IEnumerable<uint> team, IEnumerable<string> rotation) {
+    public (List<AgentAction>, Dictionary<Affix, double>) Calculate(uint characterId, uint weaponId, 
+        double stunMultiplier, IEnumerable<DriveDisc> driveDiscs, IEnumerable<uint> team, 
+        IEnumerable<string> rotation) {
         // Initialize the agent and the weapon
         var agent = CreateAgentInstance(characterId);
         var weapon = Resources.Current.GetWeapon(weaponId);
@@ -287,6 +290,6 @@ public class Calculator {
             result.Add(localDmg);
         }
 
-        return result;
+        return (result, agent.Stats);
     }
 }
