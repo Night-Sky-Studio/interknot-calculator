@@ -7,7 +7,7 @@ public sealed class JaneDoe : Agent {
         Speciality = Speciality.Anomaly;
         Element = Element.Physical;
         Rarity = Rarity.S;
-        Faction = Faction.CriminalInvestigationResponseTeam;
+        Faction = Faction.CriminalInvestigationSpecialResponseTeam;
 
         Stats[Affix.Hp] = 7788;
         Stats[Affix.Def] = 606;
@@ -56,14 +56,14 @@ public sealed class JaneDoe : Agent {
     public override void ApplyPassive() {
         Anomalies["assault"] = Anomaly.Default[AnomalyType.Assault] with {
             Bonuses = [
-                new(0.4 + Stats[Affix.AnomalyProficiency] * 0.0016, Affix.CritRate),
+                new(0.4 + AnomalyProficiency * 0.0016, Affix.CritRate),
                 new(0.5, Affix.CritDamage)
             ],
             CanCrit = true
         };
         
-        if (Stats[Affix.AnomalyProficiency] > 120) {
-            Stats[Affix.Atk] += (Stats[Affix.AnomalyProficiency] - 120) * 2;
+        if (AnomalyProficiency > 120) {
+            BonusStats[Affix.Atk] += Math.Min((AnomalyProficiency - 120) * 2, 600);
         }
     }
 }

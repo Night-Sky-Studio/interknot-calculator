@@ -7,7 +7,7 @@ public sealed class ZhuYuan : Agent {
         Speciality = Speciality.Attack;
         Element = Element.Ether;
         Rarity = Rarity.S;
-        Faction = Faction.CriminalInvestigationResponseTeam;
+        Faction = Faction.CriminalInvestigationSpecialResponseTeam;
 
         Stats[Affix.Hp] = 7482;
         Stats[Affix.Def] = 600;
@@ -18,6 +18,7 @@ public sealed class ZhuYuan : Agent {
         Stats[Affix.AnomalyMastery] = 93;
         Stats[Affix.AnomalyProficiency] = 92;
         Stats[Affix.DmgBonus] = 0.4;
+        Stats[Affix.EnergyRegen] = 1.2;
 
         Skills["dont_move"] = new(SkillTag.BasicAtk, [
             new(87.1, 32.6, Element.Physical),

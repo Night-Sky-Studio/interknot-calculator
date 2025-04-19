@@ -48,6 +48,7 @@ public sealed class AstraYao : Agent, ISupportAgent<AstraYao> {
         Stats[Affix.Impact] = 83;
         Stats[Affix.AnomalyMastery] = 93;
         Stats[Affix.AnomalyProficiency] = 92;
+        Stats[Affix.EnergyRegen] = 1.56;
 
         ExternalBonus[Affix.DmgBonus] = 0.2;
         ExternalBonus[Affix.CritDamage] = 0.25;

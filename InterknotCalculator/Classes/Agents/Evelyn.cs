@@ -17,6 +17,7 @@ public class Evelyn : Agent {
         Stats[Affix.Impact] = 93;
         Stats[Affix.AnomalyMastery] = 92;
         Stats[Affix.AnomalyProficiency] = 90;
+        Stats[Affix.EnergyRegen] = 1.2;
 
         Skills["razor_wire"] = new() {
             Tag = SkillTag.BasicAtk,
@@ -104,7 +105,7 @@ public class Evelyn : Agent {
     }
 
     public override void ApplyPassive() {
-        Stats[Affix.CritRate] += 0.25;
+        BonusStats[Affix.CritRate] += 0.25;
     }
 
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
@@ -116,7 +117,7 @@ public class Evelyn : Agent {
         
         var bonusValue = 0.3;
             
-        if (Stats[Affix.CritRate] >= 0.8) {
+        if (CritRate >= 0.8) {
             bonusValue *= 1.25;
         }
 
