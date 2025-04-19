@@ -3,7 +3,7 @@
 [Flags]
 public enum Faction {
     BelobogHeavyIndustries = 0,
-    CriminalInvestigationResponseTeam = 1,
+    CriminalInvestigationSpecialResponseTeam = 1,
     CunningHares = 2,
     SilverSquad = 4,
     HollowSpecialOperationsSection6 = 8,
