@@ -1,8 +1,9 @@
 ﻿using InterknotCalculator.Enums;
+using InterknotCalculator.Interfaces;
 
 namespace InterknotCalculator.Classes.Agents;
 
-public sealed class AstraYao : Agent {
+public sealed class AstraYao : Agent, ISupportAgent<AstraYao> {
     public static AstraYao Reference() {
         var astraYao = new AstraYao {
             Stats = {
@@ -28,6 +29,8 @@ public sealed class AstraYao : Agent {
         astraYao.ExternalTagBonus[SkillTag.Chain] = qaBonus with {
             Tags = [SkillTag.Chain]
         };
+        
+        astraYao.ApplyPassive();
         
         return astraYao;
     }
