@@ -1,6 +1,6 @@
 {
     "PartialBonus": [{
-        "Affix": "Impact",
+        "Affix": "ImpactRatio",
         "Value": 0.06
     }],
     "FullBonus": [{
