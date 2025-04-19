@@ -111,17 +111,18 @@ public class Evelyn : Agent {
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
         if (team.Count < 2) return [];
 
-        if (team.All(a => a.Speciality != Speciality.Support) && 
-            team.All(a => a.Speciality != Speciality.Stun)) 
-            return [];
-        
-        var bonusValue = 0.3;
-            
-        if (CritRate >= 0.8) {
-            bonusValue *= 1.25;
+        if (team.Any(a => a.Speciality == Speciality.Support) 
+            || team.Any(a => a.Speciality == Speciality.Stun)) {
+            var bonusValue = 0.3;
+
+            if (CritRate >= 0.8) {
+                bonusValue *= 1.25;
+            }
+
+            return [new(bonusValue, Affix.DmgBonus, [SkillTag.Chain, SkillTag.Ultimate])];
         }
 
-        return [new(bonusValue, Affix.DmgBonus, [SkillTag.Chain, SkillTag.Ultimate])];
+        return [];
 
     }
 }
