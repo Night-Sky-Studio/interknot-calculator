@@ -17,7 +17,7 @@ public enum Affix {
     ElectricDmgBonus, ElectricResPen,
     EtherDmgBonus, EtherResPen,
     
-    EnergyRegen,
+    EnergyRegen, EnergyRegenRatio,
     
     DazeBonus,
     
