@@ -17,8 +17,8 @@ public sealed class Miyabi : Agent {
         Stats[Affix.Impact] = 86;
         Stats[Affix.AnomalyMastery] = 116;
         Stats[Affix.AnomalyProficiency] = 238;
-        Stats[Affix.IceDmgBonus] = 0.3;
         Stats[Affix.EnergyRegen] = 1.2;
+        BonusStats[Affix.IceDmgBonus] = 0.3;
 
         Anomalies["frostburn"] = new(1500, Element.Ice, []);
 
