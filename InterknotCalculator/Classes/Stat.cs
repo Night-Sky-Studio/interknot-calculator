@@ -53,7 +53,7 @@ public struct Stat {
         { Affix.EtherDmgBonus,       new (0.3, Affix.EtherDmgBonus) },
         { Affix.AnomalyMasteryRatio, new (0.3, Affix.AnomalyMasteryRatio) },
         { Affix.ImpactRatio,         new (0.18, Affix.ImpactRatio) },
-        { Affix.EnergyRegen,         new (0.6, Affix.EnergyRegen) },
+        { Affix.EnergyRegenRatio,    new (0.6, Affix.EnergyRegenRatio) },
     }; 
     
     public static implicit operator double(Stat v) {

@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using InterknotCalculator.Classes.Agents;
+﻿using InterknotCalculator.Classes.Agents;
 using InterknotCalculator.Classes.Server;
 using InterknotCalculator.Enums;
 
@@ -29,46 +28,64 @@ public class Calculator {
     }
 
     /// <summary>
-    /// Collects all stats from Drive Discs and Drive Discs sets.
+    /// Collects all unconditional stats from Drive Discs
     /// </summary>
     /// <param name="driveDiscs">A collection of <see cref="DriveDisc"/> instances</param>
+    /// <param name="partialSets">
+    /// A collection of Drive Disc Set IDs for
+    /// which 2pc bonus should be applied
+    /// </param>
     /// <param name="tagDamageBonus">Tag Damage Bonus dictionary reference</param>
     /// <returns>A dictionary of all collected stats</returns>
     private SafeDictionary<Affix, double> CollectDriveDiscStats(IEnumerable<DriveDisc> driveDiscs, 
-        SafeDictionary<SkillTag, Stat> tagDamageBonus) {
+        IEnumerable<uint> partialSets, SafeDictionary<SkillTag, Stat> tagDamageBonus) {
         var result = new SafeDictionary<Affix, double>();
-        var setCounts = new SafeDictionary<uint, uint>();
 
         foreach (var disc in driveDiscs) {
-            setCounts[disc.SetId] += 1;
             result[disc.MainStat.Affix] += disc.MainStat.Value;
             foreach (var subStat in disc.SubStats) {
                 result[subStat.Stat.Affix] += subStat.Level * subStat.Stat.Value;
             }
         }
 
-        foreach (var (set, count) in setCounts) {
+        foreach (var set in partialSets) {
             var dds = Resources.Current.GetDriveDiscSet(set);
-            if (count >= 2) {
-                foreach (var bonus in dds.PartialBonus) {
-                    if (bonus.SkillTags.Length != 0) {
-                        foreach (var tag in bonus.SkillTags) {
-                            tagDamageBonus[tag] = bonus;
-                        }
-                    } else
-                        result[bonus.Affix] += bonus;
-                }
+            foreach (var bonus in dds.PartialBonus) {
+                if (bonus.SkillTags.Length != 0) {
+                    foreach (var tag in bonus.SkillTags) {
+                        tagDamageBonus[tag] = bonus;
+                    }
+                } else
+                    result[bonus.Affix] += bonus;
             }
+        }
 
-            if (count >= 4) {
-                foreach (var bonus in dds.FullBonus) {
-                    if (bonus.SkillTags.Length != 0) {
-                        foreach (var tag in bonus.SkillTags) {
-                            tagDamageBonus[tag] = bonus;
-                        }
-                    } else
-                        result[bonus.Affix] += bonus;
-                }
+        return result;
+    }
+
+    /// <summary>
+    /// Collects and applies 4pc drive discs set bonus
+    /// </summary>
+    /// <param name="fullSets">
+    /// A collection of Drive Disc Set IDs for
+    /// which 4pc bonus should be applied
+    /// </param>
+    /// <param name="tagDamageBonus">Tag Damage Bonus dictionary reference</param>
+    /// <returns>A dictionary of all collected stats</returns>
+    private SafeDictionary<Affix, double> CollectDriveDiscSetBonus(IEnumerable<uint> fullSets, 
+        SafeDictionary<SkillTag, Stat> tagDamageBonus) {
+        var result = new SafeDictionary<Affix, double>();
+        
+        foreach (var set in fullSets) {
+            var dds = Resources.Current.GetDriveDiscSet(set);
+            
+            foreach (var bonus in dds.FullBonus) {
+                if (bonus.SkillTags.Length != 0) {
+                    foreach (var tag in bonus.SkillTags) {
+                        tagDamageBonus[tag] = bonus;
+                    }
+                } else
+                    result[bonus.Affix] += bonus;
             }
         }
 
@@ -88,8 +105,7 @@ public class Calculator {
     /// <returns>Enemy Defense multiplier</returns>
     private static double GetEnemyDefMultiplier(Agent agent) {
         const double enemyDef = 953, levelFactor = 794;
-        return levelFactor / (Math.Max(enemyDef * (1 - agent.Stats[Affix.PenRatio])
-            - agent.Stats[Affix.Pen], 0) + levelFactor);
+        return levelFactor / (Math.Max(enemyDef * (1 - agent.PenRatio) - agent.Pen, 0) + levelFactor);
     }
 
     /// <summary>
@@ -123,14 +139,15 @@ public class Calculator {
         }
 
         // Calculate damage according to formula
-        var baseDmgAttacker = data.Scales[scale].Damage / 100 * agent.Stats[Affix.Atk];
-        var dmgBonusMultiplier = 1 + agent.Stats[relatedAffixDmg] + tagDmgBonus[relatedAffixDmg]
-                                 + data.Affixes[Affix.DmgBonus]  + tagDmgBonus[Affix.DmgBonus];
-        var critMultiplier = 1 + (agent.Stats[Affix.CritRate] + tagDmgBonus[Affix.CritRate])
-            * (agent.Stats[Affix.CritDamage] + tagDmgBonus[Affix.CritDamage]);
-        var resMultiplier = 1 + data.Affixes[relatedAffixRes] + tagDmgBonus[relatedAffixRes]
-                              + agent.Stats[relatedAffixRes] + agent.Stats[Affix.ResPen]
-                              + tagDmgBonus[Affix.ResPen];
+        var baseDmgAttacker = data.Scales[scale].Damage / 100 * agent.Atk;
+        var dmgBonusMultiplier = 1 + agent.ElementalDmgBonus + agent.DmgBonus 
+                                 + tagDmgBonus[relatedAffixDmg] + tagDmgBonus[Affix.DmgBonus]
+                                 + data.Affixes[relatedAffixDmg] + data.Affixes[Affix.DmgBonus];
+        var critMultiplier = 1 + (agent.CritRate + tagDmgBonus[Affix.CritRate])
+            * (agent.CritDamage + tagDmgBonus[Affix.CritDamage]);
+        var resMultiplier = 1 + agent.ElementalResPen + agent.ResPen 
+                            + tagDmgBonus[relatedAffixRes] + tagDmgBonus[Affix.ResPen]
+                            + data.Affixes[relatedAffixRes] + data.Affixes[Affix.ResPen];
 
         var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * GetEnemyDefMultiplier(agent)
             * resMultiplier * DamageTakenMultiplier * stunMultiplier;
@@ -176,14 +193,12 @@ public class Calculator {
             anomalyCritMultiplier = 1 + anomalyCritRate * anomalyCritDamage;
         }
 
-        var attribute = data.Element;
-
         // Calculate anomaly damage according to formula
-        var anomalyBaseDmg = data.Scale / 100 * agent.Stats[Affix.Atk];
-        var anomalyProficiencyMultiplier = agent.Stats[Affix.AnomalyProficiency] / 100;
+        var anomalyBaseDmg = data.Scale / 100 * agent.Atk;
+        var anomalyProficiencyMultiplier = agent.AnomalyProficiency / 100;
         const double anomalyLevelMultiplier = 2;
-        var dmgBonusMultiplier = 1 + agent.Stats[Helpers.GetRelatedAffixDmg(attribute)] + agent.Stats[Affix.DmgBonus];
-        var resMultiplier = 1 + agent.Stats[Helpers.GetRelatedAffixRes(attribute)] + agent.Stats[Affix.ResPen];
+        var dmgBonusMultiplier = 1 + agent.ElementalDmgBonus + agent.DmgBonus;
+        var resMultiplier = 1 + agent.ElementalResPen + agent.ResPen;
 
         var total = anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier
                * dmgBonusMultiplier * GetEnemyDefMultiplier(agent) * resMultiplier;
@@ -207,7 +222,7 @@ public class Calculator {
     /// <param name="rotation">Collection of agent skills/anomalies</param>
     /// <returns>A collection of agent actions</returns>
     public CalcResult Calculate(uint characterId, uint weaponId, 
-        double stunMultiplier, IEnumerable<DriveDisc> driveDiscs, IEnumerable<uint> team, 
+        double stunMultiplier, List<DriveDisc> driveDiscs, IEnumerable<uint> team, 
         IEnumerable<string> rotation) {
         // Initialize the agent and the weapon
         var agent = CreateAgentInstance(characterId);
@@ -215,40 +230,30 @@ public class Calculator {
         var tagDamageBonus = new SafeDictionary<SkillTag, Stat>();
 
         // Collect Drive Discs stats and apply them
-        var bonusStats = CollectDriveDiscStats(driveDiscs, tagDamageBonus);
+        var groupedSets = driveDiscs
+            .GroupBy(x => x.SetId)
+            .ToDictionary(set => set.Key, set => set.Count());
+        var partialSets = groupedSets.Where(kvp => kvp.Value >= 2).Select(kvp => kvp.Key);
+        var fullSets = groupedSets.Where(kvp => kvp.Value >= 4).Select(kvp => kvp.Key);
+        
+        agent.BonusStats = CollectDriveDiscStats(driveDiscs, partialSets, tagDamageBonus);
+        
+        agent.Stats[Affix.Atk] += weapon.MainStat.Value;
+        agent.BonusStats[weapon.SecondaryStat.Affix] += weapon.SecondaryStat.Value;
 
-        bonusStats[weapon.SecondaryStat.Affix] += weapon.SecondaryStat.Value;
-
-        foreach (var passive in weapon.Passive) {
-            bonusStats[passive.Affix] += passive.Value;
+        var baseStats = agent.CollectStats();
+        
+        var driveDiscSetBonus = CollectDriveDiscSetBonus(fullSets, tagDamageBonus);
+        foreach (var (afx, val) in driveDiscSetBonus) {
+            agent.BonusStats[afx] += val;
         }
-
-        agent.Stats[Affix.Atk] = (agent.Stats[Affix.Atk] + weapon.MainStat.Value)
-            * (1 + bonusStats[Affix.AtkRatio]) + bonusStats[Affix.Atk];
-
-        agent.Stats[Affix.CritRate] += bonusStats[Affix.CritRate];
-        agent.Stats[Affix.CritDamage] += bonusStats[Affix.CritDamage];
-        agent.Stats[Affix.Pen] += bonusStats[Affix.Pen];
-        agent.Stats[Affix.PenRatio] += bonusStats[Affix.PenRatio];
-
-        agent.Stats[Affix.AnomalyProficiency] += bonusStats[Affix.AnomalyProficiency];
-        agent.Stats[Affix.AnomalyMastery] += agent.Stats[Affix.AnomalyMastery] * bonusStats[Affix.AnomalyMasteryRatio]
-            + bonusStats[Affix.AnomalyMastery];
-
-        // Check for any resistance shred bonuses
-        var relatedAffixDmg = Helpers.GetRelatedAffixDmg(agent.Element);
-        agent.Stats[relatedAffixDmg] += bonusStats[relatedAffixDmg];
-        agent.Stats[Affix.DmgBonus] += bonusStats[Affix.DmgBonus];
-
-        var relatedAffixRes = Helpers.GetRelatedAffixRes(agent.Element);
-        agent.Stats[relatedAffixRes] += bonusStats[relatedAffixRes];
-        agent.Stats[Affix.ResPen] += bonusStats[Affix.ResPen];
+        
+        foreach (var passive in weapon.Passive) {
+            agent.BonusStats[passive.Affix] += passive.Value;
+        }
         
         // Apply Agent's passive
         agent.ApplyPassive();
-        
-        // Cap the Crit Rate
-        agent.Stats[Affix.CritRate] = Math.Min(agent.Stats[Affix.CritRate], 1);
         
         // Apply team passive
         // Those include current agent in the team, because current agent can also
@@ -262,7 +267,7 @@ public class Calculator {
 
         foreach (var a in fullTeam) {
             foreach (var (afx, bonus) in a.ExternalBonus) {
-                agent.Stats[afx] += bonus;
+                agent.BonusStats[afx] += bonus;
             }
 
             foreach (var (tag, stat) in a.ExternalTagBonus) {
@@ -291,7 +296,10 @@ public class Calculator {
         }
 
         return new CalcResult {
-            FinalStats = agent.Stats,
+            FinalStats = {
+                BaseStats = baseStats,
+                CalculatedStats = agent.CollectStats()
+            },
             PerAction = actions,
             Total = actions.Sum(action => action.Damage)
         };

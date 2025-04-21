@@ -44,8 +44,7 @@ public static class Program {
             // Convert Drive Discs from request
             var discs = result.Discs.Select((d, idx) =>
                 new DriveDisc(d.SetId, Convert.ToUInt32(idx), d.Rarity, Stat.Stats[d.Stats[0]],
-                    d.StatsLevels.Skip(1).Select(p => (p.Value, Stat.SubStats[p.Key])))
-            );
+                    d.StatsLevels.Skip(1).Select(p => (p.Value, Stat.SubStats[p.Key])))).ToList();
             
             var calcResult = calc.Calculate(result.AgentId, 
                 result.WeaponId, result.StunBonus, discs, result.Team, result.Rotation);

@@ -1,8 +1,9 @@
 ﻿using InterknotCalculator.Enums;
+using InterknotCalculator.Interfaces;
 
 namespace InterknotCalculator.Classes.Agents;
 
-public sealed class AstraYao : Agent {
+public sealed class AstraYao : Agent, ISupportAgent<AstraYao> {
     public static AstraYao Reference() {
         var astraYao = new AstraYao {
             Stats = {
@@ -29,6 +30,8 @@ public sealed class AstraYao : Agent {
             Tags = [SkillTag.Chain]
         };
         
+        astraYao.ApplyPassive();
+        
         return astraYao;
     }
     public AstraYao() {
@@ -45,6 +48,7 @@ public sealed class AstraYao : Agent {
         Stats[Affix.Impact] = 83;
         Stats[Affix.AnomalyMastery] = 93;
         Stats[Affix.AnomalyProficiency] = 92;
+        Stats[Affix.EnergyRegen] = 1.56;
 
         ExternalBonus[Affix.DmgBonus] = 0.2;
         ExternalBonus[Affix.CritDamage] = 0.25;

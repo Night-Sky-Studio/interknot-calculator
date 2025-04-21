@@ -17,6 +17,7 @@ public sealed class Soldier11 : Agent {
         Stats[Affix.Impact] = 93;
         Stats[Affix.AnomalyMastery] = 94;
         Stats[Affix.AnomalyProficiency] = 93;
+        Stats[Affix.EnergyRegen] = 1.2;
         
         Skills["warming_sparks"] = new() {
             Tag = SkillTag.BasicAtk,

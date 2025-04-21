@@ -17,7 +17,7 @@ public sealed class Miyabi : Agent {
         Stats[Affix.Impact] = 86;
         Stats[Affix.AnomalyMastery] = 116;
         Stats[Affix.AnomalyProficiency] = 238;
-        Stats[Affix.IceDmgBonus] = 0.3;
+        Stats[Affix.EnergyRegen] = 1.2;
 
         Anomalies["frostburn"] = new(1500, Element.Ice, []);
 
@@ -90,6 +90,10 @@ public sealed class Miyabi : Agent {
             Tag = SkillTag.Ultimate,
             Scales = [new(4776.1, 556.3)]
         };
+    }
+
+    public override void ApplyPassive() {
+        BonusStats[Affix.IceDmgBonus] += 0.3;
     }
 
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {

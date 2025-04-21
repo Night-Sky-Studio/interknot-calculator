@@ -33,6 +33,8 @@ public class Resources {
     /// Loads Weapons and Drive Discs definitions from <see cref="WeaponsPath"/> and <see cref="DriveDiscsPath"/> 
     /// </summary>
     public async Task Init() {
+        if (_isInitialized) return;
+        
         var weapons = GetFilesSafe(WeaponsPath);
         foreach (var weapon in weapons) {
             if (JsonSerializer.Deserialize(await File.ReadAllTextAsync(weapon), SerializerContext.Default.Weapon) is { } json)
