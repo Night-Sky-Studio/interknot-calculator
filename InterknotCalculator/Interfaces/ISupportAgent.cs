@@ -10,6 +10,6 @@ public interface ISupportAgent<out T> where T : Agent {
     /// Reference build is a build that achieves the maximum
     /// agent's external bonus value possible (if capped, reasonable otherwise).
     /// </remarks>
-    /// <returns>Instace of Agent's Reference build</returns>
+    /// <returns>Instance of Agent's Reference build</returns>
     public static abstract T Reference();
 }
