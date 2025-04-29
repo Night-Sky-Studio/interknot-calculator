@@ -16,7 +16,7 @@ public sealed class AstraYao : Agent, ISupportAgent<AstraYao> {
         var elegantVanity = Resources.Current.GetWeapon(14131);
 
         foreach (var stat in elegantVanity.ExternalBonus) {
-            astraYao.ExternalBonus[stat.Affix] = stat.Value;
+            astraYao.ExternalBonus[stat.Affix] += stat.Value;
         }
 
         var astralVoice = Resources.Current.GetDriveDiscSet(32800);
@@ -53,6 +53,6 @@ public sealed class AstraYao : Agent, ISupportAgent<AstraYao> {
     }
 
     public override void ApplyPassive() {
-        ExternalBonus[Affix.Atk] = Math.Min(Stats[Affix.Atk] * 0.35, 1200);
+        ExternalBonus[Affix.Atk] += Math.Min(Stats[Affix.Atk] * 0.35, 1200);
     }
 }

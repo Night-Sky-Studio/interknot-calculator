@@ -34,7 +34,7 @@ public class Nicole : Agent, ISupportAgent<Nicole> {
         
         var theVault = Resources.Current.GetWeapon(13103);
         foreach (var stat in theVault.ExternalBonus) {
-            nicole.ExternalBonus[stat.Affix] = stat.Value;
+            nicole.ExternalBonus[stat.Affix] += stat.Value;
         }
         var astralVoice = Resources.Current.GetDriveDiscSet(32800);
 
@@ -47,9 +47,9 @@ public class Nicole : Agent, ISupportAgent<Nicole> {
     }
 
     public override void ApplyPassive() {
-        ExternalBonus[Affix.ResPen] = 0.4;
+        ExternalBonus[Affix.ResPen] += 0.4;
         // M6
-        ExternalBonus[Affix.CritRate] = 0.15;
+        ExternalBonus[Affix.CritRate] += 0.15;
     }
 
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
