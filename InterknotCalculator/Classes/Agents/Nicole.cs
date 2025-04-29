@@ -20,7 +20,6 @@ public class Nicole : Agent, ISupportAgent<Nicole> {
         Stats[Affix.AnomalyProficiency] = 90;
         Stats[Affix.EnergyRegen] = 1.56;
     }
-
     public static Nicole Reference() {
         var nicole = new Nicole {
             Stats = {
@@ -51,5 +50,16 @@ public class Nicole : Agent, ISupportAgent<Nicole> {
         ExternalBonus[Affix.ResPen] = 0.4;
         // M6
         ExternalBonus[Affix.CritRate] = 0.15;
+    }
+
+    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
+        if (team.Count < 2) return [];
+
+        if (team.Any(a => a.Element == Element) ||
+            team.Any(a => a.Faction == Faction)) {
+            return [new(0.25, Affix.EtherDmgBonus)];
+        }
+        
+        return [];
     }
 }
