@@ -49,5 +49,7 @@ public class Nicole : Agent, ISupportAgent<Nicole> {
 
     public override void ApplyPassive() {
         ExternalBonus[Affix.ResPen] = 0.4;
+        // M6
+        ExternalBonus[Affix.CritRate] = 0.15;
     }
 }
