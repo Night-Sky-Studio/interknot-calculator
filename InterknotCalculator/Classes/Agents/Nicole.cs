@@ -7,7 +7,7 @@ public class Nicole : Agent, ISupportAgent<Nicole> {
     public Nicole() {
         Speciality = Speciality.Support;
         Element = Element.Ether;
-        Rarity = Rarity.S;
+        Rarity = Rarity.A;
         Faction = Faction.CunningHares;
         
         Stats[Affix.Hp] = 8145;
