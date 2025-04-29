@@ -30,8 +30,6 @@ public sealed class AstraYao : Agent, ISupportAgent<AstraYao> {
             Tags = [SkillTag.Chain]
         };
         
-        astraYao.ApplyPassive();
-        
         return astraYao;
     }
     public AstraYao() {
