@@ -1,0 +1,18 @@
+{
+    "Speciality": "Support",
+    "Rarity": "A",
+    "MainStat": {
+        "Affix": "Atk",
+        "Value": 624
+    },
+    "SecondaryStat": {
+        "Affix": "EnergyRegenRatio",
+        "Value": 0.5
+    },
+    "ExternalBonus": [
+        {
+            "Affix": "DmgBonus",
+            "Value": 0.16
+        }
+    ]
+}
