@@ -6,9 +6,9 @@ namespace InterknotCalculator.Classes.Agents;
 public class Lucy : Agent, ISupportAgent<Lucy> {
     public Lucy() {
         Speciality = Speciality.Support;
-        Element = Element.Ether;
+        Element = Element.Fire;
         Rarity = Rarity.A;
-        Faction = Faction.CunningHares;
+        Faction = Faction.SonsOfCalydon;
 
         Stats[Affix.Hp] = 8025;
         Stats[Affix.Def] = 612;
