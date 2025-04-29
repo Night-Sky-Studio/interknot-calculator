@@ -16,6 +16,7 @@ public class Calculator {
     /// <exception cref="ArgumentOutOfRangeException">Agent not implemented</exception>
     private static Agent CreateAgentInstance(uint agentId) {
         return agentId switch {
+            1031 => Nicole.Reference(), // Support agent - provide reference implementation
             1041 => new Soldier11(),
             1091 => new Miyabi(),
             1191 => new Ellen(),
