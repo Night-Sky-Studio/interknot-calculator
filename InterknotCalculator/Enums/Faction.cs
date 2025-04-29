@@ -2,16 +2,17 @@
 
 [Flags]
 public enum Faction {
-    BelobogHeavyIndustries = 0,
-    CriminalInvestigationSpecialResponseTeam = 1,
-    CunningHares = 2,
-    SilverSquad = 4,
-    HollowSpecialOperationsSection6 = 8,
-    LyreSquad = 16,
-    Mockingbird = 32,
-    ObolSquad = 64,
-    SonsOfCalydon = 128,
-    StarsOfLyra = 256,
-    VictoriaHousekeeping = 512,
+    None = 0,
+    BelobogHeavyIndustries = 1,
+    CriminalInvestigationSpecialResponseTeam = 2,
+    CunningHares = 4,
+    SilverSquad = 8,
+    HollowSpecialOperationsSection6 = 16,
+    LyreSquad = 32,
+    Mockingbird = 64,
+    ObolSquad = 128,
+    SonsOfCalydon = 256,
+    StarsOfLyra = 512,
+    VictoriaHousekeeping = 1024,
     NewEriduDefenseForce = SilverSquad | ObolSquad | LyreSquad
 }
