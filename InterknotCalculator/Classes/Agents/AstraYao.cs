@@ -10,8 +10,6 @@ public sealed class AstraYao : Agent, ISupportAgent<AstraYao> {
                 [Affix.Atk] = 3430
             }
         };
-        
-        astraYao.ApplyPassive();
 
         var elegantVanity = Resources.Current.GetWeapon(14131);
 
@@ -22,13 +20,9 @@ public sealed class AstraYao : Agent, ISupportAgent<AstraYao> {
         var astralVoice = Resources.Current.GetDriveDiscSet(32800);
 
         var qaBonus = astralVoice.FullBonus.First();
-        foreach (var tag in qaBonus.SkillTags) {
-            astraYao.ExternalTagBonus[tag] = qaBonus;
-        }
-
-        astraYao.ExternalTagBonus[SkillTag.Chain] = qaBonus with {
-            Tags = [SkillTag.Chain]
-        };
+        astraYao.ExternalBonus[qaBonus.Affix] += qaBonus.Value;
+        
+        astraYao.ApplyPassive();
         
         return astraYao;
     }
@@ -53,6 +47,6 @@ public sealed class AstraYao : Agent, ISupportAgent<AstraYao> {
     }
 
     public override void ApplyPassive() {
-        ExternalBonus[Affix.Atk] += Math.Min(Stats[Affix.Atk] * 0.35, 1200);
+        ExternalBonus[Affix.Atk] += Math.Min(Atk * 0.35, 1200);
     }
 }

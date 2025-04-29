@@ -37,9 +37,7 @@ public class Soukaku : Agent, ISupportAgent<Soukaku> {
         var astralVoice = Resources.Current.GetDriveDiscSet(32800);
 
         var qaBonus = astralVoice.FullBonus.First();
-        foreach (var tag in qaBonus.SkillTags) {
-            soukaku.ExternalTagBonus[tag] = qaBonus;
-        }
+        soukaku.ExternalBonus[qaBonus.Affix] += qaBonus.Value;
 
         soukaku.ApplyPassive();
         

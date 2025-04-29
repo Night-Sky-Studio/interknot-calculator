@@ -30,19 +30,18 @@ public class Nicole : Agent, ISupportAgent<Nicole> {
             }
         };
         
-        nicole.ApplyPassive();
-        
         var theVault = Resources.Current.GetWeapon(13103);
         foreach (var stat in theVault.ExternalBonus) {
             nicole.ExternalBonus[stat.Affix] += stat.Value;
         }
+
         var astralVoice = Resources.Current.GetDriveDiscSet(32800);
 
         var qaBonus = astralVoice.FullBonus.First();
-        foreach (var tag in qaBonus.SkillTags) {
-            nicole.ExternalTagBonus[tag] = qaBonus;
-        }
+        nicole.ExternalBonus[qaBonus.Affix] += qaBonus.Value;
 
+        nicole.ApplyPassive();
+        
         return nicole;
     }
 
