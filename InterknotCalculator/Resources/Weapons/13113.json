@@ -1,0 +1,24 @@
+{
+    "Speciality": "Support",
+    "Rarity": "A",
+    "MainStat": {
+        "Affix": "Atk",
+        "Value": 624
+    },
+    "SecondaryStat": {
+        "Affix": "AtkRatio",
+        "Value": 0.25
+    },
+    "ExternalBonus": [
+        {
+            "Affix": "AtkRatio",
+            "Value": 0.128
+        }
+    ],
+    "Passive": [
+        {
+            "Affix": "IceDmgBonus",
+            "Value": 0.24
+        }
+    ]
+}
