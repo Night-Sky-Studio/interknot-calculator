@@ -19,10 +19,13 @@ public class Calculator {
             1031 => Nicole.Reference(), // Support agent - provide reference implementation
             1041 => new Soldier11(),
             1091 => new Miyabi(),
+            1131 => Soukaku.Reference(),
+            1151 => Lucy.Reference(),
             1191 => new Ellen(),
+            1211 => Rina.Reference(),
             1241 => new ZhuYuan(),
             1261 => new JaneDoe(),
-            1311 => AstraYao.Reference(), // Support agent - provide reference implementation
+            1311 => AstraYao.Reference(),
             1321 => new Evelyn(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent wasn't found.")
         };

@@ -38,13 +38,19 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 
 ## Current Progress
 ### Agents
+#### Active Agents
 - Soldier 11 (1041)
 - Miyabi (1091)
 - Ellen Joe (1191)
 - Zhu Yuan (1241)
 - Jane Doe (1261)
-- Astra Yao (1311)
 - Evelyn (1321)
+#### Support Agents
+- Nicole (1031)
+- Soukaku (1131)
+- Lucy (1151)
+- Rina (1211)
+- Astra Yao (1311)
 
 ### Weapons
 - Hailstorm Shrine (14109)
