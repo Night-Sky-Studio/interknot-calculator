@@ -42,7 +42,7 @@ public class Calculator {
     /// <param name="tagDamageBonus">Tag Damage Bonus dictionary reference</param>
     /// <returns>A dictionary of all collected stats</returns>
     private SafeDictionary<Affix, double> CollectDriveDiscStats(IEnumerable<DriveDisc> driveDiscs, 
-        IEnumerable<uint> partialSets, SafeDictionary<SkillTag, Stat> tagDamageBonus) {
+        IEnumerable<uint> partialSets, List<Stat> tagDamageBonus) {
         var result = new SafeDictionary<Affix, double>();
 
         foreach (var disc in driveDiscs) {
@@ -56,9 +56,7 @@ public class Calculator {
             var dds = Resources.Current.GetDriveDiscSet(set);
             foreach (var bonus in dds.PartialBonus) {
                 if (bonus.SkillTags.Length != 0) {
-                    foreach (var tag in bonus.SkillTags) {
-                        tagDamageBonus[tag] = bonus;
-                    }
+                    tagDamageBonus.Add(bonus);
                 } else
                     result[bonus.Affix] += bonus;
             }
@@ -77,17 +75,15 @@ public class Calculator {
     /// <param name="tagDamageBonus">Tag Damage Bonus dictionary reference</param>
     /// <returns>A dictionary of all collected stats</returns>
     private SafeDictionary<Affix, double> CollectDriveDiscSetBonus(IEnumerable<uint> fullSets, 
-        SafeDictionary<SkillTag, Stat> tagDamageBonus) {
+        List<Stat> tagDamageBonus) {
         var result = new SafeDictionary<Affix, double>();
         
         foreach (var set in fullSets) {
             var dds = Resources.Current.GetDriveDiscSet(set);
             
             foreach (var bonus in dds.FullBonus) {
-                if (bonus.SkillTags.Length != 0) {
-                    foreach (var tag in bonus.SkillTags) {
-                        tagDamageBonus[tag] = bonus;
-                    }
+                if (bonus.SkillTags.Length != 0) { 
+                    tagDamageBonus.Add(bonus);
                 } else
                     result[bonus.Affix] += bonus;
             }
@@ -118,11 +114,9 @@ public class Calculator {
     /// <param name="agent">Agent instance</param>
     /// <param name="skill">Skill name</param>
     /// <param name="scale">Skill level</param>
-    /// <param name="tagDamageBonus">Tag Damage Bonus dictionary reference</param>
     /// <param name="stunMultiplier">Enemy Stun multiplier</param>
     /// <returns><see cref="AgentAction"/> with calculated damage</returns>
-    private static AgentAction GetStandardDamage(Agent agent, string skill, int scale, 
-        SafeDictionary<SkillTag, Stat> tagDamageBonus, double stunMultiplier = 1d) {
+    private static AgentAction GetStandardDamage(Agent agent, string skill, int scale, double stunMultiplier = 1d) {
         var data = agent.Skills[skill];
         var attribute = data.Scales[scale].Element ?? agent.Element;
         var relatedAffixDmg = Helpers.GetRelatedAffixDmg(attribute);
@@ -130,8 +124,8 @@ public class Calculator {
 
         // Process all tag bonuses and apply if tag matches
         var tagDmgBonus = new SafeDictionary<Affix, double>();
-        foreach (var (tag, stat) in tagDamageBonus) {
-            if (data.Tag == tag) {
+        foreach (var stat in agent.TagBonus) {
+            if (stat.SkillTags.Contains(data.Tag)) {
                 tagDmgBonus[stat.Affix] += stat.Value;
             }
         }
@@ -231,7 +225,6 @@ public class Calculator {
         // Initialize the agent and the weapon
         var agent = CreateAgentInstance(characterId);
         var weapon = Resources.Current.GetWeapon(weaponId);
-        var tagDamageBonus = new SafeDictionary<SkillTag, Stat>();
 
         // Collect Drive Discs stats and apply them
         var groupedSets = driveDiscs
@@ -240,14 +233,14 @@ public class Calculator {
         var partialSets = groupedSets.Where(kvp => kvp.Value >= 2).Select(kvp => kvp.Key);
         var fullSets = groupedSets.Where(kvp => kvp.Value >= 4).Select(kvp => kvp.Key);
         
-        agent.BonusStats = CollectDriveDiscStats(driveDiscs, partialSets, tagDamageBonus);
+        agent.BonusStats = CollectDriveDiscStats(driveDiscs, partialSets, agent.TagBonus);
         
         agent.Stats[Affix.Atk] += weapon.MainStat.Value;
         agent.BonusStats[weapon.SecondaryStat.Affix] += weapon.SecondaryStat.Value;
 
         var baseStats = agent.CollectStats();
         
-        var driveDiscSetBonus = CollectDriveDiscSetBonus(fullSets, tagDamageBonus);
+        var driveDiscSetBonus = CollectDriveDiscSetBonus(fullSets, agent.TagBonus);
         foreach (var (afx, val) in driveDiscSetBonus) {
             agent.BonusStats[afx] += val;
         }
@@ -263,9 +256,16 @@ public class Calculator {
         // Those include current agent in the team, because current agent can also
         // have synergy with other team members
         List<Agent> fullTeam = [agent ,..team.Select(CreateAgentInstance).ToList()];
-        foreach (var stat in agent.ApplyTeamPassive(fullTeam)) {
-            foreach (var tag in stat.SkillTags) {
-                tagDamageBonus.Add(tag, stat);
+        List<Stat> fullTeamPassive = [];
+        foreach (var a in fullTeam) {
+            fullTeamPassive.AddRange(a.ApplyTeamPassive(fullTeam));
+        }
+        
+        foreach (var stat in fullTeamPassive) {
+            if (stat.SkillTags.Length > 0) {
+                agent.TagBonus.Add(stat);
+            } else {
+                agent.BonusStats[stat.Affix] += stat.Value;
             }
         }
 
@@ -274,12 +274,8 @@ public class Calculator {
                 agent.BonusStats[afx] += bonus;
             }
 
-            foreach (var (tag, stat) in a.ExternalTagBonus) {
-                if (tagDamageBonus.ContainsKey(tag)) {
-                    tagDamageBonus[tag] += stat;
-                } else {
-                    tagDamageBonus[tag] = stat;
-                }
+            foreach (var stat in a.ExternalTagBonus) {
+                agent.TagBonus.Add(stat);
             }
         }
 
@@ -294,7 +290,7 @@ public class Calculator {
                 var name = attack[0];
                 var idx = attack.Length == 1 ? 1 : int.Parse(attack[1]);
 
-                localDmg = GetStandardDamage(agent, name, idx - 1, tagDamageBonus, stunMultiplier);
+                localDmg = GetStandardDamage(agent, name, idx - 1, stunMultiplier);
             }
             actions.Add(localDmg);
         }

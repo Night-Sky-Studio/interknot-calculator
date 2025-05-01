@@ -14,7 +14,8 @@ public abstract class Agent {
     public SafeDictionary<Affix, double> Stats { get; set; } = new();
     public SafeDictionary<Affix, double> BonusStats { get; set; } = new();
     public SafeDictionary<Affix, double> ExternalBonus { get; set; } = new();
-    public SafeDictionary<SkillTag, Stat> ExternalTagBonus { get; set; } = new();
+    public List<Stat> TagBonus { get; set; } = [];
+    public List<Stat> ExternalTagBonus { get; set; } = [];
     public Dictionary<string, Anomaly> Anomalies { get; set; } = new();
     public Dictionary<string, Skill> Skills { get; set; } = new();
     
@@ -37,7 +38,7 @@ public abstract class Agent {
     public double DmgBonus => Stats[Affix.DmgBonus] + BonusStats[Affix.DmgBonus];
     public double ResPen => Stats[Affix.ResPen] + BonusStats[Affix.ResPen];
     public double DazeBonus => Stats[Affix.DazeBonus] + BonusStats[Affix.DazeBonus];
-
+    
     public SafeDictionary<Affix, double> CollectStats() => new() {
         [Affix.Hp] = Hp,
         [Affix.Atk] = Atk,

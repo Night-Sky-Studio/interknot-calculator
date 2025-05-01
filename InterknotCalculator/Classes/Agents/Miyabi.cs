@@ -103,7 +103,7 @@ public sealed class Miyabi : Agent {
             team.Any(a => a.Faction == Faction)) {
             return [
                 new (0.6, Affix.DmgBonus, [SkillTag.BasicAtk]),
-                new(0.3, Affix.IceResPen, [SkillTag.BasicAtk])
+                new (0.3, Affix.IceResPen, [SkillTag.BasicAtk])
             ];
         }
 
