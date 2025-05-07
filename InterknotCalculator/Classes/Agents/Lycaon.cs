@@ -3,7 +3,7 @@ using InterknotCalculator.Interfaces;
 
 namespace InterknotCalculator.Classes.Agents;
 
-public sealed class Lycaon : Agent, IStunAgent, ISupportAgent<Lycaon> {
+public sealed class Lycaon : StunAgent, ISupportAgent<Lycaon> {
     public static Lycaon Reference() {
         return new();
     }
@@ -41,5 +41,5 @@ public sealed class Lycaon : Agent, IStunAgent, ISupportAgent<Lycaon> {
         return [];
     }
 
-    public double EnemyStunBonusOverride { get; set; } = 1.0;
+    public override double EnemyStunBonusOverride { get; set; } = 1.0;
 }
