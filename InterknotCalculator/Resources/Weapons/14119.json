@@ -16,8 +16,7 @@
         },
         {
             "Affix": "CritRate",
-            "Tags": ["BasicAtk", "Dash"],
-            "Value": 0.10
+            "Value": 0.20
         }
     ]
 }
