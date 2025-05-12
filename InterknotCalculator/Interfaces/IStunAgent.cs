@@ -2,4 +2,5 @@
 
 public interface IStunAgent {
     public double EnemyStunBonusOverride { get; set; }
+    public double GetStandardDaze(string action, int scale);
 }

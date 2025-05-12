@@ -5,11 +5,7 @@ namespace InterknotCalculator.Classes.Agents;
 
 public sealed class Lycaon : Agent, IStunAgent, ISupportAgent<Lycaon> {
     public static Lycaon Reference() {
-        var lycaon = new Lycaon();
-
-        lycaon.ApplyPassive();
-        
-        return lycaon;
+        return new();
     }
 
     public Lycaon() {
