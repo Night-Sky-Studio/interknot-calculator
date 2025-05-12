@@ -281,9 +281,7 @@ public class Calculator {
             }
 
             if (a is IStunAgent stunAgent) {
-                if (Math.Abs(stunAgent.EnemyStunBonusOverride - 1.0) > 0.001) {
-                    stunMultiplier += stunAgent.EnemyStunBonusOverride;
-                }
+                stunMultiplier += stunAgent.EnemyStunBonusOverride;
             }
         }
 
