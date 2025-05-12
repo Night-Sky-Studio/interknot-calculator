@@ -5,7 +5,11 @@ namespace InterknotCalculator.Classes.Agents;
 
 public sealed class Lycaon : Agent, IStunAgent, ISupportAgent<Lycaon> {
     public static Lycaon Reference() {
-        return new();
+        var lycaon = new Lycaon();
+
+        lycaon.ApplyPassive();
+        
+        return lycaon;
     }
 
     public Lycaon() {
@@ -35,11 +39,12 @@ public sealed class Lycaon : Agent, IStunAgent, ISupportAgent<Lycaon> {
         
         if (team.Any(a => a.Element == Element) ||
             team.Any(a => a.Faction == Faction)) {
-            return [new(0.35, Affix.DazeBonus)];
+            EnemyStunBonusOverride = 0.35;
+            return [];
         }
 
         return [];
     }
 
-    public double EnemyStunBonusOverride { get; set; } = 1.0;
+    public double EnemyStunBonusOverride { get; set; }
 }
