@@ -1,6 +1,7 @@
 ﻿using InterknotCalculator.Classes.Agents;
 using InterknotCalculator.Classes.Server;
 using InterknotCalculator.Enums;
+using InterknotCalculator.Interfaces;
 
 namespace InterknotCalculator.Classes;
 
@@ -20,6 +21,7 @@ public class Calculator {
             1041 => new Soldier11(),
             1091 => new Miyabi(),
             1131 => Soukaku.Reference(),
+            1141 => Lycaon.Reference(),
             1151 => Lucy.Reference(),
             1191 => new Ellen(),
             1211 => Rina.Reference(),
@@ -281,6 +283,10 @@ public class Calculator {
 
             foreach (var stat in a.ExternalTagBonus) {
                 agent.TagBonus.Add(stat);
+            }
+
+            if (a is IStunAgent stunAgent) {
+                stunMultiplier += stunAgent.EnemyStunBonusOverride;
             }
         }
         
