@@ -141,8 +141,8 @@ public class Calculator {
         var dmgBonusMultiplier = 1 + agent.ElementalDmgBonus + agent.DmgBonus 
                                  + tagDmgBonus[relatedAffixDmg] + tagDmgBonus[Affix.DmgBonus]
                                  + data.Affixes[relatedAffixDmg] + data.Affixes[Affix.DmgBonus];
-        var critMultiplier = 1 + (agent.CritRate + tagDmgBonus[Affix.CritRate])
-            * (agent.CritDamage + tagDmgBonus[Affix.CritDamage]);
+        var critMultiplier = 1 + Math.Min(agent.CritRate + tagDmgBonus[Affix.CritRate] + data.Affixes[Affix.CritRate], 1)
+            * (agent.CritDamage + tagDmgBonus[Affix.CritDamage] + data.Affixes[Affix.CritDamage]);
         var resMultiplier = 1 + agent.ElementalResPen + agent.ResPen 
                             + tagDmgBonus[relatedAffixRes] + tagDmgBonus[Affix.ResPen]
                             + data.Affixes[relatedAffixRes] + data.Affixes[Affix.ResPen];
@@ -257,6 +257,11 @@ public class Calculator {
         // have synergy with other team members
         List<Agent> fullTeam = [agent ,..team.Select(CreateAgentInstance).ToList()];
         List<Stat> fullTeamPassive = [];
+        
+        // All supports are rocking "Astral Voice" set
+        // they need to be counted to then subtract excess applications of this set
+        // as "Astral Voice" 4pc bonus can only be applied once
+        var astralVoiceCount = fullTeam.Count(a => a.Speciality == Speciality.Support);
         foreach (var a in fullTeam) {
             fullTeamPassive.AddRange(a.ApplyTeamPassive(fullTeam));
         }
@@ -277,6 +282,14 @@ public class Calculator {
             foreach (var stat in a.ExternalTagBonus) {
                 agent.TagBonus.Add(stat);
             }
+        }
+        
+        // Subtract excess applications of "Astral Voice" 4pc bonus
+        // I can't believe how hacky this feels...
+        if (astralVoiceCount > 1) {
+            var astralVoice = Resources.Current.GetDriveDiscSet(32800);
+            var avBonus = astralVoice.FullBonus.First();
+            agent.BonusStats[avBonus.Affix] -= avBonus.Value * (astralVoiceCount - 1);
         }
 
         // Do the calculation
