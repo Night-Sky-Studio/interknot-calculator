@@ -40,7 +40,6 @@ public sealed class Lycaon : Agent, IStunAgent, ISupportAgent<Lycaon> {
         if (team.Any(a => a.Element == Element) ||
             team.Any(a => a.Faction == Faction)) {
             EnemyStunBonusOverride = 0.35;
-            return [];
         }
 
         return [];
