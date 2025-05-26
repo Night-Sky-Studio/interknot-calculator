@@ -11,6 +11,8 @@ All configurations are in JSON format and named with IDs of the corresponding ob
 [interknot-calculator/IDs.md](IDs.md) file.
 
 ## How damage is being calculated
+*(short ver., long version can be found [here](https://github.com/Night-Sky-Studio/interknot-calculator/wiki/Damage-Calculation))*
+
 Before everything, the important stuff:
 - All characters are assumed to be at level 70 with maxed out skills (lvl. 12) and Core Skill (lvl. 7).
 - All S-rank characters are assumed to be at M0. All A-rank characters are assumed to be at M6. (TODO)
@@ -45,6 +47,11 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Zhu Yuan (1241)
 - Jane Doe (1261)
 - Evelyn (1321)
+- Harumasa (1201)
+
+#### Stun Agents
+- [Partial] Lycaon (1141)
+
 #### Support Agents
 - Nicole (1031)
 - Soukaku (1131)
@@ -63,6 +70,8 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Deep Sea Visitor (14119)
 - Elegant Vanity (14131)
 - Heartstring Nocturne (14132)
+- The Restrained (14114)
+- Zanshin Herb Case (14120)
 
 ### Drive Disc Sets
 - Woodpecker Electro (31000)
