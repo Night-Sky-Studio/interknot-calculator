@@ -72,6 +72,7 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Heartstring Nocturne (14132)
 - The Restrained (14114)
 - Zanshin Herb Case (14120)
+- Marcato Desire (13015)
 
 ### Drive Disc Sets
 - Woodpecker Electro (31000)
