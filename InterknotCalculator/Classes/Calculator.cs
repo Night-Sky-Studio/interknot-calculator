@@ -24,6 +24,7 @@ public class Calculator {
             1141 => Lycaon.Reference(),
             1151 => Lucy.Reference(),
             1191 => new Ellen(),
+            1201 => new Harumasa(),
             1211 => Rina.Reference(),
             1241 => new ZhuYuan(),
             1261 => new JaneDoe(),
