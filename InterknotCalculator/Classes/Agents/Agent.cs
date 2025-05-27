@@ -1,4 +1,6 @@
-﻿using InterknotCalculator.Enums;
+﻿using InterknotCalculator.Classes.Enemies;
+using InterknotCalculator.Classes.Server;
+using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Classes.Agents;
 
@@ -7,6 +9,8 @@ namespace InterknotCalculator.Classes.Agents;
 /// All agents should inherit from this class and be sealed
 /// </summary>
 public abstract class Agent {
+    private const double DamageTakenMultiplier = 1;
+    
     public Speciality Speciality { get; set; }
     public Element Element { get; set; }
     public Rarity Rarity { get; set; }
@@ -76,4 +80,52 @@ public abstract class Agent {
     /// <param name="ability">Ability name</param>
     /// <returns><see cref="Stat"/> or null if ability has none</returns>
     public virtual Stat? ApplyAbilityPassive(string ability) => null;
+
+    /// <summary>
+    /// Calculates standard damage for a given agent and skill
+    /// </summary>
+    /// <param name="skill">Skill name</param>
+    /// <param name="scale">Skill level</param>
+    /// <param name="enemy">Enemy instance</param>
+    /// <returns><see cref="AgentAction"/> with calculated damage</returns>
+    public AgentAction GetActionDamage(string skill, int scale, Enemy enemy) {
+        var data = Skills[skill];
+        var attribute = data.Scales[scale].Element ?? Element;
+        var relatedAffixDmg = Helpers.GetRelatedAffixDmg(attribute);
+        var relatedAffixRes = Helpers.GetRelatedAffixRes(attribute);
+
+        // Process all tag bonuses and apply if tag matches
+        var tagDmgBonus = new SafeDictionary<Affix, double>();
+        foreach (var stat in TagBonus) {
+            if (stat.SkillTags.Contains(data.Tag)) {
+                tagDmgBonus[stat.Affix] += stat.Value;
+            }
+        }
+
+        // Apply ability passive if present
+        var abilityPassive = ApplyAbilityPassive(skill);
+        if (abilityPassive is { } passive) {
+            tagDmgBonus.Add(passive.Affix, passive.Value);
+        }
+
+        // Calculate damage according to formula
+        var baseDmgAttacker = data.Scales[scale].Damage / 100 * Atk;
+        var dmgBonusMultiplier = 1 + ElementalDmgBonus + DmgBonus 
+                                 + tagDmgBonus[relatedAffixDmg] + tagDmgBonus[Affix.DmgBonus]
+                                 + data.Affixes[relatedAffixDmg] + data.Affixes[Affix.DmgBonus];
+        var critMultiplier = 1 + Math.Min(CritRate + tagDmgBonus[Affix.CritRate] + data.Affixes[Affix.CritRate], 1)
+            * (CritDamage + tagDmgBonus[Affix.CritDamage] + data.Affixes[Affix.CritDamage]);
+        var resMultiplier = 1 + ElementalResPen + ResPen 
+                            + tagDmgBonus[relatedAffixRes] + tagDmgBonus[Affix.ResPen]
+                            + data.Affixes[relatedAffixRes] + data.Affixes[Affix.ResPen];
+
+        var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * enemy.GetDefenseMultiplier(this)
+                    * resMultiplier * DamageTakenMultiplier * enemy.StunMultiplier;
+
+        return new() {
+            Name = $"{skill} { (scale == 0 && data.Scales.Count == 1 ? "" : scale + 1) }".Trim(),
+            Tag = data.Tag,
+            Damage = total
+        };
+    }
 }
