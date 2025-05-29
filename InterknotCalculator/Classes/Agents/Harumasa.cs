@@ -22,8 +22,8 @@ public class Harumasa : Agent {
         Skills["cloud_piercer"] = new() {
             Tag = SkillTag.BasicAtk,
             Scales = [
-                new(85.3, 40.8, Element.Physical),
-                new(80.5, 67.4, Element.Physical),
+                new(85.3, 40.8, Element: Element.Physical),
+                new(80.5, 67.4, Element: Element.Physical),
                 new(142.4, 100.2),
                 new(180.3, 134.7),
                 new(266, 173.7)
@@ -31,7 +31,7 @@ public class Harumasa : Agent {
         };
         Skills["cloud_piercer_drift"] = new() {
             Tag = SkillTag.BasicAtk,
-            Scales = [new(139.9, 74.2, Element.Physical)]
+            Scales = [new(139.9, 74.2, Element: Element.Physical)]
         };
         Skills["falling_feather"] = new() {
               Tag = SkillTag.BasicAtk,
@@ -44,7 +44,7 @@ public class Harumasa : Agent {
 
         Skills["hiten_no_tsuru"] = new() {
             Tag = SkillTag.Dash, 
-            Scales = [new(162.1, 61.3, Element.Physical)]
+            Scales = [new(162.1, 61.3, Element: Element.Physical)]
         };
         Skills["hidden_edge"] = new() {
             Tag = SkillTag.Dash,

@@ -24,8 +24,8 @@ public sealed class Miyabi : Agent {
         Skills["kazahana"] = new() {
             Tag = SkillTag.BasicAtk,
             Scales = [
-                new (54.4, 21.2, Element.Physical),
-                new (59.3, 41.2, Element.Physical),
+                new (54.4, 21.2, Element: Element.Physical),
+                new (59.3, 41.2, Element: Element.Physical),
                 new (126.6, 70.6),
                 new (193.3, 123.9),
                 new (258.8, 197.0)
@@ -45,7 +45,7 @@ public sealed class Miyabi : Agent {
         };
         Skills["fuyubachi"] = new() {
             Tag = SkillTag.Dash,
-            Scales = [new(52.2, 19.5, Element.Physical)]
+            Scales = [new(52.2, 19.5, Element: Element.Physical)]
         };
         Skills["kan_suzume"] = new() {
             Tag = SkillTag.Counter,
