@@ -6,8 +6,8 @@ namespace InterknotCalculator.Classes.Enemies;
 public abstract class Enemy(double defense, double levelFactor) {
     public double Defense { get; } = defense;
     public double LevelFactor { get; } = levelFactor;
-    public double Daze { get; set; } = 0.0;
-    public double StunMultiplier { get; set; } = 1.0;
+    public Progress Daze { get; set; }
+    public double StunMultiplier { get; set; } = 1.5;
 
     public SafeDictionary<Affix, double> Stats { get; set; } = new();
     
