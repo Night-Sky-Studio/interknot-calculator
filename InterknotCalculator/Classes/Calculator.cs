@@ -97,71 +97,6 @@ public class Calculator {
     }
 
     /// <summary>
-    /// Calculates enemy defense multiplier
-    /// </summary>
-    /// <remarks>
-    /// Currently, enemy is "Notorious Dullahan" at lvl. 70
-    /// </remarks>
-    /// <param name="agent">Agent instance</param>
-    /// <returns>Enemy Defense multiplier</returns>
-    private static double GetEnemyDefMultiplier(Agent agent) {
-        const double enemyDef = 953, levelFactor = 794;
-        return levelFactor / (Math.Max(enemyDef * (1 - agent.PenRatio) - agent.Pen, 0) + levelFactor);
-    }
-
-    /// <summary>
-    /// Gets standard anomaly damage.
-    /// </summary>
-    /// <param name="agent">Agent instance</param>
-    /// <param name="anomaly">Anomaly name</param>
-    /// <returns><see cref="AgentAction"/> with calculated damage</returns>
-    private static AgentAction GetAnomalyDamage(Agent agent, string anomaly) {
-        // Agents can override default anomalies
-        // ReSharper disable once InlineOutVariableDeclaration
-        Anomaly data;
-        if (!agent.Anomalies.TryGetValue(anomaly, out data!)) {
-            data = Anomaly.GetAnomalyByElement(agent.Element);
-        }
-
-        // Some anomalies (Jane Doe - Assault) can crit
-        double anomalyCritMultiplier = 1;
-
-        if (data.CanCrit) {
-            // These crit values are not affected by anything other than character's skill kit
-            double anomalyCritRate = 0.05, anomalyCritDamage = 0.5;
-            foreach (var bonus in data.Bonuses) {
-                switch (bonus.Affix) {
-                    case Affix.CritRate:
-                        anomalyCritRate = Math.Min(bonus.Value, 1);
-                        break;
-                    case Affix.CritDamage:
-                        anomalyCritDamage = bonus.Value;
-                        break;
-                }
-            }
-
-            anomalyCritMultiplier = 1 + anomalyCritRate * anomalyCritDamage;
-        }
-
-        // Calculate anomaly damage according to formula
-        var anomalyBaseDmg = data.Scale / 100 * agent.Atk;
-        var anomalyProficiencyMultiplier = agent.AnomalyProficiency / 100;
-        const double anomalyLevelMultiplier = 2;
-        var dmgBonusMultiplier = 1 + agent.ElementalDmgBonus + agent.DmgBonus;
-        var resMultiplier = 1 + agent.ElementalResPen + agent.ResPen;
-
-        var total = anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier
-               * dmgBonusMultiplier * GetEnemyDefMultiplier(agent) * resMultiplier;
-
-        return new() {
-            Name = anomaly,
-            Tag = SkillTag.AttributeAnomaly,
-            Damage = total
-        };
-    }
-
-
-    /// <summary>
     /// Main damage calculation function
     /// </summary>
     /// <param name="characterId">Agent ID</param>
@@ -203,13 +138,20 @@ public class Calculator {
         // Apply Agent's passive
         agent.ApplyPassive();
         
+        var actions = new List<AgentAction>();
+        
         // Apply team passive
         // Those include current agent in the team, because current agent can also
         // have synergy with other team members
         List<Agent> fullTeam = [agent ,..team.Select(CreateAgentInstance).ToList()];
         List<Stat> fullTeamPassive = [];
 
+
         var enemy = new Nineveh();
+        enemy.AttributeAnomalyTrigger = (element) => {
+            actions.Add(agent.GetAnomalyDamage(element, enemy));
+        };
+        
         
         // All supports are rocking "Astral Voice" set
         // they need to be counted to then subtract excess applications of this set
@@ -250,19 +192,13 @@ public class Calculator {
         }
 
         // Do the calculation
-        var actions = new List<AgentAction>();
+        // Anomalies should be included automatically
         foreach (var action in rotation) {
-            AgentAction localDmg;
-            if (agent.Anomalies.ContainsKey(action) || Anomaly.DefaultByNames.ContainsKey(action)) {
-                localDmg = GetAnomalyDamage(agent, action);
-            } else {
-                var attack = action.Split(' ');
-                var name = attack[0];
-                var idx = attack.Length == 1 ? 1 : int.Parse(attack[1]);
+            var attack = action.Split(' ');
+            var name = attack[0];
+            var idx = attack.Length == 1 ? 1 : int.Parse(attack[1]);
 
-                localDmg = agent.GetActionDamage(name, idx - 1, enemy);
-            }
-            actions.Add(localDmg);
+            actions.Add(agent.GetActionDamage(name, idx - 1, enemy));
         }
 
         return new CalcResult {
