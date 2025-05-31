@@ -147,9 +147,11 @@ public class Calculator {
         List<Stat> fullTeamPassive = [];
 
 
+
+        AgentAction? anomalyAction = null;
         var enemy = new Nineveh();
-        enemy.AttributeAnomalyTrigger = (element) => {
-            actions.Add(agent.GetAnomalyDamage(element, enemy));
+        enemy.AttributeAnomalyTrigger = element => {
+            anomalyAction = agent.GetAnomalyDamage(element, enemy);
         };
         
         
@@ -199,6 +201,11 @@ public class Calculator {
             var idx = attack.Length == 1 ? 1 : int.Parse(attack[1]);
 
             actions.Add(agent.GetActionDamage(name, idx - 1, enemy));
+
+            if (anomalyAction is { } a) {
+                actions.Add(a);
+                anomalyAction = null; // Reset for next anomaly
+            }
         }
 
         return new CalcResult {
