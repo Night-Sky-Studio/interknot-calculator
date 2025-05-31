@@ -3,7 +3,7 @@
 namespace InterknotCalculator.Classes.Agents;
 
 public class Evelyn : Agent {
-    public Evelyn() {
+    public Evelyn() : base(1321) {
         Speciality = Speciality.Attack;
         Element = Element.Fire;
         Rarity = Rarity.S;

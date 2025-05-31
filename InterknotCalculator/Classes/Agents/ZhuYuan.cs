@@ -3,7 +3,7 @@ using InterknotCalculator.Enums;
 namespace InterknotCalculator.Classes.Agents;
 
 public sealed class ZhuYuan : Agent {
-    public ZhuYuan() {
+    public ZhuYuan() : base(1241) {
         Speciality = Speciality.Attack;
         Element = Element.Ether;
         Rarity = Rarity.S;

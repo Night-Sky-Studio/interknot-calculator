@@ -3,7 +3,7 @@
 namespace InterknotCalculator.Classes.Agents;
 
 public sealed class Miyabi : Agent {
-    public Miyabi() {
+    public Miyabi() : base(1091) {
         Speciality = Speciality.Anomaly;
         Element = Element.Ice;
         Rarity = Rarity.S;

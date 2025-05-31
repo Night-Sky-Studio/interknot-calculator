@@ -3,7 +3,7 @@ using InterknotCalculator.Enums;
 namespace InterknotCalculator.Classes.Agents;
 
 public class Harumasa : Agent {
-    public Harumasa() {
+    public Harumasa() : base(1201) {
         Speciality = Speciality.Attack;
         Element = Element.Electric;
         Rarity = Rarity.S;

@@ -4,7 +4,7 @@ using InterknotCalculator.Interfaces;
 namespace InterknotCalculator.Classes.Agents;
 
 public class Soukaku : Agent, ISupportAgent<Soukaku> {
-    public Soukaku() {
+    public Soukaku() : base(1131) {
         Speciality = Speciality.Support;
         Element = Element.Ice;
         Rarity = Rarity.A;
