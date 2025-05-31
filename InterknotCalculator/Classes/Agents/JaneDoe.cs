@@ -30,7 +30,7 @@ public sealed class JaneDoe : Agent {
             new(602.2, 344.7, 273.4),
             new(323, 184.5, 146.56),
         ]);
-        
+
         Skills["edge_jump"] = new(SkillTag.Dash, [
             new(143, 54.5, 32.5),
             new(143, 54.5, 32.5),
@@ -45,7 +45,7 @@ public sealed class JaneDoe : Agent {
         Skills["swift_shadow_dance"] = new(SkillTag.Counter, [
             new(774.2, 371.8, 194.31)
         ]);
-        
+
         Skills["dark_thorn"] = new(SkillTag.QuickAssist, [
             new(239.1, 179.7, 108.33)
         ]);
@@ -60,14 +60,14 @@ public sealed class JaneDoe : Agent {
         Skills["gale_sweep"] = new(SkillTag.FollowUpAssist, [
             new(692, 448.6, 292.92)
         ]);
-        
+
         Skills["aerial_sweep"] = new(SkillTag.Special, [
             new(116.1, 87.5, 52.5)
         ]);
         Skills["aerial_sweep_cleanout"] = new(SkillTag.ExSpecial, [
             new(1150, 702.4, 473.96)
         ]);
-        
+
         Skills["flowers_of_sin"] = new(SkillTag.Chain, [
             new(1266.2, 356.4, 439.46)
         ]);
@@ -77,7 +77,7 @@ public sealed class JaneDoe : Agent {
     }
 
     public override void ApplyPassive() {
-        Anomalies["assault"] = Anomaly.Default[AnomalyType.Assault] with {
+        Anomalies[Element.Physical] = Anomaly.Default[AnomalyType.Assault] with {
             Bonuses = [
                 new(0.4 + AnomalyProficiency * 0.0016, Affix.CritRate),
                 new(0.5, Affix.CritDamage)

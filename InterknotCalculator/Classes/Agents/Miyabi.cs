@@ -19,7 +19,7 @@ public sealed class Miyabi : Agent {
         Stats[Affix.AnomalyProficiency] = 238;
         Stats[Affix.EnergyRegen] = 1.2;
 
-        Anomalies["frostburn"] = new(1500, Element.Ice, []);
+        Anomalies[Element.Frost] = new(1500, Element.Ice, []);
 
         Skills["kazahana"] = new() {
             Tag = SkillTag.BasicAtk,
