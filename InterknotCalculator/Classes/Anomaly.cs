@@ -47,6 +47,15 @@ public record Anomaly(double Scale, Element Element, Stat[] Bonuses, bool CanCri
         Element.Ether => Default[AnomalyType.Corruption],
         _ => throw new ArgumentOutOfRangeException(nameof(element), element, "This was supposed to be impossible...")
     };
-    
-    
+
+    public override string ToString() => Element switch {
+        Element.Ice => "shatter",
+        Element.Fire => "burn",
+        Element.Physical => "assault",
+        Element.Electric => "shock",
+        Element.Ether => "corruption",
+        Element.Frost => "frostburn",
+        Element.AuricInk => "TODO", // TODO: 2.0, name's unknown yet
+        _ => throw new ArgumentOutOfRangeException()
+    };
 }
