@@ -4,7 +4,7 @@ using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Test.Agents;
 
-public class JaneTest : CalculatorTest {
+public partial class AgentsTest {
     private CalcRequest Jane { get; } = new() {
         AgentId = 1261,
         WeaponId = 14126,
@@ -59,21 +59,10 @@ public class JaneTest : CalculatorTest {
             "final_curtain"
         ]
     };
-    
-    public List<DriveDisc> DriveDiscs => Jane.Discs.Select((d, idx) =>
-        new DriveDisc(
-            d.SetId, 
-            Convert.ToUInt32(idx), 
-            d.Rarity, 
-            Stat.Stats[d.Stats[0]], 
-            d.StatsLevels
-                .Skip(1)
-                .Select(p => (p.Value, Stat.SubStats[p.Key])))
-    ).ToList();
 
     [Test]
-    public void Test() {
-        var result = Calculator.Calculate(Jane.AgentId, Jane.WeaponId, DriveDiscs, Jane.Team, Jane.Rotation);
+    public void JaneTest() {
+        var result = Calculator.Calculate(Jane.AgentId, Jane.WeaponId, GetDriveDiscs(Jane), Jane.Team, Jane.Rotation);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
