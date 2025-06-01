@@ -48,8 +48,14 @@ public partial class AgentsTest {
         Team = [],
         StunBonus = 1.5,
         Rotation = [
-            "springs_call 1",
-            "lingering_snow 1",
+            "hisetsu 1",
+            "hisetsu 2",
+            "kazahana 3",
+            "kazahana 4",
+            "kazahana 5",
+            "shimotsuki 3",
+            "springs_call",
+            "lingering_snow",
             "shimotsuki 3"
         ]
     };

@@ -145,9 +145,7 @@ public class Calculator {
         // have synergy with other team members
         List<Agent> fullTeam = [agent ,..team.Select(CreateAgentInstance).ToList()];
         List<Stat> fullTeamPassive = [];
-
-
-
+        
         AgentAction? anomalyAction = null;
         var enemy = new Nineveh();
         enemy.AttributeAnomalyTrigger = element => {
