@@ -1,5 +1,6 @@
 using InterknotCalculator.Classes.Agents;
 using InterknotCalculator.Enums;
+using InterknotCalculator.Interfaces;
 
 namespace InterknotCalculator.Classes.Enemies;
 
@@ -30,18 +31,43 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     
     private int AnomalyTriggerCount { get; set; } = 0;
     
+    private bool WaitingForShatter { get; set; } = false;
+    
     public void AddAnomalyBuildup(Agent agent, double value) {
-        var buildup = AnomalyBuildup[agent.Element];
+        Element element = agent.Element;
+
+        if (agent is ICustomAnomaly customAnomaly) {
+            element = customAnomaly.AnomalyElement;
+        }
+        
+        var buildup = AnomalyBuildup[element];
         buildup.AddContribution(agent.Id, value);
         
-        var threshold = agent.Element == Element.Physical 
+        var threshold = element == Element.Physical 
             ? AnomalyBuildupThreshold + AnomalyBuildupThreshold * 0.2
             : AnomalyBuildupThreshold;
+
+        // Trigger Shatter manually
+        if (WaitingForShatter) {
+            buildup.AddContribution(agent.Id, threshold);
+        }
         
         if (buildup.Current > threshold) {
+            // Frostburn -> Prepare for Shatter
+            // Freeze does not deal damage and can be ignored
+            if (element is Element.Frost) {
+                WaitingForShatter = !WaitingForShatter;
+
+                if (WaitingForShatter == false) {
+                    buildup.Reset();
+                    AttributeAnomalyTrigger?.Invoke(Element.Ice); // Trigger Shatter
+                    return;
+                }
+            }
+            
             buildup.Reset();
             AnomalyBuildupThreshold = BaseAnomalyBuildupThreshold * Math.Pow(1.02, ++AnomalyTriggerCount);
-            AttributeAnomalyTrigger?.Invoke(agent.Element);
+            AttributeAnomalyTrigger?.Invoke(element);
         }
     }
 }
