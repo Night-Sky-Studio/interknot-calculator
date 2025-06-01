@@ -34,9 +34,13 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
         var buildup = AnomalyBuildup[agent.Element];
         buildup.AddContribution(agent.Id, value);
         
-        if (buildup.Current > AnomalyBuildupThreshold) {
+        var threshold = agent.Element == Element.Physical 
+            ? AnomalyBuildupThreshold + AnomalyBuildupThreshold * 0.2
+            : AnomalyBuildupThreshold;
+        
+        if (buildup.Current > threshold) {
             buildup.Reset();
-            AnomalyBuildupThreshold = BaseAnomalyBuildupThreshold * Math.Pow(1.02, AnomalyTriggerCount++);
+            AnomalyBuildupThreshold = BaseAnomalyBuildupThreshold * Math.Pow(1.02, ++AnomalyTriggerCount);
             AttributeAnomalyTrigger?.Invoke(agent.Element);
         }
     }
