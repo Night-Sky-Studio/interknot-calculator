@@ -147,7 +147,7 @@ public class Calculator {
         List<Stat> fullTeamPassive = [];
         
         AgentAction? anomalyAction = null;
-        var enemy = new Nineveh();
+        var enemy = new NotoriousDullahan();
         enemy.AttributeAnomalyTrigger = element => {
             anomalyAction = agent.GetAnomalyDamage(element, enemy);
         };
@@ -211,6 +211,7 @@ public class Calculator {
                 BaseStats = baseStats,
                 CalculatedStats = agent.CollectStats()
             },
+            Enemy = enemy,
             PerAction = actions,
             Total = actions.Sum(action => action.Damage)
         };
