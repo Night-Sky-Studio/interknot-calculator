@@ -3,7 +3,7 @@ using InterknotCalculator.Interfaces;
 
 namespace InterknotCalculator.Classes.Agents;
 
-public abstract class StunAgent : Agent, IStunAgent {
+public abstract class StunAgent(uint id) : Agent(id), IStunAgent {
     public abstract double EnemyStunBonusOverride { get; set; }
     public double GetStandardDaze(string action, int scale) {
         var data = Skills[action];

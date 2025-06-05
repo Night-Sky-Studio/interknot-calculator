@@ -3,7 +3,7 @@
 namespace InterknotCalculator.Classes.Agents;
 
 public class Evelyn : Agent {
-    public Evelyn() {
+    public Evelyn() : base(1321) {
         Speciality = Speciality.Attack;
         Element = Element.Fire;
         Rarity = Rarity.S;
@@ -22,9 +22,9 @@ public class Evelyn : Agent {
         Skills["razor_wire"] = new() {
             Tag = SkillTag.BasicAtk,
             Scales = [
-                new(102.9, 38.8, Element.Physical),
-                new(124.8, 81.3, Element.Physical),
-                new(157.4, 94, Element.Physical),
+                new(102.9, 38.8, Element: Element.Physical),
+                new(124.8, 81.3, Element: Element.Physical),
+                new(157.4, 94, Element: Element.Physical),
                 new(373.7, 230),
                 new(447.8, 253),
             ]
@@ -40,7 +40,7 @@ public class Evelyn : Agent {
         Skills["piercing_ambush"] = new() {
             Tag = SkillTag.Dash,
             Scales = [
-                new(121, 45.7, Element.Physical)
+                new(121, 45.7, Element: Element.Physical)
             ]
         };
         Skills["strangling_reversal"] = new () {

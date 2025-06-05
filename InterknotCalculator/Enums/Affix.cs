@@ -22,5 +22,7 @@ public enum Affix {
     
     Daze, DazeBonus,
     
+    AnomalyBuildupBonus, AnomalyBuildupRes,
+    
     Unknown = -1
 }
