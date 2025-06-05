@@ -47,7 +47,7 @@ public static class Program {
                     d.StatsLevels.Skip(1).Select(p => (p.Value, Stat.SubStats[p.Key])))).ToList();
             
             var calcResult = calc.Calculate(result.AgentId, 
-                result.WeaponId, result.StunBonus, discs, result.Team, result.Rotation);
+                result.WeaponId, discs, result.Team, result.Rotation);
             
             return Results.Json(calcResult, SerializerContext.Default.CalcResult);
         });

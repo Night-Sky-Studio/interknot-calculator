@@ -1,4 +1,5 @@
 ﻿using InterknotCalculator.Classes.Agents;
+using InterknotCalculator.Classes.Enemies;
 using InterknotCalculator.Classes.Server;
 using InterknotCalculator.Enums;
 using InterknotCalculator.Interfaces;
@@ -95,9 +96,6 @@ public class Calculator {
         return result;
     }
 
-    /// Default damage multiplier for all attacks
-    private const double DamageTakenMultiplier = 1;
-
     /// <summary>
     /// Calculates enemy defense multiplier
     /// </summary>
@@ -109,55 +107,6 @@ public class Calculator {
     private static double GetEnemyDefMultiplier(Agent agent) {
         const double enemyDef = 953, levelFactor = 794;
         return levelFactor / (Math.Max(enemyDef * (1 - agent.PenRatio) - agent.Pen, 0) + levelFactor);
-    }
-
-    /// <summary>
-    /// Calculates standard damage for a given agent and skill
-    /// </summary>
-    /// <param name="agent">Agent instance</param>
-    /// <param name="skill">Skill name</param>
-    /// <param name="scale">Skill level</param>
-    /// <param name="stunMultiplier">Enemy Stun multiplier</param>
-    /// <returns><see cref="AgentAction"/> with calculated damage</returns>
-    private static AgentAction GetStandardDamage(Agent agent, string skill, int scale, double stunMultiplier = 1d) {
-        var data = agent.Skills[skill];
-        var attribute = data.Scales[scale].Element ?? agent.Element;
-        var relatedAffixDmg = Helpers.GetRelatedAffixDmg(attribute);
-        var relatedAffixRes = Helpers.GetRelatedAffixRes(attribute);
-
-        // Process all tag bonuses and apply if tag matches
-        var tagDmgBonus = new SafeDictionary<Affix, double>();
-        foreach (var stat in agent.TagBonus) {
-            if (stat.SkillTags.Contains(data.Tag)) {
-                tagDmgBonus[stat.Affix] += stat.Value;
-            }
-        }
-
-        // Apply ability passive if present
-        var abilityPassive = agent.ApplyAbilityPassive(skill);
-        if (abilityPassive is { } passive) {
-            tagDmgBonus.Add(passive.Affix, passive.Value);
-        }
-
-        // Calculate damage according to formula
-        var baseDmgAttacker = data.Scales[scale].Damage / 100 * agent.Atk;
-        var dmgBonusMultiplier = 1 + agent.ElementalDmgBonus + agent.DmgBonus 
-                                 + tagDmgBonus[relatedAffixDmg] + tagDmgBonus[Affix.DmgBonus]
-                                 + data.Affixes[relatedAffixDmg] + data.Affixes[Affix.DmgBonus];
-        var critMultiplier = 1 + Math.Min(agent.CritRate + tagDmgBonus[Affix.CritRate] + data.Affixes[Affix.CritRate], 1)
-            * (agent.CritDamage + tagDmgBonus[Affix.CritDamage] + data.Affixes[Affix.CritDamage]);
-        var resMultiplier = 1 + agent.ElementalResPen + agent.ResPen 
-                            + tagDmgBonus[relatedAffixRes] + tagDmgBonus[Affix.ResPen]
-                            + data.Affixes[relatedAffixRes] + data.Affixes[Affix.ResPen];
-
-        var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * GetEnemyDefMultiplier(agent)
-            * resMultiplier * DamageTakenMultiplier * stunMultiplier;
-
-        return new() {
-            Name = $"{skill} { (scale == 0 && data.Scales.Count == 1 ? "" : scale + 1) }".Trim(),
-            Tag = data.Tag,
-            Damage = total
-        };
     }
 
     /// <summary>
@@ -217,13 +166,12 @@ public class Calculator {
     /// </summary>
     /// <param name="characterId">Agent ID</param>
     /// <param name="weaponId">Weapon ID</param>
-    /// <param name="stunMultiplier">Enemy Stun Multiplier</param>
     /// <param name="driveDiscs">Agent's equipped Drive Discs</param>
     /// <param name="team">Team members IDs collection (except current agent)</param>
     /// <param name="rotation">Collection of agent skills/anomalies</param>
     /// <returns>A collection of agent actions</returns>
     public CalcResult Calculate(uint characterId, uint weaponId, 
-        double stunMultiplier, List<DriveDisc> driveDiscs, IEnumerable<uint> team, 
+        List<DriveDisc> driveDiscs, IEnumerable<uint> team, 
         IEnumerable<string> rotation) {
         // Initialize the agent and the weapon
         var agent = CreateAgentInstance(characterId);
@@ -260,6 +208,8 @@ public class Calculator {
         // have synergy with other team members
         List<Agent> fullTeam = [agent ,..team.Select(CreateAgentInstance).ToList()];
         List<Stat> fullTeamPassive = [];
+
+        var enemy = new Nineveh();
         
         // All supports are rocking "Astral Voice" set
         // they need to be counted to then subtract excess applications of this set
@@ -287,7 +237,7 @@ public class Calculator {
             }
 
             if (a is IStunAgent stunAgent) {
-                stunMultiplier += stunAgent.EnemyStunBonusOverride;
+                enemy.StunMultiplier += stunAgent.EnemyStunBonusOverride;
             }
         }
         
@@ -310,7 +260,7 @@ public class Calculator {
                 var name = attack[0];
                 var idx = attack.Length == 1 ? 1 : int.Parse(attack[1]);
 
-                localDmg = GetStandardDamage(agent, name, idx - 1, stunMultiplier);
+                localDmg = agent.GetActionDamage(name, idx - 1, enemy);
             }
             actions.Add(localDmg);
         }
