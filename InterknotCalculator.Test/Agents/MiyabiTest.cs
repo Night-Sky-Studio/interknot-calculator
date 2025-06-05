@@ -65,5 +65,8 @@ public partial class AgentsTest {
         var result = Calculator.Calculate(Miyabi.AgentId, Miyabi.WeaponId, GetDriveDiscs(Miyabi), Miyabi.Team, Miyabi.Rotation);
         
         Assert.That(result.PerAction, Is.Not.Empty);
+        
+        Console.WriteLine($"Total Assault triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
+        Console.WriteLine($"Enemy Anomaly Buildup: {result.Enemy?.AnomalyBuildup}");
     } 
 }

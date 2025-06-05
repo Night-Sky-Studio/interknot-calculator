@@ -56,7 +56,9 @@ public partial class AgentsTest {
             "aerial_sweep_cleanout",
             "aerial_sweep_cleanout",
             "phantom_thrust",
-            "final_curtain"
+            "final_curtain",
+            "salchow_jump 1",
+            "salchow_jump 2"
         ]
     };
 
@@ -67,5 +69,6 @@ public partial class AgentsTest {
         Assert.That(result.PerAction, Is.Not.Empty);
         
         Console.WriteLine($"Total Assault triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
+        Console.WriteLine($"Enemy Anomaly Buildup: {string.Join(Environment.NewLine, result.Enemy?.AnomalyBuildup ?? [])}");
     }
 }
