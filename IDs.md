@@ -31,7 +31,10 @@ Game version: `1.6`
 1321 Evelyn
 1351 Pulchra
 1361 Trigger
+1371 Yixuan
 1381 Soldier 0 - Anby
+1391 Ju Fufu
+1421 Pan Yinhu
 ```
 
 # Weapons
@@ -50,6 +53,7 @@ Game version: `1.6`
 12012 [Magnetic Storm] Charlie
 12013 [Identity] Base
 12014 [Identity] Inflection
+12015 [Cinder] Cobalt
 13001 Street Superstar
 13002 Slice of Time
 13003 Rainforest Gourmet
@@ -61,8 +65,11 @@ Game version: `1.6`
 13009 Electro-Lip Gloss
 13010 Bunny Band
 13011 Spring Embrace
+13012 Puzzle Sphere
 13013 Gilded Blossom
+13014 Radiowave Journey
 13015 Marcato Desire
+13016 Reel Projector
 13101 Demara Battery Mark II
 13103 The Vault
 13106 Housekeeper
@@ -74,6 +81,7 @@ Game version: `1.6`
 13127 Peacekeeper - Specialized
 13128 Roaring Ride
 13135 Box Cutter
+13142 Tremor Trigram Vessel
 14001 Cannon Rotor
 14002 Unfettered Game Ball
 14003 Six Shooter
@@ -96,7 +104,9 @@ Game version: `1.6`
 14131 Elegant Vanity
 14132 Heartstring Nocturne
 14136 Spectral Gaze
+14137 Qingming Birdcage
 14138 Severed Innocence
+14139 Roaring Fur-nace
 ```
 
 # Drive Disc Sets
@@ -119,4 +129,6 @@ Game version: `1.6`
 32800 Astral Voice
 32900 Shadow Harmony
 33000 Phaethon's Melody
+33100 Yunkui Tales
+33200 King of the Summit
 ```

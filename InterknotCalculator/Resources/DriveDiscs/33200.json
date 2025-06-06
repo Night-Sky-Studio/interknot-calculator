@@ -1,0 +1,12 @@
+{
+    "PartialBonus": [{
+        "Affix": "DazeBonus",
+        "Value": 0.06
+    }],
+    "FullBonus": [
+        {
+            "Affix": "CritDamage",
+            "Value": 0.3
+        }
+    ]
+}

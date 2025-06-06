@@ -1,0 +1,16 @@
+{
+    "PartialBonus": [{
+        "Affix": "HpRatio",
+        "Value": 0.1
+    }],
+    "FullBonus": [
+        {
+            "Affix": "CritRate",
+            "Value": 0.12
+        },
+        {
+            "Affix": "SheerRatio",
+            "Value": 0.1
+        }
+    ]
+}
