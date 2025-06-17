@@ -34,10 +34,10 @@ public sealed class Soldier11 : Agent {
                 { Affix.DmgBonus, 0.7 } // Heatwave passive
             },
             Scales = [
-                new(111.2, 27.9),
-                new(114.4, 51.2),
-                new(264, 113.7),
-                new(681.7, 287.7)
+                new(111.2, 27.9, 17.05),
+                new(114.4, 51.2, 31.91),
+                new(264, 113.7, 71.57),
+                new(681.7, 287.7, 182.8)
             ]
         };
 
@@ -53,20 +53,20 @@ public sealed class Soldier11 : Agent {
                 { Affix.DmgBonus, 0.7 } // Heatwave passive
             },
             Scales = [
-                new(158, 118.4)
+                new(158, 118.4, 75)
             ]
         };
         Skills["backdraft"] = new() {
             Tag = SkillTag.Counter,
             Scales = [
-                new(524.9, 339.1)
+                new(524.9, 339.1, 114.99)
             ]
         };
 
         Skills["covering_fire"] = new() {
             Tag = SkillTag.QuickAssist,
             Scales = [
-                new(241.8, 181.3)
+                new(241.8, 181.3, 114.99)
             ]
         };
         Skills["hold_the_line"] = new() {
@@ -80,33 +80,33 @@ public sealed class Soldier11 : Agent {
         Skills["reignition"] = new() {
             Tag = SkillTag.FollowUpAssist,
             Scales = [
-                new (767.6, 503.8)
+                new (767.6, 503.8, 342.42)
             ]
         };
 
         Skills["raging_fire"] = new() {
             Tag = SkillTag.Special,
             Scales = [
-                new(105.4, 79)
+                new(105.4, 79, 50.01)
             ]
         };
         Skills["fervent_fire"] = new() {
             Tag = SkillTag.ExSpecial,
             Scales = [
-                new(1350.4, 816.3)
+                new(1350.4, 816.3, 580.18)
             ]
         };
 
         Skills["uplifting_flame"] = new() {
             Tag = SkillTag.Chain,
             Scales = [
-                new(1265, 321.4)
+                new(1265, 321.4, 402.86)
             ]
         };
         Skills["bellowing_flame"] = new() {
             Tag = SkillTag.Ultimate,
             Scales = [
-                new(4206.2, 428)
+                new(4206.2, 428, 246.7)
             ]
         };
     }
