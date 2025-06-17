@@ -25,15 +25,15 @@ public class Evelyn : Agent {
                 new(102.9, 38.8, Element: Element.Physical),
                 new(124.8, 81.3, Element: Element.Physical),
                 new(157.4, 94, Element: Element.Physical),
-                new(373.7, 230),
-                new(447.8, 253),
+                new(373.7, 230, 139.03),
+                new(447.8, 253, 152.91),
             ]
         };
         Skills["garrote"] = new() {
             Tag = SkillTag.BasicAtk,
             Scales = [
-                new(453, 182.7),
-                new(490.5, 187.5)
+                new(453, 182.7, 110.03),
+                new(490.5, 187.5, 113.36)
             ]
         };
 
@@ -46,13 +46,13 @@ public class Evelyn : Agent {
         Skills["strangling_reversal"] = new () {
             Tag = SkillTag.Counter,
             Scales = [
-                new(421.4, 281.7)
+                new(421.4, 281.7, 70.03)
             ]
         };
 
         Skills["fierce_blade"] = new() {
             Tag = SkillTag.QuickAssist,
-            Scales = [new(155.2, 116.7)]
+            Scales = [new(155.2, 116.7, 70.03)]
         };
         Skills["silent_protection"] = new() {
             Tag = SkillTag.DefensiveAssist,
@@ -65,41 +65,41 @@ public class Evelyn : Agent {
         Skills["course_disruption"] = new() {
             Tag = SkillTag.FollowUpAssist,
             Scales = [
-                new(584.2, 374.4)            
+                new(584.2, 374.4, 245.67)            
             ]
         };
 
         Skills["locked_position"] = new() {
             Tag = SkillTag.Special,
             Scales = [
-                new(105.1, 78.7)
+                new(105.1, 78.7, 47.48)
             ]
         };
         Skills["binding_sunder_first"] = new() {
             Tag = SkillTag.Special,
             Scales = [
-                new(81.1, 61.3),
-                new(68.1, 51.6)
+                new(81.1, 61.3, 36.64),
+                new(68.1, 51.6, 30.84)
             ]
         };
         Skills["binding_sunder_second"] = new() {
             Tag = SkillTag.ExSpecial,
             Scales = [
-                new(1082.4, 656),
-                new(120.1, 90.4)
+                new(1082.4, 656, 444.62),
+                new(120.1, 90.4, 56.2)
             ]
         };
 
         Skills["lunalux"] = new() {
             Tag = SkillTag.Chain,
             Scales = [
-                new(1658.7, 355.4)
+                new(1658.7, 355.4, 290.17)
             ]
         };
         Skills["lunalux_garrote"] = new() {
             Tag = SkillTag.Ultimate,
             Scales = [
-                new(3977.3, 391.3)
+                new(3977.3, 391.3, 236.7),
             ]
         };
     }
