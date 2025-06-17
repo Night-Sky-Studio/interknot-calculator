@@ -55,7 +55,7 @@ public record Anomaly(double Scale, Element Element, Stat[] Bonuses, bool CanCri
         Element.Electric => "shock",
         Element.Ether => "corruption",
         Element.Frost => "frostburn",
-        Element.AuricInk => "TODO", // TODO: 2.0, name's unknown yet
+        Element.AuricInk => "corruption",
         _ => throw new ArgumentOutOfRangeException()
     };
 }
