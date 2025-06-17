@@ -24,9 +24,9 @@ public class Harumasa : Agent {
             Scales = [
                 new(85.3, 40.8, Element: Element.Physical),
                 new(80.5, 67.4, Element: Element.Physical),
-                new(142.4, 100.2),
-                new(180.3, 134.7),
-                new(266, 173.7)
+                new(142.4, 100.2, Element: Element.Physical),
+                new(180.3, 134.7, 49.17),
+                new(266, 173.7, 65.84)
             ]
         };
         Skills["cloud_piercer_drift"] = new() {
@@ -35,7 +35,7 @@ public class Harumasa : Agent {
         };
         Skills["falling_feather"] = new() {
               Tag = SkillTag.BasicAtk,
-              Scales = [new(211, 79.1)]
+              Scales = [new(211, 79.1, 33.51)]
         };
         Skills["ha-oto_no_ya"] = new() { // That'd be a fucking pain to simulate...
             Tag = SkillTag.BasicAtk,
@@ -48,14 +48,14 @@ public class Harumasa : Agent {
         };
         Skills["hidden_edge"] = new() {
             Tag = SkillTag.Dash,
-            Scales = [new(439.6, 292.2)]
+            Scales = [new(439.6, 292.2, 53.64)]
         };
         Skills["hiten_no_tsuru_slash"] = new() {
             Tag = SkillTag.Dash,
             Scales = [
-                new(325.1, 99),
-                new(333.8, 69),
-                new(379.9, 71.2)
+                new(325.1, 99, 41.97),
+                new(333.8, 69, 29.16),
+                new(379.9, 71.2, 31.47)
             ],
             Affixes = {
                 [Affix.CritRate] = 0.25,
@@ -65,7 +65,7 @@ public class Harumasa : Agent {
 
         Skills["braced_bow"] = new() {
             Tag = SkillTag.QuickAssist, 
-            Scales = [new(169, 127.2)]
+            Scales = [new(169, 127.2, 53.64)]
         };
         Skills["yugamae"] = new() {
             Tag = SkillTag.DefensiveAssist,
@@ -77,25 +77,25 @@ public class Harumasa : Agent {
         };
         Skills["yugamae_slash"] = new() {
             Tag = SkillTag.FollowUpAssist,
-            Scales = [new(615.1, 395.3)]
+            Scales = [new(615.1, 395.3, 181.45)]
         };
 
         Skills["nowhere_to_hide"] = new() {
             Tag = SkillTag.Special,
-            Scales = [new(105.1, 78.7)]
+            Scales = [new(105.1, 78.7, 33.26)]
         };
         Skills["nowhere_to_run"] = new() {
             Tag = SkillTag.ExSpecial,
-            Scales = [new(899.2, 674.5)]
+            Scales = [new(899.2, 674.5, 319.11)]
         };
 
         Skills["kai_hanare"] = new() {
             Tag = SkillTag.Chain,
-            Scales = [new(1035.7, 275.8)]
+            Scales = [new(1035.7, 275.8, 256.33)]
         };        
         Skills["zanshin"] = new() {
             Tag = SkillTag.Ultimate,
-            Scales = [new(3908.6, 160.8)]
+            Scales = [new(3908.6, 160.8, 61.81)]
         };
     }
     
