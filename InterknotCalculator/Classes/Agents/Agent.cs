@@ -109,7 +109,8 @@ public abstract class Agent(uint id) {
         }
 
         // Process anomalies
-        enemy.AddAnomalyBuildup(this, GetAnomalyBuildup(skill, scale));
+        var buildup = GetAnomalyBuildup(skill, scale);
+        enemy.AddAnomalyBuildup(this, buildup + buildup * BonusStats[Affix.AnomalyBuildupBonus]);
         
         // Calculate damage according to formula
         var baseDmgAttacker = data.Scales[scale].Damage / 100 * Atk;

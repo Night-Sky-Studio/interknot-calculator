@@ -85,7 +85,7 @@ public sealed class JaneDoe : Agent {
             CanCrit = true
         };
 
-        BonusStats[Affix.AnomalyBuildupBonus] = 0.25;
+        BonusStats[Affix.AnomalyBuildupBonus] += 0.25;
         
         if (AnomalyProficiency > 120) {
             BonusStats[Affix.Atk] += Math.Min((AnomalyProficiency - 120) * 2, 600);
