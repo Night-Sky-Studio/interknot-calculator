@@ -42,6 +42,14 @@ public abstract class Agent(uint id) {
     public double DmgBonus => Stats[Affix.DmgBonus] + BonusStats[Affix.DmgBonus];
     public double ResPen => Stats[Affix.ResPen] + BonusStats[Affix.ResPen];
     public double DazeBonus => Stats[Affix.DazeBonus] + BonusStats[Affix.DazeBonus];
+
+#if ENERGY_REQUIREMENT_CHECK
+    private double _energy = 60;
+    public double Energy {
+        get => _energy;
+        set => _energy = Math.Clamp(value, 0, 120);
+    }
+#endif
     
     public SafeDictionary<Affix, double> CollectStats() => new() {
         [Affix.Hp] = Hp,
@@ -90,9 +98,21 @@ public abstract class Agent(uint id) {
     /// <returns><see cref="AgentAction"/> with calculated damage</returns>
     public AgentAction GetActionDamage(string skill, int scale, Enemy enemy) {
         var data = Skills[skill];
+        var multiplier = data.Scales[scale];
         var attribute = data.Scales[scale].Element ?? Element;
         var relatedAffixDmg = Helpers.GetRelatedAffixDmg(attribute);
         var relatedAffixRes = Helpers.GetRelatedAffixRes(attribute);
+
+#if ENERGY_REQUIREMENT_CHECK 
+        // Energy requirement check
+        // ExSpecial has negative energy (using energy)
+        // everything else have positive (accumulating energy)
+        if (Energy + multiplier.Energy < 0) {
+            throw new InvalidOperationException($"Agent does not have enough energy to perform {skill} at scale {scale + 1}. " +
+                                                $"Required: {Math.Abs(multiplier.Energy)}, current: {Energy}");
+        }
+        Energy += multiplier.Energy;
+#endif
 
         // Process all tag bonuses and apply if tag matches
         var tagDmgBonus = new SafeDictionary<Affix, double>();

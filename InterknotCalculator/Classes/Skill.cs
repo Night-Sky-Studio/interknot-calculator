@@ -2,7 +2,7 @@
 
 namespace InterknotCalculator.Classes;
 
-public record Scale(double Damage, double Daze, double AnomalyBuildup = 0.0, Element? Element = null);
+public record Scale(double Damage, double Daze, double AnomalyBuildup = 0.0, double Energy = 0.0, Element? Element = null);
 
 public record Skill() {
     public Skill(SkillTag tag, IEnumerable<Scale> scales, SafeDictionary<Affix, double>? affixes = null) : this() {
