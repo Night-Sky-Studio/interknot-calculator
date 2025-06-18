@@ -26,7 +26,7 @@ public sealed class AstraYao : Agent, ISupportAgent<AstraYao> {
         
         return astraYao;
     }
-    public AstraYao() {
+    public AstraYao() : base(1311) {
         Speciality = Speciality.Support;
         Element = Element.Ether;
         Rarity = Rarity.S;

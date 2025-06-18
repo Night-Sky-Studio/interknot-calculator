@@ -13,6 +13,10 @@
         {
             "Affix": "PhysicalDmgBonus",
             "Value": 0.36
+        },
+        {
+            "Affix": "AnomalyBuildupBonus",
+            "Value": 0.4
         }
     ]
 }

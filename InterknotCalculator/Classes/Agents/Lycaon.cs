@@ -12,7 +12,7 @@ public sealed class Lycaon : Agent, IStunAgent, ISupportAgent<Lycaon> {
         return lycaon;
     }
 
-    public Lycaon() {
+    public Lycaon() : base(1141) {
         Speciality = Speciality.Stun;
         Element = Element.Ice;
         Rarity = Rarity.S;

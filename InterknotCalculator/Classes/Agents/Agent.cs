@@ -8,9 +8,9 @@ namespace InterknotCalculator.Classes.Agents;
 /// Base Agent class
 /// All agents should inherit from this class and be sealed
 /// </summary>
-public abstract class Agent {
+public abstract class Agent(uint id) {
     private const double DamageTakenMultiplier = 1;
-    
+    public uint Id { get; } = id;
     public Speciality Speciality { get; set; }
     public Element Element { get; set; }
     public Rarity Rarity { get; set; }
@@ -20,7 +20,7 @@ public abstract class Agent {
     public SafeDictionary<Affix, double> ExternalBonus { get; set; } = new();
     public List<Stat> TagBonus { get; set; } = [];
     public List<Stat> ExternalTagBonus { get; set; } = [];
-    public Dictionary<string, Anomaly> Anomalies { get; set; } = new();
+    public Dictionary<Element, Anomaly> Anomalies { get; set; } = new();
     public Dictionary<string, Skill> Skills { get; set; } = new();
     
     public Affix RelatedElementDmg => Helpers.GetRelatedAffixDmg(Element);
@@ -42,6 +42,14 @@ public abstract class Agent {
     public double DmgBonus => Stats[Affix.DmgBonus] + BonusStats[Affix.DmgBonus];
     public double ResPen => Stats[Affix.ResPen] + BonusStats[Affix.ResPen];
     public double DazeBonus => Stats[Affix.DazeBonus] + BonusStats[Affix.DazeBonus];
+
+#if ENERGY_REQUIREMENT_CHECK
+    private double _energy = 60;
+    public double Energy {
+        get => _energy;
+        set => _energy = Math.Clamp(value, 0, 120);
+    }
+#endif
     
     public SafeDictionary<Affix, double> CollectStats() => new() {
         [Affix.Hp] = Hp,
@@ -90,9 +98,21 @@ public abstract class Agent {
     /// <returns><see cref="AgentAction"/> with calculated damage</returns>
     public AgentAction GetActionDamage(string skill, int scale, Enemy enemy) {
         var data = Skills[skill];
+        var multiplier = data.Scales[scale];
         var attribute = data.Scales[scale].Element ?? Element;
         var relatedAffixDmg = Helpers.GetRelatedAffixDmg(attribute);
         var relatedAffixRes = Helpers.GetRelatedAffixRes(attribute);
+
+#if ENERGY_REQUIREMENT_CHECK 
+        // Energy requirement check
+        // ExSpecial has negative energy (using energy)
+        // everything else have positive (accumulating energy)
+        if (Energy + multiplier.Energy < 0) {
+            throw new InvalidOperationException($"Agent does not have enough energy to perform {skill} at scale {scale + 1}. " +
+                                                $"Required: {Math.Abs(multiplier.Energy)}, current: {Energy}");
+        }
+        Energy += multiplier.Energy;
+#endif
 
         // Process all tag bonuses and apply if tag matches
         var tagDmgBonus = new SafeDictionary<Affix, double>();
@@ -108,6 +128,10 @@ public abstract class Agent {
             tagDmgBonus.Add(passive.Affix, passive.Value);
         }
 
+        // Process anomalies
+        var buildup = GetAnomalyBuildup(skill, scale);
+        enemy.AddAnomalyBuildup(this, buildup + buildup * BonusStats[Affix.AnomalyBuildupBonus]);
+        
         // Calculate damage according to formula
         var baseDmgAttacker = data.Scales[scale].Damage / 100 * Atk;
         var dmgBonusMultiplier = 1 + ElementalDmgBonus + DmgBonus 
@@ -125,6 +149,63 @@ public abstract class Agent {
         return new() {
             Name = $"{skill} { (scale == 0 && data.Scales.Count == 1 ? "" : scale + 1) }".Trim(),
             Tag = data.Tag,
+            Damage = total
+        };
+    }
+
+    public double GetAnomalyBuildup(string skill, int scale) {
+        var data = Skills[skill];
+        var baseBuildup = data.Scales[scale].AnomalyBuildup;
+        if (baseBuildup == 0) return 0;
+
+        var amBonus = AnomalyMastery / 100;
+        var amBuildupBonus = 1 + BonusStats[Affix.AnomalyBuildupBonus] + data.Affixes[Affix.AnomalyBuildupBonus];
+        var amBuildupRes = 1;
+
+        return baseBuildup * amBonus * amBuildupBonus * amBuildupRes;
+    }
+
+    public virtual AgentAction GetAnomalyDamage(Element element, Enemy enemy) {
+        // Agents can override default anomalies
+        // ReSharper disable once InlineOutVariableDeclaration
+        Anomaly data;
+        if (!Anomalies.TryGetValue(element, out data!)) {
+            data = Anomaly.GetAnomalyByElement(element);
+        }
+        
+        // Some anomalies (Jane Doe - Assault) can crit
+        double anomalyCritMultiplier = 1;
+
+        if (data.CanCrit) {
+            // These crit values are not affected by anything other than character's skill kit
+            double anomalyCritRate = 0.05, anomalyCritDamage = 0.5;
+            foreach (var bonus in data.Bonuses) {
+                switch (bonus.Affix) {
+                    case Affix.CritRate:
+                        anomalyCritRate = Math.Min(bonus.Value, 1);
+                        break;
+                    case Affix.CritDamage:
+                        anomalyCritDamage = bonus.Value;
+                        break;
+                }
+            }
+
+            anomalyCritMultiplier = 1 + anomalyCritRate * anomalyCritDamage;
+        }
+
+        // Calculate anomaly damage according to formula
+        var anomalyBaseDmg = data.Scale / 100 * Atk;
+        var anomalyProficiencyMultiplier = AnomalyProficiency / 100;
+        const double anomalyLevelMultiplier = 2;
+        var dmgBonusMultiplier = 1 + ElementalDmgBonus + DmgBonus;
+        var resMultiplier = 1 + ElementalResPen + ResPen;
+
+        var total = anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier
+                    * dmgBonusMultiplier * enemy.GetDefenseMultiplier(this) * resMultiplier;
+
+        return new() {
+            Name = data.ToString(),
+            Tag = SkillTag.AttributeAnomaly,
             Damage = total
         };
     }
