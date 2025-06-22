@@ -69,7 +69,10 @@ public partial class AgentsTest {
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
-        Console.WriteLine($"Total Assault triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
+        Assert.That(result.PerAction.Any(action => action.Name == "frostburn"), Is.True);
+        Assert.That(result.PerAction.Any(action => action.Name == "shatter"), Is.True);
+        
+        Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         foreach (var action in result.PerAction) {
             Console.WriteLine($"{action.Name, -32}{action.Tag, -24}{action.Damage}");
         }
