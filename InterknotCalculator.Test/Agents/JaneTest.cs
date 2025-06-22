@@ -73,8 +73,6 @@ public partial class AgentsTest {
         Assert.That(result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly), Is.EqualTo(3));
         
         Console.WriteLine($"Total Assault triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
-        foreach (var action in result.PerAction) {
-            Console.WriteLine($"{action.Name, -32}{action.Tag, -24}{action.Damage}");
-        }
+        PrintActions(result.PerAction);
     }
 }

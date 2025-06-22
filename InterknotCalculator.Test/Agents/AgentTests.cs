@@ -1,4 +1,5 @@
 using InterknotCalculator.Classes;
+using InterknotCalculator.Classes.Agents;
 using InterknotCalculator.Classes.Server;
 
 namespace InterknotCalculator.Test.Agents;
@@ -14,4 +15,10 @@ public partial class AgentsTest : CalculatorTest {
                 .Skip(1)
                 .Select(p => (p.Value, Stat.SubStats[p.Key])))
     ).ToList();
+
+    private void PrintActions(IEnumerable<AgentAction> actions) {
+        foreach (var action in actions) {
+            Console.WriteLine($"{action.Name, -38}{action.Tag, -24}{action.Damage}");
+        }
+    }
 }

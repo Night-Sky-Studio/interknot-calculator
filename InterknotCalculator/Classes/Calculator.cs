@@ -20,6 +20,7 @@ public class Calculator {
         return agentId switch {
             1041 => new Soldier11(),
             1091 => new Miyabi(),
+            1171 => new Burnice(),
             1191 => new Ellen(),
             1201 => new Harumasa(),
             1241 => new ZhuYuan(),
