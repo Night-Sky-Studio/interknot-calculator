@@ -1,3 +1,4 @@
+using InterknotCalculator.Classes.Enemies;
 using InterknotCalculator.Classes.Server;
 using InterknotCalculator.Enums;
 
@@ -62,11 +63,15 @@ public partial class AgentsTest {
 
     [Test]
     public void MiyabiTest() {
-        var result = Calculator.Calculate(Miyabi.AgentId, Miyabi.WeaponId, GetDriveDiscs(Miyabi), Miyabi.Team, Miyabi.Rotation);
+        var enemy = new NotoriousDullahan();
+        var result = Calculator.Calculate(Miyabi.AgentId, Miyabi.WeaponId, GetDriveDiscs(Miyabi), 
+            Miyabi.Team, Miyabi.Rotation, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
         Console.WriteLine($"Total Assault triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
-        Console.WriteLine($"Enemy Anomaly Buildup: {result.Enemy?.AnomalyBuildup}");
+        foreach (var action in result.PerAction) {
+            Console.WriteLine($"{action.Name, -32}{action.Tag, -24}{action.Damage}");
+        }
     } 
 }

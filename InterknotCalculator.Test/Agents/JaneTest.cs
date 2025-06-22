@@ -1,4 +1,5 @@
 ﻿using InterknotCalculator.Classes;
+using InterknotCalculator.Classes.Enemies;
 using InterknotCalculator.Classes.Server;
 using InterknotCalculator.Enums;
 
@@ -49,26 +50,37 @@ public partial class AgentsTest {
         Team = [],
         StunBonus = 1.5,
         Rotation = [
-            "flowers_of_sin",
-            "phantom_thrust",
-            "salchow_jump 1",
-            "salchow_jump 2",
             "aerial_sweep_cleanout",
             "aerial_sweep_cleanout",
-            "phantom_thrust",
-            "final_curtain",
-            "salchow_jump 1",
-            "salchow_jump 2"
+            "aerial_sweep_cleanout",
+            "aerial_sweep_cleanout",
+            // "dancing_blades 1",
+            // "dancing_blades 2"
+            // "flowers_of_sin",
+            // "phantom_thrust",
+            // "salchow_jump 1",
+            // "salchow_jump 2",
+            //
+            // "phantom_thrust",
+            // "final_curtain",
+            // "salchow_jump 1",
+            // "salchow_jump 2"
         ]
     };
 
     [Test]
     public void JaneTest() {
-        var result = Calculator.Calculate(Jane.AgentId, Jane.WeaponId, GetDriveDiscs(Jane), Jane.Team, Jane.Rotation);
+        var enemy = new NotoriousDullahan {
+            AfflictedAnomaly = Anomaly.Default[AnomalyType.Burn]
+        };
+        var result = Calculator.Calculate(Jane.AgentId, Jane.WeaponId, GetDriveDiscs(Jane), 
+            Jane.Team, Jane.Rotation, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
         Console.WriteLine($"Total Assault triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
-        Console.WriteLine($"Enemy Anomaly Buildup: {string.Join(Environment.NewLine, result.Enemy?.AnomalyBuildup ?? [])}");
+        foreach (var action in result.PerAction) {
+            Console.WriteLine($"{action.Name, -32}{action.Tag, -24}{action.Damage}");
+        }
     }
 }

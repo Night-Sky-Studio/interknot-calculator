@@ -18,20 +18,26 @@ public class Calculator {
     /// <exception cref="ArgumentOutOfRangeException">Agent not implemented</exception>
     private static Agent CreateAgentInstance(uint agentId) {
         return agentId switch {
-            1031 => Nicole.Reference(), // Support agent - provide reference implementation
             1041 => new Soldier11(),
             1091 => new Miyabi(),
+            1191 => new Ellen(),
+            1201 => new Harumasa(),
+            1241 => new ZhuYuan(),
+            1261 => new JaneDoe(),
+            1321 => new Evelyn(),
+            _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent instance wasn't found.")
+        };
+    }
+
+    private static Agent CreateAgentReference(uint agentId) {
+        return agentId switch {
+            1031 => Nicole.Reference(), // Support agent - provide reference implementation
             1131 => Soukaku.Reference(),
             1141 => Lycaon.Reference(),
             1151 => Lucy.Reference(),
-            1191 => new Ellen(),
-            1201 => new Harumasa(),
             1211 => Rina.Reference(),
-            1241 => new ZhuYuan(),
-            1261 => new JaneDoe(),
             1311 => AstraYao.Reference(),
-            1321 => new Evelyn(),
-            _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent wasn't found.")
+            _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent reference wasn't found.")
         };
     }
 
@@ -103,11 +109,12 @@ public class Calculator {
     /// <param name="weaponId">Weapon ID</param>
     /// <param name="driveDiscs">Agent's equipped Drive Discs</param>
     /// <param name="team">Team members IDs collection (except current agent)</param>
-    /// <param name="rotation">Collection of agent skills/anomalies</param>
+    /// <param name="rotation">Collection of agent skills</param>
+    /// <param name="enemy">Enemy instance</param>
     /// <returns>A collection of agent actions</returns>
     public CalcResult Calculate(uint characterId, uint weaponId, 
         List<DriveDisc> driveDiscs, IEnumerable<uint> team, 
-        IEnumerable<string> rotation) {
+        IEnumerable<string> rotation, Enemy enemy) {
         // Initialize the agent and the weapon
         var agent = CreateAgentInstance(characterId);
         var weapon = Resources.Current.GetWeapon(weaponId);
@@ -143,15 +150,23 @@ public class Calculator {
         // Apply team passive
         // Those include current agent in the team, because current agent can also
         // have synergy with other team members
-        List<Agent> fullTeam = [agent ,..team.Select(CreateAgentInstance).ToList()];
+        List<Agent> fullTeam = [agent ,..team.Select(CreateAgentReference).ToList()];
         List<Stat> fullTeamPassive = [];
+
+        List<AgentAction> anomalyQueue = [];
         
-        AgentAction? anomalyAction = null;
-        var enemy = new NotoriousDullahan();
-        enemy.AttributeAnomalyTrigger = element => {
-            anomalyAction = agent.GetAnomalyDamage(element, enemy);
+        enemy.AttributeAnomalyTrigger = (sender, element) => {
+            if (sender.AfflictedAnomaly is { } anomaly) {
+                if (anomaly.Element != element) {
+                    // TODO: disorder damage
+                    // anomalyQueue.Add(agent.GetAnomalyDamage(Element.None, enemy));
+                } else {
+                    sender.AfflictedAnomaly = null;
+                }
+            }
+            
+            anomalyQueue.Add(agent.GetAnomalyDamage(element, enemy));
         };
-        
         
         // All supports are rocking "Astral Voice" set
         // they need to be counted to then subtract excess applications of this set
@@ -199,10 +214,10 @@ public class Calculator {
             var idx = attack.Length == 1 ? 1 : int.Parse(attack[1]);
 
             actions.Add(agent.GetActionDamage(name, idx - 1, enemy));
-
-            if (anomalyAction is { } a) {
-                actions.Add(a);
-                anomalyAction = null; // Reset for next anomaly
+            
+            if (anomalyQueue.Count > 0) {
+                actions.AddRange(anomalyQueue);
+                anomalyQueue.Clear();
             }
         }
 

@@ -98,7 +98,6 @@ public abstract class Agent(uint id) {
     /// <returns><see cref="AgentAction"/> with calculated damage</returns>
     public AgentAction GetActionDamage(string skill, int scale, Enemy enemy) {
         var data = Skills[skill];
-        var multiplier = data.Scales[scale];
         var attribute = data.Scales[scale].Element ?? Element;
         var relatedAffixDmg = Helpers.GetRelatedAffixDmg(attribute);
         var relatedAffixRes = Helpers.GetRelatedAffixRes(attribute);
@@ -107,6 +106,7 @@ public abstract class Agent(uint id) {
         // Energy requirement check
         // ExSpecial has negative energy (using energy)
         // everything else have positive (accumulating energy)
+        var multiplier = data.Scales[scale];
         if (Energy + multiplier.Energy < 0) {
             throw new InvalidOperationException($"Agent does not have enough energy to perform {skill} at scale {scale + 1}. " +
                                                 $"Required: {Math.Abs(multiplier.Energy)}, current: {Energy}");
@@ -130,7 +130,7 @@ public abstract class Agent(uint id) {
 
         // Process anomalies
         var buildup = GetAnomalyBuildup(skill, scale);
-        enemy.AddAnomalyBuildup(this, buildup + buildup * BonusStats[Affix.AnomalyBuildupBonus]);
+        enemy.AddAnomalyBuildup(this, buildup);
         
         // Calculate damage according to formula
         var baseDmgAttacker = data.Scales[scale].Damage / 100 * Atk;
@@ -168,9 +168,8 @@ public abstract class Agent(uint id) {
     public virtual AgentAction GetAnomalyDamage(Element element, Enemy enemy) {
         // Agents can override default anomalies
         // ReSharper disable once InlineOutVariableDeclaration
-        Anomaly data;
-        if (!Anomalies.TryGetValue(element, out data!)) {
-            data = Anomaly.GetAnomalyByElement(element);
+        if (!Anomalies.TryGetValue(element, out var data)) {
+            data = Anomaly.GetAnomalyByElement(element)!;
         }
         
         // Some anomalies (Jane Doe - Assault) can crit
@@ -194,7 +193,7 @@ public abstract class Agent(uint id) {
         }
 
         // Calculate anomaly damage according to formula
-        var anomalyBaseDmg = data.Scale / 100 * Atk;
+        var anomalyBaseDmg = element != Element.None ? data.Scale / 100 * Atk : GetDisorderBaseDamage(enemy.AfflictedAnomaly!);
         var anomalyProficiencyMultiplier = AnomalyProficiency / 100;
         const double anomalyLevelMultiplier = 2;
         var dmgBonusMultiplier = 1 + ElementalDmgBonus + DmgBonus;
@@ -207,6 +206,24 @@ public abstract class Agent(uint id) {
             Name = data.ToString(),
             Tag = SkillTag.AttributeAnomaly,
             Damage = total
+        };
+    }
+
+    private double GetDisorderBaseDamage(Anomaly anomaly, double overrideDuration = 0) {
+        if (anomaly.Element is Element.None) {
+            throw new ArgumentException("Disorder cannot trigger itself", nameof(anomaly));
+        }
+
+        var duration = overrideDuration != 0 ? overrideDuration : anomaly.Element is Element.Frost ? 20 : 10;
+        
+        return anomaly.Element switch {
+            Element.Fire => (4.5 + duration / 0.5 * 0.5) * Atk,
+            Element.Electric => (4.5 + duration * 1.25) * Atk,
+            Element.Ice => (4.5 + duration * 0.075) * Atk,
+            Element.Frost => (6 + duration * 0.75) * Atk,
+            Element.Physical => (4.5 + duration * 0.075) * Atk,
+            Element.Ether or Element.AuricInk => (4.5 + duration / 0.5 * 0.625) * Atk,
+            _ => 0
         };
     }
 }

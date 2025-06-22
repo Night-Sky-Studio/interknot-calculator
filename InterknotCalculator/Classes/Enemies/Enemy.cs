@@ -24,7 +24,7 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
         [Element.Physical] = new()
     };
 
-    public Action<Element>? AttributeAnomalyTrigger { get; set; }
+    public Action<Enemy, Element>? AttributeAnomalyTrigger { get; set; }
 
     public double GetDefenseMultiplier(Agent agent) => 
         LevelFactor / (Math.Max(Defense * (1 - agent.PenRatio) - agent.Pen, 0) + LevelFactor);
@@ -33,11 +33,15 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     
     private bool WaitingForShatter { get; set; } = false;
     
+    public Anomaly? AfflictedAnomaly { get; set; } = null;
+    
     public void AddAnomalyBuildup(Agent agent, double value) {
         Element element = agent.Element;
-
+        Anomaly? anomaly = Anomaly.GetAnomalyByElement(element);
+        
         if (agent is ICustomAnomaly customAnomaly) {
             element = customAnomaly.AnomalyElement;
+            anomaly = agent.Anomalies[element];
         }
         
         var buildup = AnomalyBuildup[element];
@@ -60,14 +64,15 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
 
                 if (WaitingForShatter == false) {
                     buildup.Reset();
-                    AttributeAnomalyTrigger?.Invoke(Element.Ice); // Trigger Shatter
+                    AttributeAnomalyTrigger?.Invoke(this, Element.Ice); // Trigger Shatter
                     return;
                 }
             }
             
             buildup.Reset();
-            AnomalyBuildupThreshold = BaseAnomalyBuildupThreshold * Math.Pow(1.02, ++AnomalyTriggerCount);
-            AttributeAnomalyTrigger?.Invoke(element);
+            AnomalyBuildupThreshold = BaseAnomalyBuildupThreshold * Math.Pow(1.02, Math.Min(10, ++AnomalyTriggerCount));
+            AttributeAnomalyTrigger?.Invoke(this, element);
+            AfflictedAnomaly = anomaly;
         }
     }
 }
