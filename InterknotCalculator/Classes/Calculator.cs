@@ -157,7 +157,8 @@ public class Calculator {
         List<AgentAction> anomalyQueue = [];
         
         enemy.AttributeAnomalyTrigger = (sender, element) => {
-            if (sender.AfflictedAnomaly is { } anomaly) {
+            var isFrostburnShatter = element == Element.Ice && sender.AfflictedAnomaly?.Element == Element.Frost;
+            if (sender.AfflictedAnomaly is { } anomaly && !isFrostburnShatter) {
                 if (anomaly.Element != element) {
                     anomalyQueue.Add(agent.GetAnomalyDamage(Element.None, enemy));
                 } else {
