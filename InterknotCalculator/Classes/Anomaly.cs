@@ -11,29 +11,24 @@ public enum AnomalyType {
     Corruption
 }
 
-public record Anomaly(double Scale, Element Element, Stat[] Bonuses, bool CanCrit = false) {
+public record Anomaly(
+    double Scale,
+    Element Element,
+    Stat[] Bonuses,
+    bool CanCrit = false
+) {
+    public SafeDictionary<Affix, double> Stats { get; set; } = new();
+    
     /// <summary>
     /// Default anomalies with default scales
     /// </summary>
     public static readonly Dictionary<AnomalyType, Anomaly> Default = new () {
-        { AnomalyType.Disorder,   new Anomaly(0,          Element.None,     []) },
-        { AnomalyType.Assault,    new Anomaly(731.0,      Element.Physical, []) },
-        { AnomalyType.Burn,       new Anomaly(50.0 * 20,  Element.Fire,     []) },
-        { AnomalyType.Shatter,    new Anomaly(500.0,      Element.Ice,      []) },
-        { AnomalyType.Shock,      new Anomaly(125.0 * 10, Element.Electric, []) },
-        { AnomalyType.Corruption, new Anomaly(62.5 * 20,  Element.Ether,    []) }
-    };
-
-    /// <summary>
-    /// Default anomalies by name
-    /// </summary>
-    public static readonly Dictionary<string, Anomaly> DefaultByNames = new () {
-        { "disorder", Default[AnomalyType.Disorder] },
-        { "assault", Default[AnomalyType.Assault] },
-        { "burn", Default[AnomalyType.Burn] },
-        { "shatter", Default[AnomalyType.Shatter] },
-        { "shock", Default[AnomalyType.Shock] },
-        { "corruption", Default[AnomalyType.Corruption] },
+        { AnomalyType.Disorder,   new (0,          Element.None,     []) },
+        { AnomalyType.Assault,    new (731.0,      Element.Physical, []) },
+        { AnomalyType.Burn,       new (50.0 * 20,  Element.Fire,     []) },
+        { AnomalyType.Shatter,    new (500.0,      Element.Ice,      []) },
+        { AnomalyType.Shock,      new (125.0 * 10, Element.Electric, []) },
+        { AnomalyType.Corruption, new (62.5 * 20,  Element.Ether,    []) }
     };
     
     /// <summary>

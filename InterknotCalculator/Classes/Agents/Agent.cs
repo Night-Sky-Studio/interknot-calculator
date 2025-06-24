@@ -192,12 +192,19 @@ public abstract class Agent(uint id) {
             anomalyCritMultiplier = 1 + anomalyCritRate * anomalyCritDamage;
         }
 
+        var anomalyProficiency = element != Element.None 
+            ? AnomalyProficiency 
+            : enemy.AfflictedAnomaly?.Stats[Affix.AnomalyProficiency] ?? 0;
+        
         // Calculate anomaly damage according to formula
-        var anomalyBaseDmg = element != Element.None ? data.Scale / 100 * Atk : GetDisorderBaseDamage(enemy.AfflictedAnomaly!);
-        var anomalyProficiencyMultiplier = AnomalyProficiency / 100;
+        var anomalyBaseDmg = element != Element.None 
+            ? data.Scale / 100 * Atk 
+            : GetDisorderBaseMultiplier(enemy.AfflictedAnomaly!) * enemy.AfflictedAnomaly?.Stats[Affix.Atk] ?? 0;
+        
+        var anomalyProficiencyMultiplier = anomalyProficiency / 100;
         const double anomalyLevelMultiplier = 2;
-        var dmgBonusMultiplier = 1 + ElementalDmgBonus + DmgBonus;
-        var resMultiplier = 1 + ElementalResPen + ResPen;
+        var dmgBonusMultiplier = element != Element.None ? 1 + ElementalDmgBonus + DmgBonus : 1;
+        var resMultiplier = element != Element.None ? 1 + ElementalResPen + ResPen : 1;
 
         var total = anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier
                     * dmgBonusMultiplier * enemy.GetDefenseMultiplier(this) * resMultiplier;
@@ -209,20 +216,20 @@ public abstract class Agent(uint id) {
         };
     }
 
-    private double GetDisorderBaseDamage(Anomaly anomaly, double overrideDuration = 0) {
-        if (anomaly.Element is Element.None) {
+    private double GetDisorderBaseMultiplier(Anomaly? anomaly) {
+        if (anomaly?.Element is Element.None) {
             throw new ArgumentException("Disorder cannot trigger itself", nameof(anomaly));
         }
 
-        var duration = overrideDuration != 0 ? overrideDuration : anomaly.Element is Element.Frost ? 20 : 10;
+        var duration = (anomaly?.Element is Element.Frost ? 20 : 10) - 3;
         
-        return anomaly.Element switch {
-            Element.Fire => (4.5 + duration / 0.5 * 0.5) * Atk,
-            Element.Electric => (4.5 + duration * 1.25) * Atk,
-            Element.Ice => (4.5 + duration * 0.075) * Atk,
-            Element.Frost => (6 + duration * 0.75) * Atk,
-            Element.Physical => (4.5 + duration * 0.075) * Atk,
-            Element.Ether or Element.AuricInk => (4.5 + duration / 0.5 * 0.625) * Atk,
+        return anomaly?.Element switch {
+            Element.Fire => 4.5 + duration / 0.5 * 0.5,
+            Element.Electric => 4.5 + duration * 1.25,
+            Element.Ice => 4.5 + duration * 0.075,
+            Element.Frost => 6 + duration * 0.75,
+            Element.Physical => 4.5 + duration * 0.075,
+            Element.Ether or Element.AuricInk => 4.5 + duration / 0.5 * 0.625,
             _ => 0
         };
     }

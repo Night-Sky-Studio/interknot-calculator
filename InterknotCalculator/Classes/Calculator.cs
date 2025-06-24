@@ -159,8 +159,7 @@ public class Calculator {
         enemy.AttributeAnomalyTrigger = (sender, element) => {
             if (sender.AfflictedAnomaly is { } anomaly) {
                 if (anomaly.Element != element) {
-                    // TODO: disorder damage
-                    // anomalyQueue.Add(agent.GetAnomalyDamage(Element.None, enemy));
+                    anomalyQueue.Add(agent.GetAnomalyDamage(Element.None, enemy));
                 } else {
                     sender.AfflictedAnomaly = null;
                 }
