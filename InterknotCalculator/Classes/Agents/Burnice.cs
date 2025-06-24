@@ -3,8 +3,6 @@ using InterknotCalculator.Enums;
 namespace InterknotCalculator.Classes.Agents;
 
 public class Burnice : Agent {
-    private double Heat { get; set; }
-    
     public Burnice() : base(1171) {
         Speciality = Speciality.Anomaly;
         Element = Element.Fire;
@@ -73,4 +71,15 @@ public class Burnice : Agent {
         ]);
     }
 
+
+    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
+        if (team.Count < 2) return [];
+
+        if (team.Any(a => a.Speciality == Speciality) ||
+            team.Any(a => a.Faction == Faction)) {
+            return [new(0.65, Affix.AnomalyBuildupBonus)];
+        }
+
+        return [];
+    }
 }

@@ -47,7 +47,7 @@ public partial class AgentsTest {
                 Levels = [15, 4, 1, 2, 2]
             },
         ],
-        Team = [],
+        Team = [1151],
         StunBonus = 1.5,
         Rotation = [
             "fuel-fed_flame",
