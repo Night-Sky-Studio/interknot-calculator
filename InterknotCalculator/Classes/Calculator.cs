@@ -118,8 +118,10 @@ public class Calculator {
     public CalcResult Calculate(uint characterId, uint weaponId, 
         List<DriveDisc> driveDiscs, IEnumerable<uint> team, 
         IEnumerable<string> rotation, Enemy enemy) {
+        
         // Initialize the agent and the weapon
-
+        // Having a dictionary here allows us to use abilities 
+        // other team members
         var fullTeam = new Dictionary<uint, Agent> {
             [characterId] = CreateAgentInstance(characterId)
         };
@@ -165,6 +167,11 @@ public class Calculator {
         
         enemy.AttributeAnomalyTrigger = (sender, element) => {
             var isFrostburnShatter = element == Element.Ice && sender.AfflictedAnomaly?.Element == Element.Frost;
+            
+            // Process anomaly damage
+            anomalyQueue.Add(fullTeam[characterId].GetAnomalyDamage(element, enemy));
+            
+            // Then process disorders
             if (sender.AfflictedAnomaly is { } anomaly && !isFrostburnShatter) {
                 if (anomaly.Element != element) {
                     anomalyQueue.Add(fullTeam[characterId].GetAnomalyDamage(Element.None, enemy));
@@ -172,8 +179,6 @@ public class Calculator {
                     sender.AfflictedAnomaly = null;
                 }
             }
-            
-            anomalyQueue.Add(fullTeam[characterId].GetAnomalyDamage(element, enemy));
         };
         
         // All supports are rocking "Astral Voice" set
@@ -224,6 +229,8 @@ public class Calculator {
             
             actions.Add(fullTeam[act.AgentId].GetActionDamage(act.ActionName, act.Scale - 1, enemy));
             
+            // Anomalies are processed in a queue to maintain the order
+            // This includes simultaneous anomaly triggers like disorders
             if (anomalyQueue.Count > 0) {
                 actions.AddRange(anomalyQueue);
                 anomalyQueue.Clear();
