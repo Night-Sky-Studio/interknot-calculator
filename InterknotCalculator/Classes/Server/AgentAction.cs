@@ -2,7 +2,8 @@
 
 namespace InterknotCalculator.Classes.Server;
 
-public class AgentAction {
+public record AgentAction {
+    public uint AgentId { get; set; }   
     public string Name { get; set; } = "";
     public SkillTag Tag { get; set; }
     public double Damage { get; set; }

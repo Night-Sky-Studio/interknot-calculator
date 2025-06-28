@@ -147,6 +147,7 @@ public abstract class Agent(uint id) {
                     * resMultiplier * DamageTakenMultiplier * enemy.StunMultiplier;
 
         return new() {
+            AgentId = Id,
             Name = $"{skill} { (scale == 0 && data.Scales.Count == 1 ? "" : scale + 1) }".Trim(),
             Tag = data.Tag,
             Damage = total
@@ -210,6 +211,7 @@ public abstract class Agent(uint id) {
                     * dmgBonusMultiplier * enemy.GetDefenseMultiplier(this) * resMultiplier;
 
         return new() {
+            AgentId = Id,
             Name = data.ToString(),
             Tag = SkillTag.AttributeAnomaly,
             Damage = total
