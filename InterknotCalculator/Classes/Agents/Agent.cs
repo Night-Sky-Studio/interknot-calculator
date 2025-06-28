@@ -129,7 +129,7 @@ public abstract class Agent(uint id) {
         }
 
         // Process anomalies
-        var buildup = GetAnomalyBuildup(skill, scale);
+        var buildup = GetAnomalyBuildup(skill, scale, data.Tag);
         enemy.AddAnomalyBuildup(this, buildup);
         
         // Calculate damage according to formula
@@ -154,13 +154,21 @@ public abstract class Agent(uint id) {
         };
     }
 
-    public double GetAnomalyBuildup(string skill, int scale) {
+    public double GetAnomalyBuildup(string skill, int scale, SkillTag currentTag) {
         var data = Skills[skill];
         var baseBuildup = data.Scales[scale].AnomalyBuildup;
         if (baseBuildup == 0) return 0;
-
+        
+        
         var amBonus = AnomalyMastery / 100;
         var amBuildupBonus = 1 + BonusStats[Affix.AnomalyBuildupBonus] + data.Affixes[Affix.AnomalyBuildupBonus];
+
+        var tagBonus = TagBonus.Where(stat => stat.Tags?.Contains(currentTag) ?? false)
+            .Where(stat => stat.Affix == Affix.AnomalyBuildupBonus)
+            .Select(stat => stat.Value).Sum();
+        
+        amBuildupBonus += tagBonus;
+        
         var amBuildupRes = 1;
 
         return baseBuildup * amBonus * amBuildupBonus * amBuildupRes;
@@ -192,6 +200,10 @@ public abstract class Agent(uint id) {
 
             anomalyCritMultiplier = 1 + anomalyCritRate * anomalyCritDamage;
         }
+        
+        var tagBonus = TagBonus.Where(stat => stat.SkillTags.Contains(SkillTag.AttributeAnomaly))
+            .Where(stat => stat.Affix == Affix.DmgBonus)
+            .Select(stat => stat.Value).Sum();
 
         var anomalyProficiency = element != Element.None 
             ? AnomalyProficiency 
@@ -204,7 +216,7 @@ public abstract class Agent(uint id) {
         
         var anomalyProficiencyMultiplier = anomalyProficiency / 100;
         const double anomalyLevelMultiplier = 2;
-        var dmgBonusMultiplier = element != Element.None ? 1 + ElementalDmgBonus + DmgBonus : 1;
+        var dmgBonusMultiplier = element != Element.None ? 1 + ElementalDmgBonus + DmgBonus + tagBonus : 1;
         var resMultiplier = element != Element.None ? 1 + ElementalResPen + ResPen : 1;
 
         var total = anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier
