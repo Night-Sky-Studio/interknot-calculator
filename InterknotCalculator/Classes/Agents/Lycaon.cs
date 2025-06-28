@@ -3,7 +3,7 @@ using InterknotCalculator.Interfaces;
 
 namespace InterknotCalculator.Classes.Agents;
 
-public sealed class Lycaon : Agent, IStunAgent, ISupportAgent<Lycaon> {
+public sealed class Lycaon : Agent, IStunAgent, IAgentReference<Lycaon> {
     public static Lycaon Reference() {
         var lycaon = new Lycaon();
 

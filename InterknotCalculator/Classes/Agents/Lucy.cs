@@ -3,7 +3,7 @@ using InterknotCalculator.Interfaces;
 
 namespace InterknotCalculator.Classes.Agents;
 
-public class Lucy : Agent, ISupportAgent<Lucy> {
+public class Lucy : Agent, IAgentReference<Lucy> {
     public Lucy() : base(1151) {
         Speciality = Speciality.Support;
         Element = Element.Fire;

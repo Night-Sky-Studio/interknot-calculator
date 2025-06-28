@@ -3,7 +3,7 @@ using InterknotCalculator.Interfaces;
 
 namespace InterknotCalculator.Classes.Agents;
 
-public sealed class AstraYao : Agent, ISupportAgent<AstraYao> {
+public sealed class AstraYao : Agent, IAgentReference<AstraYao> {
     public static AstraYao Reference() {
         var astraYao = new AstraYao {
             Stats = {
