@@ -22,4 +22,6 @@ public record AnomalyBuildup {
         
         return contribution / Current * 100;
     }
+
+    public override string ToString() => $"Current: {Current}, Contributions: [{string.Join(", ", Contributions.Select(kv => $"{kv.Key}: {kv.Value}"))}]";
 }
