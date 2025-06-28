@@ -2,7 +2,6 @@ using InterknotCalculator.Classes;
 
 namespace InterknotCalculator.Test;
 
-[TestFixture]
 public class CalculatorTest {
     [OneTimeSetUp]
     public async Task OneTimeSetUp() {
