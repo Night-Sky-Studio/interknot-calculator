@@ -21,6 +21,7 @@ public class Calculator {
             1041 => new Soldier11(),
             1091 => new Miyabi(),
             1171 => new Burnice(),
+            1181 => new Grace(),
             1191 => new Ellen(),
             1201 => new Harumasa(),
             1241 => new ZhuYuan(),
