@@ -18,7 +18,7 @@ public partial class AgentsTest : CalculatorTest {
 
     private void PrintActions(IEnumerable<AgentAction> actions) {
         foreach (var action in actions) {
-            Console.WriteLine($"{action.Name, -38}{action.Tag, -24}{action.Damage}");
+            Console.WriteLine($"{action.AgentId, -6}{action.Name, -38}{action.Tag, -24}{action.Damage}");
         }
     }
 }
