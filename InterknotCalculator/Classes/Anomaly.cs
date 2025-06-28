@@ -17,6 +17,7 @@ public record Anomaly(
     Stat[] Bonuses,
     bool CanCrit = false
 ) {
+    public uint AgentId { get; set; }
     public SafeDictionary<Affix, double> Stats { get; set; } = new();
     
     /// <summary>

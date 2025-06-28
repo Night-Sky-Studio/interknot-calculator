@@ -223,7 +223,7 @@ public abstract class Agent(uint id) {
                     * dmgBonusMultiplier * enemy.GetDefenseMultiplier(this) * resMultiplier;
 
         return new() {
-            AgentId = Id,
+            AgentId =  data.AgentId != 0 ? data.AgentId : Id,
             Name = data.ToString(),
             Tag = SkillTag.AttributeAnomaly,
             Damage = total

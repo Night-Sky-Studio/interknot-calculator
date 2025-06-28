@@ -46,6 +46,7 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
 
         if (anomaly is not null) {
             anomaly.Stats = agent.CollectStats();
+            anomaly.AgentId = agent.Id;
         }
         
         var buildup = AnomalyBuildup[element];
