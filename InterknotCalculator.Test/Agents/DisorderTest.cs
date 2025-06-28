@@ -36,6 +36,8 @@ public partial class AgentsTest : CalculatorTest {
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction);
+        Console.WriteLine($"Total: {result.Total}");
+        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
         
         Jane.Team = (uint[])prevTeam;
         Jane.Rotation = (string[])prevRotation;

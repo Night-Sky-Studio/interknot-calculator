@@ -27,7 +27,7 @@ public class Burnice : Agent, IAgentReference<Burnice> {
 
         Stats[Affix.Hp] = 7368;
         Stats[Affix.Def] = 600;
-        Stats[Affix.Atk] = 863 + 75;
+        Stats[Affix.Atk] = 788 + 75;
         Stats[Affix.CritRate] = 0.05;
         Stats[Affix.CritDamage] = 0.5;
         Stats[Affix.Impact] = 83;
