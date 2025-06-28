@@ -1,8 +1,24 @@
 using InterknotCalculator.Enums;
+using InterknotCalculator.Interfaces;
 
 namespace InterknotCalculator.Classes.Agents;
 
-public class Burnice : Agent {
+public class Burnice : Agent, IAgentReference<Burnice> {
+    public static Burnice Reference() {
+        var burnice = new Burnice {
+            Stats = {
+                [Affix.Atk] = 2850, 
+                [Affix.AnomalyMastery] = 135.5, 
+                [Affix.AnomalyProficiency] = 375,
+                [Affix.FireDmgBonus] = 0.3,
+            }
+        };
+        
+        burnice.ApplyPassive();
+
+        return burnice;
+    }
+
     public Burnice() : base(1171) {
         Speciality = Speciality.Anomaly;
         Element = Element.Fire;
@@ -12,12 +28,12 @@ public class Burnice : Agent {
         Stats[Affix.Hp] = 7368;
         Stats[Affix.Def] = 600;
         Stats[Affix.Atk] = 863 + 75;
-        Stats[Affix.CritRate] = 0.05 + 0.144;
+        Stats[Affix.CritRate] = 0.05;
         Stats[Affix.CritDamage] = 0.5;
         Stats[Affix.Impact] = 83;
         Stats[Affix.AnomalyMastery] = 118;
         Stats[Affix.AnomalyProficiency] = 120;
-        Stats[Affix.EnergyRegen] = 1.56;
+        Stats[Affix.EnergyRegen] = 1.2 + 0.36;
 
         Skills["direct_flame_blend"] = new(SkillTag.BasicAtk, [
             new(89.9, 28.6, 16.94, 0.61),
