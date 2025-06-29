@@ -43,6 +43,8 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 #### Active Agents
 - Soldier 11 (1041)
 - Miyabi (1091)
+- Burnice (1171)
+- Grace (1181)
 - Ellen Joe (1191)
 - Zhu Yuan (1241)
 - Jane Doe (1261)
@@ -60,19 +62,24 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Astra Yao (1311)
 
 ### Weapons
-- Hailstorm Shrine (14109)
-- Riot Suppressor Mark VI (14124)
-- Sharpened Stinger (14126)
 - Electro-Lip Gloss (13009)
-- Fusion Compiler (14118)
-- The Brimstone (14104)
-- Canon Rotor (14001)
-- Deep Sea Visitor (14119)
-- Elegant Vanity (14131)
-- Heartstring Nocturne (14132)
-- The Restrained (14114)
-- Zanshin Herb Case (14120)
 - Marcato Desire (13015)
+- The Vault (13103)
+- Bashful Demon (13113)
+- Kaboom the Cannon (13115)
+- Cannon Rotor (14001)
+- The Brimstone (14104)
+- Hailstorm Shrine (14109)
+- The Restrained (14114)
+- Flamemaker Shaker (14117)
+- Fusion Compiler (14118)
+- Deep Sea Visitor (14119)
+- Zanshin Herb Case (14120)
+- Weeping Cradle (14121)
+- Riot Suppressor Mark VI (14124)
+- Sharpened Stinger (12126)
+- Elegant Vanity (12131)
+- Heartstring Nocturne (14132)
 
 ### Drive Disc Sets
 - Woodpecker Electro (31000)
@@ -93,7 +100,8 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Astral Voice (32800)
 - Shadow Harmony (32900)
 - Phaethon's Melody (33000)
-
+- Yunkui Tales (33100)
+- King of the Summit (33200)
 
 ## Contributing
 This project uses .NET NativeAOT compilation, so if you want to introduce any library that uses dynamic code that
