@@ -36,8 +36,8 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     public Anomaly? AfflictedAnomaly { get; set; } = null;
     
     public void AddAnomalyBuildup(Agent agent, double value) {
-        Element element = agent.Element;
-        Anomaly? anomaly = Anomaly.GetAnomalyByElement(element);
+        var element = agent.Element;
+        var anomaly = Anomaly.GetAnomalyByElement(element);
         
         if (agent is ICustomAnomaly customAnomaly) {
             element = customAnomaly.AnomalyElement;

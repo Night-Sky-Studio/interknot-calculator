@@ -77,7 +77,7 @@ public sealed class JaneDoe : Agent {
     }
 
     public override void ApplyPassive() {
-        Anomalies[Element.Physical] = Anomaly.Default[AnomalyType.Assault] with {
+        Anomalies[Element.Physical] = Anomaly.GetAnomalyByElement(Element.Physical)! with {
             Bonuses = [
                 new(0.4 + AnomalyProficiency * 0.0016, Affix.CritRate),
                 new(0.5, Affix.CritDamage)

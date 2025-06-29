@@ -64,7 +64,7 @@ public partial class AgentsTest {
     [Test]
     public void JaneTest() {
         var enemy = new NotoriousDullahan {
-            AfflictedAnomaly = Anomaly.Default[AnomalyType.Burn] with {
+            AfflictedAnomaly = Anomaly.GetAnomalyByElement(Element.Fire)! with {
                 Stats = new() {
                     [Affix.Atk] = 2358,
                     [Affix.AnomalyProficiency] = 353

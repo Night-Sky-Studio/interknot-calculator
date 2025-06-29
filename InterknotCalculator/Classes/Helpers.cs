@@ -50,4 +50,12 @@ public static class Helpers {
             _ => Affix.Unknown,
         };
     }
+
+    #if DEBUG
+    public static void BreakIf(Func<bool> condition) {
+        if (System.Diagnostics.Debugger.IsAttached && condition()) {
+            System.Diagnostics.Debugger.Break();
+        }
+    }
+    #endif
 }
