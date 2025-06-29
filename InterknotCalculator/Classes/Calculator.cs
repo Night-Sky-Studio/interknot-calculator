@@ -18,20 +18,29 @@ public class Calculator {
     /// <exception cref="ArgumentOutOfRangeException">Agent not implemented</exception>
     private static Agent CreateAgentInstance(uint agentId) {
         return agentId switch {
-            1031 => Nicole.Reference(), // Support agent - provide reference implementation
             1041 => new Soldier11(),
             1091 => new Miyabi(),
+            1171 => new Burnice(),
+            1181 => new Grace(),
+            1191 => new Ellen(),
+            1201 => new Harumasa(),
+            1241 => new ZhuYuan(),
+            1261 => new JaneDoe(),
+            1321 => new Evelyn(),
+            _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent instance wasn't found.")
+        };
+    }
+
+    private static Agent CreateAgentReference(uint agentId) {
+        return agentId switch {
+            1031 => Nicole.Reference(), // Support agent - provide reference implementation
             1131 => Soukaku.Reference(),
             1141 => Lycaon.Reference(),
             1151 => Lucy.Reference(),
-            1191 => new Ellen(),
-            1201 => new Harumasa(),
+            1171 => Burnice.Reference(),
             1211 => Rina.Reference(),
-            1241 => new ZhuYuan(),
-            1261 => new JaneDoe(),
             1311 => AstraYao.Reference(),
-            1321 => new Evelyn(),
-            _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent wasn't found.")
+            _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent reference wasn't found.")
         };
     }
 
@@ -97,84 +106,25 @@ public class Calculator {
     }
 
     /// <summary>
-    /// Calculates enemy defense multiplier
-    /// </summary>
-    /// <remarks>
-    /// Currently, enemy is "Notorious Dullahan" at lvl. 70
-    /// </remarks>
-    /// <param name="agent">Agent instance</param>
-    /// <returns>Enemy Defense multiplier</returns>
-    private static double GetEnemyDefMultiplier(Agent agent) {
-        const double enemyDef = 953, levelFactor = 794;
-        return levelFactor / (Math.Max(enemyDef * (1 - agent.PenRatio) - agent.Pen, 0) + levelFactor);
-    }
-
-    /// <summary>
-    /// Gets standard anomaly damage.
-    /// </summary>
-    /// <param name="agent">Agent instance</param>
-    /// <param name="anomaly">Anomaly name</param>
-    /// <returns><see cref="AgentAction"/> with calculated damage</returns>
-    private static AgentAction GetAnomalyDamage(Agent agent, string anomaly) {
-        // Agents can override default anomalies
-        // ReSharper disable once InlineOutVariableDeclaration
-        Anomaly data;
-        if (!agent.Anomalies.TryGetValue(anomaly, out data!)) {
-            data = Anomaly.GetAnomalyByElement(agent.Element);
-        }
-
-        // Some anomalies (Jane Doe - Assault) can crit
-        double anomalyCritMultiplier = 1;
-
-        if (data.CanCrit) {
-            // These crit values are not affected by anything other than character's skill kit
-            double anomalyCritRate = 0.05, anomalyCritDamage = 0.5;
-            foreach (var bonus in data.Bonuses) {
-                switch (bonus.Affix) {
-                    case Affix.CritRate:
-                        anomalyCritRate = Math.Min(bonus.Value, 1);
-                        break;
-                    case Affix.CritDamage:
-                        anomalyCritDamage = bonus.Value;
-                        break;
-                }
-            }
-
-            anomalyCritMultiplier = 1 + anomalyCritRate * anomalyCritDamage;
-        }
-
-        // Calculate anomaly damage according to formula
-        var anomalyBaseDmg = data.Scale / 100 * agent.Atk;
-        var anomalyProficiencyMultiplier = agent.AnomalyProficiency / 100;
-        const double anomalyLevelMultiplier = 2;
-        var dmgBonusMultiplier = 1 + agent.ElementalDmgBonus + agent.DmgBonus;
-        var resMultiplier = 1 + agent.ElementalResPen + agent.ResPen;
-
-        var total = anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier
-               * dmgBonusMultiplier * GetEnemyDefMultiplier(agent) * resMultiplier;
-
-        return new() {
-            Name = anomaly,
-            Tag = SkillTag.AttributeAnomaly,
-            Damage = total
-        };
-    }
-
-
-    /// <summary>
     /// Main damage calculation function
     /// </summary>
     /// <param name="characterId">Agent ID</param>
     /// <param name="weaponId">Weapon ID</param>
     /// <param name="driveDiscs">Agent's equipped Drive Discs</param>
     /// <param name="team">Team members IDs collection (except current agent)</param>
-    /// <param name="rotation">Collection of agent skills/anomalies</param>
+    /// <param name="rotation">Collection of agent skills</param>
+    /// <param name="enemy">Enemy instance</param>
     /// <returns>A collection of agent actions</returns>
     public CalcResult Calculate(uint characterId, uint weaponId, 
         List<DriveDisc> driveDiscs, IEnumerable<uint> team, 
-        IEnumerable<string> rotation) {
+        IEnumerable<string> rotation, Enemy enemy) {
+        
         // Initialize the agent and the weapon
-        var agent = CreateAgentInstance(characterId);
+        // Having a dictionary here allows us to use abilities 
+        // other team members
+        var fullTeam = new Dictionary<uint, Agent> {
+            [characterId] = CreateAgentInstance(characterId)
+        };
         var weapon = Resources.Current.GetWeapon(weaponId);
 
         // Collect Drive Discs stats and apply them
@@ -184,56 +134,76 @@ public class Calculator {
         var partialSets = groupedSets.Where(kvp => kvp.Value >= 2).Select(kvp => kvp.Key);
         var fullSets = groupedSets.Where(kvp => kvp.Value >= 4).Select(kvp => kvp.Key);
         
-        agent.BonusStats = CollectDriveDiscStats(driveDiscs, partialSets, agent.TagBonus);
+        fullTeam[characterId].BonusStats = CollectDriveDiscStats(driveDiscs, partialSets, fullTeam[characterId].TagBonus);
         
-        agent.Stats[Affix.Atk] += weapon.MainStat.Value;
-        agent.BonusStats[weapon.SecondaryStat.Affix] += weapon.SecondaryStat.Value;
+        fullTeam[characterId].Stats[Affix.Atk] += weapon.MainStat.Value;
+        fullTeam[characterId].BonusStats[weapon.SecondaryStat.Affix] += weapon.SecondaryStat.Value;
 
-        var baseStats = agent.CollectStats();
+        var baseStats = fullTeam[characterId].CollectStats();
         
-        var driveDiscSetBonus = CollectDriveDiscSetBonus(fullSets, agent.TagBonus);
+        var driveDiscSetBonus = CollectDriveDiscSetBonus(fullSets, fullTeam[characterId].TagBonus);
         foreach (var (afx, val) in driveDiscSetBonus) {
-            agent.BonusStats[afx] += val;
+            fullTeam[characterId].BonusStats[afx] += val;
         }
         
         foreach (var passive in weapon.Passive) {
-            agent.BonusStats[passive.Affix] += passive.Value;
+            fullTeam[characterId].BonusStats[passive.Affix] += passive.Value;
         }
         
         // Apply Agent's passive
-        agent.ApplyPassive();
+        fullTeam[characterId].ApplyPassive();
+        
+        var actions = new List<AgentAction>();
         
         // Apply team passive
         // Those include current agent in the team, because current agent can also
         // have synergy with other team members
-        List<Agent> fullTeam = [agent ,..team.Select(CreateAgentInstance).ToList()];
+        foreach (var member in team) {
+            fullTeam[member] = CreateAgentReference(member);
+        }
         List<Stat> fullTeamPassive = [];
 
-        var enemy = new Nineveh();
+        List<AgentAction> anomalyQueue = [];
+        
+        enemy.AttributeAnomalyTrigger = (sender, element) => {
+            var isFrostburnShatter = element == Element.Ice && sender.AfflictedAnomaly?.Element == Element.Frost;
+            
+            // Process anomaly damage
+            anomalyQueue.Add(fullTeam[characterId].GetAnomalyDamage(element, enemy));
+            
+            // Then process disorders
+            if (sender.AfflictedAnomaly is { } anomaly && !isFrostburnShatter) {
+                if (anomaly.Element != element) {
+                    anomalyQueue.Add(fullTeam[characterId].GetAnomalyDamage(Element.None, enemy));
+                } else {
+                    sender.AfflictedAnomaly = null;
+                }
+            }
+        };
         
         // All supports are rocking "Astral Voice" set
         // they need to be counted to then subtract excess applications of this set
         // as "Astral Voice" 4pc bonus can only be applied once
-        var astralVoiceCount = fullTeam.Count(a => a.Speciality == Speciality.Support);
-        foreach (var a in fullTeam) {
-            fullTeamPassive.AddRange(a.ApplyTeamPassive(fullTeam));
+        var astralVoiceCount = fullTeam.Values.Count(a => a.Speciality == Speciality.Support);
+        foreach (var a in fullTeam.Values) {
+            fullTeamPassive.AddRange(a.ApplyTeamPassive([..fullTeam.Values]));
         }
         
         foreach (var stat in fullTeamPassive) {
             if (stat.SkillTags.Length > 0) {
-                agent.TagBonus.Add(stat);
+                fullTeam[characterId].TagBonus.Add(stat);
             } else {
-                agent.BonusStats[stat.Affix] += stat.Value;
+                fullTeam[characterId].BonusStats[stat.Affix] += stat.Value;
             }
         }
 
-        foreach (var a in fullTeam) {
+        foreach (var a in fullTeam.Values) {
             foreach (var (afx, bonus) in a.ExternalBonus) {
-                agent.BonusStats[afx] += bonus;
+                fullTeam[characterId].BonusStats[afx] += bonus;
             }
 
             foreach (var stat in a.ExternalTagBonus) {
-                agent.TagBonus.Add(stat);
+                fullTeam[characterId].TagBonus.Add(stat);
             }
 
             if (a is IStunAgent stunAgent) {
@@ -246,30 +216,39 @@ public class Calculator {
         if (astralVoiceCount > 1) {
             var astralVoice = Resources.Current.GetDriveDiscSet(32800);
             var avBonus = astralVoice.FullBonus.First();
-            agent.BonusStats[avBonus.Affix] -= avBonus.Value * (astralVoiceCount - 1);
+            fullTeam[characterId].BonusStats[avBonus.Affix] -= avBonus.Value * (astralVoiceCount - 1);
         }
 
         // Do the calculation
-        var actions = new List<AgentAction>();
+        // Anomalies should be included automatically
         foreach (var action in rotation) {
-            AgentAction localDmg;
-            if (agent.Anomalies.ContainsKey(action) || Anomaly.DefaultByNames.ContainsKey(action)) {
-                localDmg = GetAnomalyDamage(agent, action);
-            } else {
-                var attack = action.Split(' ');
-                var name = attack[0];
-                var idx = attack.Length == 1 ? 1 : int.Parse(attack[1]);
-
-                localDmg = agent.GetActionDamage(name, idx - 1, enemy);
+            var act = RotationAction.Parse(action, characterId);
+            if (act is null) {
+                throw new ArgumentException($"Invalid action: {action}");
             }
-            actions.Add(localDmg);
+            
+            actions.Add(fullTeam[act.AgentId].GetActionDamage(act.ActionName, act.Scale - 1, enemy));
+            
+            // Anomalies are processed in a queue to maintain the order
+            // This includes simultaneous anomaly triggers like disorders
+            if (anomalyQueue.Count > 0) {
+                actions.AddRange(anomalyQueue);
+                anomalyQueue.Clear();
+            }
         }
+        
+        // Cleanup actions - remove all damage/daze from other agents
+        actions = actions.Select(action => action.AgentId != characterId
+            ? action with { Damage = 0, Daze = 0 } 
+            : action
+        ).ToList();
 
         return new CalcResult {
             FinalStats = {
                 BaseStats = baseStats,
-                CalculatedStats = agent.CollectStats()
+                CalculatedStats = fullTeam[characterId].CollectStats()
             },
+            Enemy = enemy,
             PerAction = actions,
             Total = actions.Sum(action => action.Damage)
         };

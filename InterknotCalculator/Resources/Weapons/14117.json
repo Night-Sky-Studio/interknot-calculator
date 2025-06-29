@@ -1,0 +1,23 @@
+{
+    "Speciality": "Anomaly",
+    "Rarity": "S",
+    "MainStat": {
+        "Affix": "Atk",
+        "Value": 713
+    },
+    "SecondaryStat": {
+        "Affix": "AtkRatio",
+        "Value": 0.24
+    },
+    "Passive": [
+        {
+            "Affix": "DmgBonus",
+            "Tags": ["ExSpecial", "QuickAssist", "DefensiveAssist", "EvasiveAssist", "FollowUpAssist"],
+            "Value": 0.35
+        },
+        {
+            "Affix": "AnomalyProficiency",
+            "Value": 50
+        }
+    ]
+}

@@ -3,7 +3,7 @@ using InterknotCalculator.Interfaces;
 
 namespace InterknotCalculator.Classes.Agents;
 
-public sealed class Rina : Agent, ISupportAgent<Rina> {
+public sealed class Rina : Agent, IAgentReference<Rina> {
     public static Rina Reference() {
         var rina = new Rina {
             Stats = {
@@ -32,7 +32,7 @@ public sealed class Rina : Agent, ISupportAgent<Rina> {
         
         return rina;
     }
-    public Rina() {
+    public Rina() : base(1211) {
         Speciality = Speciality.Support;
         Element = Element.Electric;
         Rarity = Rarity.S;

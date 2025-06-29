@@ -1,7 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using InterknotCalculator.Classes.Agents;
 using InterknotCalculator.Classes.Server;
-using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Classes;
 

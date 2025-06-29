@@ -2,7 +2,7 @@
 
 namespace InterknotCalculator.Interfaces;
 
-public interface ISupportAgent<out T> where T : Agent {
+public interface IAgentReference<out T> where T : Agent {
     /// <summary>
     /// Provides Agent's Reference Build
     /// </summary>

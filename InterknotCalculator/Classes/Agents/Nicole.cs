@@ -3,8 +3,8 @@ using InterknotCalculator.Interfaces;
 
 namespace InterknotCalculator.Classes.Agents;
 
-public class Nicole : Agent, ISupportAgent<Nicole> {
-    public Nicole() {
+public class Nicole : Agent, IAgentReference<Nicole> {
+    public Nicole() : base(1031) {
         Speciality = Speciality.Support;
         Element = Element.Ether;
         Rarity = Rarity.A;

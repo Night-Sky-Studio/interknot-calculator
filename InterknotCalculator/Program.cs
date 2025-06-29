@@ -1,4 +1,5 @@
 using InterknotCalculator.Classes;
+using InterknotCalculator.Classes.Enemies;
 using InterknotCalculator.Classes.Server;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,7 +48,7 @@ public static class Program {
                     d.StatsLevels.Skip(1).Select(p => (p.Value, Stat.SubStats[p.Key])))).ToList();
             
             var calcResult = calc.Calculate(result.AgentId, 
-                result.WeaponId, discs, result.Team, result.Rotation);
+                result.WeaponId, discs, result.Team, result.Rotation, new NotoriousDullahan());
             
             return Results.Json(calcResult, SerializerContext.Default.CalcResult);
         });
