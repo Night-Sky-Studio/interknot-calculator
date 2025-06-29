@@ -1,8 +1,5 @@
 ﻿# Inter-Knot Calculator
-Temporary solution for damage calculations. Once the real solution in [Night-Sky-Studio/3ZCalculator](https://github.com/Night-Sky-Studio/3ZCalculator) will be
-ready, this repository and all its contents will be archived and never updated. I am not competent enough to make
-a really accurate and close-to-the-game calculator, but I am competent enough to make one that won't SEGFAULT when fed
-incompatible data.
+Solution for damage calculations at Inter-Knot project.
 
 ## Project Structure
 Calculator is made to automatically load **Weapons** and **Drive Discs** from `Resources` folder.
