@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using InterknotCalculator.Classes.Enemies;
 using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Classes.Server;
@@ -39,7 +38,4 @@ public class CalcRequest {
     
     [JsonPropertyName("rotation")]
     public string[] Rotation { get; set; } = [];
-    
-    [JsonPropertyName("enemy")]
-    public Enemy? Enemy { get; set; }
 }
