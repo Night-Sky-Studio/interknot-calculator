@@ -11,11 +11,14 @@ All configurations are in JSON format and named with IDs of the corresponding ob
 *(short ver., long version can be found [here](https://github.com/Night-Sky-Studio/interknot-calculator/wiki/Damage-Calculation))*
 
 Before everything, the important stuff:
-- All characters are assumed to be at level 70 with maxed out skills (lvl. 12) and Core Skill (lvl. 7).
-- All S-rank characters are assumed to be at M0. All A-rank characters are assumed to be at M6. (TODO)
-- All S-rank W-Engines are at P0, A-rank W-Engines are at P6. (TODO)
+- All characters are assumed to be at level 60 with maxed out skills (lvl. 12) and Core Skill (lvl. 7).
+- All S-rank characters are assumed to be at M0. All A-rank characters are assumed to be at M6.
+- All S-rank W-Engines are at P0, A-rank W-Engines are at P6.
 - All Support characters have their reference builds that assume maximum supportive bonus and maximum uptime
 of any passives.
+- Every agent that can provide any value to the original character calculation (Disorder, Abloom, aftershocks, etc.)
+has their reference build that uses recommended W-Engine and Drive Disc set with stats set to average values
+provided by [Prydwen.gg](https://www.prydwen.gg/zenless) (**not sponsored**).
 - **Only your currently equipped Drive Discs are taken into account** for the damage calculation.
 - All passives that depend on character swapping, specific attacks combinations or attribute anomalies are
 considered to have 100% uptime.
