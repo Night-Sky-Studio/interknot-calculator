@@ -1,4 +1,4 @@
-Game version: `1.6`
+Game version: `2.0`
 # Agents
 ```
 1011 Anby
