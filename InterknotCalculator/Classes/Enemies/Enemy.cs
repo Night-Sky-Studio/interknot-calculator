@@ -24,10 +24,10 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
         [Element.Physical] = new()
     };
 
-    public Action<Enemy, Element>? AttributeAnomalyTrigger { get; set; }
+    public Action<Enemy, Element, uint>? AttributeAnomalyTrigger { get; set; }
 
-    public double GetDefenseMultiplier(Agent agent) => 
-        LevelFactor / (Math.Max(Defense * (1 - agent.PenRatio) - agent.Pen, 0) + LevelFactor);
+    public double GetDefenseMultiplier(double penRatio, double pen) => 
+        LevelFactor / (Math.Max(Defense * (1 - penRatio) - pen, 0) + LevelFactor);
     
     private int AnomalyTriggerCount { get; set; } = 0;
     
@@ -69,14 +69,14 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
 
                 if (WaitingForShatter == false) {
                     buildup.Reset();
-                    AttributeAnomalyTrigger?.Invoke(this, Element.Ice); // Trigger Shatter
+                    AttributeAnomalyTrigger?.Invoke(this, Element.Ice, anomaly?.AgentId ?? 0); // Trigger Shatter
                     return;
                 }
             }
             
             buildup.Reset();
             AnomalyBuildupThreshold = BaseAnomalyBuildupThreshold * Math.Pow(1.02, Math.Min(10, ++AnomalyTriggerCount));
-            AttributeAnomalyTrigger?.Invoke(this, element);
+            AttributeAnomalyTrigger?.Invoke(this, element, anomaly?.AgentId ?? 0);
             AfflictedAnomaly = anomaly;
         }
     }
