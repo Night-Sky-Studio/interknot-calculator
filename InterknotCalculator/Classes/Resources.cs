@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Classes;
 
@@ -66,6 +67,13 @@ public class Resources {
     public Weapon GetWeapon(uint id) {
         if (!_isInitialized)
             throw new Exception("Resources not yet initialized.");
+
+        if (id == 14122) {
+            Weapons[id].ApplyPassive = agent => {
+                agent.BonusStats[Affix.DisorderDmgBonus] += agent.AnomalyProficiency > 375 ? 0.25 : 0;
+            };
+        }
+        
         return Weapons[id];
     }
 
