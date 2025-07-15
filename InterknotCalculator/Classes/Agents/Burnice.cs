@@ -8,8 +8,8 @@ public class Burnice : Agent, IAgentReference<Burnice> {
         var burnice = new Burnice {
             Stats = {
                 [Affix.Atk] = 2850, 
-                [Affix.AnomalyMastery] = 135.5, 
-                [Affix.AnomalyProficiency] = 375,
+                [Affix.AnomalyMastery] = 135, 
+                [Affix.AnomalyProficiency] = 372,
                 [Affix.FireDmgBonus] = 0.3,
             }
         };
