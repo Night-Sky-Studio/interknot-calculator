@@ -22,10 +22,10 @@ public abstract class Agent(uint id) {
     public List<Stat> ExternalTagBonus { get; set; } = [];
     public Dictionary<Element, Anomaly> Anomalies { get; set; } = new();
     public Dictionary<string, Skill> Skills { get; set; } = new();
-    
+
     public Affix RelatedElementDmg => Helpers.GetRelatedAffixDmg(Element);
     public Affix RelatedElementRes => Helpers.GetRelatedAffixRes(Element);
-    
+
     public double Hp => Stats[Affix.Hp] * (1 + BonusStats[Affix.HpRatio]) + BonusStats[Affix.Hp];
     public double Atk => Stats[Affix.Atk] * (1 + BonusStats[Affix.AtkRatio]) + BonusStats[Affix.Atk];
     public double Def => Stats[Affix.Def] * (1 + BonusStats[Affix.DefRatio]) + BonusStats[Affix.Def];
@@ -50,7 +50,7 @@ public abstract class Agent(uint id) {
         set => _energy = Math.Clamp(value, 0, 120);
     }
 #endif
-    
+
     public SafeDictionary<Affix, double> CollectStats() => new() {
         [Affix.Hp] = Hp,
         [Affix.Atk] = Atk,
@@ -76,12 +76,12 @@ public abstract class Agent(uint id) {
     /// <param name="team">Current team, including current agent</param>
     /// <returns>Collection of stats</returns>
     public virtual IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) => [];
-    
+
     /// <summary>
     /// Applies agent's passive to themselves
     /// </summary>
     public virtual void ApplyPassive() { }
-    
+
     /// <summary>
     /// Applies agent's ability's passive
     /// </summary>
@@ -96,13 +96,13 @@ public abstract class Agent(uint id) {
     /// <param name="scale">Skill level</param>
     /// <param name="enemy">Enemy instance</param>
     /// <returns><see cref="AgentAction"/> with calculated damage</returns>
-    public AgentAction GetActionDamage(string skill, int scale, Enemy enemy) {
+    public virtual IEnumerable<AgentAction> GetActionDamage(string skill, int scale, Enemy enemy) {
         var data = Skills[skill];
         var attribute = data.Scales[scale].Element ?? Element;
         var relatedAffixDmg = Helpers.GetRelatedAffixDmg(attribute);
         var relatedAffixRes = Helpers.GetRelatedAffixRes(attribute);
 
-#if ENERGY_REQUIREMENT_CHECK 
+#if ENERGY_REQUIREMENT_CHECK
         // Energy requirement check
         // ExSpecial has negative energy (using energy)
         // everything else have positive (accumulating energy)
@@ -131,44 +131,43 @@ public abstract class Agent(uint id) {
         // Process anomalies
         var buildup = GetAnomalyBuildup(skill, scale, data.Tag);
         enemy.AddAnomalyBuildup(this, buildup);
-        
+
         // Calculate damage according to formula
         var baseDmgAttacker = data.Scales[scale].Damage / 100 * Atk;
-        var dmgBonusMultiplier = 1 + ElementalDmgBonus + DmgBonus 
+        var dmgBonusMultiplier = 1 + ElementalDmgBonus + DmgBonus
                                  + tagDmgBonus[relatedAffixDmg] + tagDmgBonus[Affix.DmgBonus]
                                  + data.Affixes[relatedAffixDmg] + data.Affixes[Affix.DmgBonus];
         var critMultiplier = 1 + Math.Min(CritRate + tagDmgBonus[Affix.CritRate] + data.Affixes[Affix.CritRate], 1)
             * (CritDamage + tagDmgBonus[Affix.CritDamage] + data.Affixes[Affix.CritDamage]);
-        var resMultiplier = 1 + ElementalResPen + ResPen 
+        var resMultiplier = 1 + ElementalResPen + ResPen
                             + tagDmgBonus[relatedAffixRes] + tagDmgBonus[Affix.ResPen]
                             + data.Affixes[relatedAffixRes] + data.Affixes[Affix.ResPen];
 
-        var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * enemy.GetDefenseMultiplier(this)
+        var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * enemy.GetDefenseMultiplier(PenRatio, Pen)
                     * resMultiplier * DamageTakenMultiplier * enemy.StunMultiplier;
 
-        return new() {
-            AgentId = Id,
-            Name = $"{skill} { (scale == 0 && data.Scales.Count == 1 ? "" : scale + 1) }".Trim(),
-            Tag = data.Tag,
+        return [new() {
+            AgentId = Id, 
+            Name = $"{skill} {(scale == 0 && data.Scales.Count == 1 ? "" : scale + 1)}".Trim(), 
+            Tag = data.Tag, 
             Damage = total
-        };
+        }];
     }
 
     public double GetAnomalyBuildup(string skill, int scale, SkillTag currentTag) {
         var data = Skills[skill];
         var baseBuildup = data.Scales[scale].AnomalyBuildup;
         if (baseBuildup == 0) return 0;
-        
-        
+
         var amBonus = AnomalyMastery / 100;
         var amBuildupBonus = 1 + BonusStats[Affix.AnomalyBuildupBonus] + data.Affixes[Affix.AnomalyBuildupBonus];
 
         var tagBonus = TagBonus.Where(stat => stat.Tags?.Contains(currentTag) ?? false)
             .Where(stat => stat.Affix == Affix.AnomalyBuildupBonus)
             .Select(stat => stat.Value).Sum();
-        
+
         amBuildupBonus += tagBonus;
-        
+
         var amBuildupRes = 1;
 
         return baseBuildup * amBonus * amBuildupBonus * amBuildupRes;
@@ -212,16 +211,32 @@ public abstract class Agent(uint id) {
         // Calculate anomaly damage according to formula
         var anomalyBaseDmg = element != Element.None 
             ? data.Scale / 100 * Atk 
-            : GetDisorderBaseMultiplier(enemy.AfflictedAnomaly!) * enemy.AfflictedAnomaly?.Stats[Affix.Atk] ?? 0;
+            : GetDisorderBaseMultiplier(enemy.AfflictedAnomaly!.Element, enemy.AfflictedAnomaly?.Stats[Affix.Atk] ?? 0);
         
         var anomalyProficiencyMultiplier = anomalyProficiency / 100;
         const double anomalyLevelMultiplier = 2;
-        var dmgBonusMultiplier = element != Element.None ? 1 + ElementalDmgBonus + DmgBonus + tagBonus : 1;
+        var dmgBonusMultiplier = element is Element.None ? 1 : 1 + ElementalDmgBonus + DmgBonus + tagBonus;
         var resMultiplier = element != Element.None ? 1 + ElementalResPen + ResPen : 1;
-
+        
+        var disorderElementalMultiplier = 1d;
+        var disorderElementalRes = 1d;
+        if (element is Element.None && enemy.AfflictedAnomaly is { } enemyAnomaly) {
+            var disorderElementalDmgBonus = Helpers.GetRelatedAffixDmg(enemyAnomaly.Element);
+            var disorderElementalResPen = Helpers.GetRelatedAffixRes(enemyAnomaly.Element);
+            disorderElementalMultiplier += enemyAnomaly.Stats[disorderElementalDmgBonus];
+            disorderElementalRes += enemyAnomaly.Stats[disorderElementalResPen];
+            
+            dmgBonusMultiplier += BonusStats[Affix.DisorderDmgBonus] + enemyAnomaly.Stats[Affix.DmgBonus];
+            resMultiplier += enemyAnomaly.Stats[Affix.ResPen];
+        }
+        
         var total = anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier
-                    * dmgBonusMultiplier * enemy.GetDefenseMultiplier(this) * resMultiplier;
-
+                    * dmgBonusMultiplier 
+                    * enemy.GetDefenseMultiplier(enemy.AfflictedAnomaly?.Stats[Affix.PenRatio] ?? PenRatio,
+                        enemy.AfflictedAnomaly?.Stats[Affix.Pen] ?? Pen) 
+                    * resMultiplier * 
+                    (element is Element.None ? enemy.StunMultiplier : 1) * disorderElementalMultiplier * disorderElementalRes;
+        
         return new() {
             AgentId =  data.AgentId != 0 ? data.AgentId : Id,
             Name = data.ToString(),
@@ -230,21 +245,27 @@ public abstract class Agent(uint id) {
         };
     }
 
-    private double GetDisorderBaseMultiplier(Anomaly? anomaly) {
-        if (anomaly?.Element is Element.None) {
-            throw new ArgumentException("Disorder cannot trigger itself", nameof(anomaly));
-        }
+    protected double GetDisorderTimeMultiplier(Element element, Func<double, double>? mvReducer = null) {
+        var duration = (element is Element.Frost ? 20 : 10) - 3;
 
-        var duration = (anomaly?.Element is Element.Frost ? 20 : 10) - 3;
+        mvReducer ??= prev => prev;
         
-        return anomaly?.Element switch {
-            Element.Fire => 4.5 + duration / 0.5 * 0.5,
-            Element.Electric => 4.5 + duration * 1.25,
-            Element.Ice => 4.5 + duration * 0.075,
-            Element.Frost => 6 + duration * 0.75,
-            Element.Physical => 4.5 + duration * 0.075,
-            Element.Ether or Element.AuricInk => 4.5 + duration / 0.5 * 0.625,
+        return element switch {
+            Element.Fire => mvReducer(4.5) + duration / 0.5 * 0.5,
+            Element.Electric => mvReducer(4.5) + duration * 1.25,
+            Element.Ice => mvReducer(4.5) + duration * 0.075,
+            Element.Frost => mvReducer(6) + duration * 0.75,
+            Element.Physical => mvReducer(4.5) + duration * 0.075,
+            Element.Ether or Element.AuricInk => mvReducer(4.5) + duration / 0.5 * 0.625,
             _ => 0
         };
+    }
+    
+    protected virtual double GetDisorderBaseMultiplier(Element element, double attack, Func<double, double>? mvReducer = null) {
+        if (element is Element.None) {
+            throw new ArgumentException("Disorder cannot trigger itself", nameof(element));
+        }
+
+        return GetDisorderTimeMultiplier(element, mvReducer) * attack;
     }
 }
