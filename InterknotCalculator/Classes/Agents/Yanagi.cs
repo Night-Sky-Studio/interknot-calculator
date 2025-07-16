@@ -95,23 +95,30 @@ public sealed class Yanagi : Agent {
     }
     
     public override IEnumerable<AgentAction> GetActionDamage(string skill, int scale, Enemy enemy) {
-        if (Skills[skill].Tag is SkillTag.ExSpecial or SkillTag.FollowUpAssist) {
-            ToggleStance();
-            
-            var result = base.GetActionDamage(skill, scale, enemy).ToList();
-            if (enemy.AfflictedAnomaly is not null && scale == 1) {
-                IsPolarityDisorder = true;
-                result.Add(GetAnomalyDamage(Element.None, enemy) with {
-                    AgentId = Id,
-                    Name = "polarity_disorder"
-                });
-                IsPolarityDisorder = false;
-            }
+        var result = base.GetActionDamage(skill, scale, enemy).ToList();
 
-            return result;
+        switch (Skills[skill].Tag) {
+            case SkillTag.ExSpecial:
+            case SkillTag.FollowUpAssist:
+                ToggleStance();
+                if (scale == 1) {
+                    goto case SkillTag.Ultimate;
+                }
+                break;
+            case SkillTag.Ultimate: {
+                if (enemy.AfflictedAnomaly is not null) {
+                    IsPolarityDisorder = true;
+                    result.Add(GetAnomalyDamage(Element.None, enemy) with {
+                        AgentId = Id,
+                        Name = "polarity_disorder"
+                    });
+                    IsPolarityDisorder = false;
+                }
+                break;
+            }
         }
         
-        return base.GetActionDamage(skill, scale, enemy);
+        return result;
     }
 
     public override void ApplyPassive() {
