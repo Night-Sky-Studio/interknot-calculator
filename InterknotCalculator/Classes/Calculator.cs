@@ -223,6 +223,23 @@ public class Calculator {
             fullTeam[characterId].BonusStats[avBonus.Affix] -= avBonus.Value * (astralVoiceCount - 1);
         }
 
+        if (fullTeam.TryGetValue(1331, out var agent) && agent is Vivian vivian) {
+            // Apply Vivian's Action Handler to all team members
+            foreach (var a in fullTeam.Values) {
+                a.OnAction = (sender, tag, e) => {
+                    if (tag is SkillTag.ExSpecial or SkillTag.AttributeAnomaly && e.AfflictedAnomaly is not null) {
+                        // Trigger Abloom
+                        anomalyQueue.Add(new () {
+                            AgentId = sender.Id,
+                            Name = $"Abloom_{e.AfflictedAnomaly}",
+                            Damage = vivian.GetAbloomDamage(a, e),
+                            Tag = SkillTag.AttributeAnomaly
+                        });
+                    }
+                };
+            }
+        }
+        
         // Do the calculation
         // Anomalies should be included automatically
         foreach (var action in rotation) {

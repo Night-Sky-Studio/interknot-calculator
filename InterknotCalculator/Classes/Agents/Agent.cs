@@ -42,7 +42,7 @@ public abstract class Agent(uint id) {
     public double DmgBonus => Stats[Affix.DmgBonus] + BonusStats[Affix.DmgBonus];
     public double ResPen => Stats[Affix.ResPen] + BonusStats[Affix.ResPen];
     public double DazeBonus => Stats[Affix.DazeBonus] + BonusStats[Affix.DazeBonus];
-
+    
 #if ENERGY_REQUIREMENT_CHECK
     private double _energy = 60;
     public double Energy {
@@ -50,6 +50,8 @@ public abstract class Agent(uint id) {
         set => _energy = Math.Clamp(value, 0, 120);
     }
 #endif
+    
+    public Action<Agent, SkillTag, Enemy>? OnAction { get; set; }
 
     public SafeDictionary<Affix, double> CollectStats() => new() {
         [Affix.Hp] = Hp,
@@ -102,6 +104,8 @@ public abstract class Agent(uint id) {
         var relatedAffixDmg = Helpers.GetRelatedAffixDmg(attribute);
         var relatedAffixRes = Helpers.GetRelatedAffixRes(attribute);
 
+        OnAction?.Invoke(this, data.Tag, enemy);
+        
 #if ENERGY_REQUIREMENT_CHECK
         // Energy requirement check
         // ExSpecial has negative energy (using energy)
@@ -174,6 +178,7 @@ public abstract class Agent(uint id) {
     }
 
     public virtual AgentAction GetAnomalyDamage(Element element, Enemy enemy) {
+        OnAction?.Invoke(this, SkillTag.AttributeAnomaly, enemy);
         // Agents can override default anomalies
         // ReSharper disable once InlineOutVariableDeclaration
         if (!Anomalies.TryGetValue(element, out var data)) {
