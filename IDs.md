@@ -27,8 +27,10 @@ Game version: `2.0`
 1261 Jane
 1271 Seth
 1281 Piper
+1291 Hugo
 1311 Astra Yao
 1321 Evelyn
+1331 Vivian
 1351 Pulchra
 1361 Trigger
 1371 Yixuan
