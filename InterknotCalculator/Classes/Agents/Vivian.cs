@@ -72,9 +72,34 @@ public sealed class Vivian : Agent {
             new (3374.20, 374.80, 808.56),
         ]);
     }
-    
-    public double GetAbloomDamage(Agent agent, Enemy enemy) {
-        return 0.0d;
+
+    public Anomaly CreateAbloom(Element element) {
+        Element anomalyElement = element switch {
+            Element.Fire => Element.Fire,
+            Element.Physical => Element.Physical,
+            Element.Electric => Element.Electric,
+            Element.Frost or Element.Ice => Element.Ice,
+            Element.AuricInk or Element.Ether => Element.Ether,
+            _ => throw new ArgumentOutOfRangeException(nameof(element), element, null)
+        };
+
+        var baseAnomaly = Anomaly.GetAnomalyByElement(anomalyElement)!;
+
+        double scale = element switch {
+            Element.Fire =>
+                baseAnomaly.Scale * (0.8 * AnomalyProficiency),
+            Element.Physical =>
+                baseAnomaly.Scale * (0.075 * AnomalyProficiency),
+            Element.Electric =>
+                baseAnomaly.Scale * (0.32 * AnomalyProficiency),
+            Element.Frost or Element.Ice =>
+                baseAnomaly.Scale * (0.108 * AnomalyProficiency),
+            Element.AuricInk or Element.Ether =>
+                baseAnomaly.Scale * (0.615 * AnomalyProficiency),
+            _ => throw new ArgumentOutOfRangeException(nameof(element), element, null)
+        };
+
+        return baseAnomaly with { Scale = scale };
     }
     
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {

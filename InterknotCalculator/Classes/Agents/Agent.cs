@@ -177,8 +177,10 @@ public abstract class Agent(uint id) {
         return baseBuildup * amBonus * amBuildupBonus * amBuildupRes;
     }
 
-    public virtual AgentAction GetAnomalyDamage(Element element, Enemy enemy) {
-        OnAction?.Invoke(this, SkillTag.AttributeAnomaly, enemy);
+    public virtual AgentAction GetAnomalyDamage(Element element, Enemy enemy, bool abloom = false) {
+        // Prevent Abloom from making a stack overflow by recursion
+        if (!abloom)
+            OnAction?.Invoke(this, SkillTag.AttributeAnomaly, enemy);
         // Agents can override default anomalies
         // ReSharper disable once InlineOutVariableDeclaration
         if (!Anomalies.TryGetValue(element, out var data)) {

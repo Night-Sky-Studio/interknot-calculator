@@ -227,14 +227,26 @@ public class Calculator {
             // Apply Vivian's Action Handler to all team members
             foreach (var a in fullTeam.Values) {
                 a.OnAction = (sender, tag, e) => {
-                    if (tag is SkillTag.ExSpecial or SkillTag.AttributeAnomaly && e.AfflictedAnomaly is not null) {
-                        // Trigger Abloom
-                        anomalyQueue.Add(new () {
-                            AgentId = sender.Id,
-                            Name = $"Abloom_{e.AfflictedAnomaly}",
-                            Damage = vivian.GetAbloomDamage(a, e),
-                            Tag = SkillTag.AttributeAnomaly
-                        });
+                    if (tag is not (SkillTag.ExSpecial or SkillTag.AttributeAnomaly) || e.AfflictedAnomaly is null) return;
+                    var anomalyElement = e.AfflictedAnomaly.Element;
+                    if (sender.Anomalies.TryGetValue(anomalyElement, out var previousAnomaly)) {
+                        var abloomAnomaly = vivian.CreateAbloom(anomalyElement);
+                        sender.Anomalies[anomalyElement] = previousAnomaly with {
+                            Scale = abloomAnomaly.Scale
+                        };
+                    } else {
+                        sender.Anomalies[anomalyElement] = vivian.CreateAbloom(anomalyElement);
+                    }
+
+                    var abloom = sender.GetAnomalyDamage(anomalyElement, e, true);
+                    anomalyQueue.Add(abloom with {
+                        Name = $"Abloom_{e.AfflictedAnomaly}",
+                    });
+
+                    if (previousAnomaly is not null) {
+                        sender.Anomalies[anomalyElement] = previousAnomaly;
+                    } else {
+                        sender.Anomalies.Remove(anomalyElement);
                     }
                 };
             }

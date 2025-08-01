@@ -1,4 +1,5 @@
-Game version: `2.0`
+Game version: 2.1
+
 # Agents
 ```
 1011 Anby
@@ -36,6 +37,8 @@ Game version: `2.0`
 1371 Yixuan
 1381 Soldier 0 - Anby
 1391 Ju Fufu
+1401 Alice
+1411 Yuzuha
 1421 Pan Yinhu
 ```
 
@@ -103,12 +106,16 @@ Game version: `2.0`
 14124 Riot Suppressor Mark VI
 14125 Ice-Jade Teapot
 14126 Sharpened Stinger
+14129 Myriad Eclipse
 14131 Elegant Vanity
 14132 Heartstring Nocturne
+14133 Flight of Fancy
 14136 Spectral Gaze
 14137 Qingming Birdcage
 14138 Severed Innocence
 14139 Roaring Fur-nace
+14140 Practiced Perfection
+14141 Metanukimorphosis
 ```
 
 # Drive Disc Sets

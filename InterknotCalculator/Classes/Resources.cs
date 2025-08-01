@@ -68,12 +68,18 @@ public class Resources {
         if (!_isInitialized)
             throw new Exception("Resources not yet initialized.");
 
-        if (id == 14122) {
-            Weapons[id].ApplyPassive = agent => {
+        Weapons[id].ApplyPassive = id switch {
+            14122 => agent => {
                 agent.BonusStats[Affix.DisorderDmgBonus] += agent.AnomalyProficiency > 375 ? 0.25 : 0;
-            };
-        }
-        
+            },
+            14133 => agent => {
+                if (agent.Element is Element.Ether) {
+                    agent.BonusStats[Affix.AnomalyProficiency] += 20 * 6;
+                }
+            },
+            _ => Weapons[id].ApplyPassive
+        };
+
         return Weapons[id];
     }
 
