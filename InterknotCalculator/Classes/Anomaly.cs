@@ -2,15 +2,6 @@
 
 namespace InterknotCalculator.Classes;
 
-public enum AnomalyType {
-    Disorder,
-    Assault,
-    Burn, 
-    Shatter, 
-    Shock, 
-    Corruption
-}
-
 public record Anomaly(
     double Scale,
     Element Element,
@@ -30,7 +21,7 @@ public record Anomaly(
         Element.None     => new (0,          Element.None,     []),
         Element.Ice      => new (500.0,      Element.Ice,      []),
         Element.Fire     => new (50.0 * 20,  Element.Fire,     []),
-        Element.Physical => new (731.0,      Element.Physical, []),
+        Element.Physical => new (713.0,      Element.Physical, []),
         Element.Electric => new (125.0 * 10, Element.Electric, []),
         Element.Ether or Element.AuricInk => new (62.5 * 20,  Element.Ether,    []),
         _ => null
