@@ -5,6 +5,22 @@ using InterknotCalculator.Enums;
 namespace InterknotCalculator.Classes.Agents;
 
 public sealed class Vivian : Agent {
+    private int _flightFeathersCount = 0;
+    public int FlightFeathersCount {
+        get => _flightFeathersCount;
+        set => _flightFeathersCount = Math.Clamp(value, 0, 5);
+    }
+    
+    private int _guardFeathersCount = 0;
+    public int GuardFeathersCount {
+        get => _guardFeathersCount; 
+        set => _guardFeathersCount = Math.Clamp(value, 0, 5);
+    }
+    
+    private void ConvertFeathers() {
+        GuardFeathersCount += FlightFeathersCount;
+    }
+    
     public Vivian() : base(1331) {
         Speciality = Speciality.Anomaly;
         Element = Element.Ether;
@@ -87,19 +103,32 @@ public sealed class Vivian : Agent {
 
         double scale = element switch {
             Element.Fire =>
-                baseAnomaly.Scale * (0.8 * AnomalyProficiency),
+                baseAnomaly.Scale * (0.8 * AnomalyProficiency) / 100,
             Element.Physical =>
-                baseAnomaly.Scale * (0.075 * AnomalyProficiency),
+                baseAnomaly.Scale * (0.075 * AnomalyProficiency) / 100,
             Element.Electric =>
-                baseAnomaly.Scale * (0.32 * AnomalyProficiency),
+                baseAnomaly.Scale * (0.32 * AnomalyProficiency) / 100,
             Element.Frost or Element.Ice =>
-                baseAnomaly.Scale * (0.108 * AnomalyProficiency),
+                baseAnomaly.Scale * (0.108 * AnomalyProficiency) / 100,
             Element.AuricInk or Element.Ether =>
-                baseAnomaly.Scale * (0.615 * AnomalyProficiency),
+                baseAnomaly.Scale * (0.615 * AnomalyProficiency) / 100,
             _ => throw new ArgumentOutOfRangeException(nameof(element), element, null)
         };
 
         return baseAnomaly with { Scale = scale };
+    }
+
+    public override IEnumerable<AgentAction> GetActionDamage(string skill, int scale, Enemy enemy) {
+        switch (skill) {
+            case "fluttering_frock_suspension":
+                ConvertFeathers();
+                break;
+            case "violet_requiem":
+                FlightFeathersCount += 3;
+                break;
+        }
+    
+        return base.GetActionDamage(skill, scale, enemy);
     }
     
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
