@@ -28,6 +28,7 @@ public class Calculator {
             1241 => new ZhuYuan(),
             1261 => new JaneDoe(),
             1321 => new Evelyn(),
+            1331 => new Vivian(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent instance wasn't found.")
         };
     }
@@ -40,6 +41,7 @@ public class Calculator {
             1151 => Lucy.Reference(),
             1171 => Burnice.Reference(),
             1211 => Rina.Reference(),
+            1261 => JaneDoe.Reference(),
             1311 => AstraYao.Reference(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent reference wasn't found.")
         };
@@ -122,7 +124,7 @@ public class Calculator {
         
         // Initialize the agent and the weapon
         // Having a dictionary here allows us to use abilities 
-        // other team members
+        // of other team members
         var fullTeam = new Dictionary<uint, Agent> {
             [characterId] = CreateAgentInstance(characterId)
         };
@@ -228,6 +230,7 @@ public class Calculator {
             foreach (var a in fullTeam.Values) {
                 a.OnAction = (sender, tag, e) => {
                     if (tag is not (SkillTag.ExSpecial or SkillTag.AttributeAnomaly) || e.AfflictedAnomaly is null) return;
+                    if (vivian.GuardFeathersCount == 0) return;
                     var anomalyElement = e.AfflictedAnomaly.Element;
                     if (sender.Anomalies.TryGetValue(anomalyElement, out var previousAnomaly)) {
                         var abloomAnomaly = vivian.CreateAbloom(anomalyElement);
@@ -240,7 +243,8 @@ public class Calculator {
 
                     var abloom = sender.GetAnomalyDamage(anomalyElement, e, true);
                     anomalyQueue.Add(abloom with {
-                        Name = $"Abloom_{e.AfflictedAnomaly}",
+                        AgentId = vivian.Id,
+                        Name = $"abloom_{e.AfflictedAnomaly}",
                     });
 
                     if (previousAnomaly is not null) {
@@ -271,10 +275,10 @@ public class Calculator {
         }
         
         // Cleanup actions - remove all damage/daze from other agents
-        actions = actions.Select(action => action.AgentId != characterId
-            ? action with { Damage = 0, Daze = 0 } 
-            : action
-        ).ToList();
+        // actions = actions.Select(action => action.AgentId != characterId
+        //     ? action with { Damage = 0, Daze = 0 } 
+        //     : action
+        // ).ToList();
 
         return new CalcResult {
             FinalStats = {
