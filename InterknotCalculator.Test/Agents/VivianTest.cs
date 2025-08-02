@@ -49,7 +49,12 @@ public partial class AgentsTest {
         Team = [1261],
         StunBonus = 1,
         Rotation = [
-            
+            "1261.aerial_sweep_cleanout",
+            "1261.aerial_sweep_cleanout",
+            "violet_requiem",
+            "fluttering_frock_suspension",
+            "1261.aerial_sweep_cleanout",
+            "1261.aerial_sweep_cleanout"
         ]
     };
     
