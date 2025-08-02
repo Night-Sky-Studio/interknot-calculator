@@ -1,8 +1,28 @@
 using InterknotCalculator.Enums;
+using InterknotCalculator.Interfaces;
 
 namespace InterknotCalculator.Classes.Agents;
 
-public sealed class JaneDoe : Agent {
+public sealed class JaneDoe : Agent, IAgentReference<JaneDoe> {
+    public static JaneDoe Reference() {
+        var jane = new JaneDoe {
+            Stats = {
+                [Affix.Atk] = 2400,
+                [Affix.AnomalyProficiency] = 420,
+                [Affix.AnomalyMastery] = 195
+            }
+        };
+
+        var sharpenedStinger = Resources.Current.GetWeapon(14126);
+        foreach (var passive in sharpenedStinger.Passive) {
+            jane.BonusStats[passive.Affix] += passive.Value;
+        }
+
+        jane.ApplyPassive();
+        
+        return jane;
+    }
+    
     public JaneDoe() : base(1261) {
         Speciality = Speciality.Anomaly;
         Element = Element.Physical;
