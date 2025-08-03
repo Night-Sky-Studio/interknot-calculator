@@ -275,10 +275,10 @@ public class Calculator {
         }
         
         // Cleanup actions - remove all damage/daze from other agents
-        // actions = actions.Select(action => action.AgentId != characterId
-        //     ? action with { Damage = 0, Daze = 0 } 
-        //     : action
-        // ).ToList();
+        actions = actions.Select(action => action.AgentId != characterId
+            ? action with { Damage = 0, Daze = 0 } 
+            : action
+        ).ToList();
 
         return new CalcResult {
             FinalStats = {
