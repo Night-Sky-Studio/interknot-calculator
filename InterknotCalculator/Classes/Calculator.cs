@@ -24,9 +24,11 @@ public class Calculator {
             1181 => new Grace(),
             1191 => new Ellen(),
             1201 => new Harumasa(),
+            1221 => new Yanagi(),
             1241 => new ZhuYuan(),
             1261 => new JaneDoe(),
             1321 => new Evelyn(),
+            1331 => new Vivian(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent instance wasn't found.")
         };
     }
@@ -39,6 +41,7 @@ public class Calculator {
             1151 => Lucy.Reference(),
             1171 => Burnice.Reference(),
             1211 => Rina.Reference(),
+            1261 => JaneDoe.Reference(),
             1311 => AstraYao.Reference(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent reference wasn't found.")
         };
@@ -121,7 +124,7 @@ public class Calculator {
         
         // Initialize the agent and the weapon
         // Having a dictionary here allows us to use abilities 
-        // other team members
+        // of other team members
         var fullTeam = new Dictionary<uint, Agent> {
             [characterId] = CreateAgentInstance(characterId)
         };
@@ -153,6 +156,9 @@ public class Calculator {
         // Apply Agent's passive
         fullTeam[characterId].ApplyPassive();
         
+        // Apply Agent's weapon passive
+        weapon.ApplyPassive?.Invoke(fullTeam[characterId]);
+        
         var actions = new List<AgentAction>();
         
         // Apply team passive
@@ -164,17 +170,17 @@ public class Calculator {
         List<Stat> fullTeamPassive = [];
 
         List<AgentAction> anomalyQueue = [];
-        
-        enemy.AttributeAnomalyTrigger = (sender, element) => {
+
+        enemy.AttributeAnomalyTrigger = (sender, element, agentId) => {
             var isFrostburnShatter = element == Element.Ice && sender.AfflictedAnomaly?.Element == Element.Frost;
-            
+
             // Process anomaly damage
-            anomalyQueue.Add(fullTeam[characterId].GetAnomalyDamage(element, enemy));
-            
+            anomalyQueue.Add(fullTeam[agentId].GetAnomalyDamage(element, enemy));
+
             // Then process disorders
             if (sender.AfflictedAnomaly is { } anomaly && !isFrostburnShatter) {
                 if (anomaly.Element != element) {
-                    anomalyQueue.Add(fullTeam[characterId].GetAnomalyDamage(Element.None, enemy));
+                    anomalyQueue.Add(fullTeam[agentId].GetAnomalyDamage(Element.None, enemy));
                 } else {
                     sender.AfflictedAnomaly = null;
                 }
@@ -219,6 +225,37 @@ public class Calculator {
             fullTeam[characterId].BonusStats[avBonus.Affix] -= avBonus.Value * (astralVoiceCount - 1);
         }
 
+        if (fullTeam.TryGetValue(1331, out var agent) && agent is Vivian vivian) {
+            // Apply Vivian's Action Handler to all team members
+            foreach (var a in fullTeam.Values) {
+                a.OnAction = (sender, tag, e) => {
+                    if (tag is not (SkillTag.ExSpecial or SkillTag.AttributeAnomaly) || e.AfflictedAnomaly is null) return;
+                    if (vivian.GuardFeathersCount == 0) return;
+                    var anomalyElement = e.AfflictedAnomaly.Element;
+                    if (sender.Anomalies.TryGetValue(anomalyElement, out var previousAnomaly)) {
+                        var abloomAnomaly = vivian.CreateAbloom(anomalyElement);
+                        sender.Anomalies[anomalyElement] = previousAnomaly with {
+                            Scale = abloomAnomaly.Scale
+                        };
+                    } else {
+                        sender.Anomalies[anomalyElement] = vivian.CreateAbloom(anomalyElement);
+                    }
+
+                    var abloom = sender.GetAnomalyDamage(anomalyElement, e, true);
+                    anomalyQueue.Add(abloom with {
+                        AgentId = vivian.Id,
+                        Name = $"abloom_{e.AfflictedAnomaly}",
+                    });
+
+                    if (previousAnomaly is not null) {
+                        sender.Anomalies[anomalyElement] = previousAnomaly;
+                    } else {
+                        sender.Anomalies.Remove(anomalyElement);
+                    }
+                };
+            }
+        }
+        
         // Do the calculation
         // Anomalies should be included automatically
         foreach (var action in rotation) {
@@ -227,7 +264,7 @@ public class Calculator {
                 throw new ArgumentException($"Invalid action: {action}");
             }
             
-            actions.Add(fullTeam[act.AgentId].GetActionDamage(act.ActionName, act.Scale - 1, enemy));
+            actions.AddRange(fullTeam[act.AgentId].GetActionDamage(act.ActionName, act.Scale - 1, enemy));
             
             // Anomalies are processed in a queue to maintain the order
             // This includes simultaneous anomaly triggers like disorders

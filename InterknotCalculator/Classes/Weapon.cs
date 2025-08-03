@@ -1,4 +1,6 @@
-﻿using InterknotCalculator.Enums;
+﻿using System.Text.Json.Serialization;
+using InterknotCalculator.Classes.Agents;
+using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Classes;
 
@@ -10,4 +12,7 @@ public record Weapon {
     public required Stat SecondaryStat { get; set; }
     public IEnumerable<Stat> Passive { get; set; } = [];
     public IEnumerable<Stat> ExternalBonus { get; set; } = [];
+
+    [JsonIgnore]
+    public Action<Agent>? ApplyPassive { get; set; } = null;
 }
