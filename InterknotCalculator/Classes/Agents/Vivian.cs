@@ -132,6 +132,13 @@ public sealed class Vivian : Agent {
     }
     
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        return base.ApplyTeamPassive(team);
+        if (team.Count < 2) return [];
+
+        if (team.Any(a => a.Speciality == Speciality) ||
+            team.Any(a => a.Element == Element)) {
+            return [new(0.12, Affix.DisorderDmgBonus)];
+        }
+
+        return [];   
     }
 }
