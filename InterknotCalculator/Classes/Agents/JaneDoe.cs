@@ -111,4 +111,15 @@ public sealed class JaneDoe : Agent, IAgentReference<JaneDoe> {
             BonusStats[Affix.Atk] += Math.Min((AnomalyProficiency - 120) * 2, 600);
         }
     }
+
+    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
+        if (team.Count < 2) return [];
+
+        if (team.Any(a => a.Speciality == Speciality) ||
+            team.Any(a => a.Faction == Faction)) {
+            return [new(0.35, Affix.AnomalyBuildupBonus)];
+        }
+
+        return [];   
+    }
 }
