@@ -33,8 +33,8 @@ game combat simulation engine.
 
 The damage of each action is calculated independently (previous or future rotation actions don't
 have any effect on the damage). Calculator uses damage formulas and information described in
-[this document](https://docs.google.com/document/d/e/2PACX-1vSo82Ac3HqdI_G5_BoAqYJToK6LX4FGLPJxjPZEbhMQ-wSyFyxDFl1dr8i5czcCLJmYwxWfsXkCXN6v/pub).
-Those formulas could be found in the `Calculator`'s `GetStandardDamage()` and `GetAnomalyDamage()` functions.
+[this document](https://github.com/Night-Sky-Studio/interknot-calculator/wiki/ZZZ-Formulas).
+These formulas can be found in the base `Agent` class.
 The Calculator also accounts for all possible passives or buffs/enemy debuffs. When a team is specified, all 
 `ExternalBonus` and `ExternalTagBonus` of the teammate will also be accounted for.
 
@@ -43,13 +43,15 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 #### Active Agents
 - Soldier 11 (1041)
 - Miyabi (1091)
-- Burnice (1171)
+- Burnice (1171) + Reference
 - Grace (1181)
 - Ellen Joe (1191)
 - Zhu Yuan (1241)
-- Jane Doe (1261)
+- Jane Doe (1261) + Reference
 - Evelyn (1321)
 - Harumasa (1201)
+- Yanagi (1221)
+- Vivian (1331)
 
 #### Stun Agents
 - [Partial] Lycaon (1141)
@@ -62,6 +64,7 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Astra Yao (1311)
 
 ### Weapons
+- Weeping Gemini(13008)
 - Electro-Lip Gloss (13009)
 - Marcato Desire (13015)
 - The Vault (13103)
@@ -76,10 +79,12 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Deep Sea Visitor (14119)
 - Zanshin Herb Case (14120)
 - Weeping Cradle (14121)
+- Timeweaver (14122)
 - Riot Suppressor Mark VI (14124)
 - Sharpened Stinger (12126)
 - Elegant Vanity (12131)
 - Heartstring Nocturne (14132)
+- Flight of Fancy (14133)
 
 ### Drive Disc Sets
 - Woodpecker Electro (31000)
