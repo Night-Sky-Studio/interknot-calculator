@@ -5,8 +5,9 @@ using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Test.Agents;
 
-public partial class AgentsTest {
-    private CalcRequest Jane { get; } = new() {
+[TestFixture]
+public class JaneTests : AgentsTest {
+    public static CalcRequest Jane { get; } = new() {
         AgentId = 1261,
         WeaponId = 14126,
         Discs = [

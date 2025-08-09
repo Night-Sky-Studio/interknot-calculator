@@ -1,18 +1,21 @@
 using InterknotCalculator.Classes.Enemies;
+using InterknotCalculator.Classes.Server;
 using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Test.Agents;
 
-public partial class AgentsTest : CalculatorTest {
+[TestFixture]
+public class DisorderTests : AgentsTest {
+    private readonly CalcRequest _jane = JaneTests.Jane;
     [Test]
     public void DisorderTest() {
-        var prevTeam = Jane.Team.Clone();
-        var prevRotation = Jane.Rotation.Clone();
-        Jane.Team = [
+        var prevTeam = _jane.Team.Clone();
+        var prevRotation = _jane.Rotation.Clone();
+        _jane.Team = [
             1171, // Burnice
             1151  // Lucy
         ];
-        Jane.Rotation = [
+        _jane.Rotation = [
             "1171.energizing_speciality_drink",
             "1171.intense_heat_stirring_method",
             "1171.intense_heat_stirring_method_double",
@@ -28,8 +31,8 @@ public partial class AgentsTest : CalculatorTest {
         ];
         var enemy = new NotoriousDullahan();
         
-        var result = Calculator.Calculate(Jane.AgentId, Jane.WeaponId, GetDriveDiscs(Jane), 
-            Jane.Team, Jane.Rotation, enemy);
+        var result = Calculator.Calculate(_jane.AgentId, _jane.WeaponId, GetDriveDiscs(_jane), 
+            _jane.Team, _jane.Rotation, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         // Assert.That(result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly), Is.EqualTo(3));
@@ -39,7 +42,7 @@ public partial class AgentsTest : CalculatorTest {
         Console.WriteLine($"Total: {result.Total}");
         Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
         
-        Jane.Team = (uint[])prevTeam;
-        Jane.Rotation = (string[])prevRotation;
+        _jane.Team = (uint[])prevTeam;
+        _jane.Rotation = (string[])prevRotation;
     }
 }

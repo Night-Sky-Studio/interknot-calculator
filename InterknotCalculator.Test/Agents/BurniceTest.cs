@@ -5,7 +5,8 @@ using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Test.Agents;
 
-public partial class AgentsTest {
+[TestFixture]
+public class BurniceTests : AgentsTest {
     private CalcRequest Burnice { get; } = new() {
         AgentId = 1171,
         WeaponId = 14117,
