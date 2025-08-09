@@ -169,18 +169,18 @@ public class Calculator {
         }
         List<Stat> fullTeamPassive = [];
 
-        List<AgentAction> anomalyQueue = [];
+        List<AgentAction> actionsQueue = [];
 
         enemy.AttributeAnomalyTrigger = (sender, element, agentId) => {
             var isFrostburnShatter = element == Element.Ice && sender.AfflictedAnomaly?.Element == Element.Frost;
 
             // Process anomaly damage
-            anomalyQueue.Add(fullTeam[agentId].GetAnomalyDamage(element, enemy));
+            actionsQueue.Add(fullTeam[agentId].GetAnomalyDamage(element, enemy));
 
             // Then process disorders
             if (sender.AfflictedAnomaly is { } anomaly && !isFrostburnShatter) {
                 if (anomaly.Element != element) {
-                    anomalyQueue.Add(fullTeam[agentId].GetAnomalyDamage(Element.None, enemy));
+                    actionsQueue.Add(fullTeam[agentId].GetAnomalyDamage(Element.None, enemy));
                 } else {
                     sender.AfflictedAnomaly = null;
                 }
@@ -225,8 +225,8 @@ public class Calculator {
             fullTeam[characterId].BonusStats[avBonus.Affix] -= avBonus.Value * (astralVoiceCount - 1);
         }
 
+        // Apply Vivian's Action Handler to all team members
         if (fullTeam.TryGetValue(1331, out var agent) && agent is Vivian vivian) {
-            // Apply Vivian's Action Handler to all team members
             foreach (var a in fullTeam.Values) {
                 a.OnAction = (sender, tag, e) => {
                     if (tag is not (SkillTag.ExSpecial or SkillTag.AttributeAnomaly) || e.AfflictedAnomaly is null) return;
@@ -242,7 +242,7 @@ public class Calculator {
                     }
 
                     var abloom = sender.GetAnomalyDamage(anomalyElement, e, true);
-                    anomalyQueue.Add(abloom with {
+                    actionsQueue.Add(abloom with {
                         AgentId = vivian.Id,
                         Name = $"abloom_{e.AfflictedAnomaly}",
                     });
@@ -268,9 +268,9 @@ public class Calculator {
             
             // Anomalies are processed in a queue to maintain the order
             // This includes simultaneous anomaly triggers like disorders
-            if (anomalyQueue.Count > 0) {
-                actions.AddRange(anomalyQueue);
-                anomalyQueue.Clear();
+            if (actionsQueue.Count > 0) {
+                actions.AddRange(actionsQueue);
+                actionsQueue.Clear();
             }
         }
         
