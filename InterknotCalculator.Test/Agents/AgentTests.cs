@@ -1,5 +1,4 @@
 using InterknotCalculator.Classes;
-using InterknotCalculator.Classes.Agents;
 using InterknotCalculator.Classes.Server;
 
 namespace InterknotCalculator.Test.Agents;
