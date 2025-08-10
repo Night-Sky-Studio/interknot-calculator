@@ -29,6 +29,7 @@ public class Calculator {
             1261 => new JaneDoe(),
             1321 => new Evelyn(),
             1331 => new Vivian(),
+            1381 => new SilverAnby(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent instance wasn't found.")
         };
     }
