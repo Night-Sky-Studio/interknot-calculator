@@ -67,4 +67,6 @@ public struct Stat {
             Value = a.Value + b.Value
         };
     }
+
+    public override string ToString() => $"{Affix}: {Value:0.###}";
 }
