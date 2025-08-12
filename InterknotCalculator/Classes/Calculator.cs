@@ -48,67 +48,6 @@ public class Calculator {
     }
 
     /// <summary>
-    /// Collects all unconditional stats from Drive Discs
-    /// </summary>
-    /// <param name="driveDiscs">A collection of <see cref="DriveDisc"/> instances</param>
-    /// <param name="partialSets">
-    /// A collection of Drive Disc Set IDs for
-    /// which 2pc bonus should be applied
-    /// </param>
-    /// <param name="tagDamageBonus">Tag Damage Bonus dictionary reference</param>
-    /// <returns>A dictionary of all collected stats</returns>
-    private SafeDictionary<Affix, double> CollectDriveDiscStats(IEnumerable<DriveDisc> driveDiscs, 
-        IEnumerable<uint> partialSets, List<Stat> tagDamageBonus) {
-        var result = new SafeDictionary<Affix, double>();
-
-        foreach (var disc in driveDiscs) {
-            result[disc.MainStat.Affix] += disc.MainStat.Value;
-            foreach (var subStat in disc.SubStats) {
-                result[subStat.Stat.Affix] += subStat.Level * subStat.Stat.Value;
-            }
-        }
-
-        foreach (var set in partialSets) {
-            var dds = Resources.Current.GetDriveDiscSet(set);
-            foreach (var bonus in dds.PartialBonus) {
-                if (bonus.SkillTags.Length != 0) {
-                    tagDamageBonus.Add(bonus);
-                } else
-                    result[bonus.Affix] += bonus;
-            }
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// Collects and applies 4pc drive discs set bonus
-    /// </summary>
-    /// <param name="fullSets">
-    /// A collection of Drive Disc Set IDs for
-    /// which 4pc bonus should be applied
-    /// </param>
-    /// <param name="tagDamageBonus">Tag Damage Bonus dictionary reference</param>
-    /// <returns>A dictionary of all collected stats</returns>
-    private SafeDictionary<Affix, double> CollectDriveDiscSetBonus(IEnumerable<uint> fullSets, 
-        List<Stat> tagDamageBonus) {
-        var result = new SafeDictionary<Affix, double>();
-        
-        foreach (var set in fullSets) {
-            var dds = Resources.Current.GetDriveDiscSet(set);
-            
-            foreach (var bonus in dds.FullBonus) {
-                if (bonus.SkillTags.Length != 0) { 
-                    tagDamageBonus.Add(bonus);
-                } else
-                    result[bonus.Affix] += bonus;
-            }
-        }
-
-        return result;
-    }
-
-    /// <summary>
     /// Main damage calculation function
     /// </summary>
     /// <param name="characterId">Agent ID</param>
@@ -128,36 +67,9 @@ public class Calculator {
         var fullTeam = new Dictionary<uint, Agent> {
             [characterId] = CreateAgentInstance(characterId)
         };
-        var weapon = Resources.Current.GetWeapon(weaponId);
-
-        // Collect Drive Discs stats and apply them
-        var groupedSets = driveDiscs
-            .GroupBy(x => x.SetId)
-            .ToDictionary(set => set.Key, set => set.Count());
-        var partialSets = groupedSets.Where(kvp => kvp.Value >= 2).Select(kvp => kvp.Key);
-        var fullSets = groupedSets.Where(kvp => kvp.Value >= 4).Select(kvp => kvp.Key);
         
-        fullTeam[characterId].BonusStats = CollectDriveDiscStats(driveDiscs, partialSets, fullTeam[characterId].TagBonus);
-        
-        fullTeam[characterId].Stats[Affix.Atk] += weapon.MainStat.Value;
-        fullTeam[characterId].BonusStats[weapon.SecondaryStat.Affix] += weapon.SecondaryStat.Value;
-
-        var baseStats = fullTeam[characterId].CollectStats();
-        
-        var driveDiscSetBonus = CollectDriveDiscSetBonus(fullSets, fullTeam[characterId].TagBonus);
-        foreach (var (afx, val) in driveDiscSetBonus) {
-            fullTeam[characterId].BonusStats[afx] += val;
-        }
-        
-        foreach (var passive in weapon.Passive) {
-            fullTeam[characterId].BonusStats[passive.Affix] += passive.Value;
-        }
-        
-        // Apply Agent's passive
-        fullTeam[characterId].ApplyPassive();
-        
-        // Apply Agent's weapon passive
-        weapon.ApplyPassive?.Invoke(fullTeam[characterId]);
+        fullTeam[characterId].SetWeapon(weaponId);
+        fullTeam[characterId].SetDriveDiscs(driveDiscs);
         
         var actions = new List<AgentAction>();
         
@@ -282,7 +194,7 @@ public class Calculator {
 
         return new CalcResult {
             FinalStats = {
-                BaseStats = baseStats,
+                BaseStats = fullTeam[characterId].BaseStats,
                 CalculatedStats = fullTeam[characterId].CollectStats()
             },
             Enemy = enemy,
