@@ -154,12 +154,13 @@ public abstract class Agent(uint id) {
             AgentId = Id, 
             Name = $"{skill} {(scale == 0 && data.Scales.Count == 1 ? "" : scale + 1)}".Trim(), 
             Tag = data.Tag, 
-            Damage = total
+            Damage = total,
+            Daze = GetDaze(skill, scale),
         }];
     }
 
-    public virtual double GetDaze(string action, int scale) {
-        var data = Skills[action];
+    public virtual double GetDaze(string skill, int scale) {
+        var data = Skills[skill];
 
         var tagDazeBonus = 1.0;
         foreach (var stat in TagBonus) {
@@ -168,19 +169,37 @@ public abstract class Agent(uint id) {
             }
         }
 
-        var abilityPassive = ApplyAbilityPassive(action);
+        var abilityPassive = ApplyAbilityPassive(skill);
         if (abilityPassive is { Affix: Affix.DazeBonus } passive) {
             tagDazeBonus += passive.Value;
         }
         
         var dazeDmgMultiplier = data.Scales[scale].Daze;
         var dazeIncrease = 0.0 + tagDazeBonus;
-        var dazeReduction = 0.0;
-        var dazeRes = 0.0;
-        var dazeTakenIncrease = 0.0;
-        var dazeTakenReduction = 0.0;
+        const double dazeReduction = 0.0;
+        const double dazeRes = 0.0;
+        const double dazeTakenIncrease = 0.0;
+        const double dazeTakenReduction = 0.0;
         return Impact * dazeDmgMultiplier * (1 + dazeIncrease - dazeReduction)
                * (1 - dazeRes) * (1 + dazeTakenIncrease - dazeTakenReduction);
+    }
+
+    public virtual double GetDisorderDaze(Enemy enemy) {
+         if (enemy.AfflictedAnomaly is not { } anomaly) return 0;
+         
+         var tagDazeBonus = 1.0;
+         foreach (var stat in TagBonus) {
+             if (stat.SkillTags.Contains(SkillTag.AttributeAnomaly) && stat.Affix == Affix.DazeBonus) {
+                 tagDazeBonus += stat.Value;
+             }
+         }
+         
+         const double dazeMv = 2;
+         const double dazeLevelMultiplier = 1 + 0.0075 * 60; // 60 - character level
+         var dazeMultiplier = 1 + BonusStats[Affix.DazeBonus] + anomaly.Stats[Affix.DazeBonus] + tagDazeBonus;
+         const double dazeTakenMultiplier = 1;
+         const double dazeRes = 1;
+         return dazeMv * dazeLevelMultiplier * Impact * dazeRes * dazeMultiplier * dazeTakenMultiplier;
     }
     
     public double GetAnomalyBuildup(string skill, int scale, SkillTag currentTag) {
@@ -273,7 +292,8 @@ public abstract class Agent(uint id) {
             AgentId =  data.AgentId != 0 ? data.AgentId : Id,
             Name = data.ToString(),
             Tag = SkillTag.AttributeAnomaly,
-            Damage = total
+            Damage = total,
+            Daze = element is Element.None ? GetDisorderDaze(enemy) : 0
         };
     }
 
