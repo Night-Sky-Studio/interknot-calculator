@@ -3,16 +3,16 @@
     "Rarity": "S",
     "MainStat": {
         "Affix": "Atk",
-        "Value": 684
+        "BaseValue": 684
     },
     "SecondaryStat": {
         "Affix": "PenRatio",
-        "Value": 0.24
+        "BaseValue": 0.24
     },
     "ExternalBonus": [
         {
             "Affix": "DmgBonus",
-            "Value": 0.202
+            "BaseValue": 0.202
         }
     ]
 }

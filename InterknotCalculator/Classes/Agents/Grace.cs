@@ -58,7 +58,7 @@ public sealed class Grace : Agent {
     }
 
     public override void ApplyPassive() {
-        TagBonus.Add(new(1.3, Affix.AnomalyBuildupBonus, [SkillTag.Special, SkillTag.ExSpecial]));
+        TagBonus.Add(new(Affix.AnomalyBuildupBonus, 1.3, tags: [SkillTag.Special, SkillTag.ExSpecial]));
     }
 
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
@@ -67,7 +67,7 @@ public sealed class Grace : Agent {
         if (team.Any(a => a.Element == Element) ||
             team.Any(a => a.Faction == Faction)) {
             return [
-                new(0.36, Affix.DmgBonus, [SkillTag.AttributeAnomaly])
+                new(Affix.DmgBonus, 0.36, tags: [SkillTag.AttributeAnomaly])
             ];
         }
         

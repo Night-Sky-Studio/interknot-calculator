@@ -3,16 +3,16 @@
     "Rarity": "A",
     "MainStat": {
         "Affix": "Atk",
-        "Value": 594
+        "BaseValue": 594
     },
     "SecondaryStat": {
         "Affix": "AtkRatio",
-        "Value": 0.25
+        "BaseValue": 0.25
     },
     "Passive": [
         {
             "Affix": "AnomalyProficiency",
-            "Value": 184
+            "BaseValue": 184
         }
     ]
 }

@@ -3,20 +3,20 @@
     "Rarity": "S",
     "MainStat": {
         "Affix": "Atk",
-        "Value": 713
+        "BaseValue": 713
     },
     "SecondaryStat": {
         "Affix": "CritRate",
-        "Value": 0.24
+        "BaseValue": 0.24
     },
     "Passive": [
         {
             "Affix": "IceDmgBonus",
-            "Value": 0.25
+            "BaseValue": 0.25
         },
         {
             "Affix": "CritRate",
-            "Value": 0.20
+            "BaseValue": 0.20
         }
     ]
 }

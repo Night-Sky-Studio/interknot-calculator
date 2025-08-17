@@ -3,21 +3,21 @@
     "Rarity": "S",
     "MainStat": {
         "Affix": "Atk",
-        "Value": 713
+        "BaseValue": 713
     },
     "SecondaryStat": {
         "Affix": "CritRate",
-        "Value": 0.24
+        "BaseValue": 0.24
     },
     "Passive": [
         {
             "Affix": "CritDamage",
-            "Value": 0.5
+            "BaseValue": 0.5
         },
         {
             "Affix": "FireResPen",
             "Tags": ["Chain", "Ultimate"],
-            "Value": 0.25
+            "BaseValue": 0.25
         }
     ]
 }

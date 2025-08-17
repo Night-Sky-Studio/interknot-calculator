@@ -78,7 +78,7 @@ public sealed class Ellen : Agent {
     public override Stat? ApplyAbilityPassive(string ability) {
         switch (ability) {
             case "arctic_ambush" or "flash_freeze_trimming":
-                return new(1, Affix.CritDamage);
+                return new(Affix.CritDamage, 1);
             default:
                 return null;
         }
@@ -89,7 +89,7 @@ public sealed class Ellen : Agent {
 
         if (team.Any(a => a.Element == Element) ||
             team.Any(a => a.Faction == Faction)) {
-            return [new(0.3, Affix.IceDmgBonus)];
+            return [new(Affix.IceDmgBonus, 0.3)];
         }
 
         return [];

@@ -2,16 +2,16 @@
     "PartialBonus": [{
         "Affix": "DmgBonus",
         "Tags": ["Aftershock", "Dash"],
-        "Value": 0.15
+        "BaseValue": 0.15
     }],
     "FullBonus": [
         {
             "Affix": "AtkRatio",
-            "Value": 0.12
+            "BaseValue": 0.12
         },
         {
             "Affix": "CritRate",
-            "Value": 0.12
+            "BaseValue": 0.12
         }
     ]
 }

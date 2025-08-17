@@ -1,17 +1,17 @@
 {
     "PartialBonus": [{
         "Affix": "PenRatio",
-        "Value": 0.08
+        "BaseValue": 0.08
     }],
     "FullBonus": [
         {
             "Affix": "DmgBonus",
             "Tags": ["Ultimate"],
-            "Value": 0.2
+            "BaseValue": 0.2
         },
         {
             "Affix": "AtkRatio",
-            "Value": 0.15
+            "BaseValue": 0.15
         }
     ]
 }

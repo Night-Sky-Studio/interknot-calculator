@@ -78,7 +78,7 @@ public sealed class Soldier11 : Agent {
 
         if (team.Any(a => a.Element == Element) ||
             team.Any(a => a.Faction == Faction)) {
-            return [new(0.325, Affix.FireDmgBonus)];
+            return [new(Affix.FireDmgBonus,0.325)];
         }
 
         return [];

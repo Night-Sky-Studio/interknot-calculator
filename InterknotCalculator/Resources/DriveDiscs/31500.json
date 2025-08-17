@@ -1,7 +1,7 @@
 {
     "PartialBonus": [{
         "Affix": "DefRatio",
-        "Value": 0.16
+        "BaseValue": 0.16
     }],
     "FullBonus": []
 }

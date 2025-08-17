@@ -3,22 +3,22 @@
     "Rarity": "A",
     "MainStat": {
         "Affix": "Atk",
-        "Value": 624
+        "BaseValue": 624
     },
     "SecondaryStat": {
         "Affix": "EnergyRegenRatio",
-        "Value": 0.5
+        "BaseValue": 0.5
     },
     "ExternalBonus": [
         {
             "Affix": "DmgBonus",
-            "Value": 0.24
+            "BaseValue": 0.24
         }
     ],
     "Passive": [
         {
             "Affix": "EnergyRegen",
-            "Value": 0.8
+            "BaseValue": 0.8
         }
     ]
 }

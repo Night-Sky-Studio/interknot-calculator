@@ -5,10 +5,27 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PublishAot>true</PublishAot>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DefineConstants>TRACE;DEBUG_DISABLE_STATS_COLLECTION</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DefineConstants>TRACE;DEBUG_DISABLE_STATS_COLLECTION</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\InterknotCalculator\InterknotCalculator.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="ZLinq" Version="1.5.2" />
+      <PackageReference Include="ZLinq.DropInGenerator" Version="1.5.2">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
     </ItemGroup>
 
 </Project>

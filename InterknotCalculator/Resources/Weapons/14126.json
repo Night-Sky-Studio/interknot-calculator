@@ -3,20 +3,20 @@
     "Rarity": "S",
     "MainStat": {
         "Affix": "Atk",
-        "Value": 743.0
+        "BaseValue": 743.0
     },
     "SecondaryStat": {
         "Affix": "AnomalyProficiency",
-        "Value": 90
+        "BaseValue": 90
     },
     "Passive": [
         {
             "Affix": "PhysicalDmgBonus",
-            "Value": 0.36
+            "BaseValue": 0.36
         },
         {
             "Affix": "AnomalyBuildupBonus",
-            "Value": 0.4
+            "BaseValue": 0.4
         }
     ]
 }

@@ -76,7 +76,7 @@ public sealed class ZhuYuan : Agent {
 
         if (team.Any(a => a.Speciality == Speciality.Support) ||
             team.Any(a => a.Faction == Faction)) {
-            return [new(0.3, Affix.CritRate)];
+            return [new(Affix.CritRate, 0.3)];
         }
 
         return [];

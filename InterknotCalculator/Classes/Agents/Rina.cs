@@ -60,7 +60,7 @@ public sealed class Rina : Agent, IAgentReference<Rina> {
 
         if (team.Any(a => a.Element == Element) ||
             team.Any(a => a.Faction == Faction)) {
-            return [new(0.1, Affix.ElectricDmgBonus)];
+            return [new(Affix.ElectricDmgBonus, 0.1)];
         }
         
         return [];

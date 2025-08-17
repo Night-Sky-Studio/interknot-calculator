@@ -1,11 +1,11 @@
 {
     "PartialBonus": [{
         "Affix": "EnergyRegenRatio",
-        "Value": 0.2
+        "BaseValue": 0.2
     }],
     "FullBonus": [{
         "Affix": "DmgBonus",
         "Tags": ["Chain", "Ultimate"],
-        "Value": 0.15
+        "BaseValue": 0.15
     }]
 }

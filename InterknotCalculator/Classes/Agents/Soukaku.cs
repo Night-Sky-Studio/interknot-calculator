@@ -53,7 +53,7 @@ public class Soukaku : Agent, IAgentReference<Soukaku> {
 
         if (team.Any(a => a.Element == Element) ||
             team.Any(a => a.Faction == Faction)) {
-            return [new(0.2, Affix.IceDmgBonus)];
+            return [new(Affix.IceDmgBonus, 0.2)];
         }
         
         return [];

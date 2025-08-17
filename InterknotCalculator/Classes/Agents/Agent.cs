@@ -54,16 +54,15 @@ public abstract class Agent(uint id) {
 #endif
 
     public Weapon? Weapon { get; private set; }
-    private List<DriveDisc> DriveDiscs { get; } = [];
+    private DriveDisc[] DriveDiscs { get; set; } = [];
 
     public void SetWeapon(uint weaponId) {
         Weapon = Resources.Current.GetWeapon(weaponId);
         ProcessStats();
     }
     
-    public void SetDriveDiscs(IEnumerable<DriveDisc> discs) {
-        DriveDiscs.Clear();
-        DriveDiscs.AddRange(discs);
+    public void SetDriveDiscs(DriveDisc[] discs) {
+        DriveDiscs = discs;
         ProcessStats();
     }
     
@@ -84,7 +83,7 @@ public abstract class Agent(uint id) {
             setCounts[disc.SetId] += 1;
             BonusStats[disc.MainStat.Affix] += disc.MainStat.Value;
             foreach (var subStat in disc.SubStats) {
-                BonusStats[subStat.Stat.Affix] += subStat.Level * subStat.Stat.Value;
+                BonusStats[subStat.Affix] += subStat.Value;
             }
         }
 

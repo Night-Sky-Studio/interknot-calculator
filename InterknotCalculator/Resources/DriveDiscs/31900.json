@@ -3,6 +3,6 @@
     "FullBonus": [{
         "Affix": "DmgBonus",
         "Tags": ["DefensiveAssist", "EvasiveAssist"],
-        "Value": 0.15
+        "BaseValue": 0.15
     }]
 }

@@ -4,15 +4,19 @@ using InterknotCalculator.Enums;
 namespace InterknotCalculator.Classes;
 
 public struct Stat {
-    public double Value { get; set; }
+    public double BaseValue { get; set; }
+    public uint Level { get; set; } = 1;
+    public double Value => BaseValue * Level;
     public Affix Affix { get; set; }
     public IEnumerable<SkillTag>? Tags { get; set; } = null;
     
     [JsonIgnore]
     public SkillTag[] SkillTags => Tags?.ToArray() ?? [];
     
-    public Stat(double value, Affix affix, IEnumerable<SkillTag>? tags = null) {
-        Value = value;
+    [JsonConstructor]
+    public Stat(Affix affix, double baseValue, uint level = 1, IEnumerable<SkillTag>? tags = null) {
+        BaseValue = baseValue;
+        Level = level;
         Affix = affix;
         Tags = tags?.ToArray() ?? [];
     }
@@ -20,40 +24,40 @@ public struct Stat {
     /// Default Drive Discs sub stats
     /// </summary>
     public static Dictionary<Affix, Stat> SubStats { get; } = new() {
-        { Affix.Hp,                 new (112, Affix.Hp) },
-        { Affix.Atk,                new (19, Affix.Atk) },
-        { Affix.Def,                new (15, Affix.Def) },
-        { Affix.HpRatio,            new (0.03, Affix.HpRatio) },
-        { Affix.AtkRatio,           new (0.03, Affix.AtkRatio) },
-        { Affix.DefRatio,           new (0.048, Affix.DefRatio) },
-        { Affix.Pen,                new (9, Affix.Pen) },
-        { Affix.CritRate,           new (0.024, Affix.CritRate) },
-        { Affix.CritDamage,         new (0.048, Affix.CritDamage) },
-        { Affix.AnomalyProficiency, new (9, Affix.AnomalyProficiency) },
+        { Affix.Hp,                 new (Affix.Hp, 112) },
+        { Affix.Atk,                new (Affix.Atk, 19) },
+        { Affix.Def,                new (Affix.Def, 15) },
+        { Affix.HpRatio,            new (Affix.HpRatio, 0.03) },
+        { Affix.AtkRatio,           new (Affix.AtkRatio, 0.03) },
+        { Affix.DefRatio,           new (Affix.DefRatio, 0.048) },
+        { Affix.Pen,                new (Affix.Pen, 9) },
+        { Affix.CritRate,           new (Affix.CritRate, 0.024) },
+        { Affix.CritDamage,         new (Affix.CritDamage, 0.048) },
+        { Affix.AnomalyProficiency, new (Affix.AnomalyProficiency, 9) },
     };
     
     /// <summary>
     /// Default Drive Disc Main Stats at lvl. 15
     /// </summary>
     public static Dictionary<Affix, Stat> Stats { get; } = new() {
-        { Affix.Hp,                  new (2200, Affix.Hp) },
-        { Affix.Atk,                 new (316, Affix.Atk) },
-        { Affix.Def,                 new (184, Affix.Def) },
-        { Affix.HpRatio,             new (0.3, Affix.HpRatio) },
-        { Affix.AtkRatio,            new (0.3, Affix.AtkRatio) },
-        { Affix.DefRatio,            new (0.48, Affix.DefRatio) },
-        { Affix.CritRate,            new (0.24, Affix.CritRate) },
-        { Affix.CritDamage,          new (0.48, Affix.CritDamage) },
-        { Affix.AnomalyProficiency,  new (92, Affix.AnomalyProficiency) },
-        { Affix.PenRatio,            new (0.24, Affix.PenRatio) },
-        { Affix.IceDmgBonus,         new (0.3, Affix.IceDmgBonus) },
-        { Affix.FireDmgBonus,        new (0.3, Affix.FireDmgBonus) },
-        { Affix.PhysicalDmgBonus,    new (0.3, Affix.PhysicalDmgBonus) },
-        { Affix.ElectricDmgBonus,    new (0.3, Affix.ElectricDmgBonus) },
-        { Affix.EtherDmgBonus,       new (0.3, Affix.EtherDmgBonus) },
-        { Affix.AnomalyMasteryRatio, new (0.3, Affix.AnomalyMasteryRatio) },
-        { Affix.ImpactRatio,         new (0.18, Affix.ImpactRatio) },
-        { Affix.EnergyRegenRatio,    new (0.6, Affix.EnergyRegenRatio) },
+        { Affix.Hp,                  new (Affix.Hp, 2200) },
+        { Affix.Atk,                 new (Affix.Atk, 316) },
+        { Affix.Def,                 new (Affix.Def, 184) },
+        { Affix.HpRatio,             new (Affix.HpRatio, 0.3) },
+        { Affix.AtkRatio,            new (Affix.AtkRatio, 0.3) },
+        { Affix.DefRatio,            new (Affix.DefRatio, 0.48) },
+        { Affix.CritRate,            new (Affix.CritRate, 0.24) },
+        { Affix.CritDamage,          new (Affix.CritDamage, 0.48) },
+        { Affix.AnomalyProficiency,  new (Affix.AnomalyProficiency, 92) },
+        { Affix.PenRatio,            new (Affix.PenRatio, 0.24) },
+        { Affix.IceDmgBonus,         new (Affix.IceDmgBonus, 0.3) },
+        { Affix.FireDmgBonus,        new (Affix.FireDmgBonus, 0.3) },
+        { Affix.PhysicalDmgBonus,    new (Affix.PhysicalDmgBonus, 0.3) },
+        { Affix.ElectricDmgBonus,    new (Affix.ElectricDmgBonus, 0.3) },
+        { Affix.EtherDmgBonus,       new (Affix.EtherDmgBonus, 0.3) },
+        { Affix.AnomalyMasteryRatio, new (Affix.AnomalyMasteryRatio, 0.3) },
+        { Affix.ImpactRatio,         new (Affix.ImpactRatio, 0.18) },
+        { Affix.EnergyRegenRatio,    new (Affix.EnergyRegenRatio, 0.6) },
     }; 
     
     public static implicit operator double(Stat v) {
@@ -64,9 +68,9 @@ public struct Stat {
         if (a.Affix != b.Affix)
             throw new ArgumentException("Stats must be of the same affix to be combined");
         return a with {
-            Value = a.Value + b.Value
+            BaseValue = a.BaseValue + b.BaseValue
         };
     }
 
-    public override string ToString() => $"{Affix}: {Value:0.###}";
+    public override string ToString() => $"{Affix}: {Value:0.###} ({Level})";
 }

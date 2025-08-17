@@ -58,7 +58,7 @@ public class Calculator {
     /// <param name="enemy">Enemy instance</param>
     /// <returns>A collection of agent actions</returns>
     public CalcResult Calculate(uint characterId, uint weaponId, 
-        List<DriveDisc> driveDiscs, IEnumerable<uint> team, 
+        DriveDisc[] driveDiscs, IEnumerable<uint> team, 
         IEnumerable<string> rotation, Enemy enemy) {
         
         // Initialize the agent and the weapon

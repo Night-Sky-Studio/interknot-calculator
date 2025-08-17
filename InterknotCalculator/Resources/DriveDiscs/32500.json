@@ -1,11 +1,11 @@
 ﻿{
     "PartialBonus": [{
         "Affix": "IceDmgBonus",
-        "Value": 0.1
+        "BaseValue": 0.1
     }],
     "FullBonus": [{
         "Affix": "DmgBonus",
         "Tags": ["BasicAtk", "Dash"],
-        "Value": 0.4
+        "BaseValue": 0.4
     }]
 }

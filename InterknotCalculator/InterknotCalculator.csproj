@@ -10,4 +10,12 @@
         <PublishTrimmed>true</PublishTrimmed>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="ZLinq" Version="1.5.2" />
+      <PackageReference Include="ZLinq.DropInGenerator" Version="1.5.2">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+
 </Project>

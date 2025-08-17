@@ -56,7 +56,7 @@ public class Nicole : Agent, IAgentReference<Nicole> {
 
         if (team.Any(a => a.Element == Element) ||
             team.Any(a => a.Faction == Faction)) {
-            return [new(0.25, Affix.EtherDmgBonus)];
+            return [new(Affix.EtherDmgBonus, 0.25)];
         }
         
         return [];

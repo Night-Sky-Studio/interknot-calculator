@@ -85,7 +85,7 @@ public class Evelyn : Agent {
                 bonusValue *= 1.25;
             }
 
-            return [new(bonusValue, Affix.DmgBonus, [SkillTag.Chain, SkillTag.Ultimate])];
+            return [new(Affix.DmgBonus, bonusValue, tags: [SkillTag.Chain, SkillTag.Ultimate])];
         }
 
         return [];

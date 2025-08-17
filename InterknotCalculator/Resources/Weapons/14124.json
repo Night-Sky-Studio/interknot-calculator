@@ -3,21 +3,21 @@
     "Rarity": "S",
     "MainStat": {
         "Affix": "Atk",
-        "Value": 713.0
+        "BaseValue": 713.0
     },
     "SecondaryStat": {
         "Affix": "CritDamage",
-        "Value": 0.48
+        "BaseValue": 0.48
     },
     "Passive": [
         {
             "Affix": "CritRate",
-            "Value": 0.15
+            "BaseValue": 0.15
         },
         {
             "Affix": "DmgBonus",
             "Tags": ["Special", "ExSpecial"],
-            "Value": 0.35
+            "BaseValue": 0.35
         }
     ]
 }
