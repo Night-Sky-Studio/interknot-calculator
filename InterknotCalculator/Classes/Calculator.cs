@@ -121,7 +121,7 @@ public class Calculator {
     /// <returns>A collection of agent actions</returns>
     public CalcResult Calculate(uint characterId, uint weaponId, 
         List<DriveDisc> driveDiscs, IEnumerable<uint> team, 
-        IEnumerable<string> rotation, Enemy enemy) {
+        IEnumerable<string> rotation, Enemy enemy, CalculationType calcType = CalculationType.Damage) {
         
         // Initialize the agent and the weapon
         // Having a dictionary here allows us to use abilities 
@@ -281,6 +281,12 @@ public class Calculator {
             : action
         ).ToList();
 
+        var total = calcType switch {
+            CalculationType.Damage => actions.Sum(action => action.Damage),
+            CalculationType.Daze   => actions.Sum(action => action.Daze),
+            _                      => actions.Sum(action => action.Damage) // Fallback to damage
+        };
+        
         return new CalcResult {
             FinalStats = {
                 BaseStats = baseStats,
@@ -288,7 +294,7 @@ public class Calculator {
             },
             Enemy = enemy,
             PerAction = actions,
-            Total = actions.Sum(action => action.Damage)
+            Total = total
         };
     }
 }
