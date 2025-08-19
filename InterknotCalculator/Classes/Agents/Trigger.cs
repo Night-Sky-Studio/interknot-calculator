@@ -1,3 +1,5 @@
+using InterknotCalculator.Classes.Enemies;
+using InterknotCalculator.Classes.Server;
 using InterknotCalculator.Enums;
 using InterknotCalculator.Interfaces;
 
@@ -9,12 +11,18 @@ public class Trigger : Agent, IStunAgent, IAgentReference<Trigger> {
     public static Trigger Reference() {
         var trigger = new Trigger();
         
+        var kingOfTheSummit = Resources.Current.GetDriveDiscSet(DriveDiscSetId.KingOfTheSummit);
+        
+        foreach (var fullBonus in kingOfTheSummit.FullBonus) {
+            trigger.ExternalBonus[fullBonus.Affix] = fullBonus.Value;
+        }
+        
         trigger.ApplyPassive();
         
         return trigger;
     }
     
-    public Trigger() : base(1361) {
+    public Trigger() : base(AgentId.Trigger) {
         Speciality = Speciality.Stun;
         Element = Element.Electric;
         Rarity = Rarity.S;
@@ -45,7 +53,7 @@ public class Trigger : Agent, IStunAgent, IAgentReference<Trigger> {
             new (96.30 * 2, 54.60 * 2, 10.86 * 2)
         ]);
         Skills["harmonizing_shot_tartarus"] = new(SkillTag.Aftershock, [
-            new (45.70, 25.80, 20.49),
+            new (45.70 * 3, 25.80 * 3, 20.49 * 3),
             new (91.40, 51.60, 40.98),
         ]);
 
@@ -87,6 +95,27 @@ public class Trigger : Agent, IStunAgent, IAgentReference<Trigger> {
     
     public override void ApplyPassive() {
         EnemyStunBonusOverride = 0.35;
+    }
+
+    public override IEnumerable<AgentAction> GetActionDamage(string skill, int scale, Enemy enemy) {
+        var result = base.GetActionDamage(skill, scale, enemy).ToList();
+
+        result[0].Name = skill switch {
+            "silenced_shot" => scale switch {
+                1 => "silenced_shot_(counter)",  
+                2 => "silenced_shot_(finisher)",
+                _ => result[0].Name
+            },
+            "harmonizing_shot" => "harmonizing_shot_(x2)",
+            "harmonizing_shot_tartarus" => scale switch {
+                0 => "harmonizing_shot_tartarus_(x3)",
+                1 => "harmonizing_shot_tartarus_(finisher)",
+                _ => result[0].Name
+            },
+            _ => result[0].Name
+        };
+
+        return result;
     }
 
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
