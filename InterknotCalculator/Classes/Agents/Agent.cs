@@ -174,13 +174,13 @@ public abstract class Agent(uint id) {
             tagDazeBonus += passive.Value;
         }
         
-        var dazeDmgMultiplier = data.Scales[scale].Daze;
+        var dazeScale = data.Scales[scale].Daze / 100;
         var dazeIncrease = 0.0 + tagDazeBonus;
         const double dazeReduction = 0.0;
         const double dazeRes = 0.0;
         const double dazeTakenIncrease = 0.0;
         const double dazeTakenReduction = 0.0;
-        return Impact * dazeDmgMultiplier * (1 + dazeIncrease - dazeReduction)
+        return Impact * dazeScale * (1 + dazeIncrease - dazeReduction)
                * (1 - dazeRes) * (1 + dazeTakenIncrease - dazeTakenReduction);
     }
 
@@ -216,7 +216,7 @@ public abstract class Agent(uint id) {
 
         amBuildupBonus += tagBonus;
 
-        var amBuildupRes = 1;
+        const double amBuildupRes = 1d;
 
         return baseBuildup * amBonus * amBuildupBonus * amBuildupRes;
     }
