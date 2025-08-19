@@ -1,10 +1,11 @@
 using InterknotCalculator.Enums;
+using InterknotCalculator.Interfaces;
 using Microsoft.AspNetCore.Connections;
 
 namespace InterknotCalculator.Classes.Agents;
 
 public class SilverAnby : Agent {
-    public SilverAnby() : base(1381) {
+    public SilverAnby() : base(AgentId.Soldier0Anby) {
         Speciality = Speciality.Attack;
         Element = Element.Electric;
         Rarity = Rarity.S;

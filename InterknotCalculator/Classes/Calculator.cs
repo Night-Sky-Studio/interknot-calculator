@@ -45,7 +45,6 @@ public class Calculator {
             AgentId.Rina         => Rina.Reference(),
             AgentId.Jane         => JaneDoe.Reference(),
             AgentId.AstraYao     => AstraYao.Reference(),
-            AgentId.Soldier0Anby => SilverAnby.Reference(),
             AgentId.Trigger      => Trigger.Reference(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent reference wasn't found.")
         };
