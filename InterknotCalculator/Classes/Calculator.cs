@@ -18,32 +18,35 @@ public class Calculator {
     /// <exception cref="ArgumentOutOfRangeException">Agent not implemented</exception>
     private static Agent CreateAgentInstance(uint agentId) {
         return agentId switch {
-            1041 => new Soldier11(),
-            1091 => new Miyabi(),
-            1171 => new Burnice(),
-            1181 => new Grace(),
-            1191 => new Ellen(),
-            1201 => new Harumasa(),
-            1221 => new Yanagi(),
-            1241 => new ZhuYuan(),
-            1261 => new JaneDoe(),
-            1321 => new Evelyn(),
-            1331 => new Vivian(),
-            1381 => new SilverAnby(),
+            AgentId.Soldier11    => new Soldier11(),
+            AgentId.Miyabi       => new Miyabi(),
+            AgentId.Burnice      => new Burnice(),
+            AgentId.Grace        => new Grace(),
+            AgentId.Ellen        => new Ellen(),
+            AgentId.Harumasa     => new Harumasa(),
+            AgentId.Yanagi       => new Yanagi(),
+            AgentId.ZhuYuan      => new ZhuYuan(),
+            AgentId.Jane         => new JaneDoe(),
+            AgentId.Evelyn       => new Evelyn(),
+            AgentId.Vivian       => new Vivian(),
+            AgentId.Soldier0Anby => new SilverAnby(),
+            AgentId.Trigger      => new Trigger(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent instance wasn't found.")
         };
     }
 
     private static Agent CreateAgentReference(uint agentId) {
         return agentId switch {
-            1031 => Nicole.Reference(), // Support agent - provide reference implementation
-            1131 => Soukaku.Reference(),
-            1141 => Lycaon.Reference(),
-            1151 => Lucy.Reference(),
-            1171 => Burnice.Reference(),
-            1211 => Rina.Reference(),
-            1261 => JaneDoe.Reference(),
-            1311 => AstraYao.Reference(),
+            AgentId.Nicole       => Nicole.Reference(), // Support agent - provide reference implementation
+            AgentId.Soukaku      => Soukaku.Reference(),
+            AgentId.Lycaon       => Lycaon.Reference(),
+            AgentId.Lucy         => Lucy.Reference(),
+            AgentId.Burnice      => Burnice.Reference(),
+            AgentId.Rina         => Rina.Reference(),
+            AgentId.Jane         => JaneDoe.Reference(),
+            AgentId.AstraYao     => AstraYao.Reference(),
+            AgentId.Soldier0Anby => SilverAnby.Reference(),
+            AgentId.Trigger      => Trigger.Reference(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent reference wasn't found.")
         };
     }
