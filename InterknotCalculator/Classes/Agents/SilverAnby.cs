@@ -4,7 +4,13 @@ using Microsoft.AspNetCore.Connections;
 
 namespace InterknotCalculator.Classes.Agents;
 
-public class SilverAnby : Agent {
+public class SilverAnby : Agent, IAgentReference<SilverAnby> {
+    public static SilverAnby Reference() {
+        var silverAnby = new SilverAnby();
+        silverAnby.ApplyPassive();
+        return silverAnby;
+    }
+    
     public SilverAnby() : base(AgentId.Soldier0Anby) {
         Speciality = Speciality.Attack;
         Element = Element.Electric;
