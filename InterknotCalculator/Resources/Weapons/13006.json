@@ -11,7 +11,7 @@
     },
     "Passive": [
         {
-            "Affix": "DazeRatio",
+            "Affix": "DazeBonus",
             "Value": 0.32
         }
     ]
