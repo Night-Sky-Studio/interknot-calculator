@@ -18,31 +18,35 @@ public class Calculator {
     /// <exception cref="ArgumentOutOfRangeException">Agent not implemented</exception>
     private static Agent CreateAgentInstance(uint agentId) {
         return agentId switch {
-            1041 => new Soldier11(),
-            1091 => new Miyabi(),
-            1171 => new Burnice(),
-            1181 => new Grace(),
-            1191 => new Ellen(),
-            1201 => new Harumasa(),
-            1221 => new Yanagi(),
-            1241 => new ZhuYuan(),
-            1261 => new JaneDoe(),
-            1321 => new Evelyn(),
-            1331 => new Vivian(),
+            AgentId.Soldier11    => new Soldier11(),
+            AgentId.Miyabi       => new Miyabi(),
+            AgentId.Burnice      => new Burnice(),
+            AgentId.Grace        => new Grace(),
+            AgentId.Ellen        => new Ellen(),
+            AgentId.Harumasa     => new Harumasa(),
+            AgentId.Yanagi       => new Yanagi(),
+            AgentId.ZhuYuan      => new ZhuYuan(),
+            AgentId.Jane         => new JaneDoe(),
+            AgentId.Evelyn       => new Evelyn(),
+            AgentId.Vivian       => new Vivian(),
+            AgentId.Soldier0Anby => new SilverAnby(),
+            AgentId.Trigger      => new Trigger(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent instance wasn't found.")
         };
     }
 
     private static Agent CreateAgentReference(uint agentId) {
         return agentId switch {
-            1031 => Nicole.Reference(), // Support agent - provide reference implementation
-            1131 => Soukaku.Reference(),
-            1141 => Lycaon.Reference(),
-            1151 => Lucy.Reference(),
-            1171 => Burnice.Reference(),
-            1211 => Rina.Reference(),
-            1261 => JaneDoe.Reference(),
-            1311 => AstraYao.Reference(),
+            AgentId.Nicole       => Nicole.Reference(), // Support agent - provide reference implementation
+            AgentId.Soukaku      => Soukaku.Reference(),
+            AgentId.Lycaon       => Lycaon.Reference(),
+            AgentId.Lucy         => Lucy.Reference(),
+            AgentId.Burnice      => Burnice.Reference(),
+            AgentId.Rina         => Rina.Reference(),
+            AgentId.Jane         => JaneDoe.Reference(),
+            AgentId.AstraYao     => AstraYao.Reference(),
+            AgentId.Soldier0Anby => SilverAnby.Reference(),
+            AgentId.Trigger      => Trigger.Reference(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent reference wasn't found.")
         };
     }
@@ -120,7 +124,7 @@ public class Calculator {
     /// <returns>A collection of agent actions</returns>
     public CalcResult Calculate(uint characterId, uint weaponId, 
         List<DriveDisc> driveDiscs, IEnumerable<uint> team, 
-        IEnumerable<string> rotation, Enemy enemy) {
+        IEnumerable<string> rotation, Enemy enemy, CalculationType calcType = CalculationType.Damage) {
         
         // Initialize the agent and the weapon
         // Having a dictionary here allows us to use abilities 
@@ -169,18 +173,18 @@ public class Calculator {
         }
         List<Stat> fullTeamPassive = [];
 
-        List<AgentAction> anomalyQueue = [];
+        List<AgentAction> actionsQueue = [];
 
         enemy.AttributeAnomalyTrigger = (sender, element, agentId) => {
             var isFrostburnShatter = element == Element.Ice && sender.AfflictedAnomaly?.Element == Element.Frost;
 
             // Process anomaly damage
-            anomalyQueue.Add(fullTeam[agentId].GetAnomalyDamage(element, enemy));
+            actionsQueue.Add(fullTeam[agentId].GetAnomalyDamage(element, enemy));
 
             // Then process disorders
             if (sender.AfflictedAnomaly is { } anomaly && !isFrostburnShatter) {
                 if (anomaly.Element != element) {
-                    anomalyQueue.Add(fullTeam[agentId].GetAnomalyDamage(Element.None, enemy));
+                    actionsQueue.Add(fullTeam[agentId].GetAnomalyDamage(Element.None, enemy));
                 } else {
                     sender.AfflictedAnomaly = null;
                 }
@@ -225,8 +229,8 @@ public class Calculator {
             fullTeam[characterId].BonusStats[avBonus.Affix] -= avBonus.Value * (astralVoiceCount - 1);
         }
 
+        // Apply Vivian's Action Handler to all team members
         if (fullTeam.TryGetValue(1331, out var agent) && agent is Vivian vivian) {
-            // Apply Vivian's Action Handler to all team members
             foreach (var a in fullTeam.Values) {
                 a.OnAction = (sender, tag, e) => {
                     if (tag is not (SkillTag.ExSpecial or SkillTag.AttributeAnomaly) || e.AfflictedAnomaly is null) return;
@@ -242,7 +246,7 @@ public class Calculator {
                     }
 
                     var abloom = sender.GetAnomalyDamage(anomalyElement, e, true);
-                    anomalyQueue.Add(abloom with {
+                    actionsQueue.Add(abloom with {
                         AgentId = vivian.Id,
                         Name = $"abloom_{e.AfflictedAnomaly}",
                     });
@@ -268,9 +272,9 @@ public class Calculator {
             
             // Anomalies are processed in a queue to maintain the order
             // This includes simultaneous anomaly triggers like disorders
-            if (anomalyQueue.Count > 0) {
-                actions.AddRange(anomalyQueue);
-                anomalyQueue.Clear();
+            if (actionsQueue.Count > 0) {
+                actions.AddRange(actionsQueue);
+                actionsQueue.Clear();
             }
         }
         
@@ -280,6 +284,12 @@ public class Calculator {
             : action
         ).ToList();
 
+        var total = calcType switch {
+            CalculationType.Damage => actions.Sum(action => action.Damage),
+            CalculationType.Daze   => actions.Sum(action => action.Daze),
+            _                      => actions.Sum(action => action.Damage) // Fallback to damage
+        };
+        
         return new CalcResult {
             FinalStats = {
                 BaseStats = baseStats,
@@ -287,7 +297,7 @@ public class Calculator {
             },
             Enemy = enemy,
             PerAction = actions,
-            Total = actions.Sum(action => action.Damage)
+            Total = total
         };
     }
 }

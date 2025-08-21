@@ -4,7 +4,8 @@ using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Test.Agents;
 
-public partial class AgentsTest {
+[TestFixture]
+public class MiyabiTests : AgentsTest {
     private CalcRequest Miyabi { get; } = new() {
         AgentId = 1091,
         WeaponId = 14109,

@@ -2,7 +2,7 @@ using InterknotCalculator.Classes;
 
 namespace InterknotCalculator.Test;
 
-public class CalculatorTest {
+public abstract class CalculatorTest {
     [OneTimeSetUp]
     public async Task OneTimeSetUp() {
         await Resources.Current.Init();

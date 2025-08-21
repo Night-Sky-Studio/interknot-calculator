@@ -1,0 +1,18 @@
+{
+    "Speciality": "Stun",
+    "Rarity": "A",
+    "MainStat": {
+        "Affix": "Atk",
+        "Value": 594
+    },
+    "SecondaryStat": {
+        "Affix": "ImpactRatio",
+        "Value": 0.15
+    },
+    "Passive": [
+        {
+            "Affix": "DazeBonus",
+            "Value": 0.32
+        }
+    ]
+}
