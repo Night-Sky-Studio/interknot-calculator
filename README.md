@@ -52,9 +52,11 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Harumasa (1201)
 - Yanagi (1221)
 - Vivian (1331)
+- Soldier 0 - Anby (1381)
 
 #### Stun Agents
 - [Partial] Lycaon (1141)
+- Trigger (1361)
 
 #### Support Agents
 - Nicole (1031)
@@ -64,6 +66,7 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Astra Yao (1311)
 
 ### Weapons
+- Precious Fossilized Core (13006)
 - Weeping Gemini(13008)
 - Electro-Lip Gloss (13009)
 - Marcato Desire (13015)
@@ -85,6 +88,8 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Elegant Vanity (12131)
 - Heartstring Nocturne (14132)
 - Flight of Fancy (14133)
+- Spectral Gaze (14136)
+- Severed Innocence (14138)
 
 ### Drive Disc Sets
 - Woodpecker Electro (31000)
