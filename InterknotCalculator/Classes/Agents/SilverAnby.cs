@@ -1,6 +1,5 @@
 using InterknotCalculator.Enums;
 using InterknotCalculator.Interfaces;
-using Microsoft.AspNetCore.Connections;
 
 namespace InterknotCalculator.Classes.Agents;
 
