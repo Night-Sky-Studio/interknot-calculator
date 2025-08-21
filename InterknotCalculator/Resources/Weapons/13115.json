@@ -11,7 +11,7 @@
     },
     "ExternalBonus": [
         {
-            "Affix": "DmgBonus",
+            "Affix": "AtkRatio",
             "Value": 0.16
         }
     ]
