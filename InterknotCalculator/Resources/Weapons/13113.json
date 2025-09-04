@@ -11,7 +11,7 @@
     },
     "ExternalBonus": [
         {
-            "Affix": "AtkRatio",
+            "Affix": "CombatAtkRatio",
             "Value": 0.128
         }
     ],

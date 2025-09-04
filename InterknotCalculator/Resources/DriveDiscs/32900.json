@@ -6,7 +6,7 @@
     }],
     "FullBonus": [
         {
-            "Affix": "AtkRatio",
+            "Affix": "CombatAtkRatio",
             "Value": 0.12
         },
         {

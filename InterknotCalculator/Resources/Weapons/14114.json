@@ -11,7 +11,7 @@
     },
     "Passive": [
         {
-            "Affix": "AtkRatio",
+            "Affix": "CombatAtkRatio",
             "Tags": ["BasicAtk"],
             "Value": 0.3
         },
