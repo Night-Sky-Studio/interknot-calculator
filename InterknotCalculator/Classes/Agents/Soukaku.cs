@@ -45,7 +45,7 @@ public class Soukaku : Agent, IAgentReference<Soukaku> {
     }
 
     public override void ApplyPassive() {
-        ExternalBonus[Affix.Atk] += Math.Min(TotalAtk * 2 * 0.2, 1000);
+        ExternalBonus[Affix.Atk] += Math.Min(InitialAtk * 2 * 0.2, 1000);
     }
 
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {

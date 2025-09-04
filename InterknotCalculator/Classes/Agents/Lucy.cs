@@ -45,7 +45,7 @@ public class Lucy : Agent, IAgentReference<Lucy> {
 
     public override void ApplyPassive() {
         // M6
-        ExternalBonus[Affix.Atk] += Math.Min(TotalAtk * 0.258 + 104, 600);
+        ExternalBonus[Affix.Atk] += Math.Min(InitialAtk * 0.258 + 104, 600);
         // M4
         ExternalBonus[Affix.CritDamage] += 0.1;
     }

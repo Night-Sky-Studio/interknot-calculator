@@ -3,7 +3,7 @@
 public enum Affix {
     Hp, HpRatio,
     Def, DefRatio,
-    Atk, AtkRatio, TotalAtkRatio,
+    Atk, AtkRatio, CombatAtkRatio,
     CritRate, CritDamage,
     Impact, ImpactRatio,
     Pen, PenRatio,

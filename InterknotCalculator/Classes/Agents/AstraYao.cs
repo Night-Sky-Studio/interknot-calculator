@@ -47,6 +47,6 @@ public sealed class AstraYao : Agent, IAgentReference<AstraYao> {
     }
 
     public override void ApplyPassive() {
-        ExternalBonus[Affix.Atk] += Math.Min(TotalAtk * 0.35, 1200);
+        ExternalBonus[Affix.Atk] += Math.Min(InitialAtk * 0.35, 1200);
     }
 }
