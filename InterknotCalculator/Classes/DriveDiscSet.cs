@@ -1,3 +1,9 @@
-﻿namespace InterknotCalculator.Classes;
+﻿using System.Text.Json.Serialization;
+using InterknotCalculator.Classes.Agents;
 
-public record DriveDiscSet(IEnumerable<Stat> PartialBonus, IEnumerable<Stat> FullBonus);
+namespace InterknotCalculator.Classes;
+
+public record DriveDiscSet(IEnumerable<Stat> PartialBonus, IEnumerable<Stat> FullBonus) {
+    [JsonIgnore]
+    public Action<Agent>? ApplyPassive { get; set; } = null;
+}

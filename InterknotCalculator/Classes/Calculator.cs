@@ -92,10 +92,9 @@ public class Calculator {
     /// A collection of Drive Disc Set IDs for
     /// which 4pc bonus should be applied
     /// </param>
-    /// <param name="tagDamageBonus">Tag Damage Bonus dictionary reference</param>
+    /// <param name="agent">Agent instance</param>
     /// <returns>A dictionary of all collected stats</returns>
-    private SafeDictionary<Affix, double> CollectDriveDiscSetBonus(IEnumerable<uint> fullSets, 
-        List<Stat> tagDamageBonus) {
+    private SafeDictionary<Affix, double> CollectDriveDiscSetBonus(Agent agent, IEnumerable<uint> fullSets) {
         var result = new SafeDictionary<Affix, double>();
         
         foreach (var set in fullSets) {
@@ -103,10 +102,11 @@ public class Calculator {
             
             foreach (var bonus in dds.FullBonus) {
                 if (bonus.SkillTags.Length != 0) { 
-                    tagDamageBonus.Add(bonus);
+                    agent.TagBonus.Add(bonus);
                 } else
                     result[bonus.Affix] += bonus;
             }
+            dds.ApplyPassive?.Invoke(agent);
         }
 
         return result;
@@ -121,6 +121,7 @@ public class Calculator {
     /// <param name="team">Team members IDs collection (except current agent)</param>
     /// <param name="rotation">Collection of agent skills</param>
     /// <param name="enemy">Enemy instance</param>
+    /// <param name="calcType">Damage or Daze</param>
     /// <returns>A collection of agent actions</returns>
     public CalcResult Calculate(uint characterId, uint weaponId, 
         List<DriveDisc> driveDiscs, IEnumerable<uint> team, 
@@ -148,7 +149,7 @@ public class Calculator {
 
         var baseStats = fullTeam[characterId].CollectStats();
         
-        var driveDiscSetBonus = CollectDriveDiscSetBonus(fullSets, fullTeam[characterId].TagBonus);
+        var driveDiscSetBonus = CollectDriveDiscSetBonus(fullTeam[characterId], fullSets);
         foreach (var (afx, val) in driveDiscSetBonus) {
             fullTeam[characterId].BonusStats[afx] += val;
         }

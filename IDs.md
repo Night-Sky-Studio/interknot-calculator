@@ -1,4 +1,4 @@
-Game version: 2.1
+Game version: 2.2
 
 # Agents
 ```
@@ -29,6 +29,7 @@ Game version: 2.1
 1271 Seth
 1281 Piper
 1291 Hugo
+1301 Orphie & Magus
 1311 Astra Yao
 1321 Evelyn
 1331 Vivian
@@ -40,6 +41,7 @@ Game version: 2.1
 1401 Alice
 1411 Yuzuha
 1421 Pan Yinhu
+1461 Seed
 ```
 
 # Weapons
@@ -107,6 +109,7 @@ Game version: 2.1
 14125 Ice-Jade Teapot
 14126 Sharpened Stinger
 14129 Myriad Eclipse
+14130 Bellicose Blaze
 14131 Elegant Vanity
 14132 Heartstring Nocturne
 14133 Flight of Fancy
@@ -116,6 +119,7 @@ Game version: 2.1
 14139 Roaring Fur-nace
 14140 Practiced Perfection
 14141 Metanukimorphosis
+14146 Cordis Germina
 ```
 
 # Drive Disc Sets
@@ -140,4 +144,6 @@ Game version: 2.1
 33000 Phaethon's Melody
 33100 Yunkui Tales
 33200 King of the Summit
+33300 Dawn's Bloom
+33400 Moonlight Lullaby
 ```

@@ -1,0 +1,7 @@
+{
+    "PartialBonus": [{
+        "Affix": "EnergyRegenRatio",
+        "Value": 0.2
+    }],
+    "FullBonus": []
+}

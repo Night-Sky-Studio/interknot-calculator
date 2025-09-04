@@ -1,5 +1,5 @@
 /// AUTO-GENERATED, DO NOT EDIT!!!
-/// Game version: 2.1
+/// Game version: 2.2
 
 namespace InterknotCalculator.Enums;
 
@@ -31,6 +31,7 @@ public static class AgentId {
     public const uint Seth = 1271;
     public const uint Piper = 1281;
     public const uint Hugo = 1291;
+    public const uint OrphieMagus = 1301;
     public const uint AstraYao = 1311;
     public const uint Evelyn = 1321;
     public const uint Vivian = 1331;
@@ -42,6 +43,7 @@ public static class AgentId {
     public const uint Alice = 1401;
     public const uint Yuzuha = 1411;
     public const uint PanYinhu = 1421;
+    public const uint Seed = 1461;
 }
 
 public static class WeaponId {
@@ -108,6 +110,7 @@ public static class WeaponId {
     public const uint IceJadeTeapot = 14125;
     public const uint SharpenedStinger = 14126;
     public const uint MyriadEclipse = 14129;
+    public const uint BellicoseBlaze = 14130;
     public const uint ElegantVanity = 14131;
     public const uint HeartstringNocturne = 14132;
     public const uint FlightOfFancy = 14133;
@@ -117,6 +120,7 @@ public static class WeaponId {
     public const uint RoaringFurnace = 14139;
     public const uint PracticedPerfection = 14140;
     public const uint Metanukimorphosis = 14141;
+    public const uint CordisGermina = 14146;
 }
 
 public static class DriveDiscSetId {
@@ -140,4 +144,6 @@ public static class DriveDiscSetId {
     public const uint PhaethonsMelody = 33000;
     public const uint YunkuiTales = 33100;
     public const uint KingOfTheSummit = 33200;
+    public const uint DawnsBloom = 33300;
+    public const uint MoonlightLullaby = 33400;
 }

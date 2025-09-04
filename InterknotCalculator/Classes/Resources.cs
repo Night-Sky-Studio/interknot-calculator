@@ -93,6 +93,20 @@ public class Resources {
     public DriveDiscSet GetDriveDiscSet(uint id) {
         if (!_isInitialized)
             throw new Exception("Resources not yet initialized.");
+
+        DriveDiscs[id].ApplyPassive = id switch {
+            DriveDiscSetId.DawnsBloom => agent => {
+                agent.TagBonus.Add(new(agent.Speciality == Speciality.Attack ? 0.4 : 0.2, 
+                    Affix.DmgBonus, [SkillTag.BasicAtk]));
+            },
+            DriveDiscSetId.MoonlightLullaby => agent => {
+                if (agent.Speciality == Speciality.Support) {
+                    agent.ExternalBonus[Affix.DmgBonus] += 0.18;
+                }
+            },
+            _ => DriveDiscs[id].ApplyPassive
+        };
+        
         return DriveDiscs[id];
     }
 }
