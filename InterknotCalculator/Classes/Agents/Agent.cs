@@ -28,6 +28,7 @@ public abstract class Agent(uint id) {
 
     public double Hp => Stats[Affix.Hp] * (1 + BonusStats[Affix.HpRatio]) + BonusStats[Affix.Hp];
     public double Atk => Stats[Affix.Atk] * (1 + BonusStats[Affix.AtkRatio]) + BonusStats[Affix.Atk];
+    public double TotalAtk => Atk * (1 + BonusStats[Affix.TotalAtkRatio]);
     public double Def => Stats[Affix.Def] * (1 + BonusStats[Affix.DefRatio]) + BonusStats[Affix.Def];
     public double Pen => Stats[Affix.Pen] + BonusStats[Affix.Pen];
     public double PenRatio => Stats[Affix.PenRatio] + BonusStats[Affix.PenRatio];
@@ -55,7 +56,7 @@ public abstract class Agent(uint id) {
 
     public SafeDictionary<Affix, double> CollectStats() => new() {
         [Affix.Hp] = Hp,
-        [Affix.Atk] = Atk,
+        [Affix.Atk] = TotalAtk,
         [Affix.Def] = Def,
         [Affix.Pen] = Pen,
         [Affix.PenRatio] = PenRatio,
@@ -137,7 +138,7 @@ public abstract class Agent(uint id) {
         enemy.AddAnomalyBuildup(this, buildup);
 
         // Calculate damage according to formula
-        var baseDmgAttacker = data.Scales[scale].Damage / 100 * Atk;
+        var baseDmgAttacker = data.Scales[scale].Damage / 100 * TotalAtk;
         var dmgBonusMultiplier = 1 + ElementalDmgBonus + DmgBonus
                                  + tagDmgBonus[relatedAffixDmg] + tagDmgBonus[Affix.DmgBonus]
                                  + data.Affixes[relatedAffixDmg] + data.Affixes[Affix.DmgBonus];
@@ -261,7 +262,7 @@ public abstract class Agent(uint id) {
         
         // Calculate anomaly damage according to formula
         var anomalyBaseDmg = element != Element.None 
-            ? data.Scale / 100 * Atk 
+            ? data.Scale / 100 * TotalAtk 
             : GetDisorderBaseMultiplier(enemy.AfflictedAnomaly!.Element, enemy.AfflictedAnomaly?.Stats[Affix.Atk] ?? 0);
         
         var anomalyProficiencyMultiplier = anomalyProficiency / 100;
