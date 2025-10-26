@@ -130,7 +130,7 @@ public abstract class Agent(uint id) {
         // Apply ability passive if present
         var abilityPassive = ApplyAbilityPassive(skill);
         if (abilityPassive is { } passive) {
-            tagDmgBonus.Add(passive.Affix, passive.Value);
+            tagDmgBonus[passive.Affix] += passive.Value;
         }
 
         // Process anomalies
