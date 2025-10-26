@@ -1,8 +1,12 @@
+using InterknotCalculator.Classes.Enemies;
+using InterknotCalculator.Classes.Server;
 using InterknotCalculator.Enums;
 
 namespace InterknotCalculator.Classes.Agents;
 
 public sealed class ZhuYuan : Agent {
+    private bool IsEnemyStunned { get; set; }
+    
     public ZhuYuan() : base(1241) {
         Speciality = Speciality.Attack;
         Element = Element.Ether;
@@ -17,7 +21,6 @@ public sealed class ZhuYuan : Agent {
         Stats[Affix.Impact] = 90;
         Stats[Affix.AnomalyMastery] = 93;
         Stats[Affix.AnomalyProficiency] = 92;
-        Stats[Affix.DmgBonus] = 0.4;
         Stats[Affix.EnergyRegen] = 1.2;
 
         Skills["dont_move"] = new(SkillTag.BasicAtk, [
@@ -70,6 +73,19 @@ public sealed class ZhuYuan : Agent {
             new(3955.4, 194, 103.33)
         ]);
     }
+
+    public override Stat? ApplyAbilityPassive(string ability) {
+        if (ability is "please_do_not_resist" or "overwhelming_firepower") {
+            return new(IsEnemyStunned ? 0.8 : 0.4, Affix.DmgBonus);
+        }
+        return null;
+    }
+
+    public override IEnumerable<AgentAction> GetActionDamage(string skill, int scale, Enemy enemy) {
+        IsEnemyStunned = enemy.StunMultiplier > 1;
+
+        return base.GetActionDamage(skill, scale, enemy);  
+    } 
 
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
         if (team.Count < 2) return [];

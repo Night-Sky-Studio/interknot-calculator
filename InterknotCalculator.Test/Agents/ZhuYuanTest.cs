@@ -7,23 +7,23 @@ namespace InterknotCalculator.Test.Agents;
 [TestFixture]
 public class ZhuYuanTests : AgentsTest {
     private CalcRequest ZhuYuan { get; } = new() {
-        AgentId = 1241,
-        WeaponId = 14124,
+        AgentId = AgentId.ZhuYuan,
+        WeaponId = WeaponId.RiotSuppressorMarkVI,
         Discs = [
             new () {
-                SetId = 32300, 
+                SetId = DriveDiscSetId.ChaoticMetal, 
                 Rarity = Rarity.S,
                 Stats = [Affix.Hp, Affix.CritRate, Affix.CritDamage, Affix.Atk, Affix.AtkRatio],
                 Levels = [15, 3, 2, 1, 2]
             },
             new () {
-                SetId = 31000,
+                SetId = DriveDiscSetId.WoodpeckerElectro,
                 Rarity = Rarity.S,
                 Stats = [Affix.Atk, Affix.AtkRatio, Affix.Pen, Affix.CritDamage, Affix.CritRate],
                 Levels = [15, 1, 2, 2, 4]
             },
             new () {
-                SetId = 32300,
+                SetId = DriveDiscSetId.ChaoticMetal,
                 Rarity = Rarity.S,
                 Stats = [Affix.Def, Affix.Atk, Affix.AtkRatio, Affix.CritDamage, Affix.HpRatio],
                 Levels = [15, 2, 2, 1, 3]
@@ -47,7 +47,7 @@ public class ZhuYuanTests : AgentsTest {
                 Levels = [15, 2, 1, 2, 3]
             },
         ],
-        Team = [1031],
+        Team = [],
         StunBonus = 1.5,
         Rotation = [
             "eradication_mode",
