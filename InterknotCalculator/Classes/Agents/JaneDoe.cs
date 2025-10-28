@@ -37,6 +37,7 @@ public sealed class JaneDoe : Agent, IAgentReference<JaneDoe> {
         Stats[Affix.Impact] = 86;
         Stats[Affix.AnomalyMastery] = 148;
         Stats[Affix.AnomalyProficiency] = 114;
+        Stats[Affix.EnergyRegen] = 1.2;
 
         Skills["dancing_blades"] = new(SkillTag.BasicAtk, [
             new(72.4, 23.0, 21.34, 0.501),
