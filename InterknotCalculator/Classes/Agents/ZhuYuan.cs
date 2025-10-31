@@ -76,7 +76,7 @@ public sealed class ZhuYuan : Agent {
 
     public override Stat? ApplyAbilityPassive(string ability) {
         if (ability is "please_do_not_resist" or "overwhelming_firepower") {
-            return new(IsEnemyStunned ? 0.8 : 0.4, Affix.DmgBonus);
+            return new(Affix.DmgBonus, IsEnemyStunned ? 0.8 : 0.4);
         }
         return null;
     }
@@ -92,7 +92,7 @@ public sealed class ZhuYuan : Agent {
 
         if (team.Any(a => a.Speciality == Speciality.Support) ||
             team.Any(a => a.Faction == Faction)) {
-            return [new(0.3, Affix.CritRate)];
+            return [new(Affix.CritRate, 0.3)];
         }
 
         return [];

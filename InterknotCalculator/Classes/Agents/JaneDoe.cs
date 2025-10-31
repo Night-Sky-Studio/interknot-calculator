@@ -100,8 +100,8 @@ public sealed class JaneDoe : Agent, IAgentReference<JaneDoe> {
     public override void ApplyPassive() {
         Anomalies[Element.Physical] = Anomaly.GetAnomalyByElement(Element.Physical)! with {
             Bonuses = [
-                new(0.4 + AnomalyProficiency * 0.0016, Affix.CritRate),
-                new(0.5, Affix.CritDamage)
+                new(Affix.CritRate, 0.4 + AnomalyProficiency * 0.0016),
+                new(Affix.CritDamage, 0.5)
             ],
             CanCrit = true
         };
@@ -118,7 +118,7 @@ public sealed class JaneDoe : Agent, IAgentReference<JaneDoe> {
 
         if (team.Any(a => a.Speciality == Speciality) ||
             team.Any(a => a.Faction == Faction)) {
-            return [new(0.35, Affix.AnomalyBuildupBonus)];
+            return [new(Affix.AnomalyBuildupBonus, 0.35)];
         }
 
         return [];   

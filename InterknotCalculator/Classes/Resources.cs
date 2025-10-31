@@ -96,8 +96,7 @@ public class Resources {
 
         DriveDiscs[id].ApplyPassive = id switch {
             DriveDiscSetId.DawnsBloom => agent => {
-                agent.TagBonus.Add(new(agent.Speciality == Speciality.Attack ? 0.4 : 0.2, 
-                    Affix.DmgBonus, [SkillTag.BasicAtk]));
+                agent.TagBonus.Add(new(Affix.DmgBonus, agent.Speciality == Speciality.Attack ? 0.4 : 0.2,  tags: [SkillTag.BasicAtk]));
             },
             DriveDiscSetId.MoonlightLullaby => agent => {
                 if (agent.Speciality == Speciality.Support) {

@@ -112,8 +112,8 @@ public sealed class Miyabi : Agent, ICustomAnomaly {
         if (team.Any(a => a.Speciality == Speciality.Support) ||
             team.Any(a => a.Faction == Faction)) {
             return [
-                new (0.6, Affix.DmgBonus, [SkillTag.BasicAtk]),
-                new (0.3, Affix.IceResPen, [SkillTag.BasicAtk])
+                new (Affix.DmgBonus, 0.6, tags: [SkillTag.BasicAtk]),
+                new (Affix.IceResPen, 0.3, tags: [SkillTag.BasicAtk])
             ];
         }
 

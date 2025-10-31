@@ -84,7 +84,7 @@ public class Harumasa : Agent {
 
         if (team.Any(a => a.Speciality == Speciality.Stun) ||
             team.Any(a => a.Speciality == Speciality.Anomaly)) {
-            return [new(0.4, Affix.DmgBonus)];
+            return [new(Affix.DmgBonus, 0.4)];
         }
 
         return [];

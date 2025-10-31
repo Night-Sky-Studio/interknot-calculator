@@ -93,7 +93,7 @@ public class Burnice : Agent, IAgentReference<Burnice> {
 
         if (team.Any(a => a.Speciality == Speciality) ||
             team.Any(a => a.Faction == Faction)) {
-            return [new(0.65, Affix.AnomalyBuildupBonus)];
+            return [new(Affix.AnomalyBuildupBonus, 0.65)];
         }
 
         return [];

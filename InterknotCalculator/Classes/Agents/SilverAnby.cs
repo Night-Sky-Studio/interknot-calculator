@@ -84,7 +84,7 @@ public class SilverAnby : Agent, IAgentReference<SilverAnby> {
 
     public override void ApplyPassive() {
         BonusStats[Affix.DmgBonus] += 0.25;
-        TagBonus.Add(new(0.3 * CritDamage, Affix.CritDamage, [SkillTag.Aftershock]));
+        TagBonus.Add(new(Affix.CritDamage, 0.3 * CritDamage, tags: [SkillTag.Aftershock]));
     }
 
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
@@ -92,9 +92,9 @@ public class SilverAnby : Agent, IAgentReference<SilverAnby> {
 
         if (team.Any(a => a.Speciality == Speciality.Stun) ||
             team.Any(a => a.Speciality == Speciality.Support)) {
-            ExternalTagBonus.Add(new(0.25, Affix.DmgBonus, [SkillTag.Aftershock]));
+            ExternalTagBonus.Add(new(Affix.DmgBonus, 0.25, tags: [SkillTag.Aftershock]));
             return [
-                new(0.1, Affix.CritRate)
+                new(Affix.CritRate, 0.1)
             ];
         }
 

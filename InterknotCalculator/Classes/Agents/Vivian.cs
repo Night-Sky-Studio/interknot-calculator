@@ -136,7 +136,7 @@ public sealed class Vivian : Agent {
 
         if (team.Any(a => a.Speciality == Speciality) ||
             team.Any(a => a.Element == Element)) {
-            return [new(0.12, Affix.DisorderDmgBonus)];
+            return [new(Affix.DisorderDmgBonus, 0.12)];
         }
 
         return [];   

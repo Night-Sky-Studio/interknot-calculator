@@ -125,7 +125,7 @@ public class Trigger : Agent, IStunAgent, IAgentReference<Trigger> {
             team.Any(a => a.Element == Element)) {
             if (CritRate > 0.4) {
                 return [
-                    new(Math.Min((CritRate - 0.4) * 0.015, 0.75), Affix.DazeBonus, [SkillTag.Aftershock])
+                    new(Affix.DazeBonus, Math.Min((CritRate - 0.4) * 0.015, 0.75), tags: [SkillTag.Aftershock])
                 ];
             }
         }
