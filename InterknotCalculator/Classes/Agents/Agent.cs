@@ -10,11 +10,16 @@ namespace InterknotCalculator.Classes.Agents;
 /// </summary>
 public abstract class Agent(uint id) {
     private const double DamageTakenMultiplier = 1;
+
+    #region Information
     public uint Id { get; } = id;
     public Speciality Speciality { get; set; }
     public Element Element { get; set; }
     public Rarity Rarity { get; set; }
     public Faction Faction { get; set; }
+    #endregion
+    
+    #region Collections
     public SafeDictionary<Affix, double> Stats { get; set; } = new();
     public SafeDictionary<Affix, double> BonusStats { get; set; } = new();
     public SafeDictionary<Affix, double> ExternalBonus { get; set; } = new();
@@ -22,12 +27,92 @@ public abstract class Agent(uint id) {
     public List<Stat> ExternalTagBonus { get; set; } = [];
     public Dictionary<Element, Anomaly> Anomalies { get; set; } = new();
     public Dictionary<string, Skill> Skills { get; set; } = new();
+    #endregion
 
+    #region Equipment
+
+    public Weapon? Weapon { get; private set; }
+    public DriveDisc[] DriveDiscs { get; private set; } = [];
+
+    public void SetWeapon(uint weaponId) {
+        Weapon = Resources.Current.GetWeapon(weaponId);
+        ProcessStats();
+    }
+
+    public void SetDriveDiscs(DriveDisc[] discs) {
+        DriveDiscs = discs;
+        ProcessStats();
+    }
+    
+    public Dictionary<Affix, double> BaseStats { get; private set; } = new();
+    
+    public void ProcessStats() {
+        BonusStats.Clear();
+        TagBonus.Clear();
+        var setCounts = new SafeDictionary<uint, int>();
+
+        foreach (var disc in DriveDiscs) {
+            setCounts[disc.SetId] += 1;
+            BonusStats[disc.MainStat.Affix] += disc.MainStat.Value;
+            foreach (var subStat in disc.SubStats) {
+                BonusStats[subStat.Affix] += subStat.Value;
+            }
+        }
+
+        var partialSets = setCounts
+            .Where(kvp => kvp.Value >= 2)
+            .Select(kvp => kvp.Key);
+
+        foreach (var setId in partialSets) {
+            var set = Resources.Current.GetDriveDiscSet(setId);
+            foreach (var bonus in set.PartialBonus) {
+                if (bonus.SkillTags.Length != 0) {
+                    TagBonus.Add(bonus);
+                } else {
+                    BonusStats[bonus.Affix] += bonus.Value;
+                }
+            }
+        }
+
+        if (Weapon is { } w) {
+            BonusStats[w.SecondaryStat.Affix] += w.SecondaryStat.Value;
+        }
+
+        BaseStats = CollectStats();
+        
+        var fullSets = setCounts
+            .Where(kvp => kvp.Value >= 4)
+            .Select(kvp => kvp.Key);
+
+        foreach (var setId in fullSets) {
+            var set = Resources.Current.GetDriveDiscSet(setId);
+            foreach (var bonus in set.FullBonus) {
+                if (bonus.SkillTags.Length != 0) {
+                    TagBonus.Add(bonus);
+                } else {
+                    BonusStats[bonus.Affix] += bonus.Value;
+                }
+            }
+            set.ApplyPassive?.Invoke(this);
+        }
+
+        foreach (var passive in Weapon?.Passive ?? []) {
+            BonusStats[passive.Affix] += passive.Value;
+        }
+        
+        ApplyPassive();
+        
+        Weapon?.ApplyPassive?.Invoke(this);
+    }
+    #endregion
+    
+    #region Stats
     public Affix RelatedElementDmg => Helpers.GetRelatedAffixDmg(Element);
     public Affix RelatedElementRes => Helpers.GetRelatedAffixRes(Element);
 
     public double Hp => Stats[Affix.Hp] * (1 + BonusStats[Affix.HpRatio]) + BonusStats[Affix.Hp];
-    public double InitialAtk => Stats[Affix.Atk] * (1 + BonusStats[Affix.AtkRatio]) + BonusStats[Affix.Atk];
+    public double InitialAtk => (Stats[Affix.Atk] + (Weapon?.MainStat.Value ?? 0)) 
+        * (1 + BonusStats[Affix.AtkRatio]) + BonusStats[Affix.Atk];
     public double Atk => InitialAtk * (1 + BonusStats[Affix.CombatAtkRatio]);
     public double Def => Stats[Affix.Def] * (1 + BonusStats[Affix.DefRatio]) + BonusStats[Affix.Def];
     public double Pen => Stats[Affix.Pen] + BonusStats[Affix.Pen];
@@ -52,8 +137,6 @@ public abstract class Agent(uint id) {
     }
 #endif
     
-    public Action<Agent, SkillTag, Enemy>? OnAction { get; set; }
-
     public SafeDictionary<Affix, double> CollectStats() => new() {
         [Affix.Hp] = Hp,
         [Affix.Atk] = Atk,
@@ -72,6 +155,9 @@ public abstract class Agent(uint id) {
         [Affix.ResPen] = ResPen,
         [Affix.DazeBonus] = DazeBonus
     };
+    #endregion
+    
+    public Action<Agent, SkillTag, Enemy>? OnAction { get; set; }
 
     /// <summary>
     /// Applies the agent's passive to the team
@@ -236,7 +322,7 @@ public abstract class Agent(uint id) {
         double anomalyCritMultiplier = 1;
 
         if (data.CanCrit) {
-            // These crit values are not affected by anything other than character's skill kit
+            // These crit values are not affected by anything other than a character's skill kit
             double anomalyCritRate = 0.05, anomalyCritDamage = 0.5;
             foreach (var bonus in data.Bonuses) {
                 switch (bonus.Affix) {

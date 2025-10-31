@@ -50,7 +50,7 @@ public class Calculator {
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent reference wasn't found.")
         };
     }
-
+    /*
     /// <summary>
     /// Collects all unconditional stats from Drive Discs
     /// </summary>
@@ -110,7 +110,7 @@ public class Calculator {
         }
 
         return result;
-    }
+    }*/
 
     /// <summary>
     /// Main damage calculation function
@@ -124,7 +124,7 @@ public class Calculator {
     /// <param name="calcType">Damage or Daze</param>
     /// <returns>A collection of agent actions</returns>
     public CalcResult Calculate(uint characterId, uint weaponId, 
-        List<DriveDisc> driveDiscs, IEnumerable<uint> team, 
+        DriveDisc[] driveDiscs, IEnumerable<uint> team, 
         IEnumerable<string> rotation, Enemy enemy, CalculationType calcType = CalculationType.Damage) {
         
         // Initialize the agent and the weapon
@@ -133,36 +133,39 @@ public class Calculator {
         var fullTeam = new Dictionary<uint, Agent> {
             [characterId] = CreateAgentInstance(characterId)
         };
-        var weapon = Resources.Current.GetWeapon(weaponId);
-
-        // Collect Drive Discs stats and apply them
-        var groupedSets = driveDiscs
-            .GroupBy(x => x.SetId)
-            .ToDictionary(set => set.Key, set => set.Count());
-        var partialSets = groupedSets.Where(kvp => kvp.Value >= 2).Select(kvp => kvp.Key);
-        var fullSets = groupedSets.Where(kvp => kvp.Value >= 4).Select(kvp => kvp.Key);
         
-        fullTeam[characterId].BonusStats = CollectDriveDiscStats(driveDiscs, partialSets, fullTeam[characterId].TagBonus);
+        fullTeam[characterId].SetWeapon(weaponId);
+        fullTeam[characterId].SetDriveDiscs(driveDiscs);
+        // var weapon = Resources.Current.GetWeapon(weaponId);
+        //
+        // // Collect Drive Discs stats and apply them
+        // var groupedSets = driveDiscs
+        //     .GroupBy(x => x.SetId)
+        //     .ToDictionary(set => set.Key, set => set.Count());
+        // var partialSets = groupedSets.Where(kvp => kvp.Value >= 2).Select(kvp => kvp.Key);
+        // var fullSets = groupedSets.Where(kvp => kvp.Value >= 4).Select(kvp => kvp.Key);
+        //
+        // // fullTeam[characterId].BonusStats = CollectDriveDiscStats(driveDiscs, partialSets, fullTeam[characterId].TagBonus);
+        //
+        // fullTeam[characterId].Stats[Affix.Atk] += weapon.MainStat.Value;
+        // fullTeam[characterId].BonusStats[weapon.SecondaryStat.Affix] += weapon.SecondaryStat.Value;
+        //
+        // var baseStats = fullTeam[characterId].CollectStats();
         
-        fullTeam[characterId].Stats[Affix.Atk] += weapon.MainStat.Value;
-        fullTeam[characterId].BonusStats[weapon.SecondaryStat.Affix] += weapon.SecondaryStat.Value;
-
-        var baseStats = fullTeam[characterId].CollectStats();
+        // var driveDiscSetBonus = CollectDriveDiscSetBonus(fullTeam[characterId], fullSets);
+        // foreach (var (afx, val) in driveDiscSetBonus) {
+        //     fullTeam[characterId].BonusStats[afx] += val;
+        // }
         
-        var driveDiscSetBonus = CollectDriveDiscSetBonus(fullTeam[characterId], fullSets);
-        foreach (var (afx, val) in driveDiscSetBonus) {
-            fullTeam[characterId].BonusStats[afx] += val;
-        }
-        
-        foreach (var passive in weapon.Passive) {
-            fullTeam[characterId].BonusStats[passive.Affix] += passive.Value;
-        }
+        // foreach (var passive in weapon.Passive) {
+        //     fullTeam[characterId].BonusStats[passive.Affix] += passive.Value;
+        // }
         
         // Apply Agent's passive
-        fullTeam[characterId].ApplyPassive();
+        // fullTeam[characterId].ApplyPassive();
         
         // Apply Agent's weapon passive
-        weapon.ApplyPassive?.Invoke(fullTeam[characterId]);
+        // weapon.ApplyPassive?.Invoke(fullTeam[characterId]);
         
         var actions = new List<AgentAction>();
         
@@ -293,7 +296,7 @@ public class Calculator {
         
         return new CalcResult {
             FinalStats = {
-                BaseStats = baseStats,
+                BaseStats = fullTeam[characterId].BaseStats,
                 CalculatedStats = fullTeam[characterId].CollectStats()
             },
             Enemy = enemy,
