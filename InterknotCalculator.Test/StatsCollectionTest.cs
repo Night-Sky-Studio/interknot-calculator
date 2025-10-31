@@ -84,6 +84,78 @@ public class StatsCollectionTest: CalculatorTest {
         ]);
         
         CheckStats(reference, miyabi.BaseStats);
-        //Assert.That(miyabi.BaseStats, Is.EquivalentTo(reference));
     }
+
+    [Test]
+    public void JaneStatsTest() {
+        var reference = new SafeDictionary<Affix, double> {
+            [Affix.Hp] = 11_837,
+            [Affix.Atk] = 2_673,
+            [Affix.Def] = 965,
+            [Affix.Impact] = 86,
+            [Affix.CritRate] = 0.098,
+            [Affix.CritDamage] = 0.596,
+            [Affix.EnergyRegen] = 1.2,
+            [Affix.AnomalyProficiency] = 425,
+            [Affix.AnomalyMastery] = 192,
+            [Affix.Pen] = 36,
+            [Affix.PhysicalDmgBonus] = 0.4
+        };
+
+        var jane = new JaneDoe();
+        jane.SetWeapon(WeaponId.SharpenedStinger);
+        jane.SetDriveDiscs([
+            new(DriveDiscSetId.FreedomBlues, 1, Rarity.S,
+                Stat.Stats[Affix.Hp],
+                [
+                    Stat.SubStats[Affix.AnomalyProficiency] with { Level = 2 },
+                    Stat.SubStats[Affix.HpRatio] with { Level = 2 },
+                    Stat.SubStats[Affix.AtkRatio] with { Level = 3 },
+                    Stat.SubStats[Affix.Pen] with { Level = 2 }
+                ]),
+            new(DriveDiscSetId.FreedomBlues, 2, Rarity.S,
+                Stat.Stats[Affix.Atk],
+                [
+                    Stat.SubStats[Affix.AnomalyProficiency] with { Level = 3 },
+                    Stat.SubStats[Affix.HpRatio],
+                    Stat.SubStats[Affix.AtkRatio] with { Level = 3 },
+                    Stat.SubStats[Affix.CritRate]
+                ]),
+            new(DriveDiscSetId.FangedMetal, 3, Rarity.S,
+                Stat.Stats[Affix.Def],
+                [
+                    Stat.SubStats[Affix.Hp],
+                    Stat.SubStats[Affix.DefRatio] with { Level = 2 },
+                    Stat.SubStats[Affix.AtkRatio] with { Level = 4 },
+                    Stat.SubStats[Affix.AnomalyProficiency] with { Level = 2 }
+                ]),
+            new(DriveDiscSetId.FangedMetal, 4, Rarity.S,
+                Stat.Stats[Affix.AnomalyProficiency],
+                [
+                    Stat.SubStats[Affix.CritRate],
+                    Stat.SubStats[Affix.HpRatio],
+                    Stat.SubStats[Affix.AtkRatio] with { Level = 3 },
+                    Stat.SubStats[Affix.Hp] with { Level = 3 }
+                ]),
+            new(DriveDiscSetId.FangedMetal, 5, Rarity.S,
+                Stat.Stats[Affix.PhysicalDmgBonus],
+                [
+                    Stat.SubStats[Affix.AnomalyProficiency] with { Level = 2 },
+                    Stat.SubStats[Affix.AtkRatio] with { Level = 3 },
+                    Stat.SubStats[Affix.Def] with { Level = 2 },
+                    Stat.SubStats[Affix.CritDamage] with { Level = 2 }
+                ]),
+            new(DriveDiscSetId.FangedMetal, 6, Rarity.S,
+                Stat.Stats[Affix.AnomalyMasteryRatio],
+                [
+                    Stat.SubStats[Affix.AnomalyProficiency] with { Level = 2 },
+                    Stat.SubStats[Affix.Pen] with { Level = 2 },
+                    Stat.SubStats[Affix.DefRatio] with { Level = 3 },
+                    Stat.SubStats[Affix.HpRatio] with { Level = 2 }
+                ])
+        ]);
+
+        CheckStats(reference, jane.BaseStats);
+    }
+
 }
