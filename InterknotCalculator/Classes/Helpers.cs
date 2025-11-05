@@ -37,6 +37,17 @@ public static class Helpers {
         };
     }
     
+    public static Affix GetRelatedSheerDmg(Element? element) {
+        return element switch {
+            Element.Ice => Affix.IceSheerBonus,
+            Element.Fire => Affix.FireSheerBonus,
+            Element.Electric => Affix.ElectricSheerBonus,
+            Element.Physical => Affix.PhysicalSheerBonus,
+            Element.Ether => Affix.EtherSheerBonus,
+            _ => Affix.Unknown,
+        };
+    }
+    
     /// <summary>
     /// Returns the related ResPen for the given element.
     /// </summary>

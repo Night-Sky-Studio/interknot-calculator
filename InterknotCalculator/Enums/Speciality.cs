@@ -5,5 +5,6 @@ public enum Speciality {
     Defense,
     Anomaly,
     Stun,
-    Support
+    Support,
+    Rupture
 }

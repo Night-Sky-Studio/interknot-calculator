@@ -14,5 +14,8 @@ public enum Faction {
     SonsOfCalydon = 256,
     StarsOfLyra = 512,
     VictoriaHousekeeping = 1024,
+    YunkuiSummit = 2048,
+    SpookShack = 4096,
+    Tops = 8192,
     NewEriduDefenseForce = SilverSquad | ObolSquad | LyreSquad
 }

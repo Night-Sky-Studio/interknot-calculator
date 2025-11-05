@@ -9,7 +9,7 @@ public enum Affix {
     Pen, PenRatio,
     AnomalyMastery, AnomalyMasteryRatio,
     AnomalyProficiency, 
-    Sheer, SheerRatio,
+    Sheer, 
     
     DmgBonus, ResPen,
     IceDmgBonus, IceResPen,
@@ -18,6 +18,13 @@ public enum Affix {
     ElectricDmgBonus, ElectricResPen,
     EtherDmgBonus, EtherResPen,
     DisorderDmgBonus,
+    
+    SheerBonus,
+    IceSheerBonus, 
+    FireSheerBonus, 
+    PhysicalSheerBonus, 
+    ElectricSheerBonus, 
+    EtherSheerBonus,
     
     EnergyRegen, EnergyRegenRatio,
     
