@@ -97,7 +97,11 @@ public abstract class Agent(uint id) {
         }
 
         foreach (var passive in Weapon?.Passive ?? []) {
-            BonusStats[passive.Affix] += passive.Value;
+            if (passive.SkillTags.Length != 0) {
+                TagBonus.Add(passive);
+            } else {
+                BonusStats[passive.Affix] += passive.Value;
+            }
         }
         
         ApplyPassive();
@@ -197,8 +201,9 @@ public abstract class Agent(uint id) {
     public virtual IEnumerable<AgentAction> GetActionDamage(string skill, int scale, Enemy enemy) {
         var data = Skills[skill];
         var attribute = data.Scales[scale].Element ?? Element;
-        var relatedAffixDmg = Helpers.GetRelatedAffixDmg(attribute);
-        var relatedAffixRes = Helpers.GetRelatedAffixRes(attribute);
+        var relatedAffixDmg   = Helpers.GetRelatedAffixDmg(attribute);
+        var relatedAffixSheer = Helpers.GetRelatedSheerDmg(attribute);
+        var relatedAffixRes   = Helpers.GetRelatedAffixRes(attribute);
 
         OnAction?.Invoke(this, data.Tag, enemy);
         
@@ -245,7 +250,9 @@ public abstract class Agent(uint id) {
 
         var enemyDefenseMultiplier = Speciality is Speciality.Rupture ? 1 : enemy.GetDefenseMultiplier(PenRatio, Pen);
 
-        var sheerMultiplier = 1 + GetSheerMultiplier();
+        var sheerMultiplier = 1 + GetSheerMultiplier() 
+                                    + tagDmgBonus[Affix.SheerBonus] + tagDmgBonus[relatedAffixSheer]
+                                    + data.Affixes[Affix.SheerBonus] + data.Affixes[relatedAffixSheer];
         
         var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * enemyDefenseMultiplier
                     * resMultiplier * sheerMultiplier * DamageTakenMultiplier * enemy.StunMultiplier;
