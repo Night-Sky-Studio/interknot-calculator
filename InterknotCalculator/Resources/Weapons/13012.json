@@ -1,0 +1,23 @@
+{
+    "Speciality": "Rupture",
+    "Rarity": "A",
+    "MainStat": {
+        "Affix": "Atk",
+        "Value": 594
+    },
+    "SecondaryStat": {
+        "Affix": "AtkRatio",
+        "Value": 0.25
+    },
+    "Passive": [
+        {
+            "Affix": "CritDamage",
+            "Value": 0.256
+        },
+        {
+            "Affix": "DmgBonus",
+            "Value": 0.32,
+            "Tags": ["ExSpecial"]
+        }
+    ]
+}
