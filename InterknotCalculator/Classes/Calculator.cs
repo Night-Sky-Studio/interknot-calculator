@@ -31,6 +31,7 @@ public class Calculator {
             AgentId.Vivian       => new Vivian(),
             AgentId.Soldier0Anby => new SilverAnby(),
             AgentId.Trigger      => new Trigger(),
+            AgentId.Yixuan       => new Yixuan(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent instance wasn't found.")
         };
     }
@@ -136,6 +137,7 @@ public class Calculator {
         
         fullTeam[characterId].SetWeapon(weaponId);
         fullTeam[characterId].SetDriveDiscs(driveDiscs);
+        fullTeam[characterId].Hp = fullTeam[characterId].MaxHp;
         // var weapon = Resources.Current.GetWeapon(weaponId);
         //
         // // Collect Drive Discs stats and apply them
