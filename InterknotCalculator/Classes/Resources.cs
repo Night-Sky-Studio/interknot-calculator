@@ -68,6 +68,9 @@ public class Resources {
         if (!_isInitialized)
             throw new Exception("Resources not yet initialized.");
 
+        if (!Weapons.ContainsKey(id))
+            throw new KeyNotFoundException($"Weapon {id} not found");
+        
         Weapons[id].ApplyPassive = id switch {
             14122 => agent => {
                 agent.BonusStats[Affix.DisorderDmgBonus] += agent.AnomalyProficiency > 375 ? 0.25 : 0;
@@ -94,6 +97,9 @@ public class Resources {
         if (!_isInitialized)
             throw new Exception("Resources not yet initialized.");
 
+        if (!DriveDiscs.ContainsKey(id))
+            throw new KeyNotFoundException($"Drive Disc Set {id} not found");
+        
         DriveDiscs[id].ApplyPassive = id switch {
             DriveDiscSetId.DawnsBloom => agent => {
                 agent.TagBonus.Add(new(Affix.DmgBonus, agent.Speciality == Speciality.Attack ? 0.4 : 0.2,  tags: [SkillTag.BasicAtk]));
