@@ -84,7 +84,6 @@ public class TriggerTests : AgentsTest {
         Assert.That(result.PerAction, Is.Not.Empty);
 
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
-        PrintActions(result.PerAction);
-        Console.WriteLine($"Total Daze: {result.Total}");
+        PrintActions(result.PerAction, result.Total);
     }
 }

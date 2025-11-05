@@ -82,8 +82,7 @@ public class YanagiTests : AgentsTest {
         Assert.That(result.PerAction, Is.Not.Empty);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
-        PrintActions(result.PerAction);
-        Console.WriteLine($"Total: {result.Total}");
+        PrintActions(result.PerAction, result.Total);
         Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
     }
 }

@@ -1,3 +1,4 @@
+using System.Globalization;
 using InterknotCalculator.Classes;
 using InterknotCalculator.Classes.Server;
 
@@ -10,9 +11,10 @@ public abstract class AgentsTest : CalculatorTest {
                 Level = p.Value
             }))).ToArray();
 
-    protected void PrintActions(IEnumerable<AgentAction> actions) {
+    protected void PrintActions(IEnumerable<AgentAction> actions, double total) {
         foreach (var action in actions) {
-            Console.WriteLine($"{action.AgentId, -6}{action.Name, -38}{action.Tag, -24}{action.Damage}");
+            Console.WriteLine($"{action.AgentId, -6}{action.Name, -38}{action.Tag, -24}{action.Damage.ToString(CultureInfo.InvariantCulture)}");
         }
+        Console.WriteLine($"Total: {total}");
     }
 }
