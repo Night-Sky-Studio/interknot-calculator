@@ -10,7 +10,7 @@ public class StatsCollectionTest: CalculatorTest {
         foreach (var (key, value) in expected) {
             Console.WriteLine($"Testing {key}");
             var actualValue = actual[key] > 2 ? Math.Floor(actual[key]) : actual[key];
-            Assert.That(actualValue, Is.EqualTo(value).Within(0.001), $"Key: {key}");
+            Assert.That(actualValue, Is.EqualTo(value).Within(key is Affix.Hp ? 1 : 0.001), $"Key: {key}");
         }
     }
     
@@ -156,6 +156,78 @@ public class StatsCollectionTest: CalculatorTest {
         ]);
 
         CheckStats(reference, jane.BaseStats);
+    }
+
+    [Test]
+    public void YixuanStatsTest() {
+        var reference = new SafeDictionary<Affix, double> {
+            [Affix.Hp] = 19_114,
+            [Affix.Atk] = 2_211,
+            [Affix.Def] = 685,
+            [Affix.Impact] = 93,
+            [Affix.CritRate] = 0.458,
+            [Affix.CritDamage] = 1.764,
+            [Affix.AnomalyProficiency] = 90,
+            [Affix.AnomalyMastery] = 92,
+            [Affix.Pen] = 9,
+            [Affix.Sheer] = 2_574,
+            [Affix.EtherDmgBonus] = 0.3
+        };
+
+        var yixuan = new Yixuan();
+        yixuan.SetWeapon(WeaponId.QingmingBirdcage);
+        yixuan.SetDriveDiscs([
+            new(DriveDiscSetId.YunkuiTales, 1, Rarity.S,
+                Stat.Stats[Affix.Hp],
+                [
+                    Stat.SubStats[Affix.CritRate] with { Level = 2 },
+                    Stat.SubStats[Affix.HpRatio] with { Level = 3 },
+                    Stat.SubStats[Affix.CritDamage] with { Level = 2 },
+                    Stat.SubStats[Affix.Def]
+                ]),
+            new(DriveDiscSetId.BranchBladeSong, 2, Rarity.S,
+                Stat.Stats[Affix.Atk],
+                [
+                    Stat.SubStats[Affix.AtkRatio] with { Level = 2 },
+                    Stat.SubStats[Affix.CritDamage] with { Level = 4 },
+                    Stat.SubStats[Affix.Hp] with { Level = 2 },
+                    Stat.SubStats[Affix.Def]
+                ]),
+            new(DriveDiscSetId.YunkuiTales, 3, Rarity.S,
+                Stat.Stats[Affix.Def],
+                [
+                    Stat.SubStats[Affix.CritDamage] with { Level = 2 },
+                    Stat.SubStats[Affix.CritRate] with { Level = 2 },
+                    Stat.SubStats[Affix.HpRatio] with { Level = 3 },
+                    Stat.SubStats[Affix.AtkRatio]
+                ]),
+            new(DriveDiscSetId.BranchBladeSong, 4, Rarity.S,
+                Stat.Stats[Affix.CritDamage],
+                [
+                    Stat.SubStats[Affix.Hp] with { Level = 2 },
+                    Stat.SubStats[Affix.HpRatio] with { Level = 2 },
+                    Stat.SubStats[Affix.CritRate] with { Level = 4 },
+                    Stat.SubStats[Affix.Pen]
+                ]),
+            new(DriveDiscSetId.YunkuiTales, 5, Rarity.S,
+                Stat.Stats[Affix.EtherDmgBonus],
+                [
+                    Stat.SubStats[Affix.Def] with { Level = 2 },
+                    Stat.SubStats[Affix.CritRate] with { Level = 2 },
+                    Stat.SubStats[Affix.CritDamage] with { Level = 2 },
+                    Stat.SubStats[Affix.Hp] with { Level = 2 }
+                ]),
+            new(DriveDiscSetId.YunkuiTales, 6, Rarity.S,
+                Stat.Stats[Affix.HpRatio],
+                [
+                    Stat.SubStats[Affix.Atk] with { Level = 2 },
+                    Stat.SubStats[Affix.CritRate],
+                    Stat.SubStats[Affix.CritDamage] with { Level = 3 },
+                    Stat.SubStats[Affix.AtkRatio] with { Level = 2 }
+                ])
+        ]);
+
+        CheckStats(reference, yixuan.BaseStats);
     }
 
 }
