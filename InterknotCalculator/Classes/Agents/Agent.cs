@@ -110,7 +110,12 @@ public abstract class Agent(uint id) {
     public Affix RelatedElementDmg => Helpers.GetRelatedAffixDmg(Element);
     public Affix RelatedElementRes => Helpers.GetRelatedAffixRes(Element);
 
-    public double Hp => Stats[Affix.Hp] * (1 + BonusStats[Affix.HpRatio]) + BonusStats[Affix.Hp];
+    public double MaxHp => Stats[Affix.Hp] * (1 + BonusStats[Affix.HpRatio]) + BonusStats[Affix.Hp];
+    private double _hp = 0.0;
+    public double Hp {
+        get => Math.Clamp(_hp, 0, MaxHp); 
+        set => _hp = Math.Clamp(value, 0, MaxHp);
+    }
     public double InitialAtk => (Stats[Affix.Atk] + (Weapon?.MainStat.Value ?? 0)) 
         * (1 + BonusStats[Affix.AtkRatio]) + BonusStats[Affix.Atk];
     public double Atk => InitialAtk * (1 + BonusStats[Affix.CombatAtkRatio]);
@@ -137,8 +142,8 @@ public abstract class Agent(uint id) {
     }
 #endif
     
-    public SafeDictionary<Affix, double> CollectStats() => new() {
-        [Affix.Hp] = Hp,
+    public virtual SafeDictionary<Affix, double> CollectStats() => new() {
+        [Affix.Hp] = MaxHp,
         [Affix.Atk] = Atk,
         [Affix.Def] = Def,
         [Affix.Pen] = Pen,
@@ -171,6 +176,10 @@ public abstract class Agent(uint id) {
     /// </summary>
     public virtual void ApplyPassive() { }
 
+    protected virtual double GetBaseDamage(double scale) => scale / 100 * Atk;
+
+    protected virtual double GetSheerMultiplier() => 1;
+    
     /// <summary>
     /// Applies agent's ability's passive
     /// </summary>
@@ -196,7 +205,7 @@ public abstract class Agent(uint id) {
 #if ENERGY_REQUIREMENT_CHECK
         // Energy requirement check
         // ExSpecial has negative energy (using energy)
-        // everything else have positive (accumulating energy)
+        // everything else has positive (accumulating energy)
         var multiplier = data.Scales[scale];
         if (Energy + multiplier.Energy < 0) {
             throw new InvalidOperationException($"Agent does not have enough energy to perform {skill} at scale {scale + 1}. " +
@@ -205,7 +214,7 @@ public abstract class Agent(uint id) {
         Energy += multiplier.Energy;
 #endif
 
-        // Process all tag bonuses and apply if tag matches
+        // Process all tag bonuses and apply if the tag matches
         var tagDmgBonus = new SafeDictionary<Affix, double>();
         foreach (var stat in TagBonus) {
             if (stat.SkillTags.Contains(data.Tag)) {
@@ -224,7 +233,7 @@ public abstract class Agent(uint id) {
         enemy.AddAnomalyBuildup(this, buildup);
 
         // Calculate damage according to formula
-        var baseDmgAttacker = data.Scales[scale].Damage / 100 * Atk;
+        var baseDmgAttacker = GetBaseDamage(data.Scales[scale].Damage);
         var dmgBonusMultiplier = 1 + ElementalDmgBonus + DmgBonus
                                  + tagDmgBonus[relatedAffixDmg] + tagDmgBonus[Affix.DmgBonus]
                                  + data.Affixes[relatedAffixDmg] + data.Affixes[Affix.DmgBonus];
@@ -234,8 +243,12 @@ public abstract class Agent(uint id) {
                             + tagDmgBonus[relatedAffixRes] + tagDmgBonus[Affix.ResPen]
                             + data.Affixes[relatedAffixRes] + data.Affixes[Affix.ResPen];
 
-        var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * enemy.GetDefenseMultiplier(PenRatio, Pen)
-                    * resMultiplier * DamageTakenMultiplier * enemy.StunMultiplier;
+        var enemyDefenseMultiplier = Speciality is Speciality.Rupture ? 1 : enemy.GetDefenseMultiplier(PenRatio, Pen);
+
+        var sheerMultiplier = 1 + GetSheerMultiplier();
+        
+        var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * enemyDefenseMultiplier
+                    * resMultiplier * sheerMultiplier * DamageTakenMultiplier * enemy.StunMultiplier;
 
         return [new() {
             AgentId = Id, 
