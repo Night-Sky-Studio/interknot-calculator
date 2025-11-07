@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\InterknotCalculator\InterknotCalculator.csproj" />
+      <ProjectReference Include="..\InterknotCalculator.Core\InterknotCalculator.Core.csproj" />
     </ItemGroup>
 
 </Project>

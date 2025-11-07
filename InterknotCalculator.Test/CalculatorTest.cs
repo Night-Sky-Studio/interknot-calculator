@@ -1,4 +1,4 @@
-using InterknotCalculator.Classes;
+using InterknotCalculator.Core.Classes;
 
 namespace InterknotCalculator.Test;
 

@@ -1,7 +1,7 @@
-using InterknotCalculator.Classes;
-using InterknotCalculator.Classes.Enemies;
-using InterknotCalculator.Classes.Server;
-using InterknotCalculator.Enums;
+using InterknotCalculator.Core.Classes;
+using InterknotCalculator.Core.Classes.Enemies;
+using InterknotCalculator.Core.Classes.Server;
+using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Test.Agents;
 

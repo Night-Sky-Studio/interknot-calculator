@@ -1,6 +1,6 @@
-using InterknotCalculator.Classes;
-using InterknotCalculator.Classes.Agents;
-using InterknotCalculator.Enums;
+using InterknotCalculator.Core.Classes;
+using InterknotCalculator.Core.Classes.Agents;
+using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Test;
 

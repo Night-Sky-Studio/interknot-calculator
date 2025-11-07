@@ -1,6 +1,6 @@
 using System.Globalization;
-using InterknotCalculator.Classes;
-using InterknotCalculator.Classes.Server;
+using InterknotCalculator.Core.Classes;
+using InterknotCalculator.Core.Classes.Server;
 
 namespace InterknotCalculator.Test.Agents;
 
