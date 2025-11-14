@@ -47,7 +47,11 @@ public class YixuanTests: AgentsTest {
                 Levels = [15, 2, 1, 3, 2]
             },
         ],
-        Team = [],
+        Team = [
+            AgentId.JuFufu,
+            // AgentId.Trigger,
+            AgentId.AstraYao
+        ],
         StunBonus = 1.5,
         Rotation = [
             "auric_ink_rush",

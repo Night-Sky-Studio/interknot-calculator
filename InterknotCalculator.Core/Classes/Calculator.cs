@@ -48,6 +48,8 @@ public class Calculator {
             AgentId.AstraYao     => AstraYao.Reference(),
             AgentId.Soldier0Anby => SilverAnby.Reference(),
             AgentId.Trigger      => Trigger.Reference(),
+            AgentId.PanYinhu     => PanYinhu.Reference(),
+            AgentId.JuFufu       => JuFufu.Reference(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent reference wasn't found.")
         };
     }

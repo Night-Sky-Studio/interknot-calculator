@@ -121,7 +121,7 @@ public class Trigger : Agent, IStunAgent, IAgentReference<Trigger> {
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
         if (team.Count < 2) return [];
 
-        if (team.Any(a => a.Speciality == Speciality.Attack) ||
+        if (team.Any(a => a.Speciality is Speciality.Attack or Speciality.Rupture) ||
             team.Any(a => a.Element == Element)) {
             if (CritRate > 0.4) {
                 return [

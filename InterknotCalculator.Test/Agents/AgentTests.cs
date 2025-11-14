@@ -15,6 +15,6 @@ public abstract class AgentsTest : CalculatorTest {
         foreach (var action in actions) {
             Console.WriteLine($"{action.AgentId, -6}{action.Name, -38}{action.Tag, -24}{action.Damage.ToString(CultureInfo.InvariantCulture)}");
         }
-        Console.WriteLine($"Total: {total}");
+        Console.WriteLine($"Total: {total.ToString(CultureInfo.InvariantCulture)}");
     }
 }

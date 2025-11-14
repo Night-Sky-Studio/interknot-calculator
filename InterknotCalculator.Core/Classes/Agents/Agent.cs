@@ -102,6 +102,14 @@ public abstract class Agent(uint id) {
             }
         }
         
+        foreach (var stat in Weapon?.ExternalBonus ?? []) {
+            if (stat.SkillTags.Length != 0) {
+                ExternalTagBonus.Add(stat);
+            } else {
+                ExternalBonus[stat.Affix] += stat.Value;
+            }
+        }
+        
         ApplyPassive();
         
         Weapon?.ApplyPassive?.Invoke(this);
