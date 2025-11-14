@@ -9,8 +9,8 @@ namespace InterknotCalculator.Core.Classes;
 /// </summary>
 public class Resources {
     private bool _isInitialized = false;
-    private string WeaponsPath { get; } = Path.Combine(Environment.CurrentDirectory, "Resources", "Weapons");
-    private string DriveDiscsPath { get; } = Path.Combine(Environment.CurrentDirectory, "Resources", "DriveDiscs");
+    private string WeaponsPath { get; } = Path.Combine(AppContext.BaseDirectory, "Resources", "Weapons");
+    private string DriveDiscsPath { get; } = Path.Combine(AppContext.BaseDirectory, "Resources", "DriveDiscs");
     private Dictionary<uint, DriveDiscSet> DriveDiscs { get; } = new();
     private Dictionary<uint, Weapon> Weapons { get; } = new();
     
