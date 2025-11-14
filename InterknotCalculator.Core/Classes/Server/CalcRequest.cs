@@ -4,24 +4,24 @@ using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.Server;
 
-public class DriveDiscRequest {
+public record DriveDiscRequest {
     [JsonPropertyName("id")]
     public uint SetId { get; set; }
     
     [JsonPropertyName("rarity")]
     public Rarity Rarity { get; set; }
 
-    [JsonPropertyName("stats")] 
+    [JsonPropertyName("stats")]
     public Affix[] Stats { get; set; } = [];
-    
-    [JsonPropertyName("levels")] 
+
+    [JsonPropertyName("levels")]
     public uint[] Levels { get; set; } = [];
     
     [JsonIgnore]
     public Dictionary<Affix, uint> StatsLevels => new (Stats.Zip(Levels, (k, v) => new KeyValuePair<Affix, uint>(k ,v)));
 }
 
-public class CalcRequest {
+public record CalcRequest {
     [JsonPropertyName("aid")]
     public uint AgentId { get; set; }
     
@@ -30,19 +30,20 @@ public class CalcRequest {
 
     [JsonPropertyName("discs")]
     public DriveDiscRequest[] Discs { get; set; } = [];
-    
+
     [JsonPropertyName("team")]
     public uint[] Team { get; set; } = [];
 
     [JsonPropertyName("stun_bonus")]
     public double StunBonus { get; set; }
-    
+
     [JsonPropertyName("rotation")]
     public string[] Rotation { get; set; } = [];
 
-    public static CalcRequest Decode(ReadOnlySpan<byte> data) {
-        using var stream = new MemoryStream(data.ToArray());
+    public static CalcRequest Decode(byte[] data) {
+        using var stream = new MemoryStream(data);
         using var reader = new BinaryReader(stream);
+        
         var request = new CalcRequest {
             AgentId = reader.ReadUInt16(), 
             WeaponId = reader.ReadUInt16()
@@ -71,7 +72,7 @@ public class CalcRequest {
             request.Team[i] = reader.ReadUInt16();
         }
 
-        var stunBonus = reader.ReadUInt16() / 1000d;
+        request.StunBonus = reader.ReadUInt16() / 1000d;
 
         var rotationLength = reader.ReadUInt16();
         request.Rotation = new string[rotationLength];

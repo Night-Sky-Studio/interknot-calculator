@@ -4,7 +4,7 @@ using InterknotCalculator.Core.Classes.Enemies;
 
 namespace InterknotCalculator.Core.Classes.Server;
 
-public class CalcResult {
+public record CalcResult {
     public FinalStats FinalStats { get; set; } = new();
     public IEnumerable<AgentAction> PerAction { get; set; } = [];
     [JsonIgnore]
@@ -28,7 +28,7 @@ public class CalcResult {
         }
 
         var actions = PerAction.ToArray();
-        writer.Write(actions.Length);
+        writer.Write((byte)actions.Length);
         foreach (var a in actions) {
             writer.Write((ushort)a.AgentId);
             writer.Write((byte)a.Tag);

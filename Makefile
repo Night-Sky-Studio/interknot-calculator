@@ -1,8 +1,16 @@
+.PHONY: clean
+
 DOTNET=dotnet
+SOLUTION=InterknotCalculator
 
-default: publish
+SERVER=$(SOLUTION).Server
 
-all: publish
+PUBLISH_ARGS=-c Release /p:PublishDir=./../publish/ --self-contained true
 
-publish:
-	$(DOTNET) publish -c Release /p:PublishDir=./../publish/ --self-contained true
+default: server
+
+clean:
+	rm -rf ./publish
+
+server:
+	$(DOTNET) publish $(SERVER)/$(SERVER).csproj $(PUBLISH_ARGS)

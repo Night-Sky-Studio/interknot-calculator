@@ -1,7 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <OutputType>Exe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
@@ -9,58 +11,11 @@
         <PublishReadyToRun>true</PublishReadyToRun>
         <PublishTrimmed>true</PublishTrimmed>
         <ServerGarbageCollection>true</ServerGarbageCollection>
-        <RootNamespace>InterknotCalculator</RootNamespace>
+        <RootNamespace>InterknotCalculator.Server</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\31000.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\31100.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\31200.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\31300.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\31400.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\31500.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\31600.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\31800.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\31900.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\32200.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\32300.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\32400.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\32500.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\32600.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\32700.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\32800.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\32900.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\33000.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\33100.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\33200.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\33300.json" />
-      <_ContentIncludedByDefault Remove="Resources\DriveDiscs\33400.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\13006.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\13008.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\13009.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\13012.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\13015.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\13103.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\13113.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\13115.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14001.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14104.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14109.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14114.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14117.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14118.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14119.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14120.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14121.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14122.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14124.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14126.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14131.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14132.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14133.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14136.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14137.json" />
-      <_ContentIncludedByDefault Remove="Resources\Weapons\14138.json" />
+      <PackageReference Include="Sisk.HttpServer" Version="1.5.2" />
     </ItemGroup>
 
     <ItemGroup>
