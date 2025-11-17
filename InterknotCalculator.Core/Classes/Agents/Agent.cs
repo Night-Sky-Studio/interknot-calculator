@@ -156,25 +156,49 @@ public abstract class Agent(uint id) {
         set => _energy = Math.Clamp(value, 0, 120);
     }
 #endif
+
+    public virtual SafeDictionary<Affix, double> CollectStats() {
+        var result = new SafeDictionary<Affix, double>();
+
+        var maxHp = MaxHp;
+        var atk = Atk;
+        var def = Def;
+        var pen = Pen;
+        var penRatio = PenRatio;
+        var critRate = CritRate;
+        var critDamage = CritDamage;
+        var impact = Impact;
+        var anomalyMastery = AnomalyMastery;
+        var anomalyProficiency = AnomalyProficiency;
+        var energyRegen = EnergyRegen;
+        var elemDmg = ElementalDmgBonus;
+        var elemResPen = ElementalResPen;
+        var dmgBonus = DmgBonus;
+        var resPen = ResPen;
+        var dazeBonus = DazeBonus;
+
+        Add(Affix.Hp, maxHp);
+        Add(Affix.Atk, atk);
+        Add(Affix.Def, def);
+        Add(Affix.Pen, pen);
+        Add(Affix.PenRatio, penRatio);
+        Add(Affix.CritRate, critRate);
+        Add(Affix.CritDamage, critDamage);
+        Add(Affix.Impact, impact);
+        Add(Affix.AnomalyMastery, anomalyMastery);
+        Add(Affix.AnomalyProficiency, anomalyProficiency);
+        Add(Affix.EnergyRegen, energyRegen);
+        Add(RelatedElementDmg, elemDmg);
+        Add(RelatedElementRes, elemResPen);
+        Add(Affix.DmgBonus, dmgBonus);
+        Add(Affix.ResPen, resPen);
+        Add(Affix.DazeBonus, dazeBonus);
     
-    public virtual SafeDictionary<Affix, double> CollectStats() => new() {
-        [Affix.Hp] = MaxHp,
-        [Affix.Atk] = Atk,
-        [Affix.Def] = Def,
-        [Affix.Pen] = Pen,
-        [Affix.PenRatio] = PenRatio,
-        [Affix.CritRate] = CritRate,
-        [Affix.CritDamage] = CritDamage,
-        [Affix.Impact] = Impact,
-        [Affix.AnomalyMastery] = AnomalyMastery,
-        [Affix.AnomalyProficiency] = AnomalyProficiency,
-        [Affix.EnergyRegen] = EnergyRegen,
-        [RelatedElementDmg] = ElementalDmgBonus,
-        [RelatedElementRes] = ElementalResPen,
-        [Affix.DmgBonus] = DmgBonus,
-        [Affix.ResPen] = ResPen,
-        [Affix.DazeBonus] = DazeBonus
-    };
+        return result;
+
+        void Add(Affix affix, double value) { if (value != 0) result[affix] = value; }
+    }
+
     #endregion
     
     public Action<Agent, SkillTag, Enemy>? OnAction { get; set; }
