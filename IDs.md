@@ -1,4 +1,4 @@
-Game version: 2.2
+Game version: 2.3
 
 # Agents
 ```
@@ -6,6 +6,7 @@ Game version: 2.2
 1021 Nekomata
 1031 Nicole
 1041 Soldier 11
+1051 Yidhari
 1061 Corin
 1071 Caesar
 1081 Billy
@@ -41,6 +42,8 @@ Game version: 2.2
 1401 Alice
 1411 Yuzuha
 1421 Pan Yinhu
+1441 Manato
+1451 Lucia
 1461 Seed
 ```
 
@@ -89,11 +92,13 @@ Game version: 2.2
 13128 Roaring Ride
 13135 Box Cutter
 13142 Tremor Trigram Vessel
+13144 Grill O'Wisp
 14001 Cannon Rotor
 14002 Unfettered Game Ball
 14003 Six Shooter
 14102 Steel Cushion
 14104 The Brimstone
+14105 Kraken's Cradle
 14107 Tusks of Fury
 14109 Hailstorm Shrine
 14110 Hellfire Gears
@@ -119,6 +124,7 @@ Game version: 2.2
 14139 Roaring Fur-nace
 14140 Practiced Perfection
 14141 Metanukimorphosis
+14145 Dreamlit Hearth
 14146 Cordis Germina
 ```
 

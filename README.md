@@ -53,10 +53,12 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Yanagi (1221)
 - Vivian (1331)
 - Soldier 0 - Anby (1381)
+- Yixuan (1371)
 
 #### Stun Agents
 - [Partial] Lycaon (1141)
 - Trigger (1361)
+- [Partial] Ju Fufu (1391)
 
 #### Support Agents
 - Nicole (1031)
@@ -64,6 +66,7 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Lucy (1151)
 - Rina (1211)
 - Astra Yao (1311)
+- Pan Yinhu (1421)
 
 ### Weapons
 - Precious Fossilized Core (13006)
@@ -73,7 +76,9 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - The Vault (13103)
 - Bashful Demon (13113)
 - Kaboom the Cannon (13115)
+- Tremor Trigram Vessel (13142)
 - Cannon Rotor (14001)
+- Hellfire Gears (14110)
 - The Brimstone (14104)
 - Hailstorm Shrine (14109)
 - The Restrained (14114)
@@ -89,7 +94,9 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Heartstring Nocturne (14132)
 - Flight of Fancy (14133)
 - Spectral Gaze (14136)
+- Qingming Birdcage(14137)
 - Severed Innocence (14138)
+- Roaring Fur-nace (14139)
 
 ### Drive Disc Sets
 - Woodpecker Electro (31000)
@@ -112,6 +119,8 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Phaethon's Melody (33000)
 - Yunkui Tales (33100)
 - King of the Summit (33200)
+- Dawn's Bloom (33300)
+- Moonlight Lullaby (33400)
 
 ## Contributing
 This project uses .NET NativeAOT compilation, so if you want to introduce any library that uses dynamic code that

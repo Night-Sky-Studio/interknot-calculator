@@ -1,5 +1,5 @@
 /// AUTO-GENERATED, DO NOT EDIT!!!
-/// Game version: 2.2
+/// Game version: 2.3
 
 namespace InterknotCalculator.Core.Enums;
 
@@ -8,6 +8,7 @@ public static class AgentId {
     public const uint Nekomata = 1021;
     public const uint Nicole = 1031;
     public const uint Soldier11 = 1041;
+    public const uint Yidhari = 1051;
     public const uint Corin = 1061;
     public const uint Caesar = 1071;
     public const uint Billy = 1081;
@@ -43,6 +44,8 @@ public static class AgentId {
     public const uint Alice = 1401;
     public const uint Yuzuha = 1411;
     public const uint PanYinhu = 1421;
+    public const uint Manato = 1441;
+    public const uint Lucia = 1451;
     public const uint Seed = 1461;
 }
 
@@ -90,11 +93,13 @@ public static class WeaponId {
     public const uint RoaringRide = 13128;
     public const uint BoxCutter = 13135;
     public const uint TremorTrigramVessel = 13142;
+    public const uint GrillOWisp = 13144;
     public const uint CannonRotor = 14001;
     public const uint UnfetteredGameBall = 14002;
     public const uint SixShooter = 14003;
     public const uint SteelCushion = 14102;
     public const uint TheBrimstone = 14104;
+    public const uint KrakensCradle = 14105;
     public const uint TusksOfFury = 14107;
     public const uint HailstormShrine = 14109;
     public const uint HellfireGears = 14110;
@@ -120,6 +125,7 @@ public static class WeaponId {
     public const uint RoaringFurnace = 14139;
     public const uint PracticedPerfection = 14140;
     public const uint Metanukimorphosis = 14141;
+    public const uint DreamlitHearth = 14145;
     public const uint CordisGermina = 14146;
 }
 
