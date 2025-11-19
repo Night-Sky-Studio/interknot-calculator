@@ -1,6 +1,6 @@
-using InterknotCalculator.Classes.Enemies;
-using InterknotCalculator.Classes.Server;
-using InterknotCalculator.Enums;
+using InterknotCalculator.Core.Classes.Enemies;
+using InterknotCalculator.Core.Classes.Server;
+using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Test.Agents;
 
@@ -70,8 +70,7 @@ public class VivianTests : AgentsTest {
         Assert.That(result.PerAction, Is.Not.Empty);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
-        PrintActions(result.PerAction);
-        Console.WriteLine($"Total: {result.Total}");
+        PrintActions(result.PerAction, result.Total);
         Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
     }
 }

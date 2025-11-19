@@ -1,0 +1,25 @@
+{
+    "Speciality": "Stun",
+    "Rarity": "S",
+    "MainStat": {
+        "Affix": "Atk",
+        "Value": 713
+    },
+    "SecondaryStat": {
+        "Affix": "AtkRatio",
+        "Value": 0.3
+    },
+    "Passive": [
+        {
+            "Affix": "DazeBonus",
+            "Value": 0.28,
+            "Tags": ["ExSpecial", "Chain", "Ultimate"]
+        }
+    ],
+    "ExternalBonus": [
+        {
+            "Affix": "DmgBonus",
+            "Value": 0.2
+        }
+    ]
+}

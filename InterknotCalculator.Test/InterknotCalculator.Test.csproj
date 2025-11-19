@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <IsPublishable>false</IsPublishable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\InterknotCalculator\InterknotCalculator.csproj" />
+      <ProjectReference Include="..\InterknotCalculator.Core\InterknotCalculator.Core.csproj" />
     </ItemGroup>
 
 </Project>

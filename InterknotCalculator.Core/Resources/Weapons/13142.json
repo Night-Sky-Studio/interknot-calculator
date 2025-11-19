@@ -1,0 +1,19 @@
+{
+    "Speciality": "Defense",
+    "Rarity": "A",
+    "MainStat": {
+        "Affix": "Atk",
+        "Value": 624
+    },
+    "SecondaryStat": {
+        "Affix": "AtkRatio",
+        "Value": 0.5
+    },
+    "ExternalBonus": [
+        {
+            "Affix": "DmgBonus",
+            "Tags": ["ExSpecial", "Ultimate"],
+            "Value": 0.4
+        }
+    ]
+}
