@@ -1,4 +1,5 @@
 using InterknotCalculator.Core.Classes;
+using InterknotCalculator.Core.Classes.Agents;
 using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
@@ -56,8 +57,9 @@ public static class Program {
                     }))).ToArray();
             
             var calcResult = calc.Calculate(result.AgentId, 
-                result.WeaponId, discs, result.Team, result.Rotation, new NotoriousDullahan(),
-                CalculationType.Damage);
+                result.WeaponId, discs, result.Team, result.Rotation, new NotoriousDullahan {
+                    StunMultiplier = result.StunBonus
+                });
             
             return Results.Json(calcResult, SerializerContext.Default.CalcResult);
         });
@@ -105,10 +107,10 @@ public static class Program {
                             d.SubStats.Select(p => Stat.SubStats[(Affix)p.Affix] with {
                                 Level = p.Level
                             }))).ToArray();
-
+                    
                     var result = calc.Calculate(leaderboard.CharacterId, leaderboard.WeaponId, discs,
                         leaderboard.TeamIds, leaderboard.Rotation, new NotoriousDullahan {
-                            StunMultiplier = leaderboard.StunMultiplier / 1000
+                            StunMultiplier = leaderboard.StunMultiplier / 1000d
                         });
 
                     writer.WriteResult(character.Uid, leaderboard.Id, result);
