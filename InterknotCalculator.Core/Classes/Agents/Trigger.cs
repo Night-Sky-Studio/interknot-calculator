@@ -121,8 +121,8 @@ public class Trigger : Agent, IStunAgent, IAgentReference<Trigger> {
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
         if (team.Count < 2) return [];
 
-        if (team.Any(a => a.Speciality is Speciality.Attack or Speciality.Rupture) ||
-            team.Any(a => a.Element == Element)) {
+        if (team.Any(a => a.Speciality is Speciality.Attack or Speciality.Rupture 
+                          || a.Element is Element.Electric)) {
             if (CritRate > 0.4) {
                 return [
                     new(Affix.DazeBonus, Math.Min((CritRate - 0.4) * 0.015, 0.75), tags: [SkillTag.Aftershock])

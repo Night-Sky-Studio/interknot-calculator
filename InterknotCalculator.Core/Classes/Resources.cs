@@ -68,10 +68,10 @@ public class Resources {
         if (!_isInitialized)
             throw new Exception("Resources not yet initialized.");
 
-        if (!Weapons.ContainsKey(id))
+        if (!Weapons.TryGetValue(id, out var weapon))
             throw new KeyNotFoundException($"Weapon {id} not found");
         
-        Weapons[id].ApplyPassive = id switch {
+        weapon.ApplyPassive = id switch {
             14122 => agent => {
                 agent.BonusStats[Affix.DisorderDmgBonus] += agent.AnomalyProficiency > 375 ? 0.25 : 0;
             },
@@ -80,10 +80,10 @@ public class Resources {
                     agent.BonusStats[Affix.AnomalyProficiency] += 20 * 6;
                 }
             },
-            _ => Weapons[id].ApplyPassive
+            _ => weapon.ApplyPassive
         };
 
-        return Weapons[id];
+        return weapon;
     }
 
     /// <summary>
@@ -97,10 +97,10 @@ public class Resources {
         if (!_isInitialized)
             throw new Exception("Resources not yet initialized.");
 
-        if (!DriveDiscs.ContainsKey(id))
+        if (!DriveDiscs.TryGetValue(id, out DriveDiscSet? set))
             throw new KeyNotFoundException($"Drive Disc Set {id} not found");
         
-        DriveDiscs[id].ApplyPassive = id switch {
+        set.ApplyPassive = id switch {
             DriveDiscSetId.DawnsBloom => agent => {
                 agent.TagBonus.Add(new(Affix.DmgBonus, agent.Speciality == Speciality.Attack ? 0.4 : 0.2,  tags: [SkillTag.BasicAtk]));
             },
@@ -109,9 +109,9 @@ public class Resources {
                     agent.ExternalBonus[Affix.DmgBonus] += 0.18;
                 }
             },
-            _ => DriveDiscs[id].ApplyPassive
+            _ => set.ApplyPassive
         };
         
-        return DriveDiscs[id];
+        return set;
     }
 }
