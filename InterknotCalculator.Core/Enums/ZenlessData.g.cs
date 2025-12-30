@@ -1,5 +1,5 @@
 /// AUTO-GENERATED, DO NOT EDIT!!!
-/// Game version: 2.3
+/// Game version: 2.5
 
 namespace InterknotCalculator.Core.Enums;
 
@@ -36,6 +36,7 @@ public static class AgentId {
     public const uint AstraYao = 1311;
     public const uint Evelyn = 1321;
     public const uint Vivian = 1331;
+    public const uint Zhao = 1341;
     public const uint Pulchra = 1351;
     public const uint Trigger = 1361;
     public const uint Yixuan = 1371;
@@ -44,9 +45,12 @@ public static class AgentId {
     public const uint Alice = 1401;
     public const uint Yuzuha = 1411;
     public const uint PanYinhu = 1421;
+    public const uint YeShunguang = 1431;
     public const uint Manato = 1441;
     public const uint Lucia = 1451;
     public const uint Seed = 1461;
+    public const uint Banyue = 1471;
+    public const uint Dialyn = 1481;
 }
 
 public static class WeaponId {
@@ -81,6 +85,7 @@ public static class WeaponId {
     public const uint RadiowaveJourney = 13014;
     public const uint MarcatoDesire = 13015;
     public const uint ReelProjector = 13016;
+    public const uint CauldronOfClarity = 13019;
     public const uint DemaraBatteryMarkII = 13101;
     public const uint TheVault = 13103;
     public const uint Housekeeper = 13106;
@@ -119,14 +124,18 @@ public static class WeaponId {
     public const uint ElegantVanity = 14131;
     public const uint HeartstringNocturne = 14132;
     public const uint FlightOfFancy = 14133;
+    public const uint HalfSugarBunny = 14134;
     public const uint SpectralGaze = 14136;
     public const uint QingmingBirdcage = 14137;
     public const uint SeveredInnocence = 14138;
     public const uint RoaringFurnace = 14139;
     public const uint PracticedPerfection = 14140;
     public const uint Metanukimorphosis = 14141;
+    public const uint CloudcleaveRadiance = 14143;
     public const uint DreamlitHearth = 14145;
     public const uint CordisGermina = 14146;
+    public const uint WrathfulVajra = 14147;
+    public const uint YesterdayCalls = 14148;
 }
 
 public static class DriveDiscSetId {
@@ -152,4 +161,6 @@ public static class DriveDiscSetId {
     public const uint KingOfTheSummit = 33200;
     public const uint DawnsBloom = 33300;
     public const uint MoonlightLullaby = 33400;
+    public const uint WhiteWaterBallad = 33500;
+    public const uint ShiningAria = 33600;
 }

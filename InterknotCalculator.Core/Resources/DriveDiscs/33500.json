@@ -1,0 +1,16 @@
+{
+    "PartialBonus": [{
+        "Affix": "PhysicalDmgBonus",
+        "Value": 0.1
+    }],
+    "FullBonus": [
+        {
+            "Affix": "CritRate",
+            "Value": 0.2
+        },
+        {
+            "Affix": "AtkRatio",
+            "Value": 0.1
+        }
+    ]
+}
