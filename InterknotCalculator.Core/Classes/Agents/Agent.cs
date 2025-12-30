@@ -126,7 +126,7 @@ public abstract class Agent(uint id) {
     public Affix RelatedElementRes => Helpers.GetRelatedAffixRes(Element);
 
     public double MaxHp => Stats[Affix.Hp] * (1 + BonusStats[Affix.HpRatio]) + BonusStats[Affix.Hp];
-    private double _hp = 0.0;
+    private double _hp;
     public double Hp {
         get => Math.Clamp(_hp, 0, MaxHp); 
         set => _hp = Math.Clamp(value, 0, MaxHp);
@@ -369,7 +369,6 @@ public abstract class Agent(uint id) {
         if (!abloom)
             OnAction?.Invoke(this, SkillTag.AttributeAnomaly, enemy);
         // Agents can override default anomalies
-        // ReSharper disable once InlineOutVariableDeclaration
         if (!Anomalies.TryGetValue(element, out var data)) {
             data = Anomaly.GetAnomalyByElement(element)!;
         }

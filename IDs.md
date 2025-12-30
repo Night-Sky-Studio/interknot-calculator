@@ -1,4 +1,4 @@
-Game version: 2.3
+Game version: 2.5
 
 # Agents
 ```
@@ -34,6 +34,7 @@ Game version: 2.3
 1311 Astra Yao
 1321 Evelyn
 1331 Vivian
+1341 Zhao
 1351 Pulchra
 1361 Trigger
 1371 Yixuan
@@ -42,9 +43,12 @@ Game version: 2.3
 1401 Alice
 1411 Yuzuha
 1421 Pan Yinhu
+1431 Ye Shunguang
 1441 Manato
 1451 Lucia
 1461 Seed
+1471 Banyue
+1481 Dialyn
 ```
 
 # Weapons
@@ -80,6 +84,7 @@ Game version: 2.3
 13014 Radiowave Journey
 13015 Marcato Desire
 13016 Reel Projector
+13019 Cauldron of Clarity
 13101 Demara Battery Mark II
 13103 The Vault
 13106 Housekeeper
@@ -118,14 +123,18 @@ Game version: 2.3
 14131 Elegant Vanity
 14132 Heartstring Nocturne
 14133 Flight of Fancy
+14134 Half-Sugar Bunny
 14136 Spectral Gaze
 14137 Qingming Birdcage
 14138 Severed Innocence
 14139 Roaring Fur-nace
 14140 Practiced Perfection
 14141 Metanukimorphosis
+14143 Cloudcleave Radiance
 14145 Dreamlit Hearth
 14146 Cordis Germina
+14147 Wrathful Vajra
+14148 Yesterday Calls
 ```
 
 # Drive Disc Sets
@@ -152,4 +161,6 @@ Game version: 2.3
 33200 King of the Summit
 33300 Dawn's Bloom
 33400 Moonlight Lullaby
+33500 White Water Ballad
+33600 Shining Aria
 ```

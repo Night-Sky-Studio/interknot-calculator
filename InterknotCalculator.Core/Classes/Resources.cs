@@ -101,6 +101,11 @@ public class Resources {
             throw new KeyNotFoundException($"Drive Disc Set {id} not found");
         
         set.ApplyPassive = id switch {
+            // DriveDiscSetId.ThunderMetal => (agent, enemy) => {
+            //     if (enemy.AfflictedAnomaly?.Element is Element.Electric) {
+            //         agent.BonusStats[Affix.CombatAtkRatio] += 0.28;
+            //     }
+            // },
             DriveDiscSetId.DawnsBloom => agent => {
                 agent.TagBonus.Add(new(Affix.DmgBonus, agent.Speciality == Speciality.Attack ? 0.4 : 0.2,  tags: [SkillTag.BasicAtk]));
             },
