@@ -49,7 +49,7 @@ public class Harumasa : Agent {
             new(379.9, 71.2, 31.47)
         ], new() {
             [Affix.CritRate] = 0.25, 
-            [Affix.CritDamage] = 0.36
+            [Affix.CritDamage] = 0.72
         });
 
         Skills["braced_bow"] = new(SkillTag.QuickAssist, [
