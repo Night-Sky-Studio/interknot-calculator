@@ -1,5 +1,5 @@
 /// AUTO-GENERATED, DO NOT EDIT!!!
-/// Game version: 2.5
+/// Game version: 2.7
 
 namespace InterknotCalculator.Core.Enums;
 
@@ -51,6 +51,10 @@ public static class AgentId {
     public const uint Seed = 1461;
     public const uint Banyue = 1471;
     public const uint Dialyn = 1481;
+    public const uint Sunna = 1491;
+    public const uint Aria = 1501;
+    public const uint NangongYu = 1511;
+    public const uint Cissia = 1521;
 }
 
 public static class WeaponId {
@@ -86,6 +90,7 @@ public static class WeaponId {
     public const uint MarcatoDesire = 13015;
     public const uint ReelProjector = 13016;
     public const uint CauldronOfClarity = 13019;
+    public const uint TheSimmeringPot = 13020;
     public const uint DemaraBatteryMarkII = 13101;
     public const uint TheVault = 13103;
     public const uint Housekeeper = 13106;
@@ -136,6 +141,10 @@ public static class WeaponId {
     public const uint CordisGermina = 14146;
     public const uint WrathfulVajra = 14147;
     public const uint YesterdayCalls = 14148;
+    public const uint Thoughtbop = 14149;
+    public const uint AngelInTheShell = 14150;
+    public const uint NeonFantasies = 14151;
+    public const uint SerpentineSeeker = 14152;
 }
 
 public static class DriveDiscSetId {
@@ -163,4 +172,6 @@ public static class DriveDiscSetId {
     public const uint MoonlightLullaby = 33400;
     public const uint WhiteWaterBallad = 33500;
     public const uint ShiningAria = 33600;
+    public const uint BunnyInWonderland = 33700;
+    public const uint NotesFromTheChained = 33800;
 }

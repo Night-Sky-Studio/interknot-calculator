@@ -408,7 +408,8 @@ public abstract class Agent(uint id) {
         
         var anomalyProficiencyMultiplier = anomalyProficiency / 100;
         const double anomalyLevelMultiplier = 2;
-        var dmgBonusMultiplier = element is Element.None ? 1 : 1 + ElementalDmgBonus + DmgBonus + tagBonus;
+        var dmgBonusMultiplier = element is Element.None ? 1 : 1 + ElementalDmgBonus + DmgBonus + tagBonus 
+                                                               + BonusStats[Affix.AnomalyDmgBonus];
         var resMultiplier = element != Element.None ? 1 + ElementalResPen + ResPen : 1;
         
         var disorderElementalMultiplier = 1d;

@@ -114,6 +114,11 @@ public class Resources {
                     agent.ExternalBonus[Affix.DmgBonus] += 0.18;
                 }
             },
+            DriveDiscSetId.BunnyInWonderland => agent => {
+                if (agent.Speciality == Speciality.Defense) {
+                    agent.BonusStats[Affix.DmgBonus] += 0.06 * 3;
+                }
+            },
             _ => set.ApplyPassive
         };
         

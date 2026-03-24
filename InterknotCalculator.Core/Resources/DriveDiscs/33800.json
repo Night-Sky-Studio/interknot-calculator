@@ -1,0 +1,16 @@
+{
+    "PartialBonus": [{
+        "Affix": "IceDmgBonus",
+        "Value": 0.1
+    }],
+    "FullBonus": [
+        {
+            "Affix": "AnomalyProficiency",
+            "Value": 48
+        },
+        {
+            "Affix": "AnomalyDmgBonus",
+            "Value": 0.16
+        }
+    ]
+}
