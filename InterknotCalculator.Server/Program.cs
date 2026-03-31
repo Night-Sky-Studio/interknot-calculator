@@ -100,7 +100,7 @@ public static class Program {
             using var writer = new ResultWriter();
             
             using var stream = new FileStream(RequestFilePath, FileMode.Open, FileAccess.Read);
-            RequestReader.Read(stream, (leaderboards, character) => {
+            RequestReader.Read(stream, (leaderboards, character, isPrimary) => {
                 foreach (var leaderboard in leaderboards) {
                     var discs = character.Discs.Select((d, idx) =>
                         new DriveDisc(d.SetId, Convert.ToUInt32(idx), (Rarity)d.Rarity, Stat.Stats[(Affix)d.MainStat.Affix],
@@ -113,7 +113,7 @@ public static class Program {
                             StunMultiplier = leaderboard.StunMultiplier / 1000d
                         });
 
-                    writer.WriteResult(character.Uid, leaderboard.Id, result);
+                    writer.WriteResult(character.BuildId, isPrimary, character.Uid, leaderboard.Id, result);
 
                     if (writer.Count % 10000 == 0) {
                         Console.WriteLine($"Processed {writer.Count} characters");

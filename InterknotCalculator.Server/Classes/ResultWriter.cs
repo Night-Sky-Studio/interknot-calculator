@@ -20,9 +20,11 @@ public class ResultWriter : IDisposable, IAsyncDisposable {
         Writer.Write(0x00000000); // padding
     }
 
-    public void WriteResult(uint uid, uint leaderboardId, CalcResult result) {
+    public void WriteResult(uint buildId, bool isPrimary, uint uid, uint leaderboardId, CalcResult result) {
         Count++;
         Writer.Write("CHR"u8);
+        Writer.Write(buildId);
+        Writer.Write((byte)(isPrimary ? 1 : 0));
         Writer.Write(uid);
         Writer.Write(leaderboardId);
         var data = result.Encode();

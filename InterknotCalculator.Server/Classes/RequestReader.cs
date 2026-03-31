@@ -36,11 +36,11 @@ public static class RequestReader {
     );
     public record DiscStat(byte Affix, byte Level);
     public record DriveDisc(uint SetId, byte Rarity, DiscStat MainStat, DiscStat[] SubStats);
-    public record Character(uint Uid, uint CharacterId, IEnumerable<DriveDisc> Discs);
+    public record Character(uint BuildId, uint Uid, uint CharacterId, IEnumerable<DriveDisc> Discs);
 
     public static void Read(
         Stream stream,
-        Action<IEnumerable<Leaderboard>, Character>? onCharacter = null
+        Action<IEnumerable<Leaderboard>, Character, bool>? onCharacter = null
     ) {
         using var reader = new BinaryReader(stream);
 
@@ -97,6 +97,8 @@ public static class RequestReader {
             if (magic != "CHR") {
                 throw new InvalidDataException("Invalid IKNC character header");
             }
+            var buildId = reader.ReadUInt32();
+            var isPrimary = reader.ReadByte();
             var uid = reader.ReadUInt32();
             var characterId = reader.ReadUInt32();
             
@@ -114,7 +116,7 @@ public static class RequestReader {
                 }
             }
 
-            onCharacter?.Invoke(leaderboards[characterId], new(uid, characterId, discs));
+            onCharacter?.Invoke(leaderboards[characterId], new(buildId, uid, characterId, discs), isPrimary == 1);
         }
     }
 }
