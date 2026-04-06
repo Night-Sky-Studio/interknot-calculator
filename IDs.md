@@ -1,4 +1,4 @@
-Game version: 2.5
+Game version: 2.7
 
 # Agents
 ```
@@ -49,6 +49,10 @@ Game version: 2.5
 1461 Seed
 1471 Banyue
 1481 Dialyn
+1491 Sunna
+1501 Aria
+1511 Nangong Yu
+1521 Cissia
 ```
 
 # Weapons
@@ -85,6 +89,7 @@ Game version: 2.5
 13015 Marcato Desire
 13016 Reel Projector
 13019 Cauldron of Clarity
+13020 The Simmering Pot
 13101 Demara Battery Mark II
 13103 The Vault
 13106 Housekeeper
@@ -135,6 +140,10 @@ Game version: 2.5
 14146 Cordis Germina
 14147 Wrathful Vajra
 14148 Yesterday Calls
+14149 Thoughtbop
+14150 Angel in the Shell
+14151 Neon Fantasies
+14152 Serpentine Seeker
 ```
 
 # Drive Disc Sets
@@ -163,4 +172,6 @@ Game version: 2.5
 33400 Moonlight Lullaby
 33500 White Water Ballad
 33600 Shining Aria
+33700 Bunny in Wonderland
+33800 Notes From the Chained
 ```

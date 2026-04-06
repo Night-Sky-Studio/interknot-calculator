@@ -6,7 +6,6 @@
     "FullBonus": [
         {
             "Affix": "AnomalyProficiency",
-            "Tags": ["ExSpecial"],
             "Value": 45
         },
         {

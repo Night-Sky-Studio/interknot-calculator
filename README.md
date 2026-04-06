@@ -121,6 +121,10 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - King of the Summit (33200)
 - Dawn's Bloom (33300)
 - Moonlight Lullaby (33400)
+- White Water Ballad (33500)
+- Shining Aria (33600)
+- Bunny in Wonderland (33700)
+- Notes From the Chained (33800)
 
 ## Contributing
 This project uses .NET NativeAOT compilation, so if you want to introduce any library that uses dynamic code that
