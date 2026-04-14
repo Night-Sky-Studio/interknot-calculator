@@ -39,6 +39,7 @@ public class Calculator {
     private static Agent CreateAgentReference(uint agentId) {
         return agentId switch {
             AgentId.Nicole       => Nicole.Reference(), // Support agent - provide reference implementation
+            AgentId.Koleda       => Koleda.Reference(),
             AgentId.Soukaku      => Soukaku.Reference(),
             AgentId.Lycaon       => Lycaon.Reference(),
             AgentId.Lucy         => Lucy.Reference(),
