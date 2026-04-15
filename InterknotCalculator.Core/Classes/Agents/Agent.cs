@@ -94,19 +94,21 @@ public abstract class Agent(uint id) {
             set.ApplyPassive?.Invoke(this);
         }
 
-        foreach (var passive in Weapon?.Passive ?? []) {
-            if (passive.SkillTags.Length != 0) {
-                TagBonus.Add(passive);
-            } else {
-                BonusStats[passive.Affix] += passive.Value;
+        if (Weapon?.Speciality == Speciality) {
+            foreach (var passive in Weapon?.Passive ?? []) {
+                if (passive.SkillTags.Length != 0) {
+                    TagBonus.Add(passive);
+                } else {
+                    BonusStats[passive.Affix] += passive.Value;
+                }
             }
-        }
-        
-        foreach (var stat in Weapon?.ExternalBonus ?? []) {
-            if (stat.SkillTags.Length != 0) {
-                ExternalTagBonus.Add(stat);
-            } else {
-                ExternalBonus[stat.Affix] += stat.Value;
+            
+            foreach (var stat in Weapon?.ExternalBonus ?? []) {
+                if (stat.SkillTags.Length != 0) {
+                    ExternalTagBonus.Add(stat);
+                } else {
+                    ExternalBonus[stat.Affix] += stat.Value;
+                }
             }
         }
         
