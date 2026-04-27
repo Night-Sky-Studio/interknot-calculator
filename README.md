@@ -92,6 +92,7 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Timeweaver (14122)
 - Riot Suppressor Mark VI (14124)
 - Sharpened Stinger (12126)
+- Myriad Eclipse (14129)
 - Elegant Vanity (12131)
 - Heartstring Nocturne (14132)
 - Flight of Fancy (14133)
