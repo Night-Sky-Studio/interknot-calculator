@@ -1,0 +1,18 @@
+{
+    "Speciality": "Attack",
+    "Rarity": "A",
+    "MainStat": {
+        "Affix": "Atk",
+        "Value": 594
+    },
+    "SecondaryStat": {
+        "Affix": "AtkRatio",
+        "Value": 0.25
+    },
+    "Passive": [
+        {
+            "Affix": "CombatAtkRatio",
+            "Value": 0.192
+        }
+    ]
+}

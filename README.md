@@ -69,10 +69,12 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Pan Yinhu (1421)
 
 ### Weapons
+- Starlight Engine (13004)
 - Precious Fossilized Core (13006)
-- Weeping Gemini(13008)
+- Weeping Gemini (13008)
 - Electro-Lip Gloss (13009)
 - Marcato Desire (13015)
+- Cauldron of Clarity (13019)
 - The Vault (13103)
 - Bashful Demon (13113)
 - Kaboom the Cannon (13115)
