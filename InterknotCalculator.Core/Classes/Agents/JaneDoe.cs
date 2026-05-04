@@ -3,7 +3,7 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public sealed class JaneDoe : Agent, IAgentReference<JaneDoe> {
+public class JaneDoe : Agent, IAgentReference<JaneDoe> {
     public static JaneDoe Reference() {
         var jane = new JaneDoe {
             Stats = {
@@ -121,5 +121,33 @@ public sealed class JaneDoe : Agent, IAgentReference<JaneDoe> {
         }
 
         return [];   
+    }
+}
+
+public class JaneDoeM1 : JaneDoe {
+    public override void ApplyPassive() {
+        base.ApplyPassive();
+        
+        BonusStats[Affix.AnomalyBuildupBonus] += 0.15;
+        BonusStats[Affix.DmgBonus] += AnomalyProficiency * 0.001;
+    }
+}
+
+public class JaneDoeM2 : JaneDoeM1 {
+    private bool IgnoresEnemyDefense { get; set; } = false;
+    
+    public override void RegisterHooks(Context ctx) {
+        double critRate = 0.05 + Math.Min(0.4 + AnomalyProficiency * 0.0016, 1), 
+            critDamage = 1;
+
+        ctx.AnomalyCritMultiplier = 1 + critRate * critDamage;
+        
+        ctx.Events.OnAnomalyTriggered.Add((_, e) => {
+            if (e.Element is not (Element.Physical or Element.HonedEdge)) return;
+            if (IgnoresEnemyDefense) return;
+                
+            BonusStats[Affix.ResPen] += 0.15;
+            IgnoresEnemyDefense = true;
+        });
     }
 }
