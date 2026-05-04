@@ -14,9 +14,10 @@ public class Calculator {
     /// Creates an Agent instance from known agents IDs
     /// </summary>
     /// <param name="agentId">Agent ID</param>
+    /// <param name="mindscape">Mindscape Level</param>
     /// <returns><see cref="Agent"/> instance with specific implementation</returns>
     /// <exception cref="ArgumentOutOfRangeException">Agent not implemented</exception>
-    private static Agent CreateAgentInstance(uint agentId) {
+    private static Agent CreateAgentInstance(uint agentId, uint mindscape = 0) {
         return agentId switch {
             AgentId.Soldier11    => new Soldier11(),
             AgentId.Miyabi       => new Miyabi(),
@@ -60,6 +61,7 @@ public class Calculator {
     /// </summary>
     /// <param name="characterId">Agent ID</param>
     /// <param name="weaponId">Weapon ID</param>
+    /// <param name="mindscape">Mindscape Level</param>
     /// <param name="driveDiscs">Agent's equipped Drive Discs</param>
     /// <param name="team">Team members IDs collection (except current agent)</param>
     /// <param name="rotation">Collection of agent skills</param>
@@ -68,14 +70,15 @@ public class Calculator {
     /// <returns>A collection of agent ctx.Actions</returns>
     public CalcResult Calculate(uint characterId, uint weaponId,
         DriveDisc[] driveDiscs, IEnumerable<uint> team, 
-        IEnumerable<string> rotation, Enemy enemy, CalculationType calcType = CalculationType.Damage) {
-        
+        IEnumerable<string> rotation, Enemy enemy, CalculationType calcType = CalculationType.Damage,
+        uint mindscape = 0) {
+
         var ctx = new Context {
             Team = {
                 // Initialize the agent and the weapon
                 // Having a dictionary here allows us to use abilities 
                 // of other team members
-                [characterId] = CreateAgentInstance(characterId)
+                [characterId] = CreateAgentInstance(characterId, mindscape)
             },
             MainAgentId = characterId
         };

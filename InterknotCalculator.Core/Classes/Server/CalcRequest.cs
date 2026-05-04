@@ -39,6 +39,9 @@ public record CalcRequest {
 
     [JsonPropertyName("rotation")]
     public string[] Rotation { get; set; } = [];
+    
+    [JsonPropertyName("mindscape")]
+    public uint Mindscape { get; set; }
 
     public static CalcRequest Decode(byte[] data) {
         using var stream = new MemoryStream(data);
