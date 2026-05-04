@@ -12,8 +12,8 @@ public class DisorderTests : AgentsTest {
         var prevTeam = _jane.Team.Clone();
         var prevRotation = _jane.Rotation.Clone();
         _jane.Team = [
-            1171, // Burnice
-            1151  // Lucy
+            AgentId.Burnice,
+            AgentId.Lucy
         ];
         _jane.Rotation = [
             "1171.energizing_speciality_drink",
@@ -35,7 +35,13 @@ public class DisorderTests : AgentsTest {
             _jane.Team, _jane.Rotation, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
-        // Assert.That(result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly), Is.EqualTo(3));
+        
+        Assert.That(result.PerAction, Has.Exactly(5)
+            .Matches<AgentAction>(action => action.Tag is SkillTag.AttributeAnomaly));
+
+        Assert.That(result.PerAction, Has.Exactly(1).Matches<AgentAction>(action => action is {
+            Name: "disorder", AgentId: AgentId.Jane, Damage: > 0
+        }));
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

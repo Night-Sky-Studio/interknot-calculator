@@ -70,8 +70,8 @@ public class MiyabiTests : AgentsTest {
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
-        Assert.That(result.PerAction.Any(action => action.Name == "frostburn"), Is.True);
-        Assert.That(result.PerAction.Any(action => action.Name == "shatter"), Is.True);
+        Assert.That(result.PerAction, Has.Exactly(1).Matches<AgentAction>(action => action.Name == "frostburn"));
+        Assert.That(result.PerAction, Has.Exactly(1).Matches<AgentAction>(action => action.Name == "shatter"));
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

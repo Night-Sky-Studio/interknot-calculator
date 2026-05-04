@@ -89,6 +89,7 @@ public class SilverAnbyTests : AgentsTest {
             SilverAnby.Team, SilverAnby.Rotation, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
+        Assert.That(result.PerAction, Has.Exactly(12).Matches<AgentAction>(a => a.Tag is SkillTag.Aftershock));
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
