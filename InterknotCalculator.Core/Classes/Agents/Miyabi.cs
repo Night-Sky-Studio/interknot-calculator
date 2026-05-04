@@ -3,7 +3,7 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public sealed class Miyabi : Agent, ICustomAnomaly {
+public class Miyabi : Agent, ICustomAnomaly {
     public Element AnomalyElement { get; set; }
     
     public Miyabi() : base(1091) {
@@ -121,4 +121,45 @@ public sealed class Miyabi : Agent, ICustomAnomaly {
     // public override AgentAction GetAnomalyDamage(Element element, Enemy enemy) {
     //     base.GetAnomalyDamage(element, enemy);
     // }
+}
+
+public class MiyabiM1 : Miyabi {
+    public MiyabiM1() : base() {
+        // While in Shimotsuki Stance, every 1 point of Fallen Frost consumed will allow
+        // Basic Attack: Shimotsuki to ignore 6% of DEF, stacking up to 6 times
+        Skills["shimotsuki"].Affixes[Affix.ResPen] += 0.06 * 6;
+    }
+
+    private bool IsM2BonusActive { get; set; } = false;
+    
+    public override void RegisterHooks(Context ctx) {
+        ctx.Events.OnActionExecuted.Add((c, e) => {
+            // When the slash for charge level three of Shimotsuki hits an enemy under Frostburn,
+            // it will immediately remove the Frostburn state and increase all squad members'
+            // Anomaly Buildup Rate by 20%
+            if (IsM2BonusActive) return;
+            if (e.Ability is not { Name: "shimotsuki", Scale: 2 } || 
+                c.Enemy.AfflictedAnomaly?.Element is not Element.Frost) return;
+            c.Enemy.AfflictedAnomaly = null;
+            foreach (var agent in c.Team) {
+                agent.Value.BonusStats[Affix.AnomalyBuildupBonus] += 0.2;
+            }
+        });
+    }
+}
+
+public class MiyabiM2 : MiyabiM1 {
+    public MiyabiM2() : base() {
+        // Basic Attack: Kazahana and Dodge Counter DMG increases by 30%.
+        Skills["kazahana"].Affixes[Affix.DmgBonus] += 0.3;
+        Skills["kan_suzume"].Affixes[Affix.DmgBonus] += 0.3;
+    }
+
+    public override void ApplyPassive() {
+        base.ApplyPassive();
+        
+        // Upon entering the battlefield, Hoshimi Miyabi immediately obtains 6 points
+        // of Fallen Frost and her CRIT Rate increases by 15%.
+        BonusStats[Affix.CritRate] += 0.15;
+    }
 }

@@ -20,7 +20,12 @@ public class Calculator {
     private static Agent CreateAgentInstance(uint agentId, uint mindscape = 0) {
         return agentId switch {
             AgentId.Soldier11    => new Soldier11(),
-            AgentId.Miyabi       => new Miyabi(),
+            AgentId.Miyabi       => mindscape switch {
+                0 => new Miyabi(),
+                1 => new MiyabiM1(),
+                2 => new MiyabiM2(),
+                _ => throw new ArgumentOutOfRangeException(nameof(mindscape), mindscape, "Invalid mindscape value.")
+            },
             AgentId.Burnice      => new Burnice(),
             AgentId.Grace        => new Grace(),
             AgentId.Ellen        => new Ellen(),
