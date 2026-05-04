@@ -28,7 +28,16 @@ public class Calculator {
             },
             AgentId.Burnice      => new Burnice(),
             AgentId.Grace        => new Grace(),
-            AgentId.Ellen        => new Ellen(),
+            AgentId.Ellen        => mindscape switch {
+                0 => new Ellen(),
+                1 => new EllenM1(),
+                2 => new EllenM2(),
+                3 => new EllenM3(),
+                4 => new EllenM4(),
+                5 => new EllenM5(),
+                6 => new EllenM6(),
+                 _ => throw new ArgumentOutOfRangeException(nameof(mindscape), mindscape, "Invalid mindscape value.")
+            },
             AgentId.Harumasa     => new Harumasa(),
             AgentId.Yanagi       => new Yanagi(),
             AgentId.ZhuYuan      => new ZhuYuan(),

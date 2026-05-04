@@ -112,3 +112,79 @@ public class EllenTests : AgentsTest {
         Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
     }
 }
+
+[TestFixture]
+public class EllenM6Tests : AgentsTest {
+    private CalcRequest EllenM6 { get; } = new() {
+        AgentId = AgentId.Ellen,
+        WeaponId = WeaponId.DeepSeaVisitor,
+        Discs = [
+            new() {
+                SetId = DriveDiscSetId.WoodpeckerElectro,
+                Rarity = Rarity.S,
+                Stats = [Affix.Hp, Affix.Atk, Affix.CritDamage, Affix.CritRate, Affix.HpRatio],
+                Levels = [15, 1, 3, 2, 2]
+            },
+            new() {
+                SetId = DriveDiscSetId.WoodpeckerElectro,
+                Rarity = Rarity.S,
+                Stats = [Affix.Atk, Affix.DefRatio, Affix.AtkRatio, Affix.CritDamage, Affix.CritRate],
+                Levels = [15, 1, 3, 3, 2]
+            },
+            new() {
+                SetId = DriveDiscSetId.WoodpeckerElectro,
+                Rarity = Rarity.S,
+                Stats = [Affix.Def, Affix.CritRate, Affix.HpRatio, Affix.CritDamage, Affix.Atk],
+                Levels = [15, 3, 1, 4, 1]
+            },
+            new() {
+                SetId = DriveDiscSetId.WoodpeckerElectro,
+                Rarity = Rarity.S,
+                Stats = [Affix.CritDamage, Affix.DefRatio, Affix.AtkRatio, Affix.Pen, Affix.CritRate],
+                Levels = [15, 1, 2, 2, 3]
+            },
+            new() {
+                SetId = DriveDiscSetId.PolarMetal,
+                Rarity = Rarity.S,
+                Stats = [Affix.IceDmgBonus, Affix.CritDamage, Affix.Atk, Affix.AtkRatio, Affix.CritRate],
+                Levels = [15, 2, 2, 3, 1]
+            },
+            new() {
+                SetId = DriveDiscSetId.PolarMetal,
+                Rarity = Rarity.S,
+                Stats = [Affix.AtkRatio, Affix.Hp, Affix.Pen, Affix.CritDamage, Affix.CritRate],
+                Levels = [15, 2, 3, 2, 2]
+            },
+        ],
+        Mindscape = 6,
+        Team = [AgentId.Lycaon],
+        StunBonus = 1.5,
+        Rotation = [
+            "avalanche",
+            "endless_winter",
+            "tail_swipe",
+            "sharknami",
+            "icy_blade 2",
+            "flash_freeze_trimming 3",
+            "icy_blade 2",
+            "sharknami",
+            "icy_blade 2",
+            "flash_freeze_trimming 3",
+            "icy_blade 2"
+        ]
+    };
+    
+    [Test]
+    public void EllenM6Test() {
+        var enemy = new NotoriousDullahan();
+        var result = Calculator.Calculate(EllenM6.AgentId, EllenM6.WeaponId, GetDriveDiscs(EllenM6), 
+            EllenM6.Team, EllenM6.Rotation, enemy, mindscape: EllenM6.Mindscape);
+        
+        Assert.That(result.PerAction, Is.Not.Empty);
+        
+        Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
+        PrintActions(result.PerAction, result.Total);
+        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
+    }
+    
+}
