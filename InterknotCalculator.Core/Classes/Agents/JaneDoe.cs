@@ -97,15 +97,14 @@ public sealed class JaneDoe : Agent, IAgentReference<JaneDoe> {
         ]);
     }
 
-    public override void ApplyPassive() {
-        Anomalies[Element.Physical] = Anomaly.GetAnomalyByElement(Element.Physical)! with {
-            Bonuses = [
-                new(Affix.CritRate, 0.4 + AnomalyProficiency * 0.0016),
-                new(Affix.CritDamage, 0.5)
-            ],
-            CanCrit = true
-        };
+    public override void RegisterHooks(Context ctx) {
+        double critRate = 0.05 + Math.Min(0.4 + AnomalyProficiency * 0.0016, 1), 
+            critDamage = 0.5;
 
+        ctx.AnomalyCritMultiplier = 1 + critRate * critDamage;
+    }
+
+    public override void ApplyPassive() {
         BonusStats[Affix.AnomalyBuildupBonus] += 0.25;
         
         if (AnomalyProficiency > 120) {

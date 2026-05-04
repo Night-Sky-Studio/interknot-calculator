@@ -1,4 +1,3 @@
-using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
@@ -22,7 +21,7 @@ public class Yixuan : RuptureAgent, ICustomAnomaly {
         Stats[Affix.AnomalyMastery] = 92;
         Stats[Affix.AnomalyProficiency] = 90;
 
-        Anomalies[Element.AuricInk] = new(62.5 * 20, Element.Ether, []);
+        Anomalies[Element.AuricInk] = new(62.5 * 20, Element.Ether);
 
         Skills["cirrus_strike"] = new(SkillTag.BasicAtk, [
             new(92.00, 42.90, 25.96),
@@ -91,23 +90,23 @@ public class Yixuan : RuptureAgent, ICustomAnomaly {
         ]);
     }
 
-    public override Stat? ApplyAbilityPassive(string ability) => Skills[ability].Tag switch {
+    public override Stat? ApplyAbilityPassive(Ability ability) => ability.Tag switch {
         SkillTag.ExSpecial or 
         SkillTag.FollowUpAssist or 
         SkillTag.Chain or 
         SkillTag.Ultimate => new(Affix.DmgBonus, 0.6),
-        _ => ability is "auric_array" or "qingming_eruption" ? new(Affix.DmgBonus, 0.6) : null
+        _ => ability.Name is "auric_array" or "qingming_eruption" ? new(Affix.DmgBonus, 0.6) : null
     };
 
     private bool IsTeamPassiveActive { get; set; } = false;
 
-    public override IEnumerable<AgentAction> GetActionDamage(string skill, int scale, Enemy enemy) {
-        if (IsTeamPassiveActive && enemy.StunMultiplier > 1.0 
-                                && skill is "cloud_shaper" or "ashen_ink_becomes_shadows") {
-            Skills[skill].Affixes[Affix.DmgBonus] = 0.3;
+    public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
+        if (IsTeamPassiveActive && ctx.Enemy.StunMultiplier > 1.0 
+                                && ability.Name is "cloud_shaper" or "ashen_ink_becomes_shadows") {
+            Skills[ability.Name].Affixes[Affix.DmgBonus] = 0.3;
         }
 
-        return base.GetActionDamage(skill, scale, enemy);
+        return base.GetActionDamage(ctx, ability);
     }
 
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {

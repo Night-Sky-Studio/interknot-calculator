@@ -1,4 +1,3 @@
-using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -118,8 +117,35 @@ public sealed class Vivian : Agent {
         return baseAnomaly with { Scale = scale };
     }
 
-    public override IEnumerable<AgentAction> GetActionDamage(string skill, int scale, Enemy enemy) {
-        switch (skill) {
+    public override void RegisterHooks(Context ctx) {
+        ctx.Events.OnActionExecuted.Add((c, e) => {
+            if (e.Ability.Tag is not (SkillTag.ExSpecial or SkillTag.AttributeAnomaly) || c.Enemy.AfflictedAnomaly is null) return;
+            if (GuardFeathersCount == 0) return;
+            var anomalyElement = c.Enemy.AfflictedAnomaly.Element;
+            if (e.Agent.Anomalies.TryGetValue(anomalyElement, out var previousAnomaly)) {
+                var abloomAnomaly = CreateAbloom(anomalyElement);
+                e.Agent.Anomalies[anomalyElement] = previousAnomaly with {
+                    Scale = abloomAnomaly.Scale
+                };
+            } else {
+                e.Agent.Anomalies[anomalyElement] = CreateAbloom(anomalyElement);
+            }
+
+            var abloom = e.Agent.GetAnomalyDamage(ctx, anomalyElement, true);
+            ctx.ActionsQueue.Add(abloom with {
+                AgentId = Id, Name = $"abloom_{c.Enemy.AfflictedAnomaly}",
+            });
+
+            if (previousAnomaly is not null) {
+                e.Agent.Anomalies[anomalyElement] = previousAnomaly;
+            } else {
+                e.Agent.Anomalies.Remove(anomalyElement);
+            }
+        });
+    }
+
+    public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
+        switch (ability.Name) {
             case "fluttering_frock_suspension":
                 ConvertFeathers();
                 break;
@@ -128,7 +154,7 @@ public sealed class Vivian : Agent {
                 break;
         }
     
-        return base.GetActionDamage(skill, scale, enemy);
+        return base.GetActionDamage(ctx, ability);
     }
     
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {

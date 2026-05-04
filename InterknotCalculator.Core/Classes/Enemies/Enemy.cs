@@ -1,4 +1,5 @@
 using InterknotCalculator.Core.Classes.Agents;
+using InterknotCalculator.Core.Classes.Events;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
 
@@ -23,9 +24,7 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
         [Element.AuricInk] = new(),
         [Element.Physical] = new()
     };
-
-    public Action<Enemy, Element, uint>? AttributeAnomalyTrigger { get; set; }
-
+    
     public double GetDefenseMultiplier(double penRatio, double pen) => 
         LevelFactor / (Math.Max(Defense * (1 - penRatio) - pen, 0) + LevelFactor);
     
@@ -35,7 +34,7 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     
     public Anomaly? AfflictedAnomaly { get; set; } = null;
     
-    public void AddAnomalyBuildup(Agent agent, double value) {
+    public void AddAnomalyBuildup(Context ctx, Agent agent, double value) {
         var element = agent.Element;
         var anomaly = Anomaly.GetAnomalyByElement(element);
         
@@ -51,6 +50,7 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
         
         var buildup = AnomalyBuildup[element];
         buildup.AddContribution(agent.Id, value);
+        ctx.Events.AnomalyBuildup(ctx, new(agent, buildup.Current, element));
         
         var threshold = element == Element.Physical 
             ? AnomalyBuildupThreshold + AnomalyBuildupThreshold * 0.2
@@ -62,21 +62,27 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
         }
         
         if (buildup.Current > threshold) {
+            var anomalyThresholdReachedArgs = new AnomalyThresholdEventArgs(agent, element);
+            ctx.Events.AnomalyThreshold(ctx, anomalyThresholdReachedArgs);
+            
+            if (anomalyThresholdReachedArgs.Ignore) return;
+            
             // Frostburn -> Prepare for Shatter
             // Freeze does not deal damage and can be ignored
             if (element is Element.Frost) {
                 WaitingForShatter = !WaitingForShatter;
 
+                // ReSharper disable once RedundantBoolCompare
                 if (WaitingForShatter == false) {
                     buildup.Reset();
-                    AttributeAnomalyTrigger?.Invoke(this, Element.Ice, anomaly?.AgentId ?? 0); // Trigger Shatter
+                    ctx.Events.AnomalyTriggered(ctx, new(agent, Element.Ice)); // Trigger Shatter
                     return;
                 }
             }
             
             buildup.Reset();
             AnomalyBuildupThreshold = BaseAnomalyBuildupThreshold * Math.Pow(1.02, Math.Min(10, ++AnomalyTriggerCount));
-            AttributeAnomalyTrigger?.Invoke(this, element, anomaly?.AgentId ?? 0);
+            ctx.Events.AnomalyTriggered(ctx, new(agent, element));
             AfflictedAnomaly = anomaly;
         }
     }

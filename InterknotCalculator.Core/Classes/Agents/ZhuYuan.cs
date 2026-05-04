@@ -1,4 +1,3 @@
-using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -74,17 +73,17 @@ public sealed class ZhuYuan : Agent {
         ]);
     }
 
-    public override Stat? ApplyAbilityPassive(string ability) {
-        if (ability is "please_do_not_resist" or "overwhelming_firepower") {
+    public override Stat? ApplyAbilityPassive(Ability ability) {
+        if (ability.Name is "please_do_not_resist" or "overwhelming_firepower") {
             return new(Affix.DmgBonus, IsEnemyStunned ? 0.8 : 0.4);
         }
         return null;
     }
 
-    public override IEnumerable<AgentAction> GetActionDamage(string skill, int scale, Enemy enemy) {
-        IsEnemyStunned = enemy.StunMultiplier > 1;
+    public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
+        IsEnemyStunned = ctx.Enemy.StunMultiplier > 1;
 
-        return base.GetActionDamage(skill, scale, enemy);  
+        return base.GetActionDamage(ctx, ability);  
     } 
 
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {

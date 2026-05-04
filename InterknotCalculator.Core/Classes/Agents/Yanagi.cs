@@ -1,10 +1,10 @@
-using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
+using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public sealed class Yanagi : Agent {
+public sealed class Yanagi : Agent, IPolarityDisorderAgent {
     private bool KagenActive { get; set; }
     
     private void ToggleStance() {
@@ -87,38 +87,35 @@ public sealed class Yanagi : Agent {
         ]);
     }
 
+    // TODO: check if this flag can be replaced with event bus
     private bool IsPolarityDisorder { get; set; }
     protected override double GetDisorderBaseMultiplier(Element element, double attack, Func<double, double>? mvReducer = null) {
         return IsPolarityDisorder
             ? GetDisorderTimeMultiplier(element, prev => prev + 2.5) * attack * 0.15 + 32 * AnomalyProficiency
             : base.GetDisorderBaseMultiplier(element, attack, prev => prev + 2.5);
     }
-    
-    public override IEnumerable<AgentAction> GetActionDamage(string skill, int scale, Enemy enemy) {
-        var result = base.GetActionDamage(skill, scale, enemy).ToList();
 
-        switch (Skills[skill].Tag) {
-            case SkillTag.ExSpecial:
-            case SkillTag.FollowUpAssist:
-                ToggleStance();
-                if (scale == 1) {
-                    goto case SkillTag.Ultimate;
-                }
-                break;
-            case SkillTag.Ultimate: {
-                if (enemy.AfflictedAnomaly is not null) {
-                    IsPolarityDisorder = true;
-                    result.Add(GetAnomalyDamage(Element.None, enemy) with {
-                        AgentId = Id,
-                        Name = "polarity_disorder"
-                    });
-                    IsPolarityDisorder = false;
-                }
-                break;
-            }
-        }
-        
-        return result;
+    public AgentAction GetPolarityDisorder(Context ctx) {
+        IsPolarityDisorder = true;
+        var polarityDisorder = GetAnomalyDamage(ctx, Element.None) with {
+            AgentId = Id,
+            Name = "polarity_disorder"
+        };
+        IsPolarityDisorder = false;
+        return polarityDisorder;
+    }
+    
+    public override void RegisterHooks(Context ctx) {
+        ctx.Events.OnActionExecuted.Add((c, e) => {
+            if (e.Agent != this) return;
+            if (e.Ability.Tag is not (SkillTag.Ultimate or SkillTag.ExSpecial)) return;
+            ToggleStance();
+            // only trigger PD on downward attack, which is only the second hit of Gekka Ruten
+            if (e.Ability.Tag is SkillTag.ExSpecial && e.Ability.Scale != 1) return;
+            if (c.Enemy.AfflictedAnomaly is null) return;
+
+            ctx.ActionsQueue.Add(GetPolarityDisorder(ctx));
+        });
     }
 
     public override void ApplyPassive() {

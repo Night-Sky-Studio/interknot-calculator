@@ -7,5 +7,5 @@ namespace InterknotCalculator.Core.Classes.Events;
 public class AnomalyThresholdEventArgs(Agent agent, Element element, bool ignore = false) : EventArgs, ICalcEventArgs {
     public Agent Agent { get; } = agent;
     public Element Element { get; } = element;
-    public bool Ignore { get; } = ignore;
+    public bool Ignore { get; set; } = ignore;
 }

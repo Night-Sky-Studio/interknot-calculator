@@ -1,3 +1,5 @@
+using InterknotCalculator.Core.Classes.Agents;
+
 namespace InterknotCalculator.Core.Classes;
 
 public record RotationAction(uint AgentId, string ActionName, int Scale) {
@@ -31,5 +33,10 @@ public record RotationAction(uint AgentId, string ActionName, int Scale) {
         }
 
         return new(agentId, actionName, scale);
+    }
+
+    public Ability ToAbility(Agent agent) {
+        var skill = agent.Skills[ActionName];
+        return new(skill.Tag, ActionName, Scale - 1);
     }
 }

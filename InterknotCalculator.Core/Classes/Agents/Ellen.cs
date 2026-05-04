@@ -75,9 +75,9 @@ public sealed class Ellen : Agent {
         ]);
     }
 
-    public override Stat? ApplyAbilityPassive(string ability) {
-        switch (ability) {
-            case "arctic_ambush" or "flash_freeze_trimming":
+    public override Stat? ApplyAbilityPassive(Ability ability) {
+        switch (ability.Name) {
+            case "flash_freeze_trimming":
                 return new(Affix.CritDamage, 1);
             default:
                 return null;
