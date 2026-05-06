@@ -1,4 +1,4 @@
-Game version: 2.7
+Game version: 2.8
 
 # Agents
 ```
@@ -53,6 +53,8 @@ Game version: 2.7
 1501 Aria
 1511 Nangong Yu
 1521 Cissia
+1531 Starlight - Billy
+1541 Promeia
 ```
 
 # Weapons
@@ -144,6 +146,8 @@ Game version: 2.7
 14150 Angel in the Shell
 14151 Neon Fantasies
 14152 Serpentine Seeker
+14153 Starlight Rider Faceplate
+14154 Frostfall Sickle
 ```
 
 # Drive Disc Sets

@@ -1,5 +1,5 @@
 /// AUTO-GENERATED, DO NOT EDIT!!!
-/// Game version: 2.7
+/// Game version: 2.8
 
 namespace InterknotCalculator.Core.Enums;
 
@@ -55,6 +55,8 @@ public static class AgentId {
     public const uint Aria = 1501;
     public const uint NangongYu = 1511;
     public const uint Cissia = 1521;
+    public const uint StarlightBilly = 1531;
+    public const uint Promeia = 1541;
 }
 
 public static class WeaponId {
@@ -145,6 +147,8 @@ public static class WeaponId {
     public const uint AngelInTheShell = 14150;
     public const uint NeonFantasies = 14151;
     public const uint SerpentineSeeker = 14152;
+    public const uint StarlightRiderFaceplate = 14153;
+    public const uint FrostfallSickle = 14154;
 }
 
 public static class DriveDiscSetId {
