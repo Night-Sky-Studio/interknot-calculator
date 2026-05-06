@@ -118,7 +118,7 @@ public class EllenM1 : Ellen {
         
         // For each point of Flash Freeze Charge consumed, Ellen’s CRIT Rate
         // is increased by 2% for 15s, stacking up
-        BonusStats[Affix.IceDmgBonus] += 0.02 * 6;
+        BonusStats[Affix.CritRate] += 0.02 * 6;
     }
 }
 
