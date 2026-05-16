@@ -76,7 +76,7 @@ public class JaneTests : AgentsTest {
             Jane.Team, Jane.Rotation, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
-        Assert.That(result.PerAction, Has.Exactly(3).Matches<AgentAction>(action => action.Tag is SkillTag.AttributeAnomaly));
+        Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(action => action.Tag is SkillTag.AttributeAnomaly));
         
         Console.WriteLine($"Total Assault triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

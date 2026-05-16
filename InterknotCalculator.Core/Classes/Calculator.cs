@@ -52,6 +52,7 @@ public class Calculator {
             AgentId.Soldier0Anby => new SilverAnby(),
             AgentId.Trigger      => new Trigger(),
             AgentId.Yixuan       => new Yixuan(),
+            AgentId.Alice        => new Alice(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent instance wasn't found.")
         };
     }
@@ -71,6 +72,8 @@ public class Calculator {
             AgentId.Trigger      => Trigger.Reference(),
             AgentId.PanYinhu     => PanYinhu.Reference(),
             AgentId.JuFufu       => JuFufu.Reference(),
+            AgentId.Vivian       => Vivian.Reference(),
+            AgentId.Yuzuha       => Yuzuha.Reference(),
             _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent reference wasn't found.")
         };
     }
@@ -99,7 +102,8 @@ public class Calculator {
                 // of other team members
                 [characterId] = CreateAgentInstance(characterId, mindscape)
             },
-            MainAgentId = characterId
+            MainAgentId = characterId,
+            Enemy = enemy
         };
 
         ctx.MainAgent.SetWeapon(weaponId);

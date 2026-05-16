@@ -376,14 +376,14 @@ public abstract class Agent(uint id) {
         return baseBuildup * amBonus * amBuildupBonus * amBuildupRes;
     }
     
-    public virtual AgentAction GetAnomalyDamage(Context ctx, Element element, bool abloom = false) {
+    public virtual AgentAction GetAnomalyDamage(Context ctx, Element element, bool skipEvents = false) {
         // Agents can override default anomalies
         if (!Anomalies.TryGetValue(element, out var data)) {
             data = Anomaly.GetAnomalyByElement(element)!;
         }
         
         // Prevent Abloom from causing a stack overflow by recursion
-        if (!abloom)
+        if (!skipEvents)
             ctx.Events.ActionExecuted(ctx, new(this, new(SkillTag.AttributeAnomaly, data.ToString())));
         
         // Some characters can make anomalies crit

@@ -1,21 +1,32 @@
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
+using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public sealed class Vivian : Agent {
-    private int _flightFeathersCount = 0;
-    public int FlightFeathersCount {
-        get => _flightFeathersCount;
-        set => _flightFeathersCount = Math.Clamp(value, 0, 5);
+public sealed class Vivian : Agent, IAgentReference<Vivian> {
+    public static Vivian Reference() {
+        var vivian = new Vivian {
+            Stats = {
+                [Affix.Atk] = 2200,
+                [Affix.AnomalyMastery] = 198,
+                [Affix.AnomalyProficiency] = 415
+            }
+        };
+        vivian.ApplyPassive();
+        return vivian;
     }
     
-    private int _guardFeathersCount = 0;
-    public int GuardFeathersCount {
-        get => _guardFeathersCount; 
-        set => _guardFeathersCount = Math.Clamp(value, 0, 5);
-    }
-    
+    private int FlightFeathersCount {
+        get;
+        set => field = Math.Clamp(value, 0, 5);
+    } = 0;
+
+    private int GuardFeathersCount {
+        get;
+        set => field = Math.Clamp(value, 0, 5);
+    } = 0;
+
     private void ConvertFeathers() {
         GuardFeathersCount += FlightFeathersCount;
     }

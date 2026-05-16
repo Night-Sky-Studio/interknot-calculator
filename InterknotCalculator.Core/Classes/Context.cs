@@ -11,7 +11,7 @@ public sealed class Context {
     public uint MainAgentId { get; set; }
     public Agent MainAgent => Team[MainAgentId];
     
-    public Enemy Enemy { get; } = new NotoriousDullahan();
+    public Enemy Enemy { get; init; } = new NotoriousDullahan();
     public List<AgentAction> Actions { get; } = [];
     public List<AgentAction> ActionsQueue { get; } = [];
     public EventBus Events { get; } = new();
