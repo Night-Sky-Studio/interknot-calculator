@@ -29,6 +29,7 @@ public sealed class Vivian : Agent, IAgentReference<Vivian> {
 
     private void ConvertFeathers() {
         GuardFeathersCount += FlightFeathersCount;
+        FlightFeathersCount = 0;
     }
     
     public Vivian() : base(1331) {
@@ -102,7 +103,7 @@ public sealed class Vivian : Agent, IAgentReference<Vivian> {
     public Anomaly CreateAbloom(Element element) {
         Element anomalyElement = element switch {
             Element.Fire => Element.Fire,
-            Element.Physical => Element.Physical,
+            Element.Physical or Element.HonedEdge => Element.Physical,
             Element.Electric => Element.Electric,
             Element.Frost or Element.Ice => Element.Ice,
             Element.AuricInk or Element.Ether => Element.Ether,
@@ -114,7 +115,7 @@ public sealed class Vivian : Agent, IAgentReference<Vivian> {
         double scale = element switch {
             Element.Fire =>
                 baseAnomaly.Scale * (0.8 * AnomalyProficiency) / 100,
-            Element.Physical =>
+            Element.Physical or Element.HonedEdge =>
                 baseAnomaly.Scale * (0.075 * AnomalyProficiency) / 100,
             Element.Electric =>
                 baseAnomaly.Scale * (0.32 * AnomalyProficiency) / 100,
@@ -128,30 +129,45 @@ public sealed class Vivian : Agent, IAgentReference<Vivian> {
         return baseAnomaly with { Scale = scale };
     }
 
+    private void ProcessAbloom(Context ctx, Agent agent, Element element) {
+        if (GuardFeathersCount == 0) return;
+        GuardFeathersCount--;
+        
+        if (agent.Anomalies.TryGetValue(element, out var previousAnomaly)) {
+            var abloomAnomaly = CreateAbloom(element);
+            agent.Anomalies[element] = previousAnomaly with {
+                Scale = abloomAnomaly.Scale
+            };
+        } else {
+            agent.Anomalies[element] = CreateAbloom(element);
+        }
+
+        var abloom = agent.GetAnomalyDamage(ctx, element, true);
+        ctx.ActionsQueue.Add(abloom with {
+            AgentId = Id, Name = $"abloom_{previousAnomaly}",
+        });
+
+        if (previousAnomaly is not null) {
+            agent.Anomalies[element] = previousAnomaly;
+        } else {
+            agent.Anomalies.Remove(element);
+        }
+    }
+    
     public override void RegisterHooks(Context ctx) {
         ctx.Events.OnActionExecuted.Add((c, e) => {
-            if (e.Ability.Tag is not (SkillTag.ExSpecial or SkillTag.AttributeAnomaly) || c.Enemy.AfflictedAnomaly is null) return;
-            if (GuardFeathersCount == 0) return;
-            var anomalyElement = c.Enemy.AfflictedAnomaly.Element;
-            if (e.Agent.Anomalies.TryGetValue(anomalyElement, out var previousAnomaly)) {
-                var abloomAnomaly = CreateAbloom(anomalyElement);
-                e.Agent.Anomalies[anomalyElement] = previousAnomaly with {
-                    Scale = abloomAnomaly.Scale
-                };
-            } else {
-                e.Agent.Anomalies[anomalyElement] = CreateAbloom(anomalyElement);
-            }
-
-            var abloom = e.Agent.GetAnomalyDamage(ctx, anomalyElement, true);
-            ctx.ActionsQueue.Add(abloom with {
-                AgentId = Id, Name = $"abloom_{c.Enemy.AfflictedAnomaly}",
-            });
-
-            if (previousAnomaly is not null) {
-                e.Agent.Anomalies[anomalyElement] = previousAnomaly;
-            } else {
-                e.Agent.Anomalies.Remove(anomalyElement);
-            }
+            if (e.Ability.Tag is not SkillTag.ExSpecial || c.Enemy.AfflictedAnomaly is null) return;
+            ProcessAbloom(c, e.Agent, c.Enemy.AfflictedAnomaly.Element);
+        });
+        
+        // an additional "fuck you" from Alice
+        ctx.Events.OnAftershock.Add((c, e) => {
+            if (e.Ability.Tag is not SkillTag.AttributeAnomaly || c.Enemy.AfflictedAnomaly is null) return;
+            ProcessAbloom(c, e.Agent, c.Enemy.AfflictedAnomaly.Element);
+        });
+        
+        ctx.Events.OnAnomalyTriggered.Add((c, e) => {
+            ProcessAbloom(c, e.Agent, e.Element);
         });
     }
 

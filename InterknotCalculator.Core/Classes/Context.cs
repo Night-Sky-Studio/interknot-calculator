@@ -10,7 +10,7 @@ public sealed class Context {
     public Dictionary<uint, Agent> Team { get; } = new();
     public uint MainAgentId { get; set; }
     public Agent MainAgent => Team[MainAgentId];
-    
+
     public Enemy Enemy { get; init; } = new NotoriousDullahan();
     public List<AgentAction> Actions { get; } = [];
     public List<AgentAction> ActionsQueue { get; } = [];
@@ -21,4 +21,12 @@ public sealed class Context {
     /// to the entire team, not just to her...
     /// </remarks>
     public double AnomalyCritMultiplier { get; set; } = 1;
+
+    public void ProcessActionsQueue() { 
+        if (ActionsQueue.Count > 0) {
+            Actions.AddRange(ActionsQueue);
+            ActionsQueue.Clear();
+        }
+    }
+
 }

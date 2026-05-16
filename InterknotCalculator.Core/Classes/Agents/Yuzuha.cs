@@ -47,7 +47,7 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
         ]);
         
         Skills["sugarburst_sparkles"] = new(SkillTag.BasicAtk, [
-            new(55, 0, anomalyBuildup: 17.66) 
+            new(55, 0, anomalyBuildup: 17.66 * 4)
         ]) {
             Affixes = {
                 [Affix.AnomalyBuildupBonus] = 0.25
@@ -74,7 +74,7 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
                 AgentId = Id,
                 Damage = 0,
                 Daze = 0,
-                Name = "sugarburst_sparkles",
+                Name = "sugarburst_sparkles_x4",
                 Tag = SkillTag.BasicAtk,
             });
             

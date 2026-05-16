@@ -1,12 +1,16 @@
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
+using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public class Alice : Agent {
+public class Alice : Agent, ICustomAnomaly {
+    public Element AnomalyElement { get; set; }
+    
     public Alice() : base(AgentId.Alice) {
         Speciality = Speciality.Anomaly;
         Element = Element.Physical;
+        AnomalyElement = Element.Physical;
         Rarity = Rarity.S;
         Faction = Faction.SpookShack;
 
@@ -20,6 +24,11 @@ public class Alice : Agent {
         Stats[Affix.AnomalyProficiency] = 118;
         Stats[Affix.EnergyRegen] = 1.2;
 
+        // Anomalies[Element.Physical] = Anomaly.GetAnomalyByElement(Element.Physical);
+        Anomalies[Element.Physical] = Anomaly.GetAnomalyByElement(Element.Physical) with {
+            SelfDisorder = true
+        };
+        
         Skills["celestial_overture"] = new(SkillTag.BasicAtk, [
             new(111.2, 60.6, 29.76, 1.441),
             new(176, 105, 52.13, 2.538),
@@ -31,7 +40,8 @@ public class Alice : Agent {
         Skills["starshine_waltz"] = new(SkillTag.BasicAtk, [
             new(378.1, 83.9, 78.16),
             new(609.1, 117.2, 109.66),
-            new(1931.5, 296.2, 467.83),
+            // Real buildup is 467.83, but we really need to trigger polarity assault
+            new(1931.5, 296.2, 467.83)
         ]);
         
         Skills["blade_dancers_gale"] = new(SkillTag.Dash, [
@@ -79,39 +89,40 @@ public class Alice : Agent {
     public override void RegisterHooks(Context ctx) {
         // Core passive
         ctx.Events.OnAnomalyTriggered.Add((c, e) => {
-            if (e.Element is not (Element.Physical or Element.HonedEdge)) return;
+            if (!e.Element.Matches(Element.Physical)) return;
             
             var action = e.Agent.GetAnomalyDamage(c, e.Element, true);
             action.Damage *= 0.175;
             action.Name = "twin_rainbows_of_the_swordheart";
-            c.Actions.Add(action);
+            c.ActionsQueue.Add(action);
         });
 
-        ctx.Events.OnAnomalyTriggered.Add((c, e) => {
-            if (e.Agent != this && e.Element is Element.Physical) return;
+        ctx.Events.OnAnomalyTriggered.Add((_, e) => {
+            if (e.Agent != this && e.Element.Matches(Element.Physical)) return;
             if (BuildupBonusActive) return;
             
             BuildupBonusActive = true;
             BonusStats[Affix.AnomalyBuildupBonus] += 0.125;
         });
         
-        // Hold E for polarity assault
-        ctx.Events.OnActionExecuted.Add((c, e) => {
+        // Hold BA for polarity assault
+        ctx.Events.OnAftershock.Add((c, e) => {
             if (e.Agent != this || e.Ability is not { Name: "starshine_waltz", Scale: 2 }) return;
             var polarityAssault = GetAnomalyDamage(c, Element.Physical, true) with {
                 Name = "polarity_assault"
             };
             c.ActionsQueue.Add(polarityAssault);
-
+            // well fuck me, I guess...
+            c.Events.Aftershock(c, new(this, new(SkillTag.AttributeAnomaly, "polarity_assault")));
+        
             if (c.Enemy.AfflictedAnomaly is null) return;
             var disorder = GetAnomalyDamage(c, Element.None, true);
-            c.Enemy.AfflictedAnomaly = null;
             c.ActionsQueue.Add(disorder);
         });
     }
 
     public override AgentAction GetAnomalyDamage(Context ctx, Element element, bool skipEvents = false) {
-        if (element is Element.None && ctx.Enemy.AfflictedAnomaly?.Element is Element.Physical) {
+        if (element is Element.None && ctx.Enemy.AfflictedAnomaly?.Element.Matches(Element.Physical) == true) {
             var bonus = Math.Min(0.18 * 7, 1.8);
             BonusStats[Affix.DisorderDmgBonus] += bonus;
             try {

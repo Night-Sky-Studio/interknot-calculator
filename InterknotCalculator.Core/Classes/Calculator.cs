@@ -126,15 +126,18 @@ public class Calculator {
             var isFrostburnShatter = element == Element.Ice && sender.AfflictedAnomaly?.Element == Element.Frost;
 
             // Process anomaly damage
-            ctx.ActionsQueue.Add(ctx.Team[agentId].GetAnomalyDamage(ctx, element));
+            var action = ctx.Team[agentId].GetAnomalyDamage(ctx, element, true);
+            ctx.ActionsQueue.Add(action);
+            ctx.Events.ActionExecuted(ctx, new(e.Agent, new(SkillTag.AttributeAnomaly, action.Name)));
 
             // Then process disorders
             if (sender.AfflictedAnomaly is { } anomaly && !isFrostburnShatter) {
-                if (anomaly.Element != element) {
+                if (anomaly.Element != element || anomaly.SelfDisorder) {
                     ctx.ActionsQueue.Add(ctx.Team[agentId].GetAnomalyDamage(ctx, Element.None));
-                } else {
-                    sender.AfflictedAnomaly = null;
-                }
+                } 
+                // else {
+                //     sender.AfflictedAnomaly = null;
+                // }
             }
         });
         
@@ -148,10 +151,12 @@ public class Calculator {
         }
         
         foreach (var stat in fullTeamPassive) {
-            if (stat.SkillTags.Length > 0) {
-                ctx.Team[characterId].TagBonus.Add(stat);
-            } else {
-                ctx.Team[characterId].BonusStats[stat.Affix] += stat.Value;
+            foreach (var character in ctx.Team.Values) {
+                if (stat.SkillTags.Length > 0) {
+                    character.TagBonus.Add(stat);
+                } else {
+                    character.BonusStats[stat.Affix] += stat.Value;
+                }
             }
         }
 
@@ -185,14 +190,22 @@ public class Calculator {
                 throw new ArgumentException($"Invalid action: {action}");
             }
             
-            ctx.Actions.AddRange(ctx.Team[act.AgentId].GetActionDamage(ctx, act.ToAbility(ctx.Team[act.AgentId])));
+            var agent = ctx.Team[act.AgentId];
+            var ability = act.ToAbility(agent);
+            // Step 1: Perform action
+            ctx.Actions.AddRange(agent.GetActionDamage(ctx, ability));
             
+            // Step 2: Process side effects
             // Anomalies are processed in a queue to maintain the order
             // This includes simultaneous anomaly triggers like disorders
-            if (ctx.ActionsQueue.Count > 0) {
-                ctx.Actions.AddRange(ctx.ActionsQueue);
-                ctx.ActionsQueue.Clear();
-            }
+            ctx.ProcessActionsQueue();
+            
+            // Step 3: Perform Aftershocks
+            // These happen after main anomaly triggers
+            ctx.Events.Aftershock(ctx, new(agent, ability));
+            
+            // Step 4: Process Aftershock side effects
+            ctx.ProcessActionsQueue();
         }
         
         // Cleanup ctx.Actions - remove all damage/daze from other agents

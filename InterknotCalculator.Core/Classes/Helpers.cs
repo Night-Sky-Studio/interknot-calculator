@@ -28,22 +28,22 @@ public static class Helpers {
     /// </summary>
     public static Affix GetRelatedAffixDmg(Element? element) {
         return element switch {
-            Element.Ice => Affix.IceDmgBonus,
+            Element.Ice or Element.Frost => Affix.IceDmgBonus,
             Element.Fire => Affix.FireDmgBonus,
             Element.Electric => Affix.ElectricDmgBonus,
-            Element.Physical => Affix.PhysicalDmgBonus,
-            Element.Ether => Affix.EtherDmgBonus,
+            Element.Physical or Element.HonedEdge => Affix.PhysicalDmgBonus,
+            Element.Ether or Element.AuricInk => Affix.EtherDmgBonus,
             _ => Affix.Unknown,
         };
     }
     
     public static Affix GetRelatedSheerDmg(Element? element) {
         return element switch {
-            Element.Ice => Affix.IceSheerBonus,
+            Element.Ice or Element.Frost => Affix.IceSheerBonus,
             Element.Fire => Affix.FireSheerBonus,
             Element.Electric => Affix.ElectricSheerBonus,
-            Element.Physical => Affix.PhysicalSheerBonus,
-            Element.Ether => Affix.EtherSheerBonus,
+            Element.Physical or Element.HonedEdge => Affix.PhysicalSheerBonus,
+            Element.Ether or Element.AuricInk => Affix.EtherSheerBonus,
             _ => Affix.Unknown,
         };
     }
@@ -53,11 +53,11 @@ public static class Helpers {
     /// </summary>
     public static Affix GetRelatedAffixRes(Element? element) {
         return element switch {
-            Element.Ice => Affix.IceResPen,
+            Element.Ice or Element.Frost => Affix.IceResPen,
             Element.Fire => Affix.FireResPen,
             Element.Electric => Affix.ElectricResPen,
-            Element.Physical => Affix.PhysicalResPen,
-            Element.Ether => Affix.EtherResPen,
+            Element.Physical or Element.HonedEdge => Affix.PhysicalResPen,
+            Element.Ether or Element.AuricInk => Affix.EtherResPen,
             _ => Affix.Unknown,
         };
     }

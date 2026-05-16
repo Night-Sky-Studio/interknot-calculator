@@ -15,15 +15,9 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
 
     // public SafeDictionary<Affix, double> Stats { get; set; } = new();
 
-    public Dictionary<Element, AnomalyBuildup> AnomalyBuildup { get; } = new() {
-        [Element.Ice] = new(),
-        [Element.Frost] = new(),
-        [Element.Fire] = new(),
-        [Element.Electric] = new(),
-        [Element.Ether] = new(),
-        [Element.AuricInk] = new(),
-        [Element.Physical] = new()
-    };
+    public Dictionary<Element, AnomalyBuildup> AnomalyBuildup { get; } = new();
+    private AnomalyBuildup GetBuildup(Element el) => 
+        AnomalyBuildup.TryGetValue(el, out var buildup) ? buildup : AnomalyBuildup[el] = new();
     
     public double GetDefenseMultiplier(double penRatio, double pen) => 
         LevelFactor / (Math.Max(Defense * (1 - penRatio) - pen, 0) + LevelFactor);
@@ -35,7 +29,7 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     public Anomaly? AfflictedAnomaly { get; set; } = null;
     
     private void TryTriggerAnomaly(Context ctx, Agent agent, Element element) {
-        var buildup = AnomalyBuildup[element];
+        var buildup = GetBuildup(element);
         
         var anomaly = Anomaly.GetAnomalyByElement(element);
         
@@ -43,14 +37,12 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
             element = customAnomaly.AnomalyElement;
             anomaly = agent.Anomalies[element];
         }
-
-        if (anomaly is not null) {
-            anomaly.Stats = agent.FinalStats;
-            anomaly.AgentId = agent.Id;
-        }
         
-        var threshold = element == Element.Physical 
-            ? AnomalyBuildupThreshold + AnomalyBuildupThreshold * 0.2
+        anomaly.Stats = agent.FinalStats;
+        anomaly.AgentId = agent.Id;
+        
+        var threshold = element.Matches(Element.Physical) 
+            ? AnomalyBuildupThreshold * 1.2
             : AnomalyBuildupThreshold;
 
         // Trigger Shatter manually
@@ -85,7 +77,7 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     }
     
     public void AddBuildupContribution(Context ctx, Agent agent, double value, Element element) {
-        var buildup = AnomalyBuildup[element];
+        var buildup = GetBuildup(element);
         buildup.AddContribution(agent.Id, value);
         ctx.Events.AnomalyBuildup(ctx, new(agent, buildup.Current, element));
     }
