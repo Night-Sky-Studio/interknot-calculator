@@ -46,6 +46,11 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
             new(483.4, 401.2, 324.62, -60)
         ]);
         
+        // Enemies under the effect of Sweet Scare will be attacked by a
+        // Basic Attack: Sugarburst Sparkles once every 1s.
+        // 
+        // To get any meaningful Anomaly Buildup buff, we estimate
+        // it by making 4 triggers of Sugarburst Sparkles.
         Skills["sugarburst_sparkles"] = new(SkillTag.BasicAtk, [
             new(55, 0, anomalyBuildup: 17.66 * 4)
         ]) {
@@ -64,6 +69,17 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
 
     public override void RegisterHooks(Context ctx) {
         ctx.Events.OnActionExecuted.Add((c, e) => {
+            // The Sweet Scare state lasts for 40.0s, repeated triggers reset the duration.
+            //
+            // When an enemy affected by Sweet Scare is first hit by an active character
+            // using an attack of their attribute, Flavor Match is triggered against that
+            // enemy, changing the attribute of Basic Attack: Sugarburst Sparkles and
+            // Basic Attack: Sugarburst Sparkles - Max against that enemy to match that of
+            // the character who triggered Flavor Match.
+            //
+            // When Sweet Scare is triggered again on an enemy, their existing Flavor Match
+            // state is removed. The process can be repeated to change the attribute of Basic
+            // Attack: Sugarburst Sparkles and Basic Attack: Sugarburst Sparkles - Max again.
             if (e.Agent == this) return;
             if (!SweetScareActive) return;
             if (e.Ability.Tag is SkillTag.AttributeAnomaly
@@ -84,6 +100,9 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
     }
 
     public override void ApplyPassive() {
+        // Tanuki Wish grants an ATK increase equal to 40% of Yuzuha's initial ATK,
+        // up to a maximum increase of 1,200, and increases the DMG dealt by those
+        // with the effect by 15%, lasting 40s. Repeated triggers reset the duration.
         ExternalBonus[Affix.Atk] += Math.Min(InitialAtk * 0.4, 1200);
         ExternalBonus[Affix.DmgBonus] += 0.15;
     }
@@ -92,6 +111,10 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
         if (team.Count < 2) return [];
 
         if (team.Any(a => a.Speciality is Speciality.Anomaly || a.Faction == Faction)) {
+            // If Yuzuha's Anomaly Mastery exceeds 100, every point over increases
+            // the Anomaly Buildup Rate of characters with Tanuki Wish by 0.2%, up
+            // to a maximum of 20%, and all Attribute Anomaly DMG and Disorder DMG
+            // by 0.2%, up to a maximum of 20%.
             return [
                 new(Affix.AnomalyBuildupBonus, 
                     Math.Min(Math.Max(AnomalyMastery - 100, 0) * 0.2, 0.2))

@@ -24,7 +24,7 @@ public static class ElementExtensions {
                 => other is Element.Physical or Element.HonedEdge,
             Element.Ether or Element.AuricInk 
                 => other is Element.Ether or Element.AuricInk,
-            _ => false
+            _ => element == other
         };
     }
 }

@@ -89,6 +89,10 @@ public class Alice : Agent, ICustomAnomaly {
     public override void RegisterHooks(Context ctx) {
         // Core passive
         ctx.Events.OnAnomalyTriggered.Add((c, e) => {
+            // After any squad member inflicts a Physical Anomaly on an enemy, Alice deals
+            // additional DMG each 0.95s of its active duration, equal to 2.5% of the
+            // original Physical Anomaly DMG.
+            
             if (!e.Element.Matches(Element.Physical)) return;
             
             var action = e.Agent.GetAnomalyDamage(c, e.Element, true);
@@ -98,11 +102,13 @@ public class Alice : Agent, ICustomAnomaly {
         });
 
         ctx.Events.OnAnomalyTriggered.Add((_, e) => {
-            if (e.Agent != this && e.Element.Matches(Element.Physical)) return;
+            // When Alice triggers Assault on an enemy, her Physical Anomaly Buildup
+            // Rate increases by 25% for 30s.
+            if (e.Agent != this || !e.Element.Matches(Element.Physical)) return;
             if (BuildupBonusActive) return;
             
             BuildupBonusActive = true;
-            BonusStats[Affix.AnomalyBuildupBonus] += 0.125;
+            BonusStats[Affix.AnomalyBuildupBonus] += 0.25;
         });
         
         // Hold BA for polarity assault
@@ -123,7 +129,12 @@ public class Alice : Agent, ICustomAnomaly {
 
     public override AgentAction GetAnomalyDamage(Context ctx, Element element, bool skipEvents = false) {
         if (element is Element.None && ctx.Enemy.AfflictedAnomaly?.Element.Matches(Element.Physical) == true) {
-            var bonus = Math.Min(0.18 * 7, 1.8);
+            // If Disorder is triggered while the enemy is suffering a Physical Anomaly,
+            // for every 1s of remaining Physical Anomaly duration, the Disorder DMG
+            // multiplier increases by 18%, up to a max of 180.0%.
+            
+            // We use assume that there are still 7s of physical anomaly left
+            const double bonus = 0.18 * 7;
             BonusStats[Affix.DisorderDmgBonus] += bonus;
             try {
                 return base.GetAnomalyDamage(ctx, element, skipEvents);
