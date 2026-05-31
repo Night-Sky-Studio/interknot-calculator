@@ -117,7 +117,7 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
             // by 0.2%, up to a maximum of 20%.
             return [
                 new(Affix.AnomalyBuildupBonus, 
-                    Math.Min(Math.Max(AnomalyMastery - 100, 0) * 0.2, 0.2))
+                    Math.Min(Math.Max(AnomalyMastery - 100, 0) * 0.002, 0.2))
             ];
         }
 

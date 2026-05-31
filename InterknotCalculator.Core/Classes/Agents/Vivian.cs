@@ -144,7 +144,7 @@ public sealed class Vivian : Agent, IAgentReference<Vivian> {
 
         var abloom = agent.GetAnomalyDamage(ctx, element, true);
         ctx.ActionsQueue.Add(abloom with {
-            AgentId = Id, Name = $"abloom_{previousAnomaly}",
+            AgentId = Id, Name = $"abloom_{ctx.Enemy.AfflictedAnomaly}",
         });
 
         if (previousAnomaly is not null) {
