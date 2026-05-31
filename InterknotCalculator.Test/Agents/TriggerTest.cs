@@ -82,6 +82,10 @@ public class TriggerTests : AgentsTest {
             Trigger.Team, Trigger.Rotation, enemy);
 
         Assert.That(result.PerAction, Is.Not.Empty);
+        Assert.That(result.PerAction, Has.Exactly(5).Matches<AgentAction>(a => a is {
+            Tag: SkillTag.Aftershock,
+            AgentId: AgentId.Trigger
+        }));
 
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

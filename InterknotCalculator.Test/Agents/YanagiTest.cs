@@ -81,6 +81,11 @@ public class YanagiTests : AgentsTest {
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
+        // has polarity_disorder and dmg is > 0
+        Assert.That(result.PerAction, Has.Exactly(3).Matches<AgentAction>(action => action is {
+            Name: "polarity_disorder", Damage: > 0
+        }));
+        
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
         Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");

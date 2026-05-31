@@ -68,6 +68,7 @@ public class GraceTests : AgentsTest {
             Grace.Team, Grace.Rotation, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
+        Assert.That(result.PerAction, Has.Exactly(1).Matches<AgentAction>(action => action.Name == "shock"));
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

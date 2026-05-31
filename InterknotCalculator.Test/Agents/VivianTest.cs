@@ -68,6 +68,11 @@ public class VivianTests : AgentsTest {
             Vivian.Team, Vivian.Rotation, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
+
+        Assert.That(result.PerAction, Has.Exactly(3).Matches<AgentAction>(a => a is {
+            Tag: SkillTag.AttributeAnomaly,
+            Name: "abloom_assault"
+        }));
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

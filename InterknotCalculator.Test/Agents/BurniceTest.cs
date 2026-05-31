@@ -7,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 [TestFixture]
 public class BurniceTests : AgentsTest {
     private CalcRequest Burnice { get; } = new() {
-        AgentId = 1171,
+        AgentId = AgentId.Burnice,
         WeaponId = 14117,
         Discs = [
             new () {
@@ -64,6 +64,10 @@ public class BurniceTests : AgentsTest {
             Burnice.Team, Burnice.Rotation, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
+        
+        Assert.That(result.PerAction, Has.Exactly(2).Matches<AgentAction>(action => action is {
+            Name: "burn", Damage: > 0
+        }));
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

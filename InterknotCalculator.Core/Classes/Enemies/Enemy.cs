@@ -1,4 +1,5 @@
 using InterknotCalculator.Core.Classes.Agents;
+using InterknotCalculator.Core.Classes.Events;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
 
@@ -12,20 +13,12 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     public Progress Daze { get; set; }
     public double StunMultiplier { get; set; } = 1.5;
 
-    public SafeDictionary<Affix, double> Stats { get; set; } = new();
+    // public SafeDictionary<Affix, double> Stats { get; set; } = new();
 
-    public Dictionary<Element, AnomalyBuildup> AnomalyBuildup { get; } = new() {
-        [Element.Ice] = new(),
-        [Element.Frost] = new(),
-        [Element.Fire] = new(),
-        [Element.Electric] = new(),
-        [Element.Ether] = new(),
-        [Element.AuricInk] = new(),
-        [Element.Physical] = new()
-    };
-
-    public Action<Enemy, Element, uint>? AttributeAnomalyTrigger { get; set; }
-
+    public Dictionary<Element, AnomalyBuildup> AnomalyBuildup { get; } = new();
+    private AnomalyBuildup GetBuildup(Element el) => 
+        AnomalyBuildup.TryGetValue(el, out var buildup) ? buildup : AnomalyBuildup[el] = new();
+    
     public double GetDefenseMultiplier(double penRatio, double pen) => 
         LevelFactor / (Math.Max(Defense * (1 - penRatio) - pen, 0) + LevelFactor);
     
@@ -35,25 +28,21 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     
     public Anomaly? AfflictedAnomaly { get; set; } = null;
     
-    public void AddAnomalyBuildup(Agent agent, double value) {
-        var element = agent.Element;
+    private void TryTriggerAnomaly(Context ctx, Agent agent, Element element) {
+        var buildup = GetBuildup(element);
+        
         var anomaly = Anomaly.GetAnomalyByElement(element);
         
         if (agent is ICustomAnomaly customAnomaly) {
             element = customAnomaly.AnomalyElement;
             anomaly = agent.Anomalies[element];
         }
-
-        if (anomaly is not null) {
-            anomaly.Stats = agent.FinalStats;
-            anomaly.AgentId = agent.Id;
-        }
         
-        var buildup = AnomalyBuildup[element];
-        buildup.AddContribution(agent.Id, value);
+        anomaly.Stats = agent.FinalStats;
+        anomaly.AgentId = agent.Id;
         
-        var threshold = element == Element.Physical 
-            ? AnomalyBuildupThreshold + AnomalyBuildupThreshold * 0.2
+        var threshold = element.Matches(Element.Physical) 
+            ? AnomalyBuildupThreshold * 1.2
             : AnomalyBuildupThreshold;
 
         // Trigger Shatter manually
@@ -62,22 +51,40 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
         }
         
         if (buildup.Current > threshold) {
+            var anomalyThresholdReachedArgs = new AnomalyThresholdEventArgs(agent, element);
+            ctx.Events.AnomalyThreshold(ctx, anomalyThresholdReachedArgs);
+            
+            if (anomalyThresholdReachedArgs.Ignore) return;
+            
             // Frostburn -> Prepare for Shatter
             // Freeze does not deal damage and can be ignored
             if (element is Element.Frost) {
                 WaitingForShatter = !WaitingForShatter;
 
+                // ReSharper disable once RedundantBoolCompare
                 if (WaitingForShatter == false) {
                     buildup.Reset();
-                    AttributeAnomalyTrigger?.Invoke(this, Element.Ice, anomaly?.AgentId ?? 0); // Trigger Shatter
+                    ctx.Events.AnomalyTriggered(ctx, new(agent, Element.Ice)); // Trigger Shatter
                     return;
                 }
             }
             
             buildup.Reset();
             AnomalyBuildupThreshold = BaseAnomalyBuildupThreshold * Math.Pow(1.02, Math.Min(10, ++AnomalyTriggerCount));
-            AttributeAnomalyTrigger?.Invoke(this, element, anomaly?.AgentId ?? 0);
+            ctx.Events.AnomalyTriggered(ctx, new(agent, element));
             AfflictedAnomaly = anomaly;
         }
+    }
+    
+    public void AddBuildupContribution(Context ctx, Agent agent, double value, Element element) {
+        var buildup = GetBuildup(element);
+        buildup.AddContribution(agent.Id, value);
+        ctx.Events.AnomalyBuildup(ctx, new(agent, buildup.Current, element));
+    }
+    
+    public void AddAnomalyBuildup(Context ctx, Agent agent, double value, Element? elementOverride = null) {
+        var element = elementOverride ?? agent.Element;
+        AddBuildupContribution(ctx, agent, value, element);
+        TryTriggerAnomaly(ctx, agent, element);
     }
 }

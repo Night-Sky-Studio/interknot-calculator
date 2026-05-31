@@ -1,0 +1,24 @@
+{
+    "Speciality": "Support",
+    "Rarity": "S",
+    "MainStat": {
+        "Affix": "Atk",
+        "Value": 713
+    },
+    "SecondaryStat": {
+        "Affix": "EnergyRegenRatio",
+        "Value": 0.6
+    },
+    "Passive": [
+        {
+            "Affix": "AnomalyMastery",
+            "Value": 30
+        }
+    ],
+    "ExternalBonus": [
+        {
+            "Affix": "AnomalyProficiency",
+            "Value": 60
+        }
+    ]   
+}

@@ -1,24 +1,35 @@
-using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
+using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public sealed class Vivian : Agent {
-    private int _flightFeathersCount = 0;
-    public int FlightFeathersCount {
-        get => _flightFeathersCount;
-        set => _flightFeathersCount = Math.Clamp(value, 0, 5);
+public sealed class Vivian : Agent, IAgentReference<Vivian> {
+    public static Vivian Reference() {
+        var vivian = new Vivian {
+            Stats = {
+                [Affix.Atk] = 2200,
+                [Affix.AnomalyMastery] = 198,
+                [Affix.AnomalyProficiency] = 415
+            }
+        };
+        vivian.ApplyPassive();
+        return vivian;
     }
     
-    private int _guardFeathersCount = 0;
-    public int GuardFeathersCount {
-        get => _guardFeathersCount; 
-        set => _guardFeathersCount = Math.Clamp(value, 0, 5);
-    }
-    
+    private int FlightFeathersCount {
+        get;
+        set => field = Math.Clamp(value, 0, 5);
+    } = 0;
+
+    private int GuardFeathersCount {
+        get;
+        set => field = Math.Clamp(value, 0, 5);
+    } = 0;
+
     private void ConvertFeathers() {
         GuardFeathersCount += FlightFeathersCount;
+        FlightFeathersCount = 0;
     }
     
     public Vivian() : base(1331) {
@@ -92,7 +103,7 @@ public sealed class Vivian : Agent {
     public Anomaly CreateAbloom(Element element) {
         Element anomalyElement = element switch {
             Element.Fire => Element.Fire,
-            Element.Physical => Element.Physical,
+            Element.Physical or Element.HonedEdge => Element.Physical,
             Element.Electric => Element.Electric,
             Element.Frost or Element.Ice => Element.Ice,
             Element.AuricInk or Element.Ether => Element.Ether,
@@ -104,7 +115,7 @@ public sealed class Vivian : Agent {
         double scale = element switch {
             Element.Fire =>
                 baseAnomaly.Scale * (0.8 * AnomalyProficiency) / 100,
-            Element.Physical =>
+            Element.Physical or Element.HonedEdge =>
                 baseAnomaly.Scale * (0.075 * AnomalyProficiency) / 100,
             Element.Electric =>
                 baseAnomaly.Scale * (0.32 * AnomalyProficiency) / 100,
@@ -118,8 +129,50 @@ public sealed class Vivian : Agent {
         return baseAnomaly with { Scale = scale };
     }
 
-    public override IEnumerable<AgentAction> GetActionDamage(string skill, int scale, Enemy enemy) {
-        switch (skill) {
+    private void ProcessAbloom(Context ctx, Agent agent, Element element) {
+        if (GuardFeathersCount == 0) return;
+        GuardFeathersCount--;
+        
+        if (agent.Anomalies.TryGetValue(element, out var previousAnomaly)) {
+            var abloomAnomaly = CreateAbloom(element);
+            agent.Anomalies[element] = previousAnomaly with {
+                Scale = abloomAnomaly.Scale
+            };
+        } else {
+            agent.Anomalies[element] = CreateAbloom(element);
+        }
+
+        var abloom = agent.GetAnomalyDamage(ctx, element, true);
+        ctx.ActionsQueue.Add(abloom with {
+            AgentId = Id, Name = $"abloom_{ctx.Enemy.AfflictedAnomaly}",
+        });
+
+        if (previousAnomaly is not null) {
+            agent.Anomalies[element] = previousAnomaly;
+        } else {
+            agent.Anomalies.Remove(element);
+        }
+    }
+    
+    public override void RegisterHooks(Context ctx) {
+        ctx.Events.OnActionExecuted.Add((c, e) => {
+            if (e.Ability.Tag is not SkillTag.ExSpecial || c.Enemy.AfflictedAnomaly is null) return;
+            ProcessAbloom(c, e.Agent, c.Enemy.AfflictedAnomaly.Element);
+        });
+        
+        // an additional "fuck you" from Alice
+        ctx.Events.OnAftershock.Add((c, e) => {
+            if (e.Ability.Tag is not SkillTag.AttributeAnomaly || c.Enemy.AfflictedAnomaly is null) return;
+            ProcessAbloom(c, e.Agent, c.Enemy.AfflictedAnomaly.Element);
+        });
+        
+        ctx.Events.OnAnomalyTriggered.Add((c, e) => {
+            ProcessAbloom(c, e.Agent, e.Element);
+        });
+    }
+
+    public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
+        switch (ability.Name) {
             case "fluttering_frock_suspension":
                 ConvertFeathers();
                 break;
@@ -128,7 +181,7 @@ public sealed class Vivian : Agent {
                 break;
         }
     
-        return base.GetActionDamage(skill, scale, enemy);
+        return base.GetActionDamage(ctx, ability);
     }
     
     public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {

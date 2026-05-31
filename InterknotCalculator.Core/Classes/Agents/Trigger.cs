@@ -1,4 +1,3 @@
-using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
@@ -97,17 +96,17 @@ public class Trigger : Agent, IStunAgent, IAgentReference<Trigger> {
         EnemyStunBonusOverride = 0.35;
     }
 
-    public override IEnumerable<AgentAction> GetActionDamage(string skill, int scale, Enemy enemy) {
-        var result = base.GetActionDamage(skill, scale, enemy).ToList();
+    public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
+        var result = base.GetActionDamage(ctx, ability).ToList();
 
-        result[0].Name = skill switch {
-            "silenced_shot" => scale switch {
+        result[0].Name = ability.Name switch {
+            "silenced_shot" => ability.Scale switch {
                 1 => "silenced_shot_(counter)",  
                 2 => "silenced_shot_(finisher)",
                 _ => result[0].Name
             },
             "harmonizing_shot" => "harmonizing_shot_(x2)",
-            "harmonizing_shot_tartarus" => scale switch {
+            "harmonizing_shot_tartarus" => ability.Scale switch {
                 0 => "harmonizing_shot_tartarus_(x3)",
                 1 => "harmonizing_shot_tartarus_(finisher)",
                 _ => result[0].Name

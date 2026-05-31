@@ -94,19 +94,21 @@ public abstract class Agent(uint id) {
             set.ApplyPassive?.Invoke(this);
         }
 
-        foreach (var passive in Weapon?.Passive ?? []) {
-            if (passive.SkillTags.Length != 0) {
-                TagBonus.Add(passive);
-            } else {
-                BonusStats[passive.Affix] += passive.Value;
+        if (Weapon?.Speciality == Speciality) {
+            foreach (var passive in Weapon?.Passive ?? []) {
+                if (passive.SkillTags.Length != 0) {
+                    TagBonus.Add(passive);
+                } else {
+                    BonusStats[passive.Affix] += passive.Value;
+                }
             }
-        }
-        
-        foreach (var stat in Weapon?.ExternalBonus ?? []) {
-            if (stat.SkillTags.Length != 0) {
-                ExternalTagBonus.Add(stat);
-            } else {
-                ExternalBonus[stat.Affix] += stat.Value;
+            
+            foreach (var stat in Weapon?.ExternalBonus ?? []) {
+                if (stat.SkillTags.Length != 0) {
+                    ExternalTagBonus.Add(stat);
+                } else {
+                    ExternalBonus[stat.Affix] += stat.Value;
+                }
             }
         }
         
@@ -120,7 +122,16 @@ public abstract class Agent(uint id) {
     
     #region Stats
     public SafeDictionary<Affix, double> BaseStats { get; private set; } = new();
-    public SafeDictionary<Affix, double> FinalStats { get; private set; } = new();
+    
+    private SafeDictionary<Affix, double>? _finalStats;
+    public SafeDictionary<Affix, double> FinalStats {
+        // Lazily snapshot stats when first accessed.
+        // This way Reference agents that don't go through SetWeapon/SetDriveDiscs
+        // (and therefore never trigger ProcessStats) still get a valid snapshot
+        // without forcing every implementation to remember to snapshot manually.
+        get => _finalStats ??= CollectStats();
+        private set => _finalStats = value;
+    }
     
     public Affix RelatedElementDmg => Helpers.GetRelatedAffixDmg(Element);
     public Affix RelatedElementRes => Helpers.GetRelatedAffixRes(Element);
@@ -200,9 +211,9 @@ public abstract class Agent(uint id) {
     }
 
     #endregion
-    
-    public Action<Agent, SkillTag, Enemy>? OnAction { get; set; }
 
+    public virtual void RegisterHooks(Context ctx) { }
+    
     /// <summary>
     /// Applies the agent's passive to the team
     /// </summary>
@@ -224,23 +235,22 @@ public abstract class Agent(uint id) {
     /// </summary>
     /// <param name="ability">Ability name</param>
     /// <returns><see cref="Stat"/> or null if ability has none</returns>
-    public virtual Stat? ApplyAbilityPassive(string ability) => null;
+    public virtual Stat? ApplyAbilityPassive(Ability ability) => null;
 
     /// <summary>
     /// Calculates standard damage for a given agent and skill
     /// </summary>
-    /// <param name="skill">Skill name</param>
-    /// <param name="scale">Skill level</param>
-    /// <param name="enemy">Enemy instance</param>
+    /// <param name="ctx">Current context</param>
+    /// <param name="ability">Current skill</param>
     /// <returns><see cref="AgentAction"/> with calculated damage</returns>
-    public virtual IEnumerable<AgentAction> GetActionDamage(string skill, int scale, Enemy enemy) {
-        var data = Skills[skill];
-        var attribute = data.Scales[scale].Element ?? Element;
+    public virtual IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
+        var data = Skills[ability.Name];
+        var attribute = data.Scales[ability.Scale].Element ?? Element;
         var relatedAffixDmg   = Helpers.GetRelatedAffixDmg(attribute);
         var relatedAffixSheer = Helpers.GetRelatedSheerDmg(attribute);
         var relatedAffixRes   = Helpers.GetRelatedAffixRes(attribute);
 
-        OnAction?.Invoke(this, data.Tag, enemy);
+        ctx.Events.ActionExecuted(ctx, new (this, ability));
         
 #if ENERGY_REQUIREMENT_CHECK
         // Energy requirement check
@@ -263,17 +273,17 @@ public abstract class Agent(uint id) {
         }
 
         // Apply ability passive if present
-        var abilityPassive = ApplyAbilityPassive(skill);
+        var abilityPassive = ApplyAbilityPassive(ability);
         if (abilityPassive is { } passive) {
             tagDmgBonus[passive.Affix] += passive.Value;
         }
 
         // Process anomalies
-        var buildup = GetAnomalyBuildup(skill, scale, data.Tag);
-        enemy.AddAnomalyBuildup(this, buildup);
+        var buildup = GetAnomalyBuildup(ability);
+        ctx.Enemy.AddAnomalyBuildup(ctx, this, buildup);
 
         // Calculate damage according to formula
-        var baseDmgAttacker = GetBaseDamage(data.Scales[scale].Damage);
+        var baseDmgAttacker = GetBaseDamage(data.Scales[ability.Scale].Damage);
         var dmgBonusMultiplier = 1 + ElementalDmgBonus + DmgBonus
                                  + tagDmgBonus[relatedAffixDmg] + tagDmgBonus[Affix.DmgBonus]
                                  + data.Affixes[relatedAffixDmg] + data.Affixes[Affix.DmgBonus];
@@ -283,7 +293,9 @@ public abstract class Agent(uint id) {
                             + tagDmgBonus[relatedAffixRes] + tagDmgBonus[Affix.ResPen]
                             + data.Affixes[relatedAffixRes] + data.Affixes[Affix.ResPen];
 
-        var enemyDefenseMultiplier = Speciality is Speciality.Rupture ? 1 : enemy.GetDefenseMultiplier(PenRatio, Pen);
+        var enemyDefenseMultiplier = Speciality is Speciality.Rupture 
+            ? 1 
+            : ctx.Enemy.GetDefenseMultiplier(PenRatio, Pen);
 
         var sheerMultiplier = Speciality is Speciality.Rupture 
             ? 1 + GetSheerMultiplier() + tagDmgBonus[Affix.SheerBonus] + tagDmgBonus[relatedAffixSheer]
@@ -291,19 +303,19 @@ public abstract class Agent(uint id) {
             : 1;
         
         var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * enemyDefenseMultiplier
-                    * resMultiplier * sheerMultiplier * DamageTakenMultiplier * enemy.StunMultiplier;
+                    * resMultiplier * sheerMultiplier * DamageTakenMultiplier * ctx.Enemy.StunMultiplier;
 
         return [new() {
             AgentId = Id, 
-            Name = $"{skill} {(scale == 0 && data.Scales.Count == 1 ? "" : scale + 1)}".Trim(), 
+            Name = $"{ability.Name} {(ability.Scale == 0 && data.Scales.Count == 1 ? "" : ability.Scale + 1)}".Trim(), 
             Tag = data.Tag, 
             Damage = total,
-            Daze = GetDaze(skill, scale),
+            Daze = GetDaze(ability),
         }];
     }
 
-    public virtual double GetDaze(string skill, int scale) {
-        var data = Skills[skill];
+    public virtual double GetDaze(Ability ability) {
+        var data = Skills[ability.Name];
 
         var tagDazeBonus = 1.0;
         foreach (var stat in TagBonus) {
@@ -312,12 +324,12 @@ public abstract class Agent(uint id) {
             }
         }
 
-        var abilityPassive = ApplyAbilityPassive(skill);
+        var abilityPassive = ApplyAbilityPassive(ability);
         if (abilityPassive is { Affix: Affix.DazeBonus } passive) {
             tagDazeBonus += passive.Value;
         }
         
-        var dazeScale = data.Scales[scale].Daze / 100;
+        var dazeScale = data.Scales[ability.Scale].Daze / 100;
         var dazeIncrease = 0.0 + tagDazeBonus;
         const double dazeReduction = 0.0;
         const double dazeRes = 0.0;
@@ -345,15 +357,15 @@ public abstract class Agent(uint id) {
          return dazeMv * dazeLevelMultiplier * Impact * dazeRes * dazeMultiplier * dazeTakenMultiplier;
     }
     
-    public double GetAnomalyBuildup(string skill, int scale, SkillTag currentTag) {
-        var data = Skills[skill];
-        var baseBuildup = data.Scales[scale].AnomalyBuildup;
+    public double GetAnomalyBuildup(Ability ability) {
+        var data = Skills[ability.Name];
+        var baseBuildup = data.Scales[ability.Scale].AnomalyBuildup;
         if (baseBuildup == 0) return 0;
 
         var amBonus = AnomalyMastery / 100;
         var amBuildupBonus = 1 + BonusStats[Affix.AnomalyBuildupBonus] + data.Affixes[Affix.AnomalyBuildupBonus];
 
-        var tagBonus = TagBonus.Where(stat => stat.Tags?.Contains(currentTag) ?? false)
+        var tagBonus = TagBonus.Where(stat => stat.Tags?.Contains(ability.Tag) ?? false)
             .Where(stat => stat.Affix == Affix.AnomalyBuildupBonus)
             .Select(stat => stat.Value).Sum();
 
@@ -363,35 +375,20 @@ public abstract class Agent(uint id) {
 
         return baseBuildup * amBonus * amBuildupBonus * amBuildupRes;
     }
-
-    public virtual AgentAction GetAnomalyDamage(Element element, Enemy enemy, bool abloom = false) {
-        // Prevent Abloom from making a stack overflow by recursion
-        if (!abloom)
-            OnAction?.Invoke(this, SkillTag.AttributeAnomaly, enemy);
+    
+    public virtual AgentAction GetAnomalyDamage(Context ctx, Element element, bool skipEvents = false) {
         // Agents can override default anomalies
         if (!Anomalies.TryGetValue(element, out var data)) {
             data = Anomaly.GetAnomalyByElement(element)!;
         }
         
-        // Some anomalies (Jane Doe - Assault) can crit
-        double anomalyCritMultiplier = 1;
-
-        if (data.CanCrit) {
-            // These crit values are not affected by anything other than a character's skill kit
-            double anomalyCritRate = 0.05, anomalyCritDamage = 0.5;
-            foreach (var bonus in data.Bonuses) {
-                switch (bonus.Affix) {
-                    case Affix.CritRate:
-                        anomalyCritRate = Math.Min(bonus.Value, 1);
-                        break;
-                    case Affix.CritDamage:
-                        anomalyCritDamage = bonus.Value;
-                        break;
-                }
-            }
-
-            anomalyCritMultiplier = 1 + anomalyCritRate * anomalyCritDamage;
-        }
+        // Prevent Abloom from causing a stack overflow by recursion
+        if (!skipEvents)
+            ctx.Events.ActionExecuted(ctx, new(this, new(SkillTag.AttributeAnomaly, data.ToString())));
+        
+        // Some characters can make anomalies crit
+        // ...for the entire team, apparently...
+        double anomalyCritMultiplier = ctx.AnomalyCritMultiplier;
         
         var tagBonus = TagBonus.Where(stat => stat.SkillTags.Contains(SkillTag.AttributeAnomaly))
             .Where(stat => stat.Affix == Affix.DmgBonus)
@@ -399,12 +396,12 @@ public abstract class Agent(uint id) {
 
         var anomalyProficiency = element != Element.None 
             ? AnomalyProficiency 
-            : enemy.AfflictedAnomaly?.Stats[Affix.AnomalyProficiency] ?? 0;
+            : ctx.Enemy.AfflictedAnomaly?.Stats[Affix.AnomalyProficiency] ?? 0;
         
         // Calculate anomaly damage according to formula
         var anomalyBaseDmg = element != Element.None 
             ? data.Scale / 100 * Atk 
-            : GetDisorderBaseMultiplier(enemy.AfflictedAnomaly!.Element, enemy.AfflictedAnomaly?.Stats[Affix.Atk] ?? 0);
+            : GetDisorderBaseMultiplier(ctx.Enemy.AfflictedAnomaly!.Element, ctx.Enemy.AfflictedAnomaly?.Stats[Affix.Atk] ?? 0);
         
         var anomalyProficiencyMultiplier = anomalyProficiency / 100;
         const double anomalyLevelMultiplier = 2;
@@ -414,7 +411,7 @@ public abstract class Agent(uint id) {
         
         var disorderElementalMultiplier = 1d;
         var disorderElementalRes = 1d;
-        if (element is Element.None && enemy.AfflictedAnomaly is { } enemyAnomaly) {
+        if (element is Element.None && ctx.Enemy.AfflictedAnomaly is { } enemyAnomaly) {
             var disorderElementalDmgBonus = Helpers.GetRelatedAffixDmg(enemyAnomaly.Element);
             var disorderElementalResPen = Helpers.GetRelatedAffixRes(enemyAnomaly.Element);
             disorderElementalMultiplier += enemyAnomaly.Stats[disorderElementalDmgBonus];
@@ -426,17 +423,17 @@ public abstract class Agent(uint id) {
         
         var total = anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier
                     * dmgBonusMultiplier 
-                    * enemy.GetDefenseMultiplier(enemy.AfflictedAnomaly?.Stats[Affix.PenRatio] ?? PenRatio,
-                        enemy.AfflictedAnomaly?.Stats[Affix.Pen] ?? Pen) 
+                    * ctx.Enemy.GetDefenseMultiplier(ctx.Enemy.AfflictedAnomaly?.Stats[Affix.PenRatio] ?? PenRatio,
+                        ctx.Enemy.AfflictedAnomaly?.Stats[Affix.Pen] ?? Pen) 
                     * resMultiplier * 
-                    (element is Element.None ? enemy.StunMultiplier : 1) * disorderElementalMultiplier * disorderElementalRes;
+                    (element is Element.None ? ctx.Enemy.StunMultiplier : 1) * disorderElementalMultiplier * disorderElementalRes;
         
         return new() {
             AgentId =  data.AgentId != 0 ? data.AgentId : Id,
             Name = data.ToString(),
             Tag = SkillTag.AttributeAnomaly,
             Damage = total,
-            Daze = element is Element.None ? GetDisorderDaze(enemy) : 0
+            Daze = element is Element.None ? GetDisorderDaze(ctx.Enemy) : 0
         };
     }
 
@@ -463,4 +460,20 @@ public abstract class Agent(uint id) {
 
         return GetDisorderTimeMultiplier(element, mvReducer) * attack;
     }
+
+    #region Operators
+
+    public static bool operator ==(Agent left, Agent right) {
+        return left.Id == right.Id;
+    }
+
+    public static bool operator !=(Agent left, Agent right) {
+        return !(left == right);
+    }
+
+    public override bool Equals(object? obj) => obj is Agent agent && this == agent;
+    
+    public override int GetHashCode() => Id.GetHashCode();
+
+    #endregion
 }
