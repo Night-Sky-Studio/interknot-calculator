@@ -7,6 +7,7 @@ on:
     branches: [ "main" ]
 
 permissions:
+  actions: read
   contents: write
 
 concurrency:
@@ -47,6 +48,6 @@ jobs:
           name: Nightly
           prerelease: true
           make_latest: false
-          target_commitish: ${{ github.sha }}
+          target_commitish: ${{ env.sha }}
           files: ${{ env.AssetName }}
-          body: "Automated nightly build from \`main\` @ ${{ github.sha }}."
+          body: "Automated nightly build from `main` @ ${{ env.sha }}."
