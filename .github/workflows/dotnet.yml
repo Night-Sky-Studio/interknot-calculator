@@ -1,0 +1,56 @@
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest 
+
+    env:
+      Configuration: Release
+      Runtime: linux-x64
+      SolutionName: InterknotCalculator.sln
+      ServerProjectPath: InterknotCalculator.Server/InterknotCalculator.Server.csproj
+      TestProjectPath: InterknotCalculator.Test/InterknotCalculator.Test.csproj
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      
+      # Install the .NET Core workload
+      - name: Install .NET Core
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+      
+      # Execute all unit tests in the solution
+      - name: Execute unit tests
+        run: dotnet test ${{ env.SolutionName }} -c ${{ env.Configuration }}
+      
+      - name: Publish server executable
+        run: >
+          dotnet publish ${{ env.ServerProjectPath }} 
+          -c ${{ env.Configuration }}
+          --self-contained true
+          /p:PublishDir=./../publish/ 
+
+      - name: Package artifact
+        if: github.event_name == 'push'
+        run: |
+          tar -czvf ./interknot-calculator.nightly.${{ env.Runtime }}.tar.gz ./publish/
+        
+      - name: Upload artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v5
+        with:
+          name: interknot-calculator.nightly.${{ env.Runtime }}.tar.gz
+          path: ./interknot-calculator.nightly.${{ env.Runtime }}.tar.gz
+          retention-days: 7
+          if-no-files-found: error
