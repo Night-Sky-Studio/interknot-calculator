@@ -48,6 +48,6 @@ jobs:
           name: Nightly
           prerelease: true
           make_latest: false
-          target_commitish: ${{ env.sha }}
+          target_commitish: ${{ env.SHA }}
           files: ${{ env.AssetName }}
-          body: "Automated nightly build from `main` @ ${{ env.sha }}."
+          body: "Automated nightly build from `main` @ ${{ env.SHA }}."
