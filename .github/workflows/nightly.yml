@@ -1,0 +1,53 @@
+name: Nightly Release
+
+on:
+  workflow_run:
+    workflows: [ ".NET" ]
+    types: [ completed ]
+    branches: [ "main" ]
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: nightly-release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    # Only run on successful builds triggered by a push to main
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push'
+    runs-on: ubuntu-latest
+
+    env:
+      AssetName: interknot-calculator.nightly.linux-x64.tar.gz
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ env.AssetName }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      - name: Publish nightly release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: nightly
+          name: Nightly
+          prerelease: true
+          make_latest: false
+          target_commitish: ${{ env.sha }}
+          files: ${{ env.AssetName }}
+          body: "Automated nightly build from `main` @ ${{ env.sha }}."
