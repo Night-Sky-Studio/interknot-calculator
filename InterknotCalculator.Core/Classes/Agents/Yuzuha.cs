@@ -86,13 +86,7 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
                 or SkillTag.DefensiveAssist
                 or SkillTag.Aftershock) return;
             
-            c.ActionsQueue.Add(new() {
-                AgentId = Id,
-                Damage = 0,
-                Daze = 0,
-                Name = "sugarburst_sparkles_x4",
-                Tag = SkillTag.BasicAtk,
-            });
+            c.ActionsQueue.Add(new(Id, "sugarburst_sparkles_x4", SkillTag.BasicAtk, 0, 0));
             
             var buildup = GetAnomalyBuildup(new(SkillTag.BasicAtk, "sugarburst_sparkles"));
             c.Enemy.AddBuildupContribution(c, this, buildup, e.Agent.Element); // Flavor Match

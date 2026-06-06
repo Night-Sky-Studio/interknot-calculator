@@ -305,13 +305,13 @@ public abstract class Agent(uint id) {
         var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * enemyDefenseMultiplier
                     * resMultiplier * sheerMultiplier * DamageTakenMultiplier * ctx.Enemy.StunMultiplier;
 
-        return [new() {
-            AgentId = Id, 
-            Name = $"{ability.Name} {(ability.Scale == 0 && data.Scales.Count == 1 ? "" : ability.Scale + 1)}".Trim(), 
-            Tag = data.Tag, 
-            Damage = total,
-            Daze = GetDaze(ability),
-        }];
+        return [new(
+            Id, 
+            $"{ability.Name} {(ability.Scale == 0 && data.Scales.Count == 1 ? "" : ability.Scale + 1)}".Trim(), 
+            data.Tag, 
+            total,
+            GetDaze(ability)
+        )];
     }
 
     public virtual double GetDaze(Ability ability) {
@@ -427,14 +427,14 @@ public abstract class Agent(uint id) {
                         ctx.Enemy.AfflictedAnomaly?.Stats[Affix.Pen] ?? Pen) 
                     * resMultiplier * 
                     (element is Element.None ? ctx.Enemy.StunMultiplier : 1) * disorderElementalMultiplier * disorderElementalRes;
-        
-        return new() {
-            AgentId =  data.AgentId != 0 ? data.AgentId : Id,
-            Name = data.ToString(),
-            Tag = SkillTag.AttributeAnomaly,
-            Damage = total,
-            Daze = element is Element.None ? GetDisorderDaze(ctx.Enemy) : 0
-        };
+
+        return new(
+            data.AgentId != 0 ? data.AgentId : Id,
+            data.ToString(),
+            SkillTag.AttributeAnomaly,
+            total,
+            element is Element.None ? GetDisorderDaze(ctx.Enemy) : 0
+        );
     }
 
     protected double GetDisorderTimeMultiplier(Element element, Func<double, double>? mvReducer = null) {
