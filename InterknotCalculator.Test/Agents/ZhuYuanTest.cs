@@ -1,4 +1,3 @@
-using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -71,14 +70,12 @@ public class ZhuYuanTests : AgentsTest {
 
     [Test]
     public void ZhuYuanTest() {
-        var enemy = new NotoriousDullahan();
-        var result = Calculator.Calculate(ZhuYuan.AgentId, ZhuYuan.WeaponId, GetDriveDiscs(ZhuYuan), 
-            ZhuYuan.Team, ZhuYuan.Rotation, enemy);
+        var result = Calculator.Calculate(ZhuYuan);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
-        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
+        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
     }
 }

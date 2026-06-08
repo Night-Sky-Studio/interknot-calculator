@@ -48,7 +48,7 @@ public class TriggerTests : AgentsTest {
             },
         ],
         Team = [
-            AgentId.Soldier0Anby
+            new(AgentId.Soldier0Anby)
         ],
         StunBonus = 1.5,
         Rotation = [
@@ -75,11 +75,7 @@ public class TriggerTests : AgentsTest {
 
     [Test]
     public void TriggerTest() {
-        var enemy = new NotoriousDullahan {
-            StunMultiplier = Trigger.StunBonus
-        };
-        var result = Calculator.Calculate(Trigger.AgentId, Trigger.WeaponId, GetDriveDiscs(Trigger),
-            Trigger.Team, Trigger.Rotation, enemy);
+        var result = Calculator.Calculate(Trigger);
 
         Assert.That(result.PerAction, Is.Not.Empty);
         Assert.That(result.PerAction, Has.Exactly(5).Matches<AgentAction>(a => a is {

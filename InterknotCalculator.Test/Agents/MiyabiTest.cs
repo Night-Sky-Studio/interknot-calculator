@@ -64,9 +64,7 @@ public class MiyabiTests : AgentsTest {
 
     [Test]
     public void MiyabiTest() {
-        var enemy = new NotoriousDullahan();
-        var result = Calculator.Calculate(Miyabi.AgentId, Miyabi.WeaponId, GetDriveDiscs(Miyabi), 
-            Miyabi.Team, Miyabi.Rotation, enemy);
+        var result = Calculator.Calculate(Miyabi);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
@@ -75,6 +73,6 @@ public class MiyabiTests : AgentsTest {
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
-        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
+        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
     } 
 }

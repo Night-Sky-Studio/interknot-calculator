@@ -86,7 +86,7 @@ public class EllenTests : AgentsTest {
                 Levels = [15, 4, 2, 1, 1]
             },
         ],
-        Team = [AgentId.Lycaon, AgentId.Rina],
+        Team = [new(AgentId.Lycaon), new(AgentId.Rina)],
         StunBonus = 1.5,
         Rotation = [
             "avalanche",
@@ -101,15 +101,13 @@ public class EllenTests : AgentsTest {
 
     [Test]
     public void EllenTest() {
-        var enemy = new NotoriousDullahan();
-        var result = Calculator.Calculate(Ellen.AgentId, Ellen.WeaponId, GetDriveDiscs(Ellen), 
-            Ellen.Team, Ellen.Rotation, enemy);
+        var result = Calculator.Calculate(Ellen);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
-        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
+        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
     }
 }
 
@@ -157,7 +155,7 @@ public class EllenM6Tests : AgentsTest {
             },
         ],
         Mindscape = 6,
-        Team = [AgentId.Lycaon],
+        Team = [new(AgentId.Lycaon)],
         StunBonus = 1.5,
         Rotation = [
             "avalanche",
@@ -176,15 +174,13 @@ public class EllenM6Tests : AgentsTest {
     
     [Test]
     public void EllenM6Test() {
-        var enemy = new NotoriousDullahan();
-        var result = Calculator.Calculate(EllenM6.AgentId, EllenM6.WeaponId, GetDriveDiscs(EllenM6), 
-            EllenM6.Team, EllenM6.Rotation, enemy, mindscape: EllenM6.Mindscape);
+        var result = Calculator.Calculate(EllenM6);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
-        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
+        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
     }
     
 }

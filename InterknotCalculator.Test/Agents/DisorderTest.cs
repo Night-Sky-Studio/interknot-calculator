@@ -12,8 +12,8 @@ public class DisorderTests : AgentsTest {
         var prevTeam = _jane.Team.Clone();
         var prevRotation = _jane.Rotation.Clone();
         _jane.Team = [
-            AgentId.Burnice,
-            AgentId.Lucy
+            new(AgentId.Burnice),
+            new(AgentId.Lucy)
         ];
         _jane.Rotation = [
             "1171.energizing_speciality_drink",
@@ -29,10 +29,7 @@ public class DisorderTests : AgentsTest {
             "phantom_thrust",
             "final_curtain",
         ];
-        var enemy = new NotoriousDullahan();
-        
-        var result = Calculator.Calculate(_jane.AgentId, _jane.WeaponId, GetDriveDiscs(_jane), 
-            _jane.Team, _jane.Rotation, enemy);
+        var result = Calculator.Calculate(_jane);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
@@ -45,9 +42,9 @@ public class DisorderTests : AgentsTest {
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
-        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
+        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
         
-        _jane.Team = (uint[])prevTeam;
+        _jane.Team = (TeamMemberRequest[])prevTeam;
         _jane.Rotation = (string[])prevRotation;
     }
 }

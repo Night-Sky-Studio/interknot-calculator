@@ -13,7 +13,7 @@ public class Calculator {
     /// <summary>
     /// Main damage calculation function
     /// </summary>
-    public CalcResult Calculate(CalcRequest request) {
+    public CalcResult Calculate(CalcRequest request, Enemy? enemy = null) {
         var characterId = request.AgentId;
         var weaponId = request.WeaponId;
         var mindscape = request.Mindscape;
@@ -24,9 +24,8 @@ public class Calculator {
                 }))).ToArray();
         var team = request.Team;
         var rotation = request.Rotation;
-        var enemy = new NotoriousDullahan() {
-            StunMultiplier = request.StunBonus
-        };
+        enemy ??= new NotoriousDullahan();
+        enemy.StunMultiplier = request.StunBonus;
         
         var ctx = new Context {
             Team = {
@@ -159,7 +158,7 @@ public class Calculator {
                 BaseStats = ctx.MainAgent.BaseStats,
                 CalculatedStats = ctx.MainAgent.CollectStats()
             },
-            Enemy = enemy,
+            Enemy = ctx.Enemy,
             PerAction = ctx.Actions,
             Total = ctx.Actions.Sum(action => action.Damage)
         };

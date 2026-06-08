@@ -82,11 +82,7 @@ public class SilverAnbyTests : AgentsTest {
 
     [Test]
     public void SilverAnbyTest() {
-        var enemy = new NotoriousDullahan {
-            StunMultiplier = SilverAnby.StunBonus
-        };
-        var result = Calculator.Calculate(SilverAnby.AgentId, SilverAnby.WeaponId, GetDriveDiscs(SilverAnby), 
-            SilverAnby.Team, SilverAnby.Rotation, enemy);
+        var result = Calculator.Calculate(SilverAnby);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         Assert.That(result.PerAction, Has.Exactly(12).Matches<AgentAction>(a => a.Tag is SkillTag.Aftershock));

@@ -65,21 +65,20 @@ public class JaneTests : AgentsTest {
     [Test]
     public void JaneTest() {
         var enemy = new NotoriousDullahan {
-            AfflictedAnomaly = Anomaly.GetAnomalyByElement(Element.Fire)! with {
+            AfflictedAnomaly = Anomaly.GetAnomalyByElement(Element.Fire) with {
                 Stats = new() {
                     [Affix.Atk] = 2358,
                     [Affix.AnomalyProficiency] = 353
                 }
             }
         };
-        var result = Calculator.Calculate(Jane.AgentId, Jane.WeaponId, GetDriveDiscs(Jane), 
-            Jane.Team, Jane.Rotation, enemy);
+        var result = Calculator.Calculate(Jane, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(action => action.Tag is SkillTag.AttributeAnomaly));
         
         Console.WriteLine($"Total Assault triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
-        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
+        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
     }
 }

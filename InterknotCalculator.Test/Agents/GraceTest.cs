@@ -47,7 +47,7 @@ public class GraceTests : AgentsTest {
                 Levels = [15, 3, 1, 2, 2]
             },
         ],
-        Team = [1211],
+        Team = [new(AgentId.Rina)],
         StunBonus = 1.5,
         Rotation = [
             "collaborative_construction",
@@ -63,15 +63,13 @@ public class GraceTests : AgentsTest {
 
     [Test]
     public void GraceTest() {
-        var enemy = new NotoriousDullahan();
-        var result = Calculator.Calculate(Grace.AgentId, Grace.WeaponId, GetDriveDiscs(Grace), 
-            Grace.Team, Grace.Rotation, enemy);
+        var result = Calculator.Calculate(Grace);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         Assert.That(result.PerAction, Has.Exactly(1).Matches<AgentAction>(action => action.Name == "shock"));
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
-        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
+        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
     }
 }
