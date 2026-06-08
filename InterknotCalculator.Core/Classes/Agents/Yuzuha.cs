@@ -5,7 +5,7 @@ using InterknotCalculator.Core.Interfaces;
 namespace InterknotCalculator.Core.Classes.Agents;
 
 public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
-    public static Yuzuha Reference() {
+    public static Yuzuha Reference(uint weaponId, uint setId) {
         var yuzuha = new Yuzuha {
             Stats = {
                 [Affix.Atk] = 3000,
@@ -13,8 +13,8 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
             }
         };
 
-        yuzuha.SetWeaponPassive(WeaponId.Metanukimorphosis);
-        yuzuha.SetDriveDiscsPassive(DriveDiscSetId.MoonlightLullaby);
+        yuzuha.SetWeaponPassive(weaponId);
+        yuzuha.SetDriveDiscsPassive(setId);
         
         yuzuha.ApplyPassive();
         

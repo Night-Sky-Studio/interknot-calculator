@@ -3,8 +3,8 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public class Nicole : Agent, IAgentReference<Nicole> {
-    public Nicole() : base(1031) {
+public class Nicole : SupportAgent, IAgentReference<Nicole> {
+    public Nicole() : base(AgentId.Nicole) {
         Speciality = Speciality.Support;
         Element = Element.Ether;
         Rarity = Rarity.A;
@@ -20,7 +20,7 @@ public class Nicole : Agent, IAgentReference<Nicole> {
         Stats[Affix.AnomalyProficiency] = 90;
         Stats[Affix.EnergyRegen] = 1.56;
     }
-    public static Nicole Reference() {
+    public static Nicole Reference(uint weaponId, uint setId) {
         var nicole = new Nicole {
             Stats = {
                 [Affix.Hp] = 10000,
@@ -30,16 +30,9 @@ public class Nicole : Agent, IAgentReference<Nicole> {
             }
         };
         
-        var theVault = Resources.Current.GetWeapon(13103);
-        foreach (var stat in theVault.ExternalBonus) {
-            nicole.ExternalBonus[stat.Affix] += stat.Value;
-        }
-
-        var astralVoice = Resources.Current.GetDriveDiscSet(32800);
-
-        var qaBonus = astralVoice.FullBonus.First();
-        nicole.ExternalBonus[qaBonus.Affix] += qaBonus.Value;
-
+        nicole.SetWeaponPassive(weaponId);
+        nicole.SetDriveDiscsPassive(setId);
+        
         nicole.ApplyPassive();
         
         return nicole;

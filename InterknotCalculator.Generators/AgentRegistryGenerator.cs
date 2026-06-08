@@ -10,19 +10,7 @@ namespace InterknotCalculator.Generators;
 [Generator]
 public class AgentRegistryGenerator : IIncrementalGenerator {
     private const string AgentFqn          = "InterknotCalculator.Core.Classes.Agents.Agent";
-    private const string AgentReferenceFqn = "InterknotCalculator.Core.Interfaces.IAgentReference<T>";
     private static readonly Regex MindscapeSuffix = new(@"M(\d+)$", RegexOptions.Compiled);
-
-    
-    // private record AgentSymbol(
-    //     string FullName,
-    //     string Name,
-    //     uint Id,
-    //     int MindscapeLevel,
-    //     bool HasReference,
-    //     bool IsAnchor,
-    //     string? AnchorName
-    // );
     
     private static bool InheritsFrom(INamedTypeSymbol type, string baseFqn) {
         for (var t = type.BaseType; t is not null; t = t.BaseType)
@@ -41,7 +29,8 @@ public class AgentRegistryGenerator : IIncrementalGenerator {
     private static bool ImplementsReference(INamedTypeSymbol type) =>
         type.AllInterfaces.Any(i =>
             i.IsGenericType &&
-            i.ConstructedFrom.ToDisplayString() == AgentReferenceFqn);
+            i.ConstructedFrom.MetadataName == "IAgentReference`1" &&
+            i.ContainingNamespace?.ToDisplayString() == "InterknotCalculator.Core.Interfaces");
     
     public void Initialize(IncrementalGeneratorInitializationContext context) {
         var classes = context.SyntaxProvider.CreateSyntaxProvider(
@@ -52,7 +41,7 @@ public class AgentRegistryGenerator : IIncrementalGenerator {
         var agents = classes.Collect();
         
         context.RegisterSourceOutput(agents, (spc, all) => {
-// Every concrete class derived (transitively) from Agent.
+            // Every concrete class derived (transitively) from Agent.
             var concreteAgents = all
                 .Where(s => s is INamedTypeSymbol { IsAbstract: false } sym && InheritsFrom(sym, AgentFqn))
                 .Select(s => s!)
@@ -84,7 +73,7 @@ public class AgentRegistryGenerator : IIncrementalGenerator {
                 var anchorFqn = anchor.ToDisplayString();
 
                 // Read the Id from a temporary instance of the anchor.
-                sb.AppendLine($"        {{");
+                sb.AppendLine("        {");
                 sb.AppendLine($"            var anchor = new {anchorFqn}();");
 
                 if (variantsByAnchor.TryGetValue(anchor, out var variants) && variants.Length > 0) {
@@ -96,21 +85,21 @@ public class AgentRegistryGenerator : IIncrementalGenerator {
                         .OrderBy(x => x.Level)
                         .ToArray();
 
-                    sb.AppendLine($"            Instances[anchor.Id] = mindscape => mindscape switch {{");
+                    sb.AppendLine("            Instances[anchor.Id] = mindscape => mindscape switch {");
                     sb.AppendLine($"                0 => new {anchorFqn}(),");
                     foreach (var v in ordered)
                         sb.AppendLine($"                {v.Level} => new {v.Fqn}(),");
-                    sb.AppendLine($"                _ => throw new System.ArgumentOutOfRangeException(");
+                    sb.AppendLine("                _ => throw new System.ArgumentOutOfRangeException(");
                     sb.AppendLine($"                    nameof(mindscape), mindscape, \"Invalid mindscape for {anchor.Name}.\")");
-                    sb.AppendLine($"            }};");
+                    sb.AppendLine("            };");
                 } else {
                     sb.AppendLine($"            Instances[anchor.Id] = _ => new {anchorFqn}();");
                 }
 
                 if (anchor is INamedTypeSymbol anc && ImplementsReference(anc))
-                    sb.AppendLine($"            References[anchor.Id] = static () => {anchorFqn}.Reference();");
+                    sb.AppendLine($"            References[anchor.Id] = static (weaponId, setId) => {anchorFqn}.Reference(weaponId, setId);");
 
-                sb.AppendLine($"        }}");
+                sb.AppendLine("        }");
             }
 
             sb.AppendLine("    }");

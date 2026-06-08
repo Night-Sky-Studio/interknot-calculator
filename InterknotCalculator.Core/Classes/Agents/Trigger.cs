@@ -4,17 +4,14 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public class Trigger : Agent, IStunAgent, IAgentReference<Trigger> {
+public class Trigger : SupportAgent, IStunAgent, IAgentReference<Trigger> {
     public double EnemyStunBonusOverride { get; set; }
     
-    public static Trigger Reference() {
+    public static Trigger Reference(uint weaponId, uint setId) {
         var trigger = new Trigger();
         
-        var kingOfTheSummit = Resources.Current.GetDriveDiscSet(DriveDiscSetId.KingOfTheSummit);
-        
-        foreach (var fullBonus in kingOfTheSummit.FullBonus) {
-            trigger.ExternalBonus[fullBonus.Affix] = fullBonus.Value;
-        }
+        trigger.SetWeaponPassive(weaponId);
+        trigger.SetDriveDiscsPassive(setId);
         
         trigger.ApplyPassive();
         

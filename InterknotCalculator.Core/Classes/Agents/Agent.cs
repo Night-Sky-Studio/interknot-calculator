@@ -6,7 +6,6 @@ namespace InterknotCalculator.Core.Classes.Agents;
 
 /// <summary>
 /// Base Agent class
-/// All agents should inherit from this class and be sealed
 /// </summary>
 public abstract class Agent(uint id) {
     private const double DamageTakenMultiplier = 1;

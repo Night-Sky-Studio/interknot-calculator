@@ -4,8 +4,8 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public sealed class Vivian : Agent, IAgentReference<Vivian> {
-    public static Vivian Reference() {
+public sealed class Vivian : SupportAgent, IAgentReference<Vivian> {
+    public static Vivian Reference(uint weaponId, uint setId) {
         var vivian = new Vivian {
             Stats = {
                 [Affix.Atk] = 2200,
@@ -13,6 +13,10 @@ public sealed class Vivian : Agent, IAgentReference<Vivian> {
                 [Affix.AnomalyProficiency] = 415
             }
         };
+        
+        vivian.SetWeaponPassive(weaponId);
+        vivian.SetDriveDiscsPassive(setId);
+        
         vivian.ApplyPassive();
         return vivian;
     }
@@ -32,7 +36,7 @@ public sealed class Vivian : Agent, IAgentReference<Vivian> {
         FlightFeathersCount = 0;
     }
     
-    public Vivian() : base(1331) {
+    public Vivian() : base(AgentId.Vivian) {
         Speciality = Speciality.Anomaly;
         Element = Element.Ether;
         Rarity = Rarity.S;

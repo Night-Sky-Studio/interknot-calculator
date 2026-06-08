@@ -16,10 +16,10 @@ public record DriveDiscRequest {
 }
 
 [MessagePackObject(keyAsPropertyName: true)]
-public record TeamMemberRequest {
-    public uint AgentId { get; set; }
-    public uint WeaponId { get; set; }
-    public uint DriveDiscSetId { get; set; }
+public record TeamMemberRequest(uint AgentId = 0, uint WeaponId = 0, uint DriveDiscSetId = 0) {
+    public uint AgentId { get; set; } = AgentId;
+    public uint WeaponId { get; set; } = WeaponId;
+    public uint DriveDiscSetId { get; set; } = DriveDiscSetId;
 }
 
 [MessagePackObject(keyAsPropertyName: true)]
