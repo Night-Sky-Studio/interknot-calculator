@@ -13,7 +13,7 @@ public class Calculator {
     /// <summary>
     /// Main damage calculation function
     /// </summary>
-    public CalcResult Calculate(CalcRequest request, Enemy? enemy = null) {
+    public static CalcResult Calculate(CalcRequest request, Enemy? enemy = null) {
         var characterId = request.AgentId;
         var weaponId = request.WeaponId;
         var mindscape = request.Mindscape;

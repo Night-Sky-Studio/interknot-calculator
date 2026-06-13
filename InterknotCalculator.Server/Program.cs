@@ -2,7 +2,10 @@ using InterknotCalculator.Core.Classes;
 using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
+using InterknotCalculator.Server.Models;
+using MessagePack;
 using Microsoft.AspNetCore.Mvc;
+using DriveDisc = InterknotCalculator.Core.Classes.DriveDisc;
 
 namespace InterknotCalculator.Server;
 
@@ -14,9 +17,6 @@ public static class Program {
     public static async Task Main(string[] args) {
         // Initialize Resource Manager
         await Resources.Current.Init();
-        
-        // Create Calculator instance
-        var calc = new Calculator();
         
         // Create web app
         var builder = WebApplication.CreateSlimBuilder(args);
@@ -47,49 +47,64 @@ public static class Program {
                 return Results.BadRequest("Bad request");
             }
             
-            var calcResult = calc.Calculate(result);
+            var calcResult = Calculator.Calculate(result);
             
             return Results.Json(calcResult, SerializerContext.Default.CalcResult);
         });
         
         app.MapGet("/recalculate", async () => {
-            // if (IsRecalculating) {
-            //     return Results.Text("Another request is already running", "text/plain", statusCode: 400);
-            // }
-            //
-            // IsRecalculating = true;
-            //
-            // if (!File.Exists(RequestFilePath)) {
-            //     return Results.Text("No request file found", "text/plain", statusCode: 400);
-            // }
-            //
-            // using var writer = new ResultWriter();
-            //
-            // using var stream = new FileStream(RequestFilePath, FileMode.Open, FileAccess.Read);
-            // RequestReader.Read(stream, (leaderboards, character, isPrimary) => {
-            //     foreach (var leaderboard in leaderboards) {
-            //         var discs = character.Discs.Select((d, idx) =>
-            //             new DriveDisc(d.SetId, Convert.ToUInt32(idx), (Rarity)d.Rarity, Stat.Stats[(Affix)d.MainStat.Affix],
-            //                 d.SubStats.Select(p => Stat.SubStats[(Affix)p.Affix] with {
-            //                     Level = p.Level
-            //                 }))).ToArray();
-            //         
-            //         var result = calc.Calculate(leaderboard.CharacterId, leaderboard.WeaponId, discs,
-            //             leaderboard.TeamIds, leaderboard.Rotation, new NotoriousDullahan {
-            //                 StunMultiplier = leaderboard.StunMultiplier / 1000d
-            //             });
-            //
-            //         writer.WriteResult(character.BuildId, isPrimary, character.Uid, leaderboard.Id, result);
-            //
-            //         if (writer.Count % 10000 == 0) {
-            //             Console.WriteLine($"Processed {writer.Count} characters");
-            //         }
-            //     }
-            // });
-            //
-            // IsRecalculating = false;
-            //
-            // return Results.Text(writer.Finish());
+            if (IsRecalculating) {
+                return Results.Text("Another request is already running", "text/plain", statusCode: 400);
+            }
+            
+            IsRecalculating = true;
+            
+            if (!File.Exists(RequestFilePath)) {
+                return Results.Text("No request file found", "text/plain", statusCode: 400);
+            }
+            
+            var cts = new CancellationTokenSource(TimeSpan.FromMinutes(10));
+            
+            await using var requestStream = new FileStream(RequestFilePath, FileMode.Open, FileAccess.Read); 
+            using var streamReader = new MessagePackStreamReader(requestStream);
+
+            var leaderboardCount = await streamReader.ReadArrayHeaderAsync(cts.Token);
+            var leaderboards = new Leaderboard[leaderboardCount];
+            var i = 0;
+            await foreach (var lb in streamReader.ReadArrayAsync(cts.Token)) {
+                leaderboards[i++] = MessagePackSerializer.Deserialize<Leaderboard>(lb);
+            }
+
+            List<byte> resultBytes = new();
+            
+            while (await streamReader.ReadAsync(cts.Token) is { } message) {
+                var character = MessagePackSerializer.Deserialize<Character>(message);
+                foreach (var leaderboard in leaderboards) {
+                    var discs = character.Discs.Select((d, idx) =>
+                        new DriveDiscRequest {
+                            SetId = d.SetId,
+                            Rarity = d.Rarity,
+                            Stats = [(Affix)d.MainStat.Affix, ..d.SubStats.Select(p => (Affix)p.Affix)],
+                            Levels = [d.MainStat.Level, ..d.SubStats.Select(p => p.Level)]
+                        }).ToArray();
+                    
+                    var result = Calculator.Calculate(new() {
+                        AgentId = leaderboard.CharacterId,
+                        WeaponId = leaderboard.WeaponId,
+                        Discs = discs,
+                        Mindscape = character.Mindscape,
+                        Rotation = leaderboard.Rotation.ToArray(),
+                        StunBonus = leaderboard.StunMultiplier,
+                        Team = leaderboard.Team.Select(t => 
+                            new TeamMemberRequest(t.AgentId, t.WeaponId, t.DriveDiscSetId)).ToArray()
+                    });
+                    
+                    // TODO: serialize as IKNCResult
+                    resultBytes.AddRange(MessagePackSerializer.Serialize(result));
+                }
+            }
+            
+            return Results.File(resultBytes.ToArray(), "application/octet-stream", "results.msgpack");
         });
         
         await app.RunAsync();
