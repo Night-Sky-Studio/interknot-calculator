@@ -1,3 +1,4 @@
+using InterknotCalculator.Core.Classes;
 using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
