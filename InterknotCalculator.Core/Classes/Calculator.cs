@@ -17,11 +17,10 @@ public class Calculator {
         var characterId = request.AgentId;
         var weaponId = request.WeaponId;
         var mindscape = request.Mindscape;
-        var driveDiscs = request.Discs.Select((d, idx) =>
-            new DriveDisc(d.SetId, Convert.ToUInt32(idx), d.Rarity, Stat.Stats[d.Stats[0]],
-                d.StatsLevels.Skip(1).Select(p => Stat.SubStats[p.Key] with {
-                    Level = p.Value
-                }))).ToArray();
+        var driveDiscs = request.Discs.Select((disc, i) => 
+            new DriveDisc(disc.SetId, Convert.ToUInt32(i), disc.Rarity, 
+                Stat.MainStat.Get(disc.Rarity, disc.Stats[0], disc.StatsLevels[disc.Stats[0]]),
+                disc.StatsLevels.Skip(1).Select(p => Stat.SubStat.Get(disc.Rarity, p.Key, p.Value)))).ToArray();
         var team = request.Team;
         var rotation = request.Rotation;
         enemy ??= new NotoriousDullahan();
