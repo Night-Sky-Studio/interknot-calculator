@@ -1,46 +1,45 @@
-using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 using MessagePack;
 
 namespace InterknotCalculator.Server.Models;
 
-[MessagePackObject(keyAsPropertyName: true)]
-public record DiscStat(byte Affix, byte Level);
+[MessagePackObject]
+public record DiscStat(
+    [property: Key(0)] byte Affix, 
+    [property: Key(1)] byte Level
+);
 
-[MessagePackObject(keyAsPropertyName: true)]
+[MessagePackObject]
 public record DriveDisc(
-    uint SetId, 
-    Rarity Rarity,
-    DiscStat MainStat, 
-    IEnumerable<DiscStat> SubStats
+    [property: Key(0)] uint SetId, 
+    [property: Key(1)] Rarity Rarity,
+    [property: Key(2)] DiscStat MainStat, 
+    [property: Key(3)] IEnumerable<DiscStat> SubStats
 );
 
-[MessagePackObject(keyAsPropertyName: true)]
+[MessagePackObject]
 public record Character(
-    uint Uid, 
-    uint BuildId, 
-    bool IsPrimary, 
-    uint CharacterId, 
-    uint Mindscape,
-    IEnumerable<DriveDisc> Discs
+    [property: Key(0)] uint Uid, 
+    [property: Key(1)] uint BuildId, 
+    [property: Key(2)] bool IsPrimary, 
+    [property: Key(3)] uint CharacterId,
+    [property: Key(4)] IEnumerable<DriveDisc> Discs
 );
 
-[MessagePackObject(keyAsPropertyName: true)]
-public record TeamMember(uint AgentId, uint WeaponId, uint DriveDiscSetId);
+[MessagePackObject]
+public record TeamMember(
+    [property: Key(0)] uint AgentId, 
+    [property: Key(1)] uint WeaponId, 
+    [property: Key(2)] uint DriveDiscSetId
+);
 
-[MessagePackObject(keyAsPropertyName: true)]
+[MessagePackObject]
 public record Leaderboard(
-    uint Id,
-    uint CharacterId,
-    uint WeaponId,
-    IEnumerable<TeamMember> Team,
-    ushort StunMultiplier,
-    byte ActionsCount,
-    IEnumerable<string> Rotation
-);
-
-[MessagePackObject(keyAsPropertyName: true)]
-public record IKNCRequest(
-    IEnumerable<Leaderboard> Leaderboards,
-    IEnumerable<Character> Characters
+    [property: Key(0)] uint Id,
+    [property: Key(1)] uint CharacterId,
+    [property: Key(2)] uint WeaponId,
+    [property: Key(3)] IEnumerable<TeamMember> Team,
+    [property: Key(4)] byte Mindscape,
+    [property: Key(5)] double StunMultiplier,
+    [property: Key(6)] IEnumerable<string> Rotation
 );

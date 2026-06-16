@@ -1,32 +1,40 @@
-using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 using MessagePack;
 
 namespace InterknotCalculator.Server.Models;
 
-[MessagePackObject(keyAsPropertyName: true)]
+[MessagePackObject]
 public record EnemyData(
-    double Defense,
-    double LevelFactor,
-    double AnomalyBuildupThreshold,
-    Dictionary<Element, Dictionary<uint, double>> AnomalyBuildup,
-    double StunMultiplier
+    // [property: Key(0)] double Defense,
+    // [property: Key(1)] double LevelFactor,
+    [property: Key(0)] double AnomalyBuildupThreshold,
+    [property: Key(1)] Dictionary<Element, Dictionary<uint, double>> AnomalyBuildup
+    // [property: Key(4)] double StunMultiplier
 );
 
-[MessagePackObject(keyAsPropertyName: true)]
+[MessagePackObject]
+public record AgentAction(
+    [property: Key(0)] uint AgentId, 
+    [property: Key(1)] string Name, 
+    [property: Key(2)] SkillTag Tag, 
+    [property: Key(3)] double Damage, 
+    [property: Key(4)] double Daze
+);
+
+[MessagePackObject]
 public record ResultData(
-    Dictionary<Affix, double> BaseStats,
-    Dictionary<Affix, double> CalculatedStats,
-    IEnumerable<AgentAction> PerAction,
-    double TotalDamage,
-    EnemyData Enemy
+    [property: Key(0)] Dictionary<Affix, double> BaseStats,
+    [property: Key(1)] Dictionary<Affix, double> CalculatedStats,
+    [property: Key(2)] IEnumerable<AgentAction> PerAction,
+    [property: Key(3)] double TotalDamage
+    // [property: Key(4)] EnemyData Enemy
 );
 
-[MessagePackObject(keyAsPropertyName: true)]
+[MessagePackObject]
 public record IKNCResult(
-    uint Uid,
-    uint LeaderboardId,
-    uint BuildId,
-    bool IsPrimary,
-    ResultData Result
+    [property: Key(0)] uint Uid,
+    [property: Key(1)] uint LeaderboardId,
+    [property: Key(2)] uint BuildId,
+    [property: Key(3)] bool IsPrimary,
+    [property: Key(4)] ResultData Result
 );
