@@ -1,0 +1,7 @@
+{
+    "PartialBonus": [{
+        "Affix": "EtherDmgBonus",
+        "Value": 0.1
+    }],
+    "FullBonus": []
+}

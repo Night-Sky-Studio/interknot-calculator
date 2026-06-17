@@ -1,4 +1,4 @@
-Game version: 2.8
+Game version: 3.0
 
 # Agents
 ```
@@ -55,6 +55,9 @@ Game version: 2.8
 1521 Cissia
 1531 Starlight - Billy
 1541 Promeia
+1551 Pyrois
+1561 Velina
+1571 Norma
 ```
 
 # Weapons
@@ -90,6 +93,7 @@ Game version: 2.8
 13014 Radiowave Journey
 13015 Marcato Desire
 13016 Reel Projector
+13018 Boisterous Echoes
 13019 Cauldron of Clarity
 13020 The Simmering Pot
 13101 Demara Battery Mark II
@@ -148,6 +152,9 @@ Game version: 2.8
 14152 Serpentine Seeker
 14153 Starlight Rider Faceplate
 14154 Frostfall Sickle
+14155 Sol Exuvia
+14156 Joyau Dore
+14157 Chief Sidekick
 ```
 
 # Drive Disc Sets
@@ -178,4 +185,6 @@ Game version: 2.8
 33600 Shining Aria
 33700 Bunny in Wonderland
 33800 Notes From the Chained
+33900 Wuthering Salon
+34000 The Sky Ablaze
 ```

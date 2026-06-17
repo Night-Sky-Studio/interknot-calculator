@@ -107,7 +107,8 @@ public class Resources {
             //     }
             // },
             DriveDiscSetId.DawnsBloom => agent => {
-                agent.TagBonus.Add(new(Affix.DmgBonus, agent.Speciality == Speciality.Attack ? 0.4 : 0.2,  tags: [SkillTag.BasicAtk]));
+                agent.TagBonus.Add(new(Affix.DmgBonus, agent.Speciality == Speciality.Attack ? 0.4 : 0.2, 
+                    tags: [SkillTag.BasicAtk]));
             },
             DriveDiscSetId.MoonlightLullaby => agent => {
                 if (agent.Speciality == Speciality.Support) {
@@ -118,6 +119,13 @@ public class Resources {
                 if (agent.Speciality == Speciality.Defense) {
                     agent.BonusStats[Affix.DmgBonus] += 0.06 * 3;
                 }
+            },
+            DriveDiscSetId.TheSkyAblaze => agent => {
+                if (!agent.Element.Matches(Element.Ether)) return;
+                
+                agent.BonusStats[Affix.CritDamage] += 0.3;
+                agent.TagBonus.Add(new(Affix.CombatAtkRatio, 0.1, 
+                    tags: [SkillTag.ExSpecial, SkillTag.Ultimate]));
             },
             _ => set.ApplyPassive
         };
