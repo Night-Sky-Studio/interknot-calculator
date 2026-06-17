@@ -17,6 +17,7 @@ public enum Affix {
     PhysicalDmgBonus, PhysicalResPen,
     ElectricDmgBonus, ElectricResPen,
     EtherDmgBonus, EtherResPen,
+    WindDmgBonus, WindResPen,
     DisorderDmgBonus, AnomalyDmgBonus,
     
     SheerBonus,
