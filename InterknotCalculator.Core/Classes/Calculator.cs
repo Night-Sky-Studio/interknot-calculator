@@ -19,7 +19,7 @@ public class Calculator {
         var mindscape = request.Mindscape;
         var driveDiscs = request.Discs.Select((disc, i) => 
             new DriveDisc(disc.SetId, Convert.ToUInt32(i), disc.Rarity, 
-                Stat.MainStat.Get(disc.Rarity, disc.Stats[0], disc.StatsLevels[disc.Stats[0]]),
+                Stat.MainStat.Get(disc.Rarity, disc.Stats[0], disc.Levels[0]),
                 disc.StatsLevels.Skip(1).Select(p => Stat.SubStat.Get(disc.Rarity, p.Key, p.Value)))).ToArray();
         var team = request.Team;
         var rotation = request.Rotation;
