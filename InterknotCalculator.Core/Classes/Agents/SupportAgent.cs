@@ -31,12 +31,12 @@ public abstract class SupportAgent(uint id) : Agent(id) {
         }
     }
 
-    protected void SetDriveDiscsPassive(uint driveDiscSetId, bool fullBonus = false) {
+    protected void SetDriveDiscsPassive(uint driveDiscSetId, bool partial = false) {
         if (driveDiscSetId == 0) return;
         
         var set = Resources.Current.GetDriveDiscSet(driveDiscSetId);
         
-        if (!fullBonus) {
+        if (partial) {
             foreach (var bonus in set.PartialBonus) {
                 if (bonus.SkillTags.Length != 0) {
                     TagBonus.Add(bonus);
@@ -44,8 +44,7 @@ public abstract class SupportAgent(uint id) : Agent(id) {
                     BonusStats[bonus.Affix] += bonus.Value;
                 }
             }
-            return;
-        } 
+        }
         
         foreach (var bonus in set.FullBonus) {
             if (bonus.SkillTags.Length != 0) {

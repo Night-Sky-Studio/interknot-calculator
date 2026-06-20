@@ -4,7 +4,7 @@
         "Value": 30
     }],
     "FullBonus": [{
-        "Affix": "AnomalyMasteryRatio",
+        "Affix": "AnomalyBuildupBonus",
         "Tags": ["ExSpecial"],
         "Value": 0.2
     }]

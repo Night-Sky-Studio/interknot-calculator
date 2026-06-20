@@ -147,7 +147,7 @@ public static class Program {
                     stopwatch.Restart();
                 }
             }
-            Console.WriteLine($"Done processing");
+            Console.WriteLine("Done processing");
             
             await writer.FlushAsync(cts.Token);
             
