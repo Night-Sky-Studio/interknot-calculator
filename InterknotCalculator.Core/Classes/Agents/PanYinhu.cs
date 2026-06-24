@@ -3,20 +3,16 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public class PanYinhu : Agent, IAgentReference<PanYinhu> {
-    public static PanYinhu Reference() {
+public class PanYinhu : SupportAgent, IAgentReference<PanYinhu> {
+    public static PanYinhu Reference(uint weaponId, uint setId) {
         var panYinhu = new PanYinhu {
             Stats = {
                 [Affix.Atk] = 3000
             }
         };
 
-        panYinhu.SetWeapon(WeaponId.TremorTrigramVessel);
-
-        var astralVoid = Resources.Current.GetDriveDiscSet(DriveDiscSetId.AstralVoice);
-        
-        var qaBonus = astralVoid.FullBonus.First();
-        panYinhu.ExternalBonus[qaBonus.Affix] += qaBonus.Value;
+        panYinhu.SetWeaponPassive(weaponId);
+        panYinhu.SetDriveDiscsPassive(setId);
         
         panYinhu.ApplyPassive();
         

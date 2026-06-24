@@ -2,11 +2,14 @@
 
 namespace InterknotCalculator.Core.Classes.Server;
 
-public record AgentAction {
-    public uint AgentId { get; set; }   
-    public string Name { get; set; } = "";
-    public SkillTag Tag { get; set; }
-    public double Damage { get; set; }
-    public double Daze { get; set; }
-    public ActionStatus Status { get; set; } = ActionStatus.Pass;
+public record AgentAction(
+    uint AgentId,
+    string Name,
+    SkillTag Tag,
+    double Damage,
+    double Daze
+) {
+    public string Name { get; set; } = Name;
+    public double Damage { get; set; } = Damage;
+    public double Daze { get; set; } = Daze;
 }

@@ -48,7 +48,7 @@ public class YanagiTests : AgentsTest {
                 Levels = [15, 3, 2, 2, 2]
             },
         ],
-        Team = [1171],
+        Team = [new(1171)],
         StunBonus = 1,
         Rotation = [
             "1171.energizing_speciality_drink",
@@ -67,7 +67,6 @@ public class YanagiTests : AgentsTest {
     [Test]
     public void YanagiTest() {
         var enemy = new NotoriousDullahan {
-            StunMultiplier = Yanagi.StunBonus,
             AfflictedAnomaly = Anomaly.GetAnomalyByElement(Element.Fire)! with {
                 AgentId = 1151,
                 Stats = new() {
@@ -76,8 +75,7 @@ public class YanagiTests : AgentsTest {
                 }
             }
         };
-        var result = Calculator.Calculate(Yanagi.AgentId, Yanagi.WeaponId, GetDriveDiscs(Yanagi), 
-            Yanagi.Team, Yanagi.Rotation, enemy);
+        var result = Calculator.Calculate(Yanagi, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
@@ -88,6 +86,6 @@ public class YanagiTests : AgentsTest {
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
-        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
+        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
     }
 }

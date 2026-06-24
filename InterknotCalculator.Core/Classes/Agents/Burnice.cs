@@ -3,8 +3,8 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public class Burnice : Agent, IAgentReference<Burnice> {
-    public static Burnice Reference() {
+public class Burnice : SupportAgent, IAgentReference<Burnice> {
+    public static Burnice Reference(uint weaponId, uint setId) {
         var burnice = new Burnice {
             Stats = {
                 [Affix.Atk] = 2850, 
@@ -14,12 +14,15 @@ public class Burnice : Agent, IAgentReference<Burnice> {
             }
         };
         
+        burnice.SetWeaponPassive(weaponId);
+        burnice.SetDriveDiscsPassive(setId);
+        
         burnice.ApplyPassive();
 
         return burnice;
     }
-
-    public Burnice() : base(1171) {
+    
+    public Burnice() : base(AgentId.Burnice) {
         Speciality = Speciality.Anomaly;
         Element = Element.Fire;
         Rarity = Rarity.S;

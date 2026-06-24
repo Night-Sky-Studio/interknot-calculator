@@ -3,30 +3,22 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public sealed class AstraYao : Agent, IAgentReference<AstraYao> {
-    public static AstraYao Reference() {
+public sealed class AstraYao : SupportAgent, IAgentReference<AstraYao> {
+    public static AstraYao Reference(uint weaponId, uint setId) {
         var astraYao = new AstraYao {
             Stats = {
                 [Affix.Atk] = 3430
             }
         };
 
-        var elegantVanity = Resources.Current.GetWeapon(14131);
-
-        foreach (var stat in elegantVanity.ExternalBonus) {
-            astraYao.ExternalBonus[stat.Affix] += stat.Value;
-        }
-
-        var astralVoice = Resources.Current.GetDriveDiscSet(32800);
-
-        var qaBonus = astralVoice.FullBonus.First();
-        astraYao.ExternalBonus[qaBonus.Affix] += qaBonus.Value;
+        astraYao.SetWeaponPassive(weaponId);
+        astraYao.SetDriveDiscsPassive(setId);
         
         astraYao.ApplyPassive();
         
         return astraYao;
     }
-    public AstraYao() : base(1311) {
+    public AstraYao() : base(AgentId.AstraYao) {
         Speciality = Speciality.Support;
         Element = Element.Ether;
         Rarity = Rarity.S;

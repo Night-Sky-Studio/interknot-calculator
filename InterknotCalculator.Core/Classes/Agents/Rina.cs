@@ -3,8 +3,8 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public sealed class Rina : Agent, IAgentReference<Rina> {
-    public static Rina Reference() {
+public sealed class Rina : SupportAgent, IAgentReference<Rina> {
+    public static Rina Reference(uint weaponId, uint setId) {
         var rina = new Rina {
             Stats = {
                 [Affix.Atk] = 2600
@@ -14,25 +14,14 @@ public sealed class Rina : Agent, IAgentReference<Rina> {
             }
         };
 
-        var weepingCradle = Resources.Current.GetWeapon(14121);
-
-        rina.Stats[weepingCradle.MainStat.Affix] += weepingCradle.MainStat.Value;
-        rina.BonusStats[weepingCradle.SecondaryStat.Affix] += weepingCradle.SecondaryStat.Value;
-        
-        foreach (var stat in weepingCradle.ExternalBonus) {
-            rina.ExternalBonus[stat.Affix] += stat.Value;
-        }
-
-        var astralVoice = Resources.Current.GetDriveDiscSet(32800);
-
-        var qaBonus = astralVoice.FullBonus.First();
-        rina.ExternalBonus[qaBonus.Affix] += qaBonus.Value;
+        rina.SetWeaponPassive(weaponId);
+        rina.SetDriveDiscsPassive(setId);
         
         rina.ApplyPassive();
         
         return rina;
     }
-    public Rina() : base(1211) {
+    public Rina() : base(AgentId.Rina) {
         Speciality = Speciality.Support;
         Element = Element.Electric;
         Rarity = Rarity.S;

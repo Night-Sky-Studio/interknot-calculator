@@ -34,52 +34,52 @@ public class StatsCollectionTest: CalculatorTest {
         miyabi.SetWeapon(WeaponId.HailstormShrine);
         miyabi.SetDriveDiscs([
             new(DriveDiscSetId.WoodpeckerElectro, 1, Rarity.S,
-                Stat.Stats[Affix.Hp],
+                Stat.MainStat.Get(Rarity.S, Affix.Hp, 15),
                 [
-                    Stat.SubStats[Affix.HpRatio] with { Level = 2 },
-                    Stat.SubStats[Affix.CritDamage],
-                    Stat.SubStats[Affix.CritRate] with { Level = 3 },
-                    Stat.SubStats[Affix.AtkRatio] with { Level = 3 }
+                    Stat.SubStat.Get(Rarity.S, Affix.HpRatio, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.AtkRatio, 3)
                 ]),
             new(DriveDiscSetId.BranchBladeSong, 2, Rarity.S,
-                Stat.Stats[Affix.Atk],
+                Stat.MainStat.Get(Rarity.S, Affix.Atk, 15),
                 [
-                    Stat.SubStats[Affix.AnomalyProficiency],
-                    Stat.SubStats[Affix.CritDamage] with { Level = 3 },
-                    Stat.SubStats[Affix.CritRate] with { Level = 3 },
-                    Stat.SubStats[Affix.Pen]
+                    Stat.SubStat.Get(Rarity.S, Affix.AnomalyProficiency),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.Pen)
                 ]),
             new(DriveDiscSetId.WoodpeckerElectro, 3, Rarity.S,
-                Stat.Stats[Affix.Def],
+                Stat.MainStat.Get(Rarity.S, Affix.Def, 15),
                 [
-                    Stat.SubStats[Affix.AtkRatio] with { Level = 2 },
-                    Stat.SubStats[Affix.CritRate] with { Level = 4 },
-                    Stat.SubStats[Affix.CritDamage],
-                    Stat.SubStats[Affix.Atk] with { Level = 2 }
+                    Stat.SubStat.Get(Rarity.S, Affix.AtkRatio, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate, 4),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage),
+                    Stat.SubStat.Get(Rarity.S, Affix.Atk, 2)
                 ]),
             new(DriveDiscSetId.BranchBladeSong, 4, Rarity.S,
-                Stat.Stats[Affix.CritDamage],
+                Stat.MainStat.Get(Rarity.S, Affix.CritDamage, 15),
                 [
-                    Stat.SubStats[Affix.AtkRatio],
-                    Stat.SubStats[Affix.Pen] with { Level = 3 },
-                    Stat.SubStats[Affix.CritRate] with { Level = 3 },
-                    Stat.SubStats[Affix.Atk] with { Level = 2 }
+                    Stat.SubStat.Get(Rarity.S, Affix.AtkRatio),
+                    Stat.SubStat.Get(Rarity.S, Affix.Pen, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.Atk, 2)
                 ]),
             new(DriveDiscSetId.BranchBladeSong, 5, Rarity.S,
-                Stat.Stats[Affix.PenRatio],
+                Stat.MainStat.Get(Rarity.S, Affix.PenRatio, 15),
                 [
-                    Stat.SubStats[Affix.HpRatio] with { Level = 2 },
-                    Stat.SubStats[Affix.CritDamage] with { Level = 4 },
-                    Stat.SubStats[Affix.AtkRatio],
-                    Stat.SubStats[Affix.Hp]
+                    Stat.SubStat.Get(Rarity.S, Affix.HpRatio, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage, 4),
+                    Stat.SubStat.Get(Rarity.S, Affix.AtkRatio),
+                    Stat.SubStat.Get(Rarity.S, Affix.Hp)
                 ]),
             new(DriveDiscSetId.BranchBladeSong, 6, Rarity.S,
-                Stat.Stats[Affix.AtkRatio],
+                Stat.MainStat.Get(Rarity.S, Affix.AtkRatio, 15),
                 [
-                    Stat.SubStats[Affix.Hp] with { Level = 2 },
-                    Stat.SubStats[Affix.CritDamage] with { Level = 2 },
-                    Stat.SubStats[Affix.Atk] with { Level = 3 },
-                    Stat.SubStats[Affix.CritRate]
+                    Stat.SubStat.Get(Rarity.S, Affix.Hp, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.Atk, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate)
                 ])
         ]);
         
@@ -106,52 +106,52 @@ public class StatsCollectionTest: CalculatorTest {
         jane.SetWeapon(WeaponId.SharpenedStinger);
         jane.SetDriveDiscs([
             new(DriveDiscSetId.FreedomBlues, 1, Rarity.S,
-                Stat.Stats[Affix.Hp],
+                Stat.MainStat.Get(Rarity.S, Affix.Hp, 15),
                 [
-                    Stat.SubStats[Affix.AnomalyProficiency] with { Level = 2 },
-                    Stat.SubStats[Affix.HpRatio] with { Level = 2 },
-                    Stat.SubStats[Affix.AtkRatio] with { Level = 3 },
-                    Stat.SubStats[Affix.Pen] with { Level = 2 }
+                    Stat.SubStat.Get(Rarity.S, Affix.AnomalyProficiency, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.HpRatio, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.AtkRatio, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.Pen, 2)
                 ]),
             new(DriveDiscSetId.FreedomBlues, 2, Rarity.S,
-                Stat.Stats[Affix.Atk],
+                Stat.MainStat.Get(Rarity.S, Affix.Atk, 15),
                 [
-                    Stat.SubStats[Affix.AnomalyProficiency] with { Level = 3 },
-                    Stat.SubStats[Affix.HpRatio],
-                    Stat.SubStats[Affix.AtkRatio] with { Level = 3 },
-                    Stat.SubStats[Affix.CritRate]
+                    Stat.SubStat.Get(Rarity.S, Affix.AnomalyProficiency, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.HpRatio),
+                    Stat.SubStat.Get(Rarity.S, Affix.AtkRatio, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate)
                 ]),
             new(DriveDiscSetId.FangedMetal, 3, Rarity.S,
-                Stat.Stats[Affix.Def],
+                Stat.MainStat.Get(Rarity.S, Affix.Def, 15),
                 [
-                    Stat.SubStats[Affix.Hp],
-                    Stat.SubStats[Affix.DefRatio] with { Level = 2 },
-                    Stat.SubStats[Affix.AtkRatio] with { Level = 4 },
-                    Stat.SubStats[Affix.AnomalyProficiency] with { Level = 2 }
+                    Stat.SubStat.Get(Rarity.S, Affix.Hp),
+                    Stat.SubStat.Get(Rarity.S, Affix.DefRatio, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.AtkRatio, 4),
+                    Stat.SubStat.Get(Rarity.S, Affix.AnomalyProficiency, 2)
                 ]),
             new(DriveDiscSetId.FangedMetal, 4, Rarity.S,
-                Stat.Stats[Affix.AnomalyProficiency],
+                Stat.MainStat.Get(Rarity.S, Affix.AnomalyProficiency, 15),
                 [
-                    Stat.SubStats[Affix.CritRate],
-                    Stat.SubStats[Affix.HpRatio],
-                    Stat.SubStats[Affix.AtkRatio] with { Level = 3 },
-                    Stat.SubStats[Affix.Hp] with { Level = 3 }
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate),
+                    Stat.SubStat.Get(Rarity.S, Affix.HpRatio),
+                    Stat.SubStat.Get(Rarity.S, Affix.AtkRatio, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.Hp, 3)
                 ]),
             new(DriveDiscSetId.FangedMetal, 5, Rarity.S,
-                Stat.Stats[Affix.PhysicalDmgBonus],
+                Stat.MainStat.Get(Rarity.S, Affix.PhysicalDmgBonus, 15),
                 [
-                    Stat.SubStats[Affix.AnomalyProficiency] with { Level = 2 },
-                    Stat.SubStats[Affix.AtkRatio] with { Level = 3 },
-                    Stat.SubStats[Affix.Def] with { Level = 2 },
-                    Stat.SubStats[Affix.CritDamage] with { Level = 2 }
+                    Stat.SubStat.Get(Rarity.S, Affix.AnomalyProficiency, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.AtkRatio, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.Def, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage, 2)
                 ]),
             new(DriveDiscSetId.FangedMetal, 6, Rarity.S,
-                Stat.Stats[Affix.AnomalyMasteryRatio],
+                Stat.MainStat.Get(Rarity.S, Affix.AnomalyMasteryRatio, 15),
                 [
-                    Stat.SubStats[Affix.AnomalyProficiency] with { Level = 2 },
-                    Stat.SubStats[Affix.Pen] with { Level = 2 },
-                    Stat.SubStats[Affix.DefRatio] with { Level = 3 },
-                    Stat.SubStats[Affix.HpRatio] with { Level = 2 }
+                    Stat.SubStat.Get(Rarity.S, Affix.AnomalyProficiency, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.Pen, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.DefRatio, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.HpRatio, 2)
                 ])
         ]);
 
@@ -178,52 +178,52 @@ public class StatsCollectionTest: CalculatorTest {
         yixuan.SetWeapon(WeaponId.QingmingBirdcage);
         yixuan.SetDriveDiscs([
             new(DriveDiscSetId.YunkuiTales, 1, Rarity.S,
-                Stat.Stats[Affix.Hp],
+                Stat.MainStat.Get(Rarity.S, Affix.Hp, 15),
                 [
-                    Stat.SubStats[Affix.CritRate] with { Level = 2 },
-                    Stat.SubStats[Affix.HpRatio] with { Level = 3 },
-                    Stat.SubStats[Affix.CritDamage] with { Level = 2 },
-                    Stat.SubStats[Affix.Def]
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.HpRatio, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.Def)
                 ]),
             new(DriveDiscSetId.BranchBladeSong, 2, Rarity.S,
-                Stat.Stats[Affix.Atk],
+                Stat.MainStat.Get(Rarity.S, Affix.Atk, 15),
                 [
-                    Stat.SubStats[Affix.AtkRatio] with { Level = 2 },
-                    Stat.SubStats[Affix.CritDamage] with { Level = 4 },
-                    Stat.SubStats[Affix.Hp] with { Level = 2 },
-                    Stat.SubStats[Affix.Def]
+                    Stat.SubStat.Get(Rarity.S, Affix.AtkRatio, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage, 4),
+                    Stat.SubStat.Get(Rarity.S, Affix.Hp, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.Def)
                 ]),
             new(DriveDiscSetId.YunkuiTales, 3, Rarity.S,
-                Stat.Stats[Affix.Def],
+                Stat.MainStat.Get(Rarity.S, Affix.Def, 15),
                 [
-                    Stat.SubStats[Affix.CritDamage] with { Level = 2 },
-                    Stat.SubStats[Affix.CritRate] with { Level = 2 },
-                    Stat.SubStats[Affix.HpRatio] with { Level = 3 },
-                    Stat.SubStats[Affix.AtkRatio]
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.HpRatio, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.AtkRatio)
                 ]),
             new(DriveDiscSetId.BranchBladeSong, 4, Rarity.S,
-                Stat.Stats[Affix.CritDamage],
+                Stat.MainStat.Get(Rarity.S, Affix.CritDamage, 15),
                 [
-                    Stat.SubStats[Affix.Hp] with { Level = 2 },
-                    Stat.SubStats[Affix.HpRatio] with { Level = 2 },
-                    Stat.SubStats[Affix.CritRate] with { Level = 4 },
-                    Stat.SubStats[Affix.Pen]
+                    Stat.SubStat.Get(Rarity.S, Affix.Hp, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.HpRatio, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate, 4),
+                    Stat.SubStat.Get(Rarity.S, Affix.Pen)
                 ]),
             new(DriveDiscSetId.YunkuiTales, 5, Rarity.S,
-                Stat.Stats[Affix.EtherDmgBonus],
+                Stat.MainStat.Get(Rarity.S, Affix.EtherDmgBonus, 15),
                 [
-                    Stat.SubStats[Affix.Def] with { Level = 2 },
-                    Stat.SubStats[Affix.CritRate] with { Level = 2 },
-                    Stat.SubStats[Affix.CritDamage] with { Level = 2 },
-                    Stat.SubStats[Affix.Hp] with { Level = 2 }
+                    Stat.SubStat.Get(Rarity.S, Affix.Def, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.Hp, 2)
                 ]),
             new(DriveDiscSetId.YunkuiTales, 6, Rarity.S,
-                Stat.Stats[Affix.HpRatio],
+                Stat.MainStat.Get(Rarity.S, Affix.HpRatio, 15),
                 [
-                    Stat.SubStats[Affix.Atk] with { Level = 2 },
-                    Stat.SubStats[Affix.CritRate],
-                    Stat.SubStats[Affix.CritDamage] with { Level = 3 },
-                    Stat.SubStats[Affix.AtkRatio] with { Level = 2 }
+                    Stat.SubStat.Get(Rarity.S, Affix.Atk, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.AtkRatio, 2)
                 ])
         ]);
 

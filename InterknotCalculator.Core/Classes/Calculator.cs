@@ -11,96 +11,27 @@ namespace InterknotCalculator.Core.Classes;
 /// </summary>
 public class Calculator {
     /// <summary>
-    /// Creates an Agent instance from known agents IDs
-    /// </summary>
-    /// <param name="agentId">Agent ID</param>
-    /// <param name="mindscape">Mindscape Level</param>
-    /// <returns><see cref="Agent"/> instance with specific implementation</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Agent not implemented</exception>
-    private static Agent CreateAgentInstance(uint agentId, uint mindscape = 0) {
-        return agentId switch {
-            AgentId.Soldier11    => new Soldier11(),
-            AgentId.Miyabi       => mindscape switch {
-                0 => new Miyabi(),
-                1 => new MiyabiM1(),
-                2 => new MiyabiM2(),
-                _ => throw new ArgumentOutOfRangeException(nameof(mindscape), mindscape, "Invalid mindscape value.")
-            },
-            AgentId.Burnice      => new Burnice(),
-            AgentId.Grace        => new Grace(),
-            AgentId.Ellen        => mindscape switch {
-                0 => new Ellen(),
-                1 => new EllenM1(),
-                2 => new EllenM2(),
-                3 => new EllenM3(),
-                4 => new EllenM4(),
-                5 => new EllenM5(),
-                6 => new EllenM6(),
-                 _ => throw new ArgumentOutOfRangeException(nameof(mindscape), mindscape, "Invalid mindscape value.")
-            },
-            AgentId.Harumasa     => new Harumasa(),
-            AgentId.Yanagi       => new Yanagi(),
-            AgentId.ZhuYuan      => new ZhuYuan(),
-            AgentId.Jane         => mindscape switch {
-                0 => new JaneDoe(),
-                1 => new JaneDoeM1(),
-                2 => new JaneDoeM2(),
-                 _ => throw new ArgumentOutOfRangeException(nameof(mindscape), mindscape, "Invalid mindscape value.")
-            },
-            AgentId.Evelyn       => new Evelyn(),
-            AgentId.Vivian       => new Vivian(),
-            AgentId.Soldier0Anby => new SilverAnby(),
-            AgentId.Trigger      => new Trigger(),
-            AgentId.Yixuan       => new Yixuan(),
-            AgentId.Alice        => new Alice(),
-            _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent instance wasn't found.")
-        };
-    }
-
-    private static Agent CreateAgentReference(uint agentId) {
-        return agentId switch {
-            AgentId.Nicole       => Nicole.Reference(), // Support agent - provide reference implementation
-            AgentId.Koleda       => Koleda.Reference(),
-            AgentId.Soukaku      => Soukaku.Reference(),
-            AgentId.Lycaon       => Lycaon.Reference(),
-            AgentId.Lucy         => Lucy.Reference(),
-            AgentId.Burnice      => Burnice.Reference(),
-            AgentId.Rina         => Rina.Reference(),
-            AgentId.Jane         => JaneDoe.Reference(),
-            AgentId.AstraYao     => AstraYao.Reference(),
-            AgentId.Soldier0Anby => SilverAnby.Reference(),
-            AgentId.Trigger      => Trigger.Reference(),
-            AgentId.PanYinhu     => PanYinhu.Reference(),
-            AgentId.JuFufu       => JuFufu.Reference(),
-            AgentId.Vivian       => Vivian.Reference(),
-            AgentId.Yuzuha       => Yuzuha.Reference(),
-            _ => throw new ArgumentOutOfRangeException(nameof(agentId), agentId, "Agent reference wasn't found.")
-        };
-    }
-
-    /// <summary>
     /// Main damage calculation function
     /// </summary>
-    /// <param name="characterId">Agent ID</param>
-    /// <param name="weaponId">Weapon ID</param>
-    /// <param name="mindscape">Mindscape Level</param>
-    /// <param name="driveDiscs">Agent's equipped Drive Discs</param>
-    /// <param name="team">Team members IDs collection (except current agent)</param>
-    /// <param name="rotation">Collection of agent skills</param>
-    /// <param name="enemy">Enemy instance</param>
-    /// <param name="calcType">Damage or Daze</param>
-    /// <returns>A collection of agent ctx.Actions</returns>
-    public CalcResult Calculate(uint characterId, uint weaponId,
-        DriveDisc[] driveDiscs, IEnumerable<uint> team, 
-        IEnumerable<string> rotation, Enemy enemy, CalculationType calcType = CalculationType.Damage,
-        uint mindscape = 0) {
-
+    public static CalcResult Calculate(CalcRequest request, Enemy? enemy = null) {
+        var characterId = request.AgentId;
+        var weaponId = request.WeaponId;
+        var mindscape = request.Mindscape;
+        var driveDiscs = request.Discs.Select((disc, i) => 
+            new DriveDisc(disc.SetId, Convert.ToUInt32(i), disc.Rarity, 
+                Stat.MainStat.Get(disc.Rarity, disc.Stats[0], disc.Levels[0]),
+                disc.StatsLevels.Skip(1).Select(p => Stat.SubStat.Get(disc.Rarity, p.Key, p.Value)))).ToArray();
+        var team = request.Team;
+        var rotation = request.Rotation;
+        enemy ??= new NotoriousDullahan();
+        enemy.StunMultiplier = request.StunBonus;
+        
         var ctx = new Context {
             Team = {
                 // Initialize the agent and the weapon
                 // Having a dictionary here allows us to use abilities 
                 // of other team members
-                [characterId] = CreateAgentInstance(characterId, mindscape)
+                [characterId] = AgentRegistry.CreateInstance(characterId, mindscape)
             },
             MainAgentId = characterId,
             Enemy = enemy
@@ -114,7 +45,7 @@ public class Calculator {
         // Those include current agent in the team, because current agent can also
         // have synergy with other team members
         foreach (var member in team) {
-            ctx.Team[member] = CreateAgentReference(member);
+            ctx.Team[member.AgentId] = AgentRegistry.CreateReference(member);
         }
         List<Stat> fullTeamPassive = [];
 
@@ -215,20 +146,20 @@ public class Calculator {
             action.Daze = 0;
         });
 
-        var total = calcType switch {
-            CalculationType.Damage => ctx.Actions.Sum(action => action.Damage),
-            CalculationType.Daze   => ctx.Actions.Sum(action => action.Daze),
-            _                      => ctx.Actions.Sum(action => action.Damage) // Fallback to damage
-        };
+        // var total = calcType switch {
+        //     CalculationType.Damage => ctx.Actions.Sum(action => action.Damage),
+        //     CalculationType.Daze   => ctx.Actions.Sum(action => action.Daze),
+        //     _                      => ctx.Actions.Sum(action => action.Damage) // Fallback to damage
+        // };
         
         return new CalcResult {
             FinalStats = {
                 BaseStats = ctx.MainAgent.BaseStats,
                 CalculatedStats = ctx.MainAgent.CollectStats()
             },
-            Enemy = enemy,
+            Enemy = ctx.Enemy,
             PerAction = ctx.Actions,
-            Total = total
+            Total = ctx.Actions.Sum(action => action.Damage)
         };
     }
 }

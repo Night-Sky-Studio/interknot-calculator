@@ -3,9 +3,11 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public class SilverAnby : Agent, IAgentReference<SilverAnby> {
-    public static SilverAnby Reference() {
+public class SilverAnby : SupportAgent, IAgentReference<SilverAnby> {
+    public static SilverAnby Reference(uint weaponId, uint setId) {
         var silverAnby = new SilverAnby();
+        silverAnby.SetWeaponPassive(weaponId);
+        silverAnby.SetDriveDiscsPassive(setId);
         silverAnby.ApplyPassive();
         return silverAnby;
     }

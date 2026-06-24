@@ -1,3 +1,4 @@
+using InterknotCalculator.Core.Classes;
 using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
@@ -48,9 +49,9 @@ public class YixuanTests: AgentsTest {
             },
         ],
         Team = [
-            AgentId.JuFufu,
-            // AgentId.Trigger,
-            AgentId.AstraYao
+            new(AgentId.JuFufu),
+            // new(AgentId.Trigger),
+            new(AgentId.AstraYao)
         ],
         StunBonus = 1.5,
         Rotation = [
@@ -67,16 +68,12 @@ public class YixuanTests: AgentsTest {
 
     [Test]
     public void YixuanTest() {
-        var enemy = new NotoriousDullahan {
-            StunMultiplier = Yixuan.StunBonus
-        };
-        var result = Calculator.Calculate(Yixuan.AgentId, Yixuan.WeaponId, GetDriveDiscs(Yixuan), 
-            Yixuan.Team, Yixuan.Rotation, enemy);
+        var result = Calculator.Calculate(Yixuan);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
         // Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
-        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
+        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
     }
 }

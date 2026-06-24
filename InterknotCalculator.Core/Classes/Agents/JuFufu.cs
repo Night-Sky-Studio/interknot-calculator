@@ -3,19 +3,16 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public class JuFufu : Agent, IStunAgent, IAgentReference<JuFufu> {
-    public static JuFufu Reference() {
+public class JuFufu : SupportAgent, IStunAgent, IAgentReference<JuFufu> {
+    public static JuFufu Reference(uint weaponId, uint setId) {
         var fufu = new JuFufu {
             Stats = {
                 [Affix.CritRate] = 0.5
             }
         };
-        fufu.SetWeapon(WeaponId.RoaringFurnace);
 
-        var kots = Resources.Current.GetDriveDiscSet(DriveDiscSetId.KingOfTheSummit);
-        foreach (var fullBonus in kots.FullBonus) {
-            fufu.ExternalBonus[fullBonus.Affix] += fullBonus.Value;
-        }
+        fufu.SetWeaponPassive(weaponId);
+        fufu.SetDriveDiscsPassive(setId);
         
         fufu.ApplyPassive();
         return fufu;

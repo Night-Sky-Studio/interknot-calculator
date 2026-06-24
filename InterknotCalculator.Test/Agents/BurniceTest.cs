@@ -1,4 +1,5 @@
-﻿using InterknotCalculator.Core.Classes.Enemies;
+﻿using InterknotCalculator.Core.Classes;
+using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -47,7 +48,7 @@ public class BurniceTests : AgentsTest {
                 Levels = [15, 4, 1, 2, 2]
             },
         ],
-        Team = [1151],
+        Team = [new(AgentId.Lucy)],
         StunBonus = 1.5,
         Rotation = [
             "fuel-fed_flame",
@@ -59,9 +60,7 @@ public class BurniceTests : AgentsTest {
 
     [Test]
     public void BurniceTest() {
-        var enemy = new NotoriousDullahan();
-        var result = Calculator.Calculate(Burnice.AgentId, Burnice.WeaponId, GetDriveDiscs(Burnice), 
-            Burnice.Team, Burnice.Rotation, enemy);
+        var result = Calculator.Calculate(Burnice);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
@@ -71,6 +70,6 @@ public class BurniceTests : AgentsTest {
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
-        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
+        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
     }
 }

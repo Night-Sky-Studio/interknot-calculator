@@ -1,7 +1,15 @@
 namespace InterknotCalculator.Core.Classes.Agents;
 
+/// <summary>
+/// Base Support Agent class.
+/// 
+/// Every agent that can be used as a team member should inherit from this class.
+/// </summary>
+/// <param name="id">Agent ID</param>
 public abstract class SupportAgent(uint id) : Agent(id) {
-    public void SetWeaponPassive(uint weaponId) {
+    protected void SetWeaponPassive(uint weaponId) {
+        if (weaponId == 0) return;
+        
         var weapon = Resources.Current.GetWeapon(weaponId);
 
         if (weapon.Speciality != Speciality) return;
@@ -22,11 +30,13 @@ public abstract class SupportAgent(uint id) : Agent(id) {
             }
         }
     }
-    
-    public void SetDriveDiscsPassive(uint driveDiscSetId, bool fullBonus = false) {
+
+    protected void SetDriveDiscsPassive(uint driveDiscSetId, bool partial = false) {
+        if (driveDiscSetId == 0) return;
+        
         var set = Resources.Current.GetDriveDiscSet(driveDiscSetId);
         
-        if (!fullBonus) {
+        if (partial) {
             foreach (var bonus in set.PartialBonus) {
                 if (bonus.SkillTags.Length != 0) {
                     TagBonus.Add(bonus);
@@ -34,8 +44,7 @@ public abstract class SupportAgent(uint id) : Agent(id) {
                     BonusStats[bonus.Affix] += bonus.Value;
                 }
             }
-            return;
-        } 
+        }
         
         foreach (var bonus in set.FullBonus) {
             if (bonus.SkillTags.Length != 0) {

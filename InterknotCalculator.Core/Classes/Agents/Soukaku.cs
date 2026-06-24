@@ -3,8 +3,8 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public class Soukaku : Agent, IAgentReference<Soukaku> {
-    public Soukaku() : base(1131) {
+public class Soukaku : SupportAgent, IAgentReference<Soukaku> {
+    public Soukaku() : base(AgentId.Soukaku) {
         Speciality = Speciality.Support;
         Element = Element.Ice;
         Rarity = Rarity.A;
@@ -21,24 +21,16 @@ public class Soukaku : Agent, IAgentReference<Soukaku> {
         Stats[Affix.EnergyRegen] = 1.56;
     }
 
-    public static Soukaku Reference() {
+    public static Soukaku Reference(uint weaponId, uint setId) {
         var soukaku = new Soukaku {
             Stats = {
                 [Affix.Atk] = 2500
             }
         };
 
-        var bashfulDemon = Resources.Current.GetWeapon(13113);
+        soukaku.SetWeaponPassive(weaponId);
+        soukaku.SetDriveDiscsPassive(setId);
         
-        foreach (var stat in bashfulDemon.ExternalBonus) {
-            soukaku.ExternalBonus[stat.Affix] += stat.Value;
-        }
-
-        var astralVoice = Resources.Current.GetDriveDiscSet(32800);
-
-        var qaBonus = astralVoice.FullBonus.First();
-        soukaku.ExternalBonus[qaBonus.Affix] += qaBonus.Value;
-
         soukaku.ApplyPassive();
         
         return soukaku;

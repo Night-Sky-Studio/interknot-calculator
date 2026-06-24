@@ -16,4 +16,14 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MessagePack" Version="3.1.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\InterknotCalculator.Generators\InterknotCalculator.Generators.csproj"
+                        OutputItemType="Analyzer"
+                        ReferenceOutputAssembly="false"/>
+    </ItemGroup>
 </Project>

@@ -3,14 +3,12 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public class Koleda : Agent, IAgentReference<Koleda> {
-    public static Koleda Reference() {
+public class Koleda : SupportAgent, IAgentReference<Koleda> {
+    public static Koleda Reference(uint weaponId, uint setId) {
         var koleda = new Koleda();
-
-        var kots = Resources.Current.GetDriveDiscSet(DriveDiscSetId.KingOfTheSummit);
-        foreach (var fullBonus in kots.FullBonus) {
-            koleda.ExternalBonus[fullBonus.Affix] += fullBonus.Value;
-        }
+        
+        koleda.SetWeaponPassive(weaponId);
+        koleda.SetDriveDiscsPassive(setId);
         
         koleda.ApplyPassive();
         return koleda;

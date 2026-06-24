@@ -3,8 +3,8 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public class JaneDoe : Agent, IAgentReference<JaneDoe> {
-    public static JaneDoe Reference() {
+public class JaneDoe : SupportAgent, IAgentReference<JaneDoe> {
+    public static JaneDoe Reference(uint weaponId, uint setId) {
         var jane = new JaneDoe {
             Stats = {
                 [Affix.Atk] = 2400,
@@ -13,17 +13,15 @@ public class JaneDoe : Agent, IAgentReference<JaneDoe> {
             }
         };
 
-        var sharpenedStinger = Resources.Current.GetWeapon(14126);
-        foreach (var passive in sharpenedStinger.Passive) {
-            jane.BonusStats[passive.Affix] += passive.Value;
-        }
+        jane.SetWeaponPassive(weaponId);
+        jane.SetDriveDiscsPassive(setId);
 
         jane.ApplyPassive();
         
         return jane;
     }
     
-    public JaneDoe() : base(1261) {
+    public JaneDoe() : base(AgentId.Jane) {
         Speciality = Speciality.Anomaly;
         Element = Element.Physical;
         Rarity = Rarity.S;

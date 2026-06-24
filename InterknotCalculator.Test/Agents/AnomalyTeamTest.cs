@@ -1,5 +1,4 @@
-using InterknotCalculator.Core.Classes.Agents;
-using InterknotCalculator.Core.Classes.Enemies;
+using InterknotCalculator.Core.Classes;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -48,8 +47,8 @@ public class AnomalyTeamTest : AgentsTest {
             },
         ],
         Team = [
-            AgentId.Vivian,
-            AgentId.Yuzuha
+            new(AgentId.Vivian, WeaponId.ElegantVanity),
+            new(AgentId.Yuzuha, WeaponId.Metanukimorphosis, DriveDiscSetId.MoonlightLullaby)
         ],
         StunBonus = 1.5,
         Rotation = [
@@ -67,11 +66,7 @@ public class AnomalyTeamTest : AgentsTest {
     
     [Test]
     public void AliceVivianYuzuhaTest() {
-        var enemy = new NotoriousDullahan {
-            StunMultiplier = Request.StunBonus
-        };
-        var result = Calculator.Calculate(Request.AgentId, Request.WeaponId, GetDriveDiscs(Request), 
-            Request.Team, Request.Rotation, enemy);
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
@@ -79,6 +74,6 @@ public class AnomalyTeamTest : AgentsTest {
             Has.Some.Matches<AgentAction>(a => a.Tag is SkillTag.AttributeAnomaly));
         
         PrintActions(result.PerAction, result.Total);
-        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
+        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
     }
 }

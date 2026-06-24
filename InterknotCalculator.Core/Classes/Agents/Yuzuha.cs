@@ -5,7 +5,7 @@ using InterknotCalculator.Core.Interfaces;
 namespace InterknotCalculator.Core.Classes.Agents;
 
 public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
-    public static Yuzuha Reference() {
+    public static Yuzuha Reference(uint weaponId, uint setId) {
         var yuzuha = new Yuzuha {
             Stats = {
                 [Affix.Atk] = 3000,
@@ -13,8 +13,8 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
             }
         };
 
-        yuzuha.SetWeaponPassive(WeaponId.Metanukimorphosis);
-        yuzuha.SetDriveDiscsPassive(DriveDiscSetId.MoonlightLullaby);
+        yuzuha.SetWeaponPassive(weaponId);
+        yuzuha.SetDriveDiscsPassive(setId);
         
         yuzuha.ApplyPassive();
         
@@ -86,13 +86,7 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
                 or SkillTag.DefensiveAssist
                 or SkillTag.Aftershock) return;
             
-            c.ActionsQueue.Add(new() {
-                AgentId = Id,
-                Damage = 0,
-                Daze = 0,
-                Name = "sugarburst_sparkles_x4",
-                Tag = SkillTag.BasicAtk,
-            });
+            c.ActionsQueue.Add(new(Id, "sugarburst_sparkles_x4", SkillTag.BasicAtk, 0, 0));
             
             var buildup = GetAnomalyBuildup(new(SkillTag.BasicAtk, "sugarburst_sparkles"));
             c.Enemy.AddBuildupContribution(c, this, buildup, e.Agent.Element); // Flavor Match

@@ -3,10 +3,13 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public sealed class Lycaon : Agent, IStunAgent, IAgentReference<Lycaon> {
-    public static Lycaon Reference() {
+public sealed class Lycaon : SupportAgent, IStunAgent, IAgentReference<Lycaon> {
+    public static Lycaon Reference(uint weaponId, uint setId) {
         var lycaon = new Lycaon();
 
+        lycaon.SetWeaponPassive(weaponId);
+        lycaon.SetDriveDiscsPassive(setId);
+        
         lycaon.ApplyPassive();
         
         return lycaon;

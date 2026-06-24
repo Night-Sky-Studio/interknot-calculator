@@ -3,8 +3,8 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public class Lucy : Agent, IAgentReference<Lucy> {
-    public Lucy() : base(1151) {
+public class Lucy : SupportAgent, IAgentReference<Lucy> {
+    public Lucy() : base(AgentId.Lucy) {
         Speciality = Speciality.Support;
         Element = Element.Fire;
         Rarity = Rarity.A;
@@ -21,22 +21,15 @@ public class Lucy : Agent, IAgentReference<Lucy> {
         Stats[Affix.EnergyRegen] = 1.56;
     }
 
-    public static Lucy Reference() {
+    public static Lucy Reference(uint weaponId, uint setId) {
         var lucy = new Lucy {
             Stats = {
                 [Affix.Atk] = 1932
             }
         };
         
-        var kaboomTheCannon = Resources.Current.GetWeapon(13115);
-        foreach (var stat in kaboomTheCannon.ExternalBonus) {
-            lucy.ExternalBonus[stat.Affix] += stat.Value;
-        }
-
-        var astralVoice = Resources.Current.GetDriveDiscSet(32800);
-
-        var qaBonus = astralVoice.FullBonus.First();
-        lucy.ExternalBonus[qaBonus.Affix] += qaBonus.Value;
+        lucy.SetWeaponPassive(weaponId);
+        lucy.SetDriveDiscsPassive(setId);
         
         lucy.ApplyPassive();
 

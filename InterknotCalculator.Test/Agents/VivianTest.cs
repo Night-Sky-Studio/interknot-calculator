@@ -1,3 +1,4 @@
+using InterknotCalculator.Core.Classes;
 using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
@@ -47,7 +48,7 @@ public class VivianTests : AgentsTest {
                 Levels = [15, 3, 3, 1, 1]
             },
         ],
-        Team = [1261],
+        Team = [new(AgentId.Jane)],
         StunBonus = 1,
         Rotation = [
             "1261.aerial_sweep_cleanout",
@@ -61,11 +62,7 @@ public class VivianTests : AgentsTest {
     
     [Test]
     public void VivianTest() {
-        var enemy = new NotoriousDullahan {
-            StunMultiplier = Vivian.StunBonus
-        };
-        var result = Calculator.Calculate(Vivian.AgentId, Vivian.WeaponId, GetDriveDiscs(Vivian), 
-            Vivian.Team, Vivian.Rotation, enemy);
+        var result = Calculator.Calculate(Vivian);
         
         Assert.That(result.PerAction, Is.Not.Empty);
 
@@ -76,6 +73,6 @@ public class VivianTests : AgentsTest {
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
-        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', enemy.AnomalyBuildup)}");
+        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
     }
 }
