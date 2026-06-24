@@ -10,4 +10,4 @@ public record DriveDisc(
     IEnumerable<Stat> SubStats
 ) {
     public override string ToString() => $"Disc({SetId}, {Slot}, {Rarity}, {MainStat}, [{string.Join(", ", SubStats)}])";
-};
+}

@@ -9,7 +9,7 @@ namespace InterknotCalculator.Core.Classes;
 /// <summary>
 /// Damage Calculator
 /// </summary>
-public class Calculator {
+public static class Calculator {
     /// <summary>
     /// Main damage calculation function
     /// </summary>

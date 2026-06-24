@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using InterknotCalculator.Core.Classes.Enemies;
 
 namespace InterknotCalculator.Core.Classes.Server;
