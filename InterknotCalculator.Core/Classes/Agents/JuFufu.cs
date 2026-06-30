@@ -7,6 +7,7 @@ public class JuFufu : SupportAgent, IStunAgent, IAgentReference<JuFufu> {
     public static JuFufu Reference(uint weaponId, uint setId) {
         var fufu = new JuFufu {
             Stats = {
+                [Affix.Atk] = 3400,
                 [Affix.CritRate] = 0.5
             }
         };

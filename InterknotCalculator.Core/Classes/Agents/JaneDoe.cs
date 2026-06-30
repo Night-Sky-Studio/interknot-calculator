@@ -7,9 +7,10 @@ public class JaneDoe : SupportAgent, IAgentReference<JaneDoe> {
     public static JaneDoe Reference(uint weaponId, uint setId) {
         var jane = new JaneDoe {
             Stats = {
-                [Affix.Atk] = 2400,
+                [Affix.Atk] = 3000,
                 [Affix.AnomalyProficiency] = 420,
-                [Affix.AnomalyMastery] = 195
+                [Affix.AnomalyMastery] = 195,
+                [Affix.PhysicalDmgBonus] = 0.36
             }
         };
 

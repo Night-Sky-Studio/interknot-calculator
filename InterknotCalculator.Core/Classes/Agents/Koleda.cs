@@ -5,7 +5,11 @@ namespace InterknotCalculator.Core.Classes.Agents;
 
 public class Koleda : SupportAgent, IAgentReference<Koleda> {
     public static Koleda Reference(uint weaponId, uint setId) {
-        var koleda = new Koleda();
+        var koleda = new Koleda {
+            Stats = {
+                [Affix.CritRate] = 0.5
+            }
+        };
         
         koleda.SetWeaponPassive(weaponId);
         koleda.SetDriveDiscsPassive(setId);

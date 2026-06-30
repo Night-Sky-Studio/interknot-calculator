@@ -5,7 +5,11 @@ namespace InterknotCalculator.Core.Classes.Agents;
 
 public sealed class Lycaon : SupportAgent, IStunAgent, IAgentReference<Lycaon> {
     public static Lycaon Reference(uint weaponId, uint setId) {
-        var lycaon = new Lycaon();
+        var lycaon = new Lycaon {
+            Stats = {
+                [Affix.CritRate] = 0.5
+            }
+        };
 
         lycaon.SetWeaponPassive(weaponId);
         lycaon.SetDriveDiscsPassive(setId);

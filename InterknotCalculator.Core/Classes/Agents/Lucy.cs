@@ -42,5 +42,4 @@ public class Lucy : SupportAgent, IAgentReference<Lucy> {
         // M4
         ExternalBonus[Affix.CritDamage] += 0.1;
     }
-
 }

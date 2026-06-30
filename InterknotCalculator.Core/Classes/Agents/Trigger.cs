@@ -8,7 +8,11 @@ public class Trigger : SupportAgent, IStunAgent, IAgentReference<Trigger> {
     public double EnemyStunBonusOverride { get; set; }
     
     public static Trigger Reference(uint weaponId, uint setId) {
-        var trigger = new Trigger();
+        var trigger = new Trigger {
+            Stats = {
+                [Affix.CritRate] = 0.5
+            }
+        };
         
         trigger.SetWeaponPassive(weaponId);
         trigger.SetDriveDiscsPassive(setId);

@@ -7,6 +7,11 @@ namespace InterknotCalculator.Core.Classes;
 /// Calculator Resource Manager
 /// Provides global access to loaded Weapons and Drive Discs
 /// </summary>
+/// <remarks>
+/// TODO: <br/>
+///   - Replace with static definitions from base Weapon and DriveDiscSet classes<br/>
+///   - Wire-up context
+/// </remarks>
 public class Resources {
     private bool _isInitialized = false;
     private string WeaponsPath { get; } = Path.Combine(AppContext.BaseDirectory, "Resources", "Weapons");
@@ -85,7 +90,7 @@ public class Resources {
 
         return weapon;
     }
-
+    
     /// <summary>
     /// Returns drive disc set data from loaded sets
     /// </summary>
@@ -106,6 +111,15 @@ public class Resources {
             //         agent.BonusStats[Affix.CombatAtkRatio] += 0.28;
             //     }
             // },
+            DriveDiscSetId.AstralVoice => agent => {
+                agent.ExternalBonus[Affix.DmgBonus] += 0.24;
+            },
+            DriveDiscSetId.KingOfTheSummit => agent => {
+                agent.ExternalBonus[Affix.CritDamage] += 0.15;
+                if (agent.CritRate >= 0.5) {
+                    agent.ExternalBonus[Affix.CritDamage] += 0.15;
+                }
+            },
             DriveDiscSetId.DawnsBloom => agent => {
                 agent.TagBonus.Add(new(Affix.DmgBonus, agent.Speciality == Speciality.Attack ? 0.4 : 0.2, 
                     tags: [SkillTag.BasicAtk]));
