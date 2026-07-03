@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using InterknotCalculator.Core.Classes;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
@@ -73,12 +72,12 @@ public static class Program {
 
                 var leaderboardCountBytes = await streamReader.ReadAsync(cts.Token)
                                             ?? throw new("No leaderboard count found");
-                var leaderboardCount = MessagePackSerializer.Deserialize<int>(leaderboardCountBytes);
+                var leaderboardCount = MessagePackSerializer.Deserialize<int>(leaderboardCountBytes, MessagePackConfig.Options);
                 var leaderboards = new Leaderboard[leaderboardCount];
                 for (var i = 0; i < leaderboardCount; i++) {
                     var msg = await streamReader.ReadAsync(cts.Token)
                               ?? throw new InvalidDataException("Truncated leaderboard section");
-                    leaderboards[i] = MessagePackSerializer.Deserialize<Leaderboard>(msg);
+                    leaderboards[i] = MessagePackSerializer.Deserialize<Leaderboard>(msg, MessagePackConfig.Options);
                 }
 
                 Console.WriteLine($"Decoded {leaderboardCount} leaderboards");
@@ -90,14 +89,14 @@ public static class Program {
 
                 var charactersCountBytes = await streamReader.ReadAsync(cts.Token)
                                            ?? throw new InvalidDataException("No characters count found");
-                var charactersCount = MessagePackSerializer.Deserialize<int>(charactersCountBytes);
+                var charactersCount = MessagePackSerializer.Deserialize<int>(charactersCountBytes, MessagePackConfig.Options);
 
                 Console.WriteLine($"Total characters: {charactersCount}");
 
                 for (var i = 0; i < charactersCount; i++) {
                     var msg = await streamReader.ReadAsync(cts.Token)
                               ?? throw new InvalidDataException("Truncated characters section");
-                    var character = MessagePackSerializer.Deserialize<Character>(msg);
+                    var character = MessagePackSerializer.Deserialize<Character>(msg, MessagePackConfig.Options);
 
                     var charLeaderboards = leaderboards
                         .Where(l => l.CharacterId == character.CharacterId)
@@ -139,7 +138,7 @@ public static class Program {
                         });
 
                     foreach (var ikncResult in results) {
-                        await MessagePackSerializer.SerializeAsync(writer, ikncResult, cancellationToken: cts.Token);
+                        await MessagePackSerializer.SerializeAsync(writer, ikncResult, MessagePackConfig.Options, cts.Token);
                     }
 
                     if ((i + 1) % 10000 == 0) {
