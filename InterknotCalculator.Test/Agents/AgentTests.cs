@@ -6,14 +6,14 @@ using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Test.Agents;
 
-public abstract class AgentsTest : CalculatorTest {
+public abstract class AgentsTest {
     private static readonly Dictionary<uint, string> AgentIdNames =
         typeof(AgentId)
             .GetFields(BindingFlags.Public | BindingFlags.Static)
             .Where(f => f.IsLiteral && f.FieldType == typeof(uint))
             .ToDictionary(f => (uint)f.GetRawConstantValue()!, f => f.Name);
     
-    protected static string GetAgentName(uint id) =>
+    private static string GetAgentName(uint id) =>
         AgentIdNames.TryGetValue(id, out var name) ? name : id.ToString();
 
     protected void PrintActions(IEnumerable<AgentAction> actions, double total) {

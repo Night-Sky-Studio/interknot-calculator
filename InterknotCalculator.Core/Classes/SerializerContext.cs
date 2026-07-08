@@ -7,8 +7,6 @@ namespace InterknotCalculator.Core.Classes;
 
 [JsonSourceGenerationOptions(WriteIndented = true, UseStringEnumConverter = true)]
 [JsonSerializable(typeof(Agent))]
-[JsonSerializable(typeof(Weapon))]
-[JsonSerializable(typeof(DriveDiscSet))]
 [JsonSerializable(typeof(Stat))]
 [JsonSerializable(typeof(Enemy))]
 [JsonSerializable(typeof(CalcRequest))]

@@ -5,7 +5,7 @@ using InterknotCalculator.Core.Enums;
 namespace InterknotCalculator.Test;
 
 [TestFixture]
-public class StatsCollectionTest: CalculatorTest {
+public class StatsCollectionTest {
     private void CheckStats(Dictionary<Affix, double> expected, Dictionary<Affix, double> actual) {
         foreach (var (key, value) in expected) {
             Console.WriteLine($"Testing {key}");
