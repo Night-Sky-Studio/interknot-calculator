@@ -8,6 +8,6 @@ public abstract class DriveDiscSet(uint id) {
 
     public Stat[] PartialBonus { get; init; } = [];
     public Stat[] FullBonus { get; init; } = [];
-    
+
     public virtual void ApplyPassive(Agent agent) { }
 }

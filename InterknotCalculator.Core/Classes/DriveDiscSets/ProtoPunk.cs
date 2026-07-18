@@ -4,7 +4,7 @@ namespace InterknotCalculator.Core.Classes.DriveDiscSets;
 
 public class ProtoPunk : DriveDiscSet {
     public ProtoPunk() : base(DriveDiscSetId.ProtoPunk) {
-        PartialBonus = [];
+        PartialBonus = []; // impossible to implement
         FullBonus = [new(Affix.DmgBonus, 0.15, tags: [SkillTag.DefensiveAssist, SkillTag.EvasiveAssist])];
     }
 }
