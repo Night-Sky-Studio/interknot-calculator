@@ -1,4 +1,5 @@
 ﻿using InterknotCalculator.Core.Classes.Agents;
+using InterknotCalculator.Core.Classes.DriveDiscSets;
 using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
@@ -108,7 +109,7 @@ public static class Calculator {
         // Subtract excess applications of "Astral Voice" 4pc bonus
         // I can't believe how hacky this feels...
         if (astralVoiceCount > 1) {
-            var astralVoice = Resources.Current.GetDriveDiscSet(32800);
+            var astralVoice = new AstralVoice(); // Resources.Current.GetDriveDiscSet(32800);
             var avBonus = astralVoice.FullBonus.First();
             ctx.Team[characterId].BonusStats[avBonus.Affix] -= avBonus.Value * (astralVoiceCount - 1);
         }

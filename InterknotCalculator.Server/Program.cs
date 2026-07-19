@@ -15,9 +15,6 @@ public static class Program {
     private static bool IsRecalculating { get; set; } = false;
     
     public static async Task Main(string[] args) {
-        // Initialize Resource Manager
-        await Resources.Current.Init();
-        
         // Create web app
         var builder = WebApplication.CreateSlimBuilder(args);
         builder.WebHost.UseUrls("http://127.0.0.1:5200/");

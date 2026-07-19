@@ -1,18 +1,21 @@
 ﻿# Inter-Knot Calculator
-Solution for damage calculations at Inter-Knot project.
+Solution for damage calculations at the Inter-Knot project.
+
+<span>
+<a href="https://youtrack.interknot.space/issues/IKC" target="_blank"><img src="https://img.shields.io/badge/YouTrack-Issues-purple.svg?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0ibm9uZSIgdmlld0JveD0iMCAwIDY0IDY0Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYSIgeDE9Ii0uMTAyNDExIiB4Mj0iNjQuMDUzMiIgeTE9IjMyLjAwMDIiIHkyPSIzMi4wMDAyIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiNGQjQzRkYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuOTciIHN0b3AtY29sb3I9IiNGQjQwNkQiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxwYXRoIGZpbGw9InVybCgjYSkiIGQ9Ik0xLjMwNjM0IDUxLjI0NDZjLS4wOTY4OC0uMDcxMy0uMTI4NzUtLjIwMTktLjA3NjI1LS4zMUw4Ljg2NTcxIDM1LjIwOS4wNTgyMTQgMjQuNjkwOGMtLjA4ODc1LS4xMDU2LS4wNzQzNzUtLjI2MzcuMDMxODc1LS4zNTE4TDI1Ljc3ODggMi45MzIwOUMzMC4zNDk1LS44Nzc5MDggMzYuOTY3LS45ODU0MDggNDEuNjYyNiAyLjY3MTQ3YzQuNjkzNyAzLjY1Njg3IDYuMTkzNyAxMC4wODgxMyAzLjU5NjkgMTUuNDM2MjNsLTIuNzk5NCA1Ljc2NjljMS4wOTE5LS4zNjYzIDIuMTcyNS0uNjk5NCAzLjI0MTItLjk5ODhsMTIuNjczOC0zLjY0MDZjLjEzODEtLjA0LjI4MTkuMDQ1LjMxMzEuMTg1Nmw1LjMwNTYgMjMuNTg1Yy4wMzI1LjE0NTctLjA2NjIuMjg4Mi0uMjE1LjMwNjktMS42ODE4LjIxMTktMTAuODU3NSAxLjUzLTIyLjI4MTIgNi4zMjk0LTEyLjk0MzEgNS40MzYyLTIxLjQ4NDQgMTMuMTYyNS0yMi42OTQ0IDE0LjI5MjUtLjA4OTQuMDgzNy0uMjIwNi4wODY5LS4zMTg3LjAxNDRMMS4zMDYzNCA1MS4yNDQ2WiIvPgogIDxwYXRoIGZpbGw9IiMwMDAiIGQ9Ik01MiAxMkgxMnY0MGg0MFYxMloiLz4KICA8cGF0aCBmaWxsPSIjZmZmIiBkPSJtMjEuNDY2NiAyNi4zNzA5LTUuNDg4MS05LjM3ODdoMy4xNTEzbDMuMzk4MSA1Ljk5MTkuMzk2OS44NTc1LjM5NjgtLjg2ODIgMy4zMTE5LTUuOTgxMmgzLjA5NzVsLTUuNDAyNSA5LjM1NzV2NS42NDg3aC0yLjg2MTl2LTUuNjI3NVoiLz4KICA8cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzMgNDMuOTk4NEgxN3YzaDE2di0zWiIvPgogIDxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik00Mi4zMjQ4IDE2Ljk5MjJIMzAuMjg3OWwtLjAwMDYgMi42MzY5aDQuNTY2MnYxMi4zNjkzaDIuOTI2M1YxOS42MjkxaDQuNTQ1di0yLjYzNjlaIi8+Cjwvc3ZnPgo=" alt="YouTrack - Issues"></a>
+<a href="https://youtrack.interknot.space/articles/IKC" target="_blank"><img src="https://img.shields.io/badge/YouTrack-Knowledge_Base-purple.svg?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0ibm9uZSIgdmlld0JveD0iMCAwIDY0IDY0Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYSIgeDE9Ii0uMTAyNDExIiB4Mj0iNjQuMDUzMiIgeTE9IjMyLjAwMDIiIHkyPSIzMi4wMDAyIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiNGQjQzRkYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuOTciIHN0b3AtY29sb3I9IiNGQjQwNkQiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxwYXRoIGZpbGw9InVybCgjYSkiIGQ9Ik0xLjMwNjM0IDUxLjI0NDZjLS4wOTY4OC0uMDcxMy0uMTI4NzUtLjIwMTktLjA3NjI1LS4zMUw4Ljg2NTcxIDM1LjIwOS4wNTgyMTQgMjQuNjkwOGMtLjA4ODc1LS4xMDU2LS4wNzQzNzUtLjI2MzcuMDMxODc1LS4zNTE4TDI1Ljc3ODggMi45MzIwOUMzMC4zNDk1LS44Nzc5MDggMzYuOTY3LS45ODU0MDggNDEuNjYyNiAyLjY3MTQ3YzQuNjkzNyAzLjY1Njg3IDYuMTkzNyAxMC4wODgxMyAzLjU5NjkgMTUuNDM2MjNsLTIuNzk5NCA1Ljc2NjljMS4wOTE5LS4zNjYzIDIuMTcyNS0uNjk5NCAzLjI0MTItLjk5ODhsMTIuNjczOC0zLjY0MDZjLjEzODEtLjA0LjI4MTkuMDQ1LjMxMzEuMTg1Nmw1LjMwNTYgMjMuNTg1Yy4wMzI1LjE0NTctLjA2NjIuMjg4Mi0uMjE1LjMwNjktMS42ODE4LjIxMTktMTAuODU3NSAxLjUzLTIyLjI4MTIgNi4zMjk0LTEyLjk0MzEgNS40MzYyLTIxLjQ4NDQgMTMuMTYyNS0yMi42OTQ0IDE0LjI5MjUtLjA4OTQuMDgzNy0uMjIwNi4wODY5LS4zMTg3LjAxNDRMMS4zMDYzNCA1MS4yNDQ2WiIvPgogIDxwYXRoIGZpbGw9IiMwMDAiIGQ9Ik01MiAxMkgxMnY0MGg0MFYxMloiLz4KICA8cGF0aCBmaWxsPSIjZmZmIiBkPSJtMjEuNDY2NiAyNi4zNzA5LTUuNDg4MS05LjM3ODdoMy4xNTEzbDMuMzk4MSA1Ljk5MTkuMzk2OS44NTc1LjM5NjgtLjg2ODIgMy4zMTE5LTUuOTgxMmgzLjA5NzVsLTUuNDAyNSA5LjM1NzV2NS42NDg3aC0yLjg2MTl2LTUuNjI3NVoiLz4KICA8cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzMgNDMuOTk4NEgxN3YzaDE2di0zWiIvPgogIDxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik00Mi4zMjQ4IDE2Ljk5MjJIMzAuMjg3OWwtLjAwMDYgMi42MzY5aDQuNTY2MnYxMi4zNjkzaDIuOTI2M1YxOS42MjkxaDQuNTQ1di0yLjYzNjlaIi8+Cjwvc3ZnPgo=" alt="YouTrack - Knowledge Base"></a>
+</span>
 
 ## Project Structure
-Calculator is made to automatically load **Weapons** and **Drive Discs** from `Resources` folder.
-Agents are hard-coded, because it's easier to calculate relative stats that way.
-All configurations are in JSON format and named with IDs of the corresponding objects. These IDs can be found in
-[interknot-calculator/IDs.md](IDs.md) file.
+Agents, W-Engines (Weapons) and Drive Disc Sets configurations are all represented as Classes.
 
 ## How damage is being calculated
-*(short ver., long version can be found [here](https://github.com/Night-Sky-Studio/interknot-calculator/wiki/Damage-Calculation))*
+*(short ver., long version can be found in the [Damage Calculation](https://youtrack.interknot.space/articles/IKC-A-1) 
+article on our Knowledge Base)*
 
 Before everything, the important stuff:
-- All characters are assumed to be at level 60 with maxed out skills (lvl. 12) and Core Skill (lvl. 7).
-- All S-rank characters are assumed to be at M0. All A-rank characters are assumed to be at M6.
+- All characters are assumed to be at level 60 with maxed-out skills (lvl. 12) and Core Skill (lvl. 7).
+- All S-rank characters are assumed to be at M0, unless explicitly stated. All A-rank characters are assumed to be at M6.
 - All S-rank W-Engines are at P0, A-rank W-Engines are at P6.
 - All Support characters have their reference builds that assume maximum supportive bonus and maximum uptime
 of any passives.
@@ -23,22 +26,27 @@ provided by [Prydwen.gg](https://www.prydwen.gg/zenless) (**not sponsored**).
 - All passives that depend on character swapping, specific attacks combinations or attribute anomalies are
 considered to have 100% uptime.
 - If you've calculated damage to be higher/lower than the one this program produced - check your calculations and
-make sure you've accounted for EVERYTHING. If you did, and you are absolutely sure that the calculator is wrong -
-**open an issue** and provide as much information as possible (your UID and character in question with your calculations 
-should be enough). Also make sure that the drive discs you have currently equipped are the same as the ones
+make sure you've accounted for EVERYTHING. If you did, and you are sure that the calculator is wrong, **open an issue** 
+and provide as much information as possible (your UID and character in question with your calculations 
+should be enough). Also, make sure that the drive discs you have currently equipped are the same as the ones
 you've used in your calculations.
 - **We never said anywhere that the calculations should be taken as gospel.** The idea was for them to be replicable 
 externally and be as close as possible to the in-game results without going into the rabbit hole of making an entire
 game combat simulation engine.
 
-The damage of each action is calculated independently (previous or future rotation actions don't
-have any effect on the damage). Calculator uses damage formulas and information described in
-[this document](https://github.com/Night-Sky-Studio/interknot-calculator/wiki/ZZZ-Formulas).
+The damage value of each action is calculated independently (previous or future rotation actions don't
+have any effect on the damage, with exceptions for agents like Yanagi who can switch stances). 
+Calculator uses damage formulas and information described in
+[this document](https://youtrack.interknot.space/articles/IKC-A-2).
 These formulas can be found in the base `Agent` class.
 The Calculator also accounts for all possible passives or buffs/enemy debuffs. When a team is specified, all 
 `ExternalBonus` and `ExternalTagBonus` of the teammate will also be accounted for.
 
 ## Current Progress
+
+> [!WARNING]
+> This list may be incomplete
+
 ### Agents
 #### Active Agents
 - Soldier 11 (1041)
@@ -128,6 +136,8 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 - Shining Aria (33600)
 - Bunny in Wonderland (33700)
 - Notes From the Chained (33800)
+- Wuthering Salon (33900)
+- The Sky Ablaze (34000)
 
 ## Contributing
 This project uses .NET NativeAOT compilation, so if you want to introduce any library that uses dynamic code that
@@ -136,7 +146,7 @@ with this project.
 
 ## License
 ```
-    Copyright (C) 2025  Night Sky Studio (Konstantin Romanets)
+    Copyright (C) 2025-2026  Night Sky Studio (Konstantin Romanets)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

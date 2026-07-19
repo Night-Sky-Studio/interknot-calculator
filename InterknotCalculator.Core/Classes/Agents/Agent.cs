@@ -1,5 +1,7 @@
-﻿using InterknotCalculator.Core.Classes.Enemies;
+﻿using InterknotCalculator.Core.Classes.DriveDiscSets;
+using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
+using InterknotCalculator.Core.Classes.Weapons;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.Agents;
@@ -34,7 +36,7 @@ public abstract class Agent(uint id) {
     public DriveDisc[] DriveDiscs { get; private set; } = [];
 
     public void SetWeapon(uint weaponId) {
-        Weapon = Resources.Current.GetWeapon(weaponId);
+        Weapon = WeaponRegistry.CreateInstance(weaponId);
         ProcessStats();
     }
 
@@ -61,7 +63,7 @@ public abstract class Agent(uint id) {
             .Select(kvp => kvp.Key);
 
         foreach (var setId in partialSets) {
-            var set = Resources.Current.GetDriveDiscSet(setId);
+            var set = DriveDiscSetRegistry.CreateInstance(setId);
             foreach (var bonus in set.PartialBonus) {
                 if (bonus.SkillTags.Length != 0) {
                     TagBonus.Add(bonus);
@@ -82,7 +84,7 @@ public abstract class Agent(uint id) {
             .Select(kvp => kvp.Key);
 
         foreach (var setId in fullSets) {
-            var set = Resources.Current.GetDriveDiscSet(setId);
+            var set = DriveDiscSetRegistry.CreateInstance(setId);
             foreach (var bonus in set.FullBonus) {
                 if (bonus.SkillTags.Length != 0) {
                     TagBonus.Add(bonus);
@@ -90,7 +92,7 @@ public abstract class Agent(uint id) {
                     BonusStats[bonus.Affix] += bonus.Value;
                 }
             }
-            set.ApplyPassive?.Invoke(this);
+            set.ApplyPassive(this);
         }
 
         if (Weapon?.Speciality == Speciality) {
@@ -113,7 +115,7 @@ public abstract class Agent(uint id) {
         
         ApplyPassive();
         
-        Weapon?.ApplyPassive?.Invoke(this);
+        Weapon?.ApplyPassive(this);
         
         FinalStats = CollectStats();
     }

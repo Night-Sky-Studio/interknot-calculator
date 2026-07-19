@@ -1,3 +1,6 @@
+using InterknotCalculator.Core.Classes.DriveDiscSets;
+using InterknotCalculator.Core.Classes.Weapons;
+
 namespace InterknotCalculator.Core.Classes.Agents;
 
 /// <summary>
@@ -10,7 +13,7 @@ public abstract class SupportAgent(uint id) : Agent(id) {
     protected void SetWeaponPassive(uint weaponId) {
         if (weaponId == 0) return;
         
-        var weapon = Resources.Current.GetWeapon(weaponId);
+        var weapon = WeaponRegistry.CreateInstance(weaponId);
 
         if (weapon.Speciality != Speciality) return;
         
@@ -34,7 +37,7 @@ public abstract class SupportAgent(uint id) : Agent(id) {
     protected void SetDriveDiscsPassive(uint driveDiscSetId, bool partial = false) {
         if (driveDiscSetId == 0) return;
         
-        var set = Resources.Current.GetDriveDiscSet(driveDiscSetId);
+        var set = DriveDiscSetRegistry.CreateInstance(driveDiscSetId);
         
         if (partial) {
             foreach (var bonus in set.PartialBonus) {
@@ -53,6 +56,6 @@ public abstract class SupportAgent(uint id) : Agent(id) {
                 BonusStats[bonus.Affix] += bonus.Value;
             }
         }
-        set.ApplyPassive?.Invoke(this);
+        set.ApplyPassive(this);
     }
 }
