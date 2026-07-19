@@ -10,10 +10,11 @@ Solution for damage calculations at the Inter-Knot project.
 Agents, W-Engines (Weapons) and Drive Disc Sets configurations are all represented as Classes.
 
 ## How damage is being calculated
-*(short ver., long version can be found [here](https://youtrack.interknot.space/articles/IKC-A-1))*
+*(short ver., long version can be found in the [Damage Calculation](https://youtrack.interknot.space/articles/IKC-A-1) 
+article on our Knowledge Base)*
 
 Before everything, the important stuff:
-- All characters are assumed to be at level 60 with maxed out skills (lvl. 12) and Core Skill (lvl. 7).
+- All characters are assumed to be at level 60 with maxed-out skills (lvl. 12) and Core Skill (lvl. 7).
 - All S-rank characters are assumed to be at M0, unless explicitly stated. All A-rank characters are assumed to be at M6.
 - All S-rank W-Engines are at P0, A-rank W-Engines are at P6.
 - All Support characters have their reference builds that assume maximum supportive bonus and maximum uptime
@@ -42,6 +43,10 @@ The Calculator also accounts for all possible passives or buffs/enemy debuffs. W
 `ExternalBonus` and `ExternalTagBonus` of the teammate will also be accounted for.
 
 ## Current Progress
+
+> [!WARNING]
+> This list may be incomplete
+
 ### Agents
 #### Active Agents
 - Soldier 11 (1041)
