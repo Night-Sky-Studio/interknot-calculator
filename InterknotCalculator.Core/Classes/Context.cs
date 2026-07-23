@@ -1,6 +1,8 @@
-using System.Collections.Immutable;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using InterknotCalculator.Core.Classes.Agents;
 using InterknotCalculator.Core.Classes.Enemies;
+using InterknotCalculator.Core.Classes.EtherVeils;
 using InterknotCalculator.Core.Classes.Events;
 using InterknotCalculator.Core.Classes.Server;
 
@@ -22,11 +24,25 @@ public sealed class Context {
     /// </remarks>
     public double AnomalyCritMultiplier { get; set; } = 1;
 
+    private List<EtherVeil> EtherVeils { get; set; } = [];
+    public bool IsEtherVeilActive => EtherVeils.Count > 0;
+    public T? GetEtherVeil<T>() where T : EtherVeil => EtherVeils.OfType<T>().FirstOrDefault();
+
+    public void ActivateEtherVeil(Agent agent, EtherVeil veil) {
+        veil.Activate(this);
+        EtherVeils.Add(veil);
+        Events.EtherVeilActivated(this, new(agent, veil));
+    }
+    public void DeactivateEtherVeil(Agent agent, EtherVeil veil) {
+        veil.Deactivate(this);
+        EtherVeils.Remove(veil);
+        Events.EtherVeilDeactivated(this, new(agent, veil));
+    }
+
     public void ProcessActionsQueue() { 
         if (ActionsQueue.Count > 0) {
             Actions.AddRange(ActionsQueue);
             ActionsQueue.Clear();
         }
     }
-
 }
