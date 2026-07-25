@@ -72,12 +72,13 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
                 : 1 + agent.CritRate * agent.CritDamage;
             var dmgBonus = 1 + agent.ElementalDmgBonus + agent.DmgBonus;
             var resPen = 1 + agent.ElementalResPen + agent.ResPen;
+            var stunBonus = 1 + c.Enemy.StunMultiplier;
                 
             c.ActionsQueue.Add(new(
-                c.MainAgentId,
+                agent.Id,
                 "cat's_gaze", 
                 SkillTag.DirectHit, 
-                baseDmg * critMultiplier * dmgBonus * resPen * c.Enemy.GetDefenseMultiplier(agent.PenRatio, agent.Pen), 
+                baseDmg * critMultiplier * dmgBonus * resPen * c.Enemy.GetDefenseMultiplier(agent.PenRatio, agent.Pen) * stunBonus, 
                 0
             ));
 
