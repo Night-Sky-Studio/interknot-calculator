@@ -87,8 +87,12 @@ public class Ellen : Agent {
     }
 
     public override Stat? ApplyAbilityPassive(Ability ability) {
+        if (ability.Tag is SkillTag.Chain or SkillTag.Ultimate) {
+            return new(Affix.CritDamage, 1);
+        }
+        
         switch (ability.Name) {
-            case "flash_freeze_trimming":
+            case "flash_freeze_trimming" or "icy_blade" or "glacial_blade_wave":
                 return new(Affix.CritDamage, 1);
             default:
                 return null;
