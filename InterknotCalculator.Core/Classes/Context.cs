@@ -1,5 +1,3 @@
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using InterknotCalculator.Core.Classes.Agents;
 using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.EtherVeils;
@@ -37,6 +35,12 @@ public sealed class Context {
         veil.Deactivate(this);
         EtherVeils.Remove(veil);
         Events.EtherVeilDeactivated(this, new(agent, veil));
+    }
+    public void ReactivateEtherVeil(Agent agent, EtherVeil veil) {
+        if (EtherVeils.Contains(veil)) {
+            DeactivateEtherVeil(agent, veil);
+        }
+        ActivateEtherVeil(agent, veil);
     }
 
     public void ProcessActionsQueue() { 
