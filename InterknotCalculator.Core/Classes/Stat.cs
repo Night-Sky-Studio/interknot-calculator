@@ -67,6 +67,7 @@ public struct Stat {
                 [Affix.PhysicalDmgBonus] = 0.025,
                 [Affix.ElectricDmgBonus] = 0.025,
                 [Affix.EtherDmgBonus] = 0.025,
+                [Affix.WindDmgBonus] = 0.025,
                 [Affix.AnomalyMasteryRatio] = 0.025,
                 [Affix.ImpactRatio] = 0.015,
                 [Affix.EnergyRegenRatio] = 0.05
