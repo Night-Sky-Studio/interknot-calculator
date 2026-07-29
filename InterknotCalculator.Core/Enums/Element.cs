@@ -6,7 +6,9 @@ public enum Element {
     Fire, 
     Physical, HonedEdge,
     Electric, 
-    Ether, AuricInk
+    Ether, AuricInk,
+    Wind,
+    Lumiflux
 }
 
 public static class ElementExtensions {
