@@ -30,7 +30,12 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
 
+      - name: Compute version
+        id: nbgv
+        uses: dotnet/nbgv@master
+        
       - name: Download build artifact
         uses: actions/download-artifact@v8
         with:
@@ -50,4 +55,4 @@ jobs:
           make_latest: false
           target_commitish: ${{ env.SHA }}
           files: ${{ env.AssetName }}
-          body: "Automated nightly build from `main` @ ${{ env.SHA }}."
+          body: "Automated nightly build `v${{ steps.nbgv.outputs.SemVer2 }}` from `main` @ ${{ env.SHA }}."

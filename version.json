@@ -1,0 +1,14 @@
+{
+    "$schema": "https://raw.githubusercontent.com/dotnet/Nerdbank.GitVersioning/main/src/NerdBank.GitVersioning/version.schema.json",
+    "version": "0.2.7-beta.{height}",
+    "prerelease": true,
+    "pathFilters": [
+        "./InterknotCalculator.Core",
+        "./InterknotCalculator.Server",
+        "./InterknotCalculator.Generators",
+        ":!/version.json"
+    ],
+    "publicReleaseRefSpec": [
+        "^refs/heads/main$"
+    ]
+}

@@ -1,5 +1,5 @@
 /// AUTO-GENERATED, DO NOT EDIT!!!
-/// Game version: 3.0
+/// Game version: 3.1
 
 namespace InterknotCalculator.Core.Enums;
 
@@ -60,6 +60,8 @@ public static class AgentId {
     public const uint Pyrois = 1551;
     public const uint Velina = 1561;
     public const uint Norma = 1571;
+    public const uint Remielle = 1581;
+    public const uint Sigrid = 1591;
 }
 
 public static class WeaponId {
@@ -156,6 +158,8 @@ public static class WeaponId {
     public const uint SolExuvia = 14155;
     public const uint JoyauDore = 14156;
     public const uint ChiefSidekick = 14157;
+    public const uint OdeOfResurrectedWings = 14158;
+    public const uint KnightsExtolment = 14159;
 }
 
 public static class DriveDiscSetId {
@@ -187,4 +191,6 @@ public static class DriveDiscSetId {
     public const uint NotesFromTheChained = 33800;
     public const uint WutheringSalon = 33900;
     public const uint TheSkyAblaze = 34000;
+    public const uint FeatheredFate = 34100;
+    public const uint ThornedRose = 34200;
 }
