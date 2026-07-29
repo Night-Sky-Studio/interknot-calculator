@@ -10,10 +10,10 @@ public class ThornedRose : DriveDiscSet {
     }
 
     public override void ApplyPassive(Agent agent) {
-        if (agent.Def > 1000) {
+        if (agent.Def >= 1000) {
             agent.BonusStats[Affix.CritRate] += 0.08;
         }
-        if (agent.Def > 1800) {
+        if (agent.Def >= 1800) {
             agent.BonusStats[Affix.CritRate] += 0.08;
         }
     }
