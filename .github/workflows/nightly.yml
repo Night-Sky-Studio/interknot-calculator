@@ -34,7 +34,7 @@ jobs:
 
       - name: Compute version
         id: nbgv
-        uses: dotnet/nbgv@master
+        uses: dotnet/nbgv@v0.5.2
         
       - name: Download build artifact
         uses: actions/download-artifact@v8
