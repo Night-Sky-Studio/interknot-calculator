@@ -18,7 +18,7 @@ public abstract class AgentsTest {
 
     protected void PrintActions(IEnumerable<AgentAction> actions, double total) {
         foreach (var action in actions) {
-            Console.WriteLine($"{GetAgentName(action.AgentId), -12}{action.Name, -38}{action.Tag, -24}{action.Damage.ToString(CultureInfo.InvariantCulture)}");
+            Console.WriteLine($"{GetAgentName(action.AgentId), -16}{action.Name, -48}{action.Tag, -24}{action.Damage.ToString(CultureInfo.InvariantCulture)}");
         }
         Console.WriteLine($"Total: {total.ToString(CultureInfo.InvariantCulture)}");
     }
