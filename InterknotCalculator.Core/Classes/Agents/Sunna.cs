@@ -32,6 +32,34 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
         Stats[Affix.AnomalyMastery] = 96;
         Stats[Affix.AnomalyProficiency] = 95;
         Stats[Affix.EnergyRegen] = 1;
+
+        Skills["mischief_meteor_hammer"] = new(SkillTag.BasicAtk, [
+            new(87.4, 38, 12.5, 0.451),
+            new(351.9, 164.1, 52.65, 1.896),
+            new(362.7, 186.3, 56.74, 2.043),
+            new(811.2, 378.2, 116.43, 4.192),
+        ]);
+        Skills["naughty_cat_spotted"] = new(SkillTag.BasicAtk, [new(417, 0, element: Element.Physical)]);
+        Skills["skyward_hammer"] = new(SkillTag.Dash, [new(199.8, 75.2, 19.16, 1.381)]);
+        Skills["delusion_strikeout"] = new(SkillTag.Counter, [new(637.8, 413.9, 55.84, 4.022)]);
+        Skills["sonic_beatdown"] = new(SkillTag.QuickAssist, [new(146.4, 110.1, 27.92, 2.011)]);
+        Skills["stage_fright"] = new(SkillTag.DefensiveAssist, [
+            new(0, 481.3),
+            new(0, 608.7),
+            new(0, 296.2),
+        ]);
+        Skills["jump_training"] = new(SkillTag.FollowUpAssist, [new(1071.4, 708.2, 193.71)]);
+        Skills["star_shooter"] = new(SkillTag.Special, [new(113.6, 85, 21.67)]);
+        Skills["bubblegum_barrage"] = new(SkillTag.ExSpecial, [
+            new(1827.4, 921.8, 171.02 + 45.81, -70),
+            new(1588.3, 742.1, 171.02, -70),
+        ]);
+        Skills["special_photography_technique"] = new(SkillTag.ExSpecial, [
+            new(1656.4, 903.7, 217.16),
+            new(1905, 1040.3, 217.16),
+        ]);
+        Skills["don't_mess_with_the_cat"] = new(SkillTag.Chain, [new(1623.1, 438.9, 212.26)]);
+        Skills["smash_it_all"] = new(SkillTag.Ultimate, [new(4182, 559.8, 143.35)]);
     }
 
     public override void RegisterHooks(Context ctx) {
@@ -59,7 +87,14 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
 
         ctx.Events.OnActionExecuted.Add((c, e) => {
             if (!CatsGazeActive || CatsGazeCooldown != 0) return;
-            CatsGazeActive = false;
+            // if (ClawSharpenersCount <= 0) { 
+            //     CatsGazeActive = false;
+            //     return;
+            // }
+            //
+            // ClawSharpenersCount--;
+            // CatsGazeActive = true;
+            // CatsGazeCooldown = 4;
 
             var agent = e.Agent;
 
@@ -82,21 +117,45 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
                 0
             ));
 
-            if (ClawSharpenersCount <= 0) return;
-            
-            ClawSharpenersCount--;
-            CatsGazeActive = true;
+            // Reapply "Cat's Gaze" if a "Claw Sharpener" is available,
+            // consuming one. Otherwise, let the effect expire
+            CatsGazeActive = ClawSharpenersCount > 0;
+            if (CatsGazeActive) {
+                ClawSharpenersCount--;
+                CatsGazeCooldown = 4;
+            }
         });
         
         ctx.Events.OnAnomalyTriggered.Add((_, _) => {
             ClawSharpenersCount += 1;
         });
         
-        ctx.Events.OnEtherVeilActivated.Add((_, _) => {
+        ctx.Events.OnEtherVeilActivated.Add((c, e) => {
             ClawSharpenersCount += 2;
+
+            if (IsTeamPassiveActive && e.Agent == this) {
+                c.Enemy.StunMultiplier += 0.3;
+            }
+        });
+        
+        ctx.Events.OnEtherVeilDeactivated.Add((c, e) => {
+            if (IsTeamPassiveActive && e.Agent == this) {
+                c.Enemy.StunMultiplier -= 0.3;
+            }
         });
     }
-
-
+    
     public DelusionReprise EtherVeil { get; } = new();
+
+    private bool IsTeamPassiveActive { get; set; } = false;
+    
+    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
+        if (team.Count < 2) return [];
+
+        if (team.Any(a => a.Speciality is Speciality.Attack || a.Faction == Faction)) {
+            IsTeamPassiveActive = true;
+        }
+        
+        return [];
+    }
 }
