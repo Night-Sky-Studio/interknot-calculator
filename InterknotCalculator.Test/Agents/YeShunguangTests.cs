@@ -8,7 +8,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class YeShunguangTests : AgentsTest {
-    private string[] EntryRotation { get; } = [
+    private static string[] EntryRotation { get; } = [
         $"{AgentId.Sunna}.special_photography_technique",
         $"{AgentId.Zhao}.burst_of_frost",
             
@@ -35,7 +35,7 @@ public class YeShunguangTests : AgentsTest {
         "enlightened_mind_return_to_dust"
     ];
     
-    public string[] SixComboRotation { get; } = [
+    public static string[] SixComboRotation { get; } = [
         $"{AgentId.Dialyn}."
     ];
     
@@ -85,9 +85,7 @@ public class YeShunguangTests : AgentsTest {
             new(AgentId.Sunna, WeaponId.Thoughtbop, DriveDiscSetId.MoonlightLullaby)
         ],
         StunBonus = 1,
-        Rotation = [
-            
-        ]
+        Rotation = EntryRotation
     };
     
     [Test]
