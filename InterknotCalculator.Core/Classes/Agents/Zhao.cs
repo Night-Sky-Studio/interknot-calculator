@@ -45,12 +45,9 @@ public class Zhao : SupportAgent, IAgentReference<Zhao>, IEtherVeilAgent<Wellspr
             // Zhao used an entry or ex-special
             if (e.Ability is not { Tag: SkillTag.Entry or SkillTag.ExSpecial }) return;
 
-            // Assume always full Frostbite Points, because I can't be bothered
-            if (c.GetEtherVeil<Wellspring>() is { } wellspring) {
-                // Overwrite existing Ether Veil if it already exists
-                c.DeactivateEtherVeil(this, wellspring);
-            }
-            c.ActivateEtherVeil(this, EtherVeil);
+            // Assume always full Frostbite Points, because I can't be bothered.
+            // Overwrites the existing Ether Veil if it already exists
+            c.ReactivateEtherVeil(this, EtherVeil);
         });
 
         // Core Passive
@@ -63,14 +60,14 @@ public class Zhao : SupportAgent, IAgentReference<Zhao>, IEtherVeilAgent<Wellspr
                 }
             }
             
-            if (e.Agent != this && e.EtherVeil is not Wellspring) return;
+            if (e.Agent != this || e.EtherVeil is not Wellspring) return;
 
             foreach (var (_, agent) in c.Team) {
                 agent.BonusStats[Affix.Atk] += 1000;
             }
         });
         ctx.Events.OnEtherVeilDeactivated.Add((c, e) => {
-            if (e.Agent != this && e.EtherVeil is not Wellspring) return;
+            if (e.Agent != this || e.EtherVeil is not Wellspring) return;
 
             foreach (var (_, agent) in c.Team) {
                 agent.BonusStats[Affix.Atk] -= 1000;
