@@ -24,7 +24,10 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
         set => field = Math.Clamp(value, 0, 6);
     } = 0;
     private bool CatsGazeActive { get; set; } = false;
-    private int CatsGazeCooldown { get; set; } = 4;
+    private int CatsGazeCooldown { 
+        get; 
+        set => field = Math.Clamp(value, 0, 4); 
+    } = 4;
     
     public Sunna() : base(AgentId.Sunna) {
         Speciality = Speciality.Support;
@@ -85,6 +88,7 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
                     or "don't_mess_with_the_cat"
                     or "smash_it_all") {
                 CatsGazeActive = true;
+                CatsGazeCooldown = 4;
             } else {
                 if (c.Enemy.StunMultiplier > 1 && CatsGazeActive) {
                     CatsGazeCooldown -= 4;
@@ -96,14 +100,6 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
 
         ctx.Events.OnActionExecuted.Add((c, e) => {
             if (!CatsGazeActive || CatsGazeCooldown != 0) return;
-            // if (ClawSharpenersCount <= 0) { 
-            //     CatsGazeActive = false;
-            //     return;
-            // }
-            //
-            // ClawSharpenersCount--;
-            // CatsGazeActive = true;
-            // CatsGazeCooldown = 4;
 
             var agent = e.Agent;
 
