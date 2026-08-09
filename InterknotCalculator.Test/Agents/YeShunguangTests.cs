@@ -1,6 +1,4 @@
 using InterknotCalculator.Core.Classes;
-using InterknotCalculator.Core.Classes.Agents;
-using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -8,6 +6,15 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class YeShunguangTests : AgentsTest {
+    private static string[] Combo { get; } = [
+        "enlightened_mind_sunderlight 1",
+        "enlightened_mind_sunderlight 2",
+        "enlightened_mind_sunderlight_annihilation 2",
+        "enlightened_mind_sunderlight_maximum",
+        "enlightened_mind_soaring_light",
+        "enlightened_mind_skyward_ascent",
+    ];
+    
     private static string[] EntryRotation { get; } = [
         $"{AgentId.Sunna}.special_photography_technique",
         $"{AgentId.Zhao}.burst_of_frost",
@@ -16,27 +23,57 @@ public class YeShunguangTests : AgentsTest {
         "illuminating_darkness",
             
         // combo 1
-        "enlightened_mind_sunderlight 1",
-        "enlightened_mind_sunderlight 2",
-        "enlightened_mind_sunderlight_annihilation 2",
-        "enlightened_mind_sunderlight_maximum",
-        "enlightened_mind_soaring_light",
-        "enlightened_mind_skyward_ascent",
+        ..Combo,
             
         // combo 2
-        "enlightened_mind_sunderlight 1",
-        "enlightened_mind_sunderlight 2",
-        "enlightened_mind_sunderlight_annihilation 2",
-        "enlightened_mind_sunderlight_maximum",
-        "enlightened_mind_soaring_light",
-        "enlightened_mind_skyward_ascent",
+        ..Combo,
             
         // finisher
         "enlightened_mind_return_to_dust"
     ];
     
     public static string[] SixComboRotation { get; } = [
-        $"{AgentId.Dialyn}."
+        $"{AgentId.Sunna}.special_photography_technique",
+        
+        $"{AgentId.Dialyn}.rock",
+        $"{AgentId.Dialyn}.scissors",
+        $"{AgentId.Dialyn}.paper",
+        
+        // give her ult
+        $"{AgentId.Dialyn}.get_lost",
+        "chasing_storms",
+        
+        // combo 1
+        ..Combo,
+        // combo 2
+        ..Combo,
+        
+        // finisher
+        "enlightened_mind_return_to_dust",
+        
+        $"{AgentId.Sunna}.special_photography_technique",
+        
+        // enter racist mode
+        "illuminating_darkness",
+            
+        // combo 1
+        ..Combo,
+        // combo 2
+        ..Combo,
+        
+        // finisher
+        "enlightened_mind_return_to_dust",
+        
+        // ult
+        "chasing_storms",
+            
+        // combo 1
+        ..Combo,
+        // combo 2
+        ..Combo,
+        
+        // finisher
+        "cleaving_heavens"
     ];
     
     private CalcRequest YeShunguang { get; } = new() {
@@ -81,11 +118,12 @@ public class YeShunguangTests : AgentsTest {
             }
         ],
         Team = [
-            new(AgentId.Zhao, WeaponId.HalfSugarBunny, DriveDiscSetId.BunnyInWonderland), 
+            // new(AgentId.Zhao, WeaponId.HalfSugarBunny, DriveDiscSetId.BunnyInWonderland), 
+            new(AgentId.Dialyn, WeaponId.YesterdayCalls, DriveDiscSetId.KingOfTheSummit),
             new(AgentId.Sunna, WeaponId.Thoughtbop, DriveDiscSetId.MoonlightLullaby)
         ],
         StunBonus = 1,
-        Rotation = EntryRotation
+        Rotation = SixComboRotation, // EntryRotation
     };
     
     [Test]
