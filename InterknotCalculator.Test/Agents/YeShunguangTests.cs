@@ -117,18 +117,39 @@ public class YeShunguangTests : AgentsTest {
                 Levels = [15, 2, 2, 3, 1]
             }
         ],
-        Team = [
-            // new(AgentId.Zhao, WeaponId.HalfSugarBunny, DriveDiscSetId.BunnyInWonderland), 
-            new(AgentId.Dialyn, WeaponId.YesterdayCalls, DriveDiscSetId.KingOfTheSummit),
-            new(AgentId.Sunna, WeaponId.Thoughtbop, DriveDiscSetId.MoonlightLullaby)
-        ],
+        Team = [],
         StunBonus = 1,
-        Rotation = SixComboRotation, // EntryRotation
+        Rotation = []
     };
     
     [Test]
-    public void YeShunguangTest() {
-        var result = Calculator.Calculate(YeShunguang);
+    public void YeShunguangEntryRotationTest() {
+        var request = YeShunguang with {
+            Team = [
+                new(AgentId.Zhao, WeaponId.HalfSugarBunny, DriveDiscSetId.BunnyInWonderland),
+                new(AgentId.Sunna, WeaponId.Thoughtbop, DriveDiscSetId.MoonlightLullaby)
+            ],
+            Rotation = EntryRotation
+        };
+        var result = Calculator.Calculate(request);
+        
+        Assert.That(result.PerAction, Is.Not.Empty);
+        
+        Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
+        PrintActions(result.PerAction, result.Total);
+        Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
+    }
+    
+    [Test]
+    public void YeShunguangSixComboRotationTest() {
+        var request = YeShunguang with {
+            Team = [
+                new(AgentId.Dialyn, WeaponId.YesterdayCalls, DriveDiscSetId.KingOfTheSummit),
+                new(AgentId.Sunna, WeaponId.Thoughtbop, DriveDiscSetId.MoonlightLullaby)
+            ],
+            Rotation = SixComboRotation
+        };
+        var result = Calculator.Calculate(request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
