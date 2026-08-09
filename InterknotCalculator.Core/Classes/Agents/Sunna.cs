@@ -7,7 +7,16 @@ namespace InterknotCalculator.Core.Classes.Agents;
 
 public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<DelusionReprise> {
     public static Sunna Reference(uint weaponId, uint setId) {
-        return new();
+        var sunna = new Sunna {
+            Stats = {
+                [Affix.Atk] = 3500
+            }
+        };
+        
+        sunna.SetWeaponPassive(weaponId);
+        sunna.SetDriveDiscsPassive(setId);
+        
+        return sunna;
     }
 
     private int ClawSharpenersCount {
