@@ -27,11 +27,13 @@ public sealed class Context {
     public T? GetEtherVeil<T>() where T : EtherVeil => EtherVeils.OfType<T>().FirstOrDefault();
 
     public void ActivateEtherVeil(Agent agent, EtherVeil veil) {
+        if (EtherVeils.Contains(veil)) return;
         veil.Activate(this);
         EtherVeils.Add(veil);
         Events.EtherVeilActivated(this, new(agent, veil));
     }
     public void DeactivateEtherVeil(Agent agent, EtherVeil veil) {
+        if (!EtherVeils.Contains(veil)) return;
         veil.Deactivate(this);
         EtherVeils.Remove(veil);
         Events.EtherVeilDeactivated(this, new(agent, veil));
