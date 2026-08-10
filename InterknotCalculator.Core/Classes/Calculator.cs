@@ -80,6 +80,7 @@ public static class Calculator {
         foreach (var a in ctx.Team.Values) {
             fullTeamPassive.AddRange(a.ApplyTeamPassive([..ctx.Team.Values]));
             a.RegisterHooks(ctx);
+            a.Weapon?.RegisterHooks(ctx);
         }
         
         foreach (var stat in fullTeamPassive) {

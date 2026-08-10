@@ -16,4 +16,6 @@ public abstract class Weapon(uint id) {
     public Stat[] ExternalBonus { get; init; } = [];
 
     public virtual void ApplyPassive(Agent agent) { }
+    
+    public virtual void RegisterHooks(Context ctx) { }
 }

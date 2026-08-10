@@ -17,5 +17,6 @@ public enum Faction {
     YunkuiSummit = 1 << 11,
     SpookShack = 1 << 12,
     KrampusComplianceAuthority = 1 << 13,
+    AngelsOfDelusion = 1 << 14,
     NewEriduDefenseForce = SilverSquad | ObolSquad | LyreSquad
 }

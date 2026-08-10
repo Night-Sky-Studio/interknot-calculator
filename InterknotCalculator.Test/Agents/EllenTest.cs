@@ -121,8 +121,8 @@ public class EllenM6Tests : AgentsTest {
             new() {
                 SetId = DriveDiscSetId.WoodpeckerElectro,
                 Rarity = Rarity.S,
-                Stats = [Affix.Hp, Affix.Atk, Affix.CritDamage, Affix.CritRate, Affix.HpRatio],
-                Levels = [15, 1, 3, 2, 2]
+                Stats = [Affix.Hp, Affix.AnomalyProficiency, Affix.CritDamage, Affix.CritRate, Affix.AtkRatio],
+                Levels = [15, 3, 2, 2, 2]
             },
             new() {
                 SetId = DriveDiscSetId.WoodpeckerElectro,
@@ -139,8 +139,8 @@ public class EllenM6Tests : AgentsTest {
             new() {
                 SetId = DriveDiscSetId.WoodpeckerElectro,
                 Rarity = Rarity.S,
-                Stats = [Affix.CritDamage, Affix.DefRatio, Affix.AtkRatio, Affix.Pen, Affix.CritRate],
-                Levels = [15, 1, 2, 2, 3]
+                Stats = [Affix.CritDamage, Affix.AtkRatio, Affix.Atk, Affix.HpRatio, Affix.CritRate],
+                Levels = [15, 3, 2, 2, 1]
             },
             new() {
                 SetId = DriveDiscSetId.PolarMetal,
@@ -156,7 +156,7 @@ public class EllenM6Tests : AgentsTest {
             },
         ],
         Mindscape = 6,
-        Team = [new(AgentId.Lycaon)],
+        Team = [],//[new(AgentId.Lycaon)],
         StunBonus = 1.5,
         Rotation = [
             "avalanche",
