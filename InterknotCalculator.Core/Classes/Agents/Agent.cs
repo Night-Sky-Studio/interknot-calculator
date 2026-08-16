@@ -28,6 +28,7 @@ public abstract class Agent(uint id) {
     public List<Stat> ExternalTagBonus { get; set; } = [];
     public Dictionary<Element, Anomaly> Anomalies { get; set; } = new();
     public Dictionary<string, Skill> Skills { get; set; } = new();
+    public Dictionary<string, IEnumerable<string>> Macros { get; set; } = new();
     #endregion
 
     #region Equipment

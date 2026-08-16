@@ -115,7 +115,7 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
             var stunBonus = 1 + c.Enemy.StunMultiplier;
                 
             c.ActionsQueue.Add(new(
-                agent.Id,
+                Id, // TODO: bad! give attribution back to the attacking agent >:C
                 "cat's_gaze", 
                 SkillTag.DirectHit, 
                 baseDmg * critMultiplier * dmgBonus * resPen * c.Enemy.GetDefenseMultiplier(agent.PenRatio, agent.Pen) * stunBonus, 

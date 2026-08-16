@@ -80,6 +80,15 @@ public class YeShunguang : Agent, IEtherVeilAgent<Verdict> {
         Skills["enlightened_mind_lure_thunder"] = new(SkillTag.Chain, [new(1817.2, 206.8, 449.5)]);
         Skills["chasing_storms"] = new(SkillTag.Ultimate, [new(3850, 82.5, 100)]);
         Skills["cleaving_heavens"] = new(SkillTag.Ultimate, [new(6168.7, 227.2, 275)]);
+
+        Macros["#enlightened_mind_combo"] = [
+            "enlightened_mind_sunderlight 1",
+            "enlightened_mind_sunderlight 2",
+            "enlightened_mind_sunderlight_annihilation 2",
+            "enlightened_mind_sunderlight_maximum",
+            "enlightened_mind_soaring_light",
+            "enlightened_mind_skyward_ascent"
+        ];
     }
 
     private bool IsTeamPassiveActive { get; set; } = false;
