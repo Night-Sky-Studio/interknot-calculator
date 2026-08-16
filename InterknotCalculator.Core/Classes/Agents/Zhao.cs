@@ -6,7 +6,11 @@ namespace InterknotCalculator.Core.Classes.Agents;
 
 public class Zhao : SupportAgent, IAgentReference<Zhao>, IEtherVeilAgent<Wellspring> {
     public static Zhao Reference(uint weaponId, uint setId) {
-        var zhao = new Zhao();
+        var zhao = new Zhao {
+            Stats = {
+                [Affix.Hp] = 27000
+            }
+        };
 
         zhao.SetWeaponPassive(weaponId);
         zhao.SetDriveDiscsPassive(setId);
