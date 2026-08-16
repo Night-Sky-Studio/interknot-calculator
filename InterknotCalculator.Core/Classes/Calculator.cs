@@ -124,21 +124,28 @@ public static class Calculator {
             }
             
             var agent = ctx.Team[act.AgentId];
-            var ability = act.ToAbility(agent);
-            // Step 1: Perform action
-            ctx.Actions.AddRange(agent.GetActionDamage(ctx, ability));
-            
-            // Step 2: Process side effects
-            // Anomalies are processed in a queue to maintain the order
-            // This includes simultaneous anomaly triggers like disorders
-            ctx.ProcessActionsQueue();
-            
-            // Step 3: Perform Aftershocks
-            // These happen after main anomaly triggers
-            ctx.Events.Aftershock(ctx, new(agent, ability));
-            
-            // Step 4: Process Aftershock side effects
-            ctx.ProcessActionsQueue();
+            var abilities = agent.Macros.TryGetValue(action, out var macro)
+                ? macro.Select(m => RotationAction.Parse(m, characterId))
+                    .Where(a => a is not null)
+                    .Cast<RotationAction>()
+                : [act];
+
+            foreach (var ability in abilities.Select(a => a.ToAbility(agent))) {
+                // Step 1: Perform action
+                ctx.Actions.AddRange(agent.GetActionDamage(ctx, ability));
+
+                // Step 2: Process side effects
+                // Anomalies are processed in a queue to maintain the order
+                // This includes simultaneous anomaly triggers like disorders
+                ctx.ProcessActionsQueue();
+
+                // Step 3: Perform Aftershocks
+                // These happen after main anomaly triggers
+                ctx.Events.Aftershock(ctx, new(agent, ability));
+
+                // Step 4: Process Aftershock side effects
+                ctx.ProcessActionsQueue();
+            }
         }
         
         // Cleanup ctx.Actions - remove all damage/daze from other agents

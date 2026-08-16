@@ -23,10 +23,10 @@ public class YeShunguangTests : AgentsTest {
         "illuminating_darkness",
             
         // combo 1
-        ..Combo,
+        "#enlightened_mind_combo",
             
         // combo 2
-        ..Combo,
+        "#enlightened_mind_combo",
             
         // finisher
         "enlightened_mind_return_to_dust"
@@ -44,9 +44,9 @@ public class YeShunguangTests : AgentsTest {
         "chasing_storms",
         
         // combo 1
-        ..Combo,
+        "#enlightened_mind_combo",
         // combo 2
-        ..Combo,
+        "#enlightened_mind_combo",
         
         // finisher
         "enlightened_mind_return_to_dust",
@@ -57,9 +57,9 @@ public class YeShunguangTests : AgentsTest {
         "illuminating_darkness",
             
         // combo 1
-        ..Combo,
+        "#enlightened_mind_combo",
         // combo 2
-        ..Combo,
+        "#enlightened_mind_combo",
         
         // finisher
         "enlightened_mind_return_to_dust",
@@ -68,9 +68,9 @@ public class YeShunguangTests : AgentsTest {
         "chasing_storms",
             
         // combo 1
-        ..Combo,
+        "#enlightened_mind_combo",
         // combo 2
-        ..Combo,
+        "#enlightened_mind_combo",
         
         // finisher
         "cleaving_heavens"
