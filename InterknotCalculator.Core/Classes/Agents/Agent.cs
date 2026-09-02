@@ -1,5 +1,7 @@
-﻿using InterknotCalculator.Core.Classes.DriveDiscSets;
+﻿using System.Collections.Immutable;
+using InterknotCalculator.Core.Classes.DriveDiscSets;
 using InterknotCalculator.Core.Classes.Enemies;
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Classes.Weapons;
 using InterknotCalculator.Core.Enums;
@@ -21,11 +23,7 @@ public abstract class Agent(uint id) {
     #endregion
     
     #region Collections
-    public SafeDictionary<Affix, double> Stats { get; set; } = new();
-    public SafeDictionary<Affix, double> BonusStats { get; set; } = new();
-    public SafeDictionary<Affix, double> ExternalBonus { get; set; } = new();
-    public List<Stat> TagBonus { get; set; } = [];
-    public List<Stat> ExternalTagBonus { get; set; } = [];
+    public StatsDictionary Stats { get; set; } = new();
     public Dictionary<Element, Anomaly> Anomalies { get; set; } = new();
     public Dictionary<string, Skill> Skills { get; set; } = new();
     public Dictionary<string, IEnumerable<string>> Macros { get; set; } = new();
@@ -37,88 +35,86 @@ public abstract class Agent(uint id) {
     public DriveDisc[] DriveDiscs { get; private set; } = [];
 
     public void SetWeapon(uint weaponId) {
+        RemoveWeaponStats();
         Weapon = WeaponRegistry.CreateInstance(weaponId);
-        ProcessStats();
+        AddWeaponStats();
+    }
+    private void RemoveWeaponStats() {
+        if (Weapon is not { } w) 
+            return;
+        Stats[w.MainStat.Affix].RemoveKey(w.MainStatKey);
+        Stats[w.SecondaryStat.Affix].RemoveKey(w.SecondaryStatKey);
+        if (w.Speciality != Speciality) 
+            return;
+        foreach (var passive in w.Passive) {
+            Stats[passive.Key].Remove(passive.Value);
+        }
+        foreach (var external in w.ExternalBonus) {
+            Stats[external.Key].Remove(external.Value);
+        }
+    }
+    private void AddWeaponStats() {
+        if (Weapon is not { } w)
+            return;
+        Stats[w.MainStat.Affix].Add(new(w.MainStatKey, w.MainStat.Value, ModifierType.Base));
+        Stats[w.SecondaryStat.Affix].Add(new(w.SecondaryStatKey, w.SecondaryStat));
+        if (w.Speciality != Speciality) 
+            return;
+        foreach (var passive in w.Passive) {
+            Stats[passive.Key].Add(passive.Value);
+        }
+        foreach (var external in w.ExternalBonus) {
+            Stats[external.Key].Add(external.Value);
+        }
     }
 
     public void SetDriveDiscs(DriveDisc[] discs) {
+        RemoveDiscsStats();
         DriveDiscs = discs;
-        ProcessStats();
+        AddDiscsStats();
     }
-    
-    private void ProcessStats() {
-        BonusStats.Clear();
-        TagBonus.Clear();
+    private void RemoveDiscsStats() {
+        foreach (var value in Stats.Values) {
+            var toRemove = value.AppliedModifiers
+                .Where(m => m.Key.ToString().StartsWith("disc"))
+                .ToImmutableList(); // freeze mods
+            foreach (var mod in toRemove) {
+                value.Remove(mod);
+            }
+        }
+    }
+    private void AddDiscsStats() {
         var setCounts = new SafeDictionary<uint, int>();
 
         foreach (var disc in DriveDiscs) {
             setCounts[disc.SetId] += 1;
-            BonusStats[disc.MainStat.Affix] += disc.MainStat.Value;
+            Stats[disc.MainStat.Affix] += new Modifier(disc.Key, disc.MainStat);
             foreach (var subStat in disc.SubStats) {
-                BonusStats[subStat.Affix] += subStat.Value;
+                Stats[subStat.Affix] += new Modifier(disc.Key.CombineWith(subStat.Key), subStat.Value);
             }
         }
-
+        
         var partialSets = setCounts
             .Where(kvp => kvp.Value >= 2)
             .Select(kvp => kvp.Key);
-
+        
         foreach (var setId in partialSets) {
             var set = DriveDiscSetRegistry.CreateInstance(setId);
             foreach (var bonus in set.PartialBonus) {
-                if (bonus.SkillTags.Length != 0) {
-                    TagBonus.Add(bonus);
-                } else {
-                    BonusStats[bonus.Affix] += bonus.Value;
-                }
+                Stats[bonus.Affix] += new Modifier(set.Key.CombineWith(bonus.Key), bonus);
             }
         }
-
-        if (Weapon is { } w) {
-            BonusStats[w.SecondaryStat.Affix] += w.SecondaryStat.Value;
-        }
-
-        BaseStats = CollectStats();
         
         var fullSets = setCounts
             .Where(kvp => kvp.Value >= 4)
             .Select(kvp => kvp.Key);
-
+        
         foreach (var setId in fullSets) {
             var set = DriveDiscSetRegistry.CreateInstance(setId);
             foreach (var bonus in set.FullBonus) {
-                if (bonus.SkillTags.Length != 0) {
-                    TagBonus.Add(bonus);
-                } else {
-                    BonusStats[bonus.Affix] += bonus.Value;
-                }
-            }
-            set.ApplyPassive(this);
-        }
-
-        if (Weapon?.Speciality == Speciality) {
-            foreach (var passive in Weapon?.Passive ?? []) {
-                if (passive.SkillTags.Length != 0) {
-                    TagBonus.Add(passive);
-                } else {
-                    BonusStats[passive.Affix] += passive.Value;
-                }
-            }
-            
-            foreach (var stat in Weapon?.ExternalBonus ?? []) {
-                if (stat.SkillTags.Length != 0) {
-                    ExternalTagBonus.Add(stat);
-                } else {
-                    ExternalBonus[stat.Affix] += stat.Value;
-                }
+                Stats[bonus.Affix] += new Modifier(set.Key.CombineWith(bonus.Key), bonus);
             }
         }
-        
-        ApplyPassive();
-        
-        Weapon?.ApplyPassive(this);
-        
-        FinalStats = CollectStats();
     }
     #endregion
     
@@ -138,29 +134,28 @@ public abstract class Agent(uint id) {
     public Affix RelatedElementDmg => Helpers.GetRelatedAffixDmg(Element);
     public Affix RelatedElementRes => Helpers.GetRelatedAffixRes(Element);
 
-    public double MaxHp => Stats[Affix.Hp] * (1 + BonusStats[Affix.HpRatio]) + BonusStats[Affix.Hp];
+    public double MaxHp => Stats[Affix.Hp];
     private double _hp;
     public double Hp {
         get => Math.Clamp(_hp, 0, MaxHp); 
         set => _hp = Math.Clamp(value, 0, MaxHp);
     }
-    public double InitialAtk => (Stats[Affix.Atk] + (Weapon?.MainStat.Value ?? 0)) 
-        * (1 + BonusStats[Affix.AtkRatio]) + BonusStats[Affix.Atk];
-    public double Atk => InitialAtk * (1 + BonusStats[Affix.CombatAtkRatio]);
-    public double Def => Stats[Affix.Def] * (1 + BonusStats[Affix.DefRatio]) + BonusStats[Affix.Def];
-    public double Pen => Stats[Affix.Pen] + BonusStats[Affix.Pen];
-    public double PenRatio => Stats[Affix.PenRatio] + BonusStats[Affix.PenRatio];
-    public double CritRate => Math.Min(Stats[Affix.CritRate] + BonusStats[Affix.CritRate], 1);
-    public double CritDamage => Stats[Affix.CritDamage] + BonusStats[Affix.CritDamage];
-    public double Impact => Stats[Affix.Impact] * (1 + BonusStats[Affix.ImpactRatio]) + BonusStats[Affix.Impact];
-    public double AnomalyMastery => Stats[Affix.AnomalyMastery] * (1 + BonusStats[Affix.AnomalyMasteryRatio]) + BonusStats[Affix.AnomalyMastery];
-    public double AnomalyProficiency => Stats[Affix.AnomalyProficiency] + BonusStats[Affix.AnomalyProficiency];
-    public double EnergyRegen => Stats[Affix.EnergyRegen] * (1 + BonusStats[Affix.EnergyRegenRatio]) + BonusStats[Affix.EnergyRegen];
-    public double ElementalDmgBonus => Stats[RelatedElementDmg] + BonusStats[RelatedElementDmg];
-    public double ElementalResPen => Stats[RelatedElementRes] + BonusStats[RelatedElementRes];
-    public double DmgBonus => Stats[Affix.DmgBonus] + BonusStats[Affix.DmgBonus];
-    public double ResPen => Stats[Affix.ResPen] + BonusStats[Affix.ResPen];
-    public double DazeBonus => Stats[Affix.DazeBonus] + BonusStats[Affix.DazeBonus];
+    public double InitialAtk => Stats[Affix.Atk];
+    public double Atk => InitialAtk * (1 + Stats[Affix.CombatAtkRatio]);
+    public double Def => Stats[Affix.Def];
+    public double Pen => Stats[Affix.Pen];
+    public double PenRatio => Stats[Affix.PenRatio];
+    public double CritRate => Stats[Affix.CritRate];
+    public double CritDamage => Stats[Affix.CritDamage];
+    public double Impact => Stats[Affix.Impact];
+    public double AnomalyMastery => Stats[Affix.AnomalyMastery];
+    public double AnomalyProficiency => Stats[Affix.AnomalyProficiency];
+    public double EnergyRegen => Stats[Affix.EnergyRegen];
+    public double ElementalDmgBonus => Stats[RelatedElementDmg];
+    public double ElementalResPen => Stats[RelatedElementRes];
+    public double DmgBonus => Stats[Affix.DmgBonus];
+    public double ResPen => Stats[Affix.ResPen];
+    public double DazeBonus => Stats[Affix.DazeBonus];
     
 #if ENERGY_REQUIREMENT_CHECK
     private double _energy = 60;
@@ -266,18 +261,14 @@ public abstract class Agent(uint id) {
         Energy += multiplier.Energy;
 #endif
 
-        // Process all tag bonuses and apply if the tag matches
-        var tagDmgBonus = new SafeDictionary<Affix, double>();
-        foreach (var stat in TagBonus) {
-            if (stat.SkillTags.Contains(data.Tag)) {
-                tagDmgBonus[stat.Affix] += stat.Value;
-            }
-        }
+        var tag = data.Tag;
 
-        // Apply ability passive if present
+        // Apply ability passive if present. Ability passives are still one-off,
+        // so fold them into local accumulators rather than the stat set.
+        var abilityDmgBonus = new SafeDictionary<Affix, double>();
         var abilityPassive = ApplyAbilityPassive(ability);
         if (abilityPassive is { } passive) {
-            tagDmgBonus[passive.Affix] += passive.Value;
+            abilityDmgBonus[passive.Affix] += passive.Value;
         }
 
         // Process anomalies
@@ -286,13 +277,13 @@ public abstract class Agent(uint id) {
 
         // Calculate damage according to formula
         var baseDmgAttacker = GetBaseDamage(data.Scales[ability.Scale].Damage);
-        var dmgBonusMultiplier = 1 + ElementalDmgBonus + DmgBonus
-                                 + tagDmgBonus[relatedAffixDmg] + tagDmgBonus[Affix.DmgBonus]
+        var dmgBonusMultiplier = 1 + Stats[relatedAffixDmg].For(tag) + Stats[Affix.DmgBonus].For(tag)
+                                 + abilityDmgBonus[relatedAffixDmg] + abilityDmgBonus[Affix.DmgBonus]
                                  + data.Affixes[relatedAffixDmg] + data.Affixes[Affix.DmgBonus];
-        var critMultiplier = 1 + Math.Min(CritRate + tagDmgBonus[Affix.CritRate] + data.Affixes[Affix.CritRate], 1)
-            * (CritDamage + tagDmgBonus[Affix.CritDamage] + data.Affixes[Affix.CritDamage]);
-        var resMultiplier = 1 + ElementalResPen + ResPen
-                            + tagDmgBonus[relatedAffixRes] + tagDmgBonus[Affix.ResPen]
+        var critMultiplier = 1 + Math.Min(Stats[Affix.CritRate].For(tag) + abilityDmgBonus[Affix.CritRate] + data.Affixes[Affix.CritRate], 1)
+            * (Stats[Affix.CritDamage].For(tag) + abilityDmgBonus[Affix.CritDamage] + data.Affixes[Affix.CritDamage]);
+        var resMultiplier = 1 + Stats[relatedAffixRes].For(tag) + Stats[Affix.ResPen].For(tag)
+                            + abilityDmgBonus[relatedAffixRes] + abilityDmgBonus[Affix.ResPen]
                             + data.Affixes[relatedAffixRes] + data.Affixes[Affix.ResPen];
 
         var enemyDefenseMultiplier = Speciality is Speciality.Rupture 
@@ -300,8 +291,8 @@ public abstract class Agent(uint id) {
             : ctx.Enemy.GetDefenseMultiplier(PenRatio, Pen);
 
         var sheerMultiplier = Speciality is Speciality.Rupture 
-            ? 1 + GetSheerMultiplier() + tagDmgBonus[Affix.SheerBonus] + tagDmgBonus[relatedAffixSheer]
-                + data.Affixes[Affix.SheerBonus] + data.Affixes[relatedAffixSheer] 
+            ? 1 + GetSheerMultiplier() + Stats[Affix.SheerForceBonus].For(tag) + Stats[relatedAffixSheer].For(tag)
+              + data.Affixes[Affix.SheerForceBonus] + data.Affixes[relatedAffixSheer] 
             : 1;
         
         var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * enemyDefenseMultiplier
@@ -319,13 +310,8 @@ public abstract class Agent(uint id) {
     public virtual double GetDaze(Ability ability) {
         var data = Skills[ability.Name];
 
-        var tagDazeBonus = 1.0;
-        foreach (var stat in TagBonus) {
-            if (stat.SkillTags.Contains(data.Tag) && stat.Affix == Affix.DazeBonus) {
-                tagDazeBonus += stat.Value;
-            }
-        }
-
+        var tagDazeBonus = 1.0 + Stats[Affix.DazeBonus].Tagged(data.Tag);
+        
         var abilityPassive = ApplyAbilityPassive(ability);
         if (abilityPassive is { Affix: Affix.DazeBonus } passive) {
             tagDazeBonus += passive.Value;
@@ -342,21 +328,15 @@ public abstract class Agent(uint id) {
     }
 
     public virtual double GetDisorderDaze(Enemy enemy) {
-         if (enemy.AfflictedAnomaly is not { } anomaly) return 0;
-         
-         var tagDazeBonus = 1.0;
-         foreach (var stat in TagBonus) {
-             if (stat.SkillTags.Contains(SkillTag.AttributeAnomaly) && stat.Affix == Affix.DazeBonus) {
-                 tagDazeBonus += stat.Value;
-             }
-         }
-         
-         const double dazeMv = 2;
-         const double dazeLevelMultiplier = 1 + 0.0075 * 60; // 60 - character level
-         var dazeMultiplier = 1 + BonusStats[Affix.DazeBonus] + anomaly.Stats[Affix.DazeBonus] + tagDazeBonus;
-         const double dazeTakenMultiplier = 1;
-         const double dazeRes = 1;
-         return dazeMv * dazeLevelMultiplier * Impact * dazeRes * dazeMultiplier * dazeTakenMultiplier;
+        if (enemy.AfflictedAnomaly is not { } anomaly) return 0;
+
+        const double dazeMv = 2;
+        const double dazeLevelMultiplier = 1 + 0.0075 * 60; // 60 - character level
+        var dazeMultiplier = 1 + Stats[Affix.DazeBonus].For(SkillTag.AttributeAnomaly)
+                               + anomaly.Stats[Affix.DazeBonus];
+        const double dazeTakenMultiplier = 1;
+        const double dazeRes = 1;
+        return dazeMv * dazeLevelMultiplier * Impact * dazeRes * dazeMultiplier * dazeTakenMultiplier;
     }
     
     public double GetAnomalyBuildup(Ability ability) {
@@ -365,13 +345,8 @@ public abstract class Agent(uint id) {
         if (baseBuildup == 0) return 0;
 
         var amBonus = AnomalyMastery / 100;
-        var amBuildupBonus = 1 + BonusStats[Affix.AnomalyBuildupBonus] + data.Affixes[Affix.AnomalyBuildupBonus];
-
-        var tagBonus = TagBonus.Where(stat => stat.Tags?.Contains(ability.Tag) ?? false)
-            .Where(stat => stat.Affix == Affix.AnomalyBuildupBonus)
-            .Select(stat => stat.Value).Sum();
-
-        amBuildupBonus += tagBonus;
+        var amBuildupBonus = 1 + Stats[Affix.AnomalyBuildupBonus].For(ability.Tag)
+                               + data.Affixes[Affix.AnomalyBuildupBonus];
 
         const double amBuildupRes = 1d;
 
@@ -391,15 +366,11 @@ public abstract class Agent(uint id) {
         // Some characters can make anomalies crit
         // ...for the entire team, apparently...
         double anomalyCritMultiplier = ctx.AnomalyCritMultiplier;
-        
-        var tagBonus = TagBonus.Where(stat => stat.SkillTags.Contains(SkillTag.AttributeAnomaly))
-            .Where(stat => stat.Affix == Affix.DmgBonus)
-            .Select(stat => stat.Value).Sum();
 
         var anomalyProficiency = element != Element.None 
             ? AnomalyProficiency 
             : ctx.Enemy.AfflictedAnomaly?.Stats[Affix.AnomalyProficiency] ?? 0;
-        
+
         // Calculate anomaly damage according to formula
         var anomalyBaseDmg = element != Element.None 
             ? data.Scale / 100 * Atk 
@@ -407,10 +378,11 @@ public abstract class Agent(uint id) {
         
         var anomalyProficiencyMultiplier = anomalyProficiency / 100;
         const double anomalyLevelMultiplier = 2;
-        var dmgBonusMultiplier = element is Element.None ? 1 : 1 + ElementalDmgBonus + DmgBonus + tagBonus 
-                                                               + BonusStats[Affix.AnomalyDmgBonus];
+        var dmgBonusMultiplier = element is Element.None ? 1 : 1 + ElementalDmgBonus
+                                                                 + Stats[Affix.DmgBonus].For(SkillTag.AttributeAnomaly)
+                                                                 + Stats[Affix.AnomalyDmgBonus].Value;
         var resMultiplier = element != Element.None ? 1 + ElementalResPen + ResPen : 1;
-        
+
         var disorderElementalMultiplier = 1d;
         var disorderElementalRes = 1d;
         if (element is Element.None && ctx.Enemy.AfflictedAnomaly is { } enemyAnomaly) {
@@ -418,8 +390,8 @@ public abstract class Agent(uint id) {
             var disorderElementalResPen = Helpers.GetRelatedAffixRes(enemyAnomaly.Element);
             disorderElementalMultiplier += enemyAnomaly.Stats[disorderElementalDmgBonus];
             disorderElementalRes += enemyAnomaly.Stats[disorderElementalResPen];
-            
-            dmgBonusMultiplier += BonusStats[Affix.DisorderDmgBonus] + enemyAnomaly.Stats[Affix.DmgBonus];
+
+            dmgBonusMultiplier += Stats[Affix.DisorderDmgBonus].Value + enemyAnomaly.Stats[Affix.DmgBonus];
             resMultiplier += enemyAnomaly.Stats[Affix.ResPen];
         }
         

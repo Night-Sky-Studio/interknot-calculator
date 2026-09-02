@@ -16,7 +16,7 @@ public class StatsCollectionTest {
     
     [Test]
     public void MiyabiStatsTest() {
-        var reference = new SafeDictionary<Affix, double> {
+        var reference = new Dictionary<Affix, double> {
             [Affix.Hp] = 11_129,
             [Affix.Atk] = 2_899,
             [Affix.Def] = 790,
@@ -88,7 +88,7 @@ public class StatsCollectionTest {
 
     [Test]
     public void JaneStatsTest() {
-        var reference = new SafeDictionary<Affix, double> {
+        var reference = new Dictionary<Affix, double> {
             [Affix.Hp] = 11_837,
             [Affix.Atk] = 2_673,
             [Affix.Def] = 965,
@@ -160,7 +160,7 @@ public class StatsCollectionTest {
 
     [Test]
     public void YixuanStatsTest() {
-        var reference = new SafeDictionary<Affix, double> {
+        var reference = new Dictionary<Affix, double> {
             [Affix.Hp] = 19_114,
             [Affix.Atk] = 2_211,
             [Affix.Def] = 685,
@@ -170,7 +170,7 @@ public class StatsCollectionTest {
             [Affix.AnomalyProficiency] = 90,
             [Affix.AnomalyMastery] = 92,
             [Affix.Pen] = 9,
-            [Affix.Sheer] = 2_574,
+            [Affix.SheerForce] = 2_574,
             [Affix.EtherDmgBonus] = 0.3
         };
 

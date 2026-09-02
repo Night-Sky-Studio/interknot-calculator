@@ -1,26 +1,29 @@
 ﻿using System.Text.Json.Serialization;
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes;
 
 public struct Stat {
+    [JsonIgnore]
+    public ModifierKey Key { get; }
+    
     [JsonPropertyName("Value")]
     public double BaseValue { get; set; }
     public double Level { get; set; } = 1;
     [JsonIgnore]
     public double Value => BaseValue * Level;
     public Affix Affix { get; set; }
-    public IEnumerable<SkillTag>? Tags { get; set; } = null;
-    
-    [JsonIgnore]
-    public SkillTag[] SkillTags => Tags?.ToArray() ?? [];
+    public SkillTag Tags { get; set; } = SkillTag.None;
     
     [JsonConstructor]
-    public Stat(Affix affix, double baseValue, double level = 1, IEnumerable<SkillTag>? tags = null) {
+    public Stat(Affix affix, double baseValue, double level = 1, SkillTag tags = SkillTag.None) {
         BaseValue = baseValue;
         Level = level;
         Affix = affix;
-        Tags = tags?.ToArray() ?? [];
+        Tags = tags;
+
+        Key = new($"stat-{Affix}-{Level}-{BaseValue}-{Tags}");
     }
     
     public static implicit operator double(Stat v) {
