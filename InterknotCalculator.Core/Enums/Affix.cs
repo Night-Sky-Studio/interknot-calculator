@@ -1,16 +1,23 @@
-﻿namespace InterknotCalculator.Core.Enums;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace InterknotCalculator.Core.Enums;
+
+[SuppressMessage("ReSharper", "InconsistentNaming")]
 public enum Affix {
-    Hp, HpRatio,
-    Def, DefRatio,
-    Atk, AtkRatio, CombatAtkRatio,
+    Unknown = -1,
+
+    // Additive affixes
+    Hp, Def, Atk, Impact, Pen,
+    AnomalyMastery, AnomalyProficiency,
+    EnergyRegen, SheerForce, Daze,
+    _Additive,
+
+    // Multiplicative affixes
+    HpRatio, DefRatio, AtkRatio, CombatAtkRatio, ImpactRatio, PenRatio,
+    AnomalyMasteryRatio,
     CritRate, CritDamage,
-    Impact, ImpactRatio,
-    Pen, PenRatio,
-    AnomalyMastery, AnomalyMasteryRatio,
-    AnomalyProficiency, 
-    Sheer, 
-    
+    EnergyRegenRatio, SheerForceBonus, DazeBonus,
+
     DmgBonus, ResPen,
     IceDmgBonus, IceResPen,
     FireDmgBonus, FireResPen,
@@ -19,19 +26,19 @@ public enum Affix {
     EtherDmgBonus, EtherResPen,
     WindDmgBonus, WindResPen,
     DisorderDmgBonus, AnomalyDmgBonus,
-    
-    SheerBonus,
+
     IceSheerBonus, 
     FireSheerBonus, 
     PhysicalSheerBonus, 
     ElectricSheerBonus, 
     EtherSheerBonus,
-    
-    EnergyRegen, EnergyRegenRatio,
-    
-    Daze, DazeBonus,
-    
+
     AnomalyBuildupBonus, AnomalyBuildupRes,
-    
-    Unknown = -1
+
+    _Multiplicative,
+}
+
+public static class AffixExtensions {
+    public static bool IsMultiplicative(this Affix a) => 
+        a is > Affix._Additive and < Affix._Multiplicative;
 }

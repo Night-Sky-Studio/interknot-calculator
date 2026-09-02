@@ -8,7 +8,7 @@ public record Anomaly(
     bool SelfDisorder = false
 ) {
     public uint AgentId { get; set; } = 0;
-    public SafeDictionary<Affix, double> Stats { get; set; } = new();
+    public Dictionary<Affix, double> Stats { get; set; } = new();
     
     /// <summary>
     /// Returns the default anomaly by element

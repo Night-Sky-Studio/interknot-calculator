@@ -1,4 +1,4 @@
-﻿namespace InterknotCalculator.Core.Classes;
+namespace InterknotCalculator.Core.Classes;
 
 /// <summary>
 /// Dictionary class with non-throwing indexer.
