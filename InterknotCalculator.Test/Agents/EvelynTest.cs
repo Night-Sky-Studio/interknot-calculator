@@ -8,7 +8,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class EvelynTests : AgentsTest {
-    private CalcRequest Evelyn { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.Evelyn,
         WeaponId = WeaponId.HeartstringNocturne,
         Discs = [
@@ -74,7 +74,7 @@ public class EvelynTests : AgentsTest {
 
     [Test]
     public void EvelynTest() {
-        var result = Calculator.Calculate(Evelyn);
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         

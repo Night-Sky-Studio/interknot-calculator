@@ -7,7 +7,7 @@ using InterknotCalculator.Core.Enums;
 namespace InterknotCalculator.Test.Agents;
 
 public class TriggerTests : AgentsTest {
-    private CalcRequest Trigger { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.Trigger,
         WeaponId = WeaponId.SpectralGaze,
         Discs = [
@@ -76,7 +76,7 @@ public class TriggerTests : AgentsTest {
 
     [Test]
     public void TriggerTest() {
-        var result = Calculator.Calculate(Trigger);
+        var result = Calculator.Calculate(Request);
 
         Assert.That(result.PerAction, Is.Not.Empty);
         Assert.That(result.PerAction, Has.Exactly(5).Matches<AgentAction>(a => a is {

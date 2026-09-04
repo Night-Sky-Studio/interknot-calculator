@@ -7,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class MiyabiTests : AgentsTest {
-    private CalcRequest Miyabi { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = 1091,
         WeaponId = 14109,
         Discs = [
@@ -65,7 +65,7 @@ public class MiyabiTests : AgentsTest {
 
     [Test]
     public void MiyabiTest() {
-        var result = Calculator.Calculate(Miyabi);
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         

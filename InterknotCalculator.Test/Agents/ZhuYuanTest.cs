@@ -6,7 +6,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class ZhuYuanTests : AgentsTest {
-    private CalcRequest ZhuYuan { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.ZhuYuan,
         WeaponId = WeaponId.RiotSuppressorMarkVI,
         Discs = [
@@ -71,7 +71,7 @@ public class ZhuYuanTests : AgentsTest {
 
     [Test]
     public void ZhuYuanTest() {
-        var result = Calculator.Calculate(ZhuYuan);
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         

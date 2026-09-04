@@ -7,16 +7,17 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class DisorderTests : AgentsTest {
-    private readonly CalcRequest _jane = JaneTests.Jane;
+    protected override CalcRequest Request => JaneTests.Jane;
+
     [Test]
     public void DisorderTest() {
-        var prevTeam = _jane.Team.Clone();
-        var prevRotation = _jane.Rotation.Clone();
-        _jane.Team = [
+        var prevTeam = Request.Team.Clone();
+        var prevRotation = Request.Rotation.Clone();
+        Request.Team = [
             new(AgentId.Burnice),
             new(AgentId.Lucy)
         ];
-        _jane.Rotation = [
+        Request.Rotation = [
             "1171.energizing_speciality_drink",
             "1171.intense_heat_stirring_method",
             "1171.intense_heat_stirring_method_double",
@@ -30,7 +31,7 @@ public class DisorderTests : AgentsTest {
             "phantom_thrust",
             "final_curtain",
         ];
-        var result = Calculator.Calculate(_jane);
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
@@ -45,7 +46,7 @@ public class DisorderTests : AgentsTest {
         PrintActions(result.PerAction, result.Total);
         Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
         
-        _jane.Team = (TeamMemberRequest[])prevTeam;
-        _jane.Rotation = (string[])prevRotation;
+        Request.Team = (TeamMemberRequest[])prevTeam;
+        Request.Rotation = (string[])prevRotation;
     }
 }

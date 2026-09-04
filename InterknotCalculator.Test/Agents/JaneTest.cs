@@ -62,6 +62,8 @@ public class JaneTests : AgentsTest {
         ]
     };
 
+    protected override CalcRequest Request => Jane;
+
     [Test]
     public void JaneTest() {
         var enemy = new NotoriousDullahan {
@@ -72,7 +74,7 @@ public class JaneTests : AgentsTest {
                 }
             }
         };
-        var result = Calculator.Calculate(Jane, enemy);
+        var result = Calculator.Calculate(Request, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(action => action.Tag is SkillTag.AttributeAnomaly));

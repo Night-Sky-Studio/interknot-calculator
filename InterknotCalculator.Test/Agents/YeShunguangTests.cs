@@ -76,7 +76,7 @@ public class YeShunguangTests : AgentsTest {
         "cleaving_heavens"
     ];
     
-    private CalcRequest YeShunguang { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.YeShunguang,
         WeaponId = WeaponId.CloudcleaveRadiance,
         Discs = [
@@ -124,7 +124,7 @@ public class YeShunguangTests : AgentsTest {
     
     [Test]
     public void YeShunguangEntryRotationTest() {
-        var request = YeShunguang with {
+        var request = Request with {
             Team = [
                 new(AgentId.Zhao, WeaponId.HalfSugarBunny, DriveDiscSetId.BunnyInWonderland),
                 new(AgentId.Sunna, WeaponId.Thoughtbop, DriveDiscSetId.MoonlightLullaby)
@@ -142,7 +142,7 @@ public class YeShunguangTests : AgentsTest {
     
     [Test]
     public void YeShunguangSixComboRotationTest() {
-        var request = YeShunguang with {
+        var request = Request with {
             Team = [
                 new(AgentId.Dialyn, WeaponId.YesterdayCalls, DriveDiscSetId.KingOfTheSummit),
                 new(AgentId.Sunna, WeaponId.Thoughtbop, DriveDiscSetId.MoonlightLullaby)

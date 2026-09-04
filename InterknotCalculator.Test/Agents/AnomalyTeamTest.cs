@@ -5,7 +5,7 @@ using InterknotCalculator.Core.Enums;
 namespace InterknotCalculator.Test.Agents;
 
 public class AnomalyTeamTest : AgentsTest {
-    private CalcRequest Request { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.Alice,
         WeaponId = WeaponId.PracticedPerfection,
         Discs = [

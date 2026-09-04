@@ -7,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class YanagiTests : AgentsTest {
-    private CalcRequest Yanagi { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = 1221,
         WeaponId = 14122,
         Discs = [
@@ -75,7 +75,7 @@ public class YanagiTests : AgentsTest {
                 }
             }
         };
-        var result = Calculator.Calculate(Yanagi, enemy);
+        var result = Calculator.Calculate(Request, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         

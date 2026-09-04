@@ -7,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class YixuanTests: AgentsTest {
-    private CalcRequest Yixuan { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.Yixuan,
         WeaponId = WeaponId.QingmingBirdcage,
         Discs = [
@@ -68,7 +68,7 @@ public class YixuanTests: AgentsTest {
 
     [Test]
     public void YixuanTest() {
-        var result = Calculator.Calculate(Yixuan);
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         

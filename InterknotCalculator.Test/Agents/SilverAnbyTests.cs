@@ -6,7 +6,7 @@ using InterknotCalculator.Core.Enums;
 namespace InterknotCalculator.Test.Agents;
 
 public class SilverAnbyTests : AgentsTest {
-    private CalcRequest SilverAnby { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.Soldier0Anby,
         WeaponId = WeaponId.SeveredInnocence,
         Discs = [
@@ -121,7 +121,7 @@ public class SilverAnbyTests : AgentsTest {
 
     [Test]
     public void SilverAnbyTest() {
-        var result = Calculator.Calculate(SilverAnby);
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         Assert.That(result.PerAction, Has.Exactly(12).Matches<AgentAction>(a => a.Tag is SkillTag.Aftershock));

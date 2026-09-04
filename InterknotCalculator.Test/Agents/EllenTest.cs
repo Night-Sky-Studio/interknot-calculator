@@ -8,7 +8,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class EllenTests : AgentsTest {
-    private CalcRequest Ellen { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.Ellen,
         WeaponId = WeaponId.DeepSeaVisitor,
         // Discs = [
@@ -102,7 +102,7 @@ public class EllenTests : AgentsTest {
 
     [Test]
     public void EllenTest() {
-        var result = Calculator.Calculate(Ellen);
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
@@ -114,7 +114,7 @@ public class EllenTests : AgentsTest {
 
 [TestFixture]
 public class EllenM6Tests : AgentsTest {
-    private CalcRequest EllenM6 { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.Ellen,
         WeaponId = WeaponId.DeepSeaVisitor,
         Discs = [
@@ -175,7 +175,7 @@ public class EllenM6Tests : AgentsTest {
     
     [Test]
     public void EllenM6Test() {
-        var result = Calculator.Calculate(EllenM6);
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         

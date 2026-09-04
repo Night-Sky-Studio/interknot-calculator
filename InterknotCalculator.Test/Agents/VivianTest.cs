@@ -7,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class VivianTests : AgentsTest {
-    private CalcRequest Vivian { get; } = new CalcRequest {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = 1331,
         WeaponId = 14133,
         Discs = [
@@ -62,7 +62,7 @@ public class VivianTests : AgentsTest {
     
     [Test]
     public void VivianTest() {
-        var result = Calculator.Calculate(Vivian);
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
 

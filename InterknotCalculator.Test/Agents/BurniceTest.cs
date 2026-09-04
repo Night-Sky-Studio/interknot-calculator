@@ -7,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class BurniceTests : AgentsTest {
-    private CalcRequest Burnice { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.Burnice,
         WeaponId = 14117,
         Discs = [
@@ -60,7 +60,7 @@ public class BurniceTests : AgentsTest {
 
     [Test]
     public void BurniceTest() {
-        var result = Calculator.Calculate(Burnice);
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
