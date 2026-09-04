@@ -1,0 +1,37 @@
+﻿[
+  {
+    Name: avalanche,
+    Tag: Chain,
+    Damage: 624693.34
+  },
+  {
+    Name: tail_swipe,
+    Tag: ExSpecial,
+    Damage: 221211.36
+  },
+  {
+    Name: flash_freeze_trimming 3,
+    Tag: BasicAtk,
+    Damage: 390320.38
+  },
+  {
+    Name: endless_winter,
+    Tag: Ultimate,
+    Damage: 1485881.39
+  },
+  {
+    Name: tail_swipe,
+    Tag: ExSpecial,
+    Damage: 221211.36
+  },
+  {
+    Name: sharknami,
+    Tag: ExSpecial,
+    Damage: 324443.33
+  },
+  {
+    Name: flash_freeze_trimming 3,
+    Tag: BasicAtk,
+    Damage: 390320.38
+  }
+]

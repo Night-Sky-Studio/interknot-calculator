@@ -10,7 +10,7 @@ public class DisorderTests : AgentsTest {
     protected override CalcRequest Request => JaneTests.Jane;
 
     [Test]
-    public void DisorderTest() {
+    public async Task DisorderTest() {
         var prevTeam = Request.Team.Clone();
         var prevRotation = Request.Rotation.Clone();
         Request.Team = [
@@ -41,6 +41,18 @@ public class DisorderTests : AgentsTest {
         Assert.That(result.PerAction, Has.Exactly(1).Matches<AgentAction>(action => action is {
             Name: "disorder", AgentId: AgentId.Jane, Damage: > 0
         }));
+        
+        foreach (var action in Request.Rotation) {
+            var act = RotationAction.Parse(action, AgentId.Jane);
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(act, Is.Not.Null);
+                Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                    a.Name.Contains(act.ActionName)));
+            }
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

@@ -61,7 +61,7 @@ public class VivianTests : AgentsTest {
     };
     
     [Test]
-    public void VivianTest() {
+    public async Task VivianTest() {
         var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
@@ -70,6 +70,18 @@ public class VivianTests : AgentsTest {
             Tag: SkillTag.AttributeAnomaly,
             Name: "abloom_assault"
         }));
+        
+        foreach (var action in Request.Rotation) {
+            var act = RotationAction.Parse(action, AgentId.Alice);
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(act, Is.Not.Null);
+                Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                    a.Name.Contains(act.ActionName)));
+            }
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

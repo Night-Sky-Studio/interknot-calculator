@@ -1,0 +1,86 @@
+﻿[
+  {
+    Name: energizing_speciality_drink,
+    Tag: QuickAssist
+  },
+  {
+    Name: intense_heat_stirring_method 1,
+    Tag: ExSpecial
+  },
+  {
+    Name: intense_heat_stirring_method_double 1,
+    Tag: ExSpecial
+  },
+  {
+    Name: burn,
+    Tag: AttributeAnomaly
+  },
+  {
+    Name: fuel-fed_flame,
+    Tag: Chain
+  },
+  {
+    Name: burn,
+    Tag: AttributeAnomaly
+  },
+  {
+    Name: gekka_ruten 1,
+    Tag: ExSpecial,
+    Damage: 8420.91
+  },
+  {
+    Name: gekka_ruten 2,
+    Tag: ExSpecial,
+    Damage: 19428.56
+  },
+  {
+    Name: polarity_disorder,
+    Tag: AttributeAnomaly,
+    Damage: 113418.69
+  },
+  {
+    Name: gekka_ruten 1,
+    Tag: ExSpecial,
+    Damage: 8420.91
+  },
+  {
+    Name: shock,
+    Tag: AttributeAnomaly,
+    Damage: 169434.09
+  },
+  {
+    Name: disorder,
+    Tag: AttributeAnomaly,
+    Damage: 219243.53
+  },
+  {
+    Name: gekka_ruten 2,
+    Tag: ExSpecial,
+    Damage: 19428.56
+  },
+  {
+    Name: polarity_disorder,
+    Tag: AttributeAnomaly,
+    Damage: 173355.76
+  },
+  {
+    Name: gekka_ruten 1,
+    Tag: ExSpecial,
+    Damage: 8420.91
+  },
+  {
+    Name: gekka_ruten 2,
+    Tag: ExSpecial,
+    Damage: 19428.56
+  },
+  {
+    Name: polarity_disorder,
+    Tag: AttributeAnomaly,
+    Damage: 173355.76
+  },
+  {
+    Name: shock,
+    Tag: AttributeAnomaly,
+    Damage: 216986.23
+  }
+]

@@ -65,7 +65,7 @@ public class JaneTests : AgentsTest {
     protected override CalcRequest Request => Jane;
 
     [Test]
-    public void JaneTest() {
+    public async Task JaneTest() {
         var enemy = new NotoriousDullahan {
             AfflictedAnomaly = Anomaly.GetAnomalyByElement(Element.Fire) with {
                 Stats = new() {
@@ -78,6 +78,13 @@ public class JaneTests : AgentsTest {
         
         Assert.That(result.PerAction, Is.Not.Empty);
         Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(action => action.Tag is SkillTag.AttributeAnomaly));
+        
+        foreach (var action in Request.Rotation) {
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a => 
+                a.Name.Contains(action)));
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Assault triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

@@ -75,14 +75,22 @@ public class TriggerTests : AgentsTest {
     };
 
     [Test]
-    public void TriggerTest() {
+    public async Task TriggerTest() {
         var result = Calculator.Calculate(Request);
 
         Assert.That(result.PerAction, Is.Not.Empty);
-        Assert.That(result.PerAction, Has.Exactly(5).Matches<AgentAction>(a => a is {
-            Tag: SkillTag.Aftershock,
-            AgentId: AgentId.Trigger
-        }));
+        
+        foreach (var action in Request.Rotation) {
+            var act = RotationAction.Parse(action, AgentId.Alice);
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(act, Is.Not.Null);
+                Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                    a.Name.Contains(act.ActionName)));
+            }
+        }
+        
+        await VerifyActions(result.PerAction);
 
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

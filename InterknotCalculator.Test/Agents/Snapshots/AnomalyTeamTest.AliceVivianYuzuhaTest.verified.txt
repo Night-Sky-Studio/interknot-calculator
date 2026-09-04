@@ -1,0 +1,125 @@
+﻿[
+  {
+    Name: violet_requiem,
+    Tag: ExSpecial
+  },
+  {
+    Name: fluttering_frock_suspension,
+    Tag: BasicAtk
+  },
+  {
+    Name: cavity_alert,
+    Tag: ExSpecial
+  },
+  {
+    Name: intertwined_stab,
+    Tag: QuickAssist,
+    Damage: 26689.3
+  },
+  {
+    Name: sugarburst_sparkles_x4,
+    Tag: BasicAtk
+  },
+  {
+    Name: starshine_waltz 3,
+    Tag: BasicAtk,
+    Damage: 157550.09
+  },
+  {
+    Name: sugarburst_sparkles_x4,
+    Tag: BasicAtk
+  },
+  {
+    Name: assault,
+    Tag: AttributeAnomaly,
+    Damage: 377778.78
+  },
+  {
+    Name: twin_rainbows_of_the_swordheart,
+    Tag: AttributeAnomaly,
+    Damage: 66111.29
+  },
+  {
+    Name: abloom_,
+    Tag: AttributeAnomaly
+  },
+  {
+    Name: polarity_assault,
+    Tag: AttributeAnomaly,
+    Damage: 377778.78
+  },
+  {
+    Name: abloom_assault,
+    Tag: AttributeAnomaly
+  },
+  {
+    Name: disorder,
+    Tag: AttributeAnomaly,
+    Damage: 507287.06
+  },
+  {
+    Name: aurora_thrust_northern_cross,
+    Tag: ExSpecial,
+    Damage: 75116.69
+  },
+  {
+    Name: abloom_assault,
+    Tag: AttributeAnomaly
+  },
+  {
+    Name: sugarburst_sparkles_x4,
+    Tag: BasicAtk
+  },
+  {
+    Name: aurora_thrust_southern_cross,
+    Tag: ExSpecial,
+    Damage: 86821.81
+  },
+  {
+    Name: sugarburst_sparkles_x4,
+    Tag: BasicAtk
+  },
+  {
+    Name: assault,
+    Tag: AttributeAnomaly,
+    Damage: 377778.78
+  },
+  {
+    Name: disorder,
+    Tag: AttributeAnomaly,
+    Damage: 507287.06
+  },
+  {
+    Name: twin_rainbows_of_the_swordheart,
+    Tag: AttributeAnomaly,
+    Damage: 66111.29
+  },
+  {
+    Name: celestial_overture 6,
+    Tag: BasicAtk,
+    Damage: 35661.87
+  },
+  {
+    Name: sugarburst_sparkles_x4,
+    Tag: BasicAtk
+  },
+  {
+    Name: starshine_waltz 3,
+    Tag: BasicAtk,
+    Damage: 157550.09
+  },
+  {
+    Name: sugarburst_sparkles_x4,
+    Tag: BasicAtk
+  },
+  {
+    Name: polarity_assault,
+    Tag: AttributeAnomaly,
+    Damage: 377778.78
+  },
+  {
+    Name: disorder,
+    Tag: AttributeAnomaly,
+    Damage: 507287.06
+  }
+]

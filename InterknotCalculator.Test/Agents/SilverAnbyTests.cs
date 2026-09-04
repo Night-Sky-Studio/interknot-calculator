@@ -120,11 +120,18 @@ public class SilverAnbyTests : AgentsTest {
     };
 
     [Test]
-    public void SilverAnbyTest() {
+    public async Task SilverAnbyTest() {
         var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         Assert.That(result.PerAction, Has.Exactly(12).Matches<AgentAction>(a => a.Tag is SkillTag.Aftershock));
+        
+        foreach (var action in Request.Rotation) {
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a => 
+                a.Name.Contains(action)));
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

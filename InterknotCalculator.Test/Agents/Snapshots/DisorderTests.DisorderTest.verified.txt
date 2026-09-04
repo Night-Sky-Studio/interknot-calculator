@@ -1,0 +1,86 @@
+﻿[
+  {
+    Name: energizing_speciality_drink,
+    Tag: QuickAssist
+  },
+  {
+    Name: intense_heat_stirring_method 1,
+    Tag: ExSpecial
+  },
+  {
+    Name: intense_heat_stirring_method_double 1,
+    Tag: ExSpecial
+  },
+  {
+    Name: burn,
+    Tag: AttributeAnomaly
+  },
+  {
+    Name: fuel-fed_flame,
+    Tag: Chain
+  },
+  {
+    Name: burn,
+    Tag: AttributeAnomaly
+  },
+  {
+    Name: flowers_of_sin,
+    Tag: Chain,
+    Damage: 79500.86
+  },
+  {
+    Name: phantom_thrust,
+    Tag: Dash,
+    Damage: 13122.48
+  },
+  {
+    Name: salchow_jump 1,
+    Tag: BasicAtk,
+    Damage: 37810.31
+  },
+  {
+    Name: assault,
+    Tag: AttributeAnomaly,
+    Damage: 309636.88
+  },
+  {
+    Name: disorder,
+    Tag: AttributeAnomaly,
+    Damage: 329570.01
+  },
+  {
+    Name: salchow_jump 2,
+    Tag: BasicAtk,
+    Damage: 20280.19
+  },
+  {
+    Name: aerial_sweep_cleanout,
+    Tag: ExSpecial,
+    Damage: 72205.01
+  },
+  {
+    Name: assault,
+    Tag: AttributeAnomaly,
+    Damage: 314497.46
+  },
+  {
+    Name: aerial_sweep_cleanout,
+    Tag: ExSpecial,
+    Damage: 72205.01
+  },
+  {
+    Name: phantom_thrust,
+    Tag: Dash,
+    Damage: 13122.48
+  },
+  {
+    Name: final_curtain,
+    Tag: Ultimate,
+    Damage: 184675.31
+  },
+  {
+    Name: assault,
+    Tag: AttributeAnomaly,
+    Damage: 314497.46
+  }
+]

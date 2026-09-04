@@ -101,10 +101,17 @@ public class EllenTests : AgentsTest {
     };
 
     [Test]
-    public void EllenTest() {
+    public async Task EllenTest() {
         var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
+        
+        foreach (var action in Request.Rotation) {
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a => 
+                a.Name.Contains(action)));
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
@@ -174,10 +181,17 @@ public class EllenM6Tests : AgentsTest {
     };
     
     [Test]
-    public void EllenM6Test() {
+    public async Task EllenM6Test() {
         var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
+        
+        foreach (var action in Request.Rotation) {
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a => 
+                a.Name.Contains(action)));
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

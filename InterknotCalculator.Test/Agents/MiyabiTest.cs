@@ -64,13 +64,20 @@ public class MiyabiTests : AgentsTest {
     };
 
     [Test]
-    public void MiyabiTest() {
+    public async Task MiyabiTest() {
         var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
         Assert.That(result.PerAction, Has.Exactly(1).Matches<AgentAction>(action => action.Name == "frostburn"));
         Assert.That(result.PerAction, Has.Exactly(1).Matches<AgentAction>(action => action.Name == "shatter"));
+        
+        foreach (var action in Request.Rotation) {
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a => 
+                a.Name.Contains(action)));
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

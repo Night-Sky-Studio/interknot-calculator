@@ -73,10 +73,17 @@ public class EvelynTests : AgentsTest {
     };
 
     [Test]
-    public void EvelynTest() {
+    public async Task EvelynTest() {
         var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
+        
+        foreach (var action in Request.Rotation) {
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a => 
+                a.Name.Contains(action)));
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

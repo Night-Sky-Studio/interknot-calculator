@@ -59,7 +59,7 @@ public class BurniceTests : AgentsTest {
     };
 
     [Test]
-    public void BurniceTest() {
+    public async Task BurniceTest() {
         var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
@@ -67,6 +67,13 @@ public class BurniceTests : AgentsTest {
         Assert.That(result.PerAction, Has.Exactly(2).Matches<AgentAction>(action => action is {
             Name: "burn", Damage: > 0
         }));
+
+        foreach (var action in Request.Rotation) {
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a => 
+                a.Name.Contains(action)));
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

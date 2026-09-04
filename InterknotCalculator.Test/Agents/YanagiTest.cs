@@ -65,7 +65,7 @@ public class YanagiTests : AgentsTest {
     };
 
     [Test]
-    public void YanagiTest() {
+    public async Task YanagiTest() {
         var enemy = new NotoriousDullahan {
             AfflictedAnomaly = Anomaly.GetAnomalyByElement(Element.Fire)! with {
                 AgentId = 1151,
@@ -83,6 +83,18 @@ public class YanagiTests : AgentsTest {
         Assert.That(result.PerAction, Has.Exactly(3).Matches<AgentAction>(action => action is {
             Name: "polarity_disorder", Damage: > 0
         }));
+        
+        foreach (var action in Request.Rotation) {
+            var act = RotationAction.Parse(action, AgentId.Alice);
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(act, Is.Not.Null);
+                Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                    a.Name.Contains(act.ActionName)));
+            }
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

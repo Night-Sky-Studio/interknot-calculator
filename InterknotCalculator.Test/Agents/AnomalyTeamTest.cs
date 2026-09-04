@@ -65,13 +65,25 @@ public class AnomalyTeamTest : AgentsTest {
     };
     
     [Test]
-    public void AliceVivianYuzuhaTest() {
+    public async Task AliceVivianYuzuhaTest() {
         var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
         Assert.That(result.PerAction, 
             Has.Some.Matches<AgentAction>(a => a.Tag is SkillTag.AttributeAnomaly));
+        
+        foreach (var action in Request.Rotation) {
+            var act = RotationAction.Parse(action, AgentId.Alice);
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(act, Is.Not.Null);
+                Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                    a.Name.Contains(act.ActionName)));
+            }
+        }
+        
+        await VerifyActions(result.PerAction);
         
         PrintActions(result.PerAction, result.Total);
         Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");

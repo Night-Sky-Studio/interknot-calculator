@@ -1,0 +1,59 @@
+﻿[
+  {
+    Name: sundering_bolt,
+    Tag: ExSpecial
+  },
+  {
+    Name: harmonizing_shot_tartarus_(x3),
+    Tag: Aftershock,
+    Damage: 13421.53
+  },
+  {
+    Name: harmonizing_shot_tartarus_(finisher),
+    Tag: Aftershock,
+    Damage: 8947.68
+  },
+  {
+    Name: azure_flash,
+    Tag: Special
+  },
+  {
+    Name: harmonizing_shot_(x2),
+    Tag: Aftershock,
+    Damage: 18854.75
+  },
+  {
+    Name: white_thunder,
+    Tag: Aftershock
+  },
+  {
+    Name: azure_flash,
+    Tag: Special
+  },
+  {
+    Name: harmonizing_shot_(x2),
+    Tag: Aftershock,
+    Damage: 18854.75
+  },
+  {
+    Name: white_thunder,
+    Tag: Aftershock
+  },
+  {
+    Name: azure_flash,
+    Tag: Special
+  },
+  {
+    Name: harmonizing_shot_(x2),
+    Tag: Aftershock,
+    Damage: 18854.75
+  },
+  {
+    Name: white_thunder,
+    Tag: Aftershock
+  },
+  {
+    Name: thunder_smite,
+    Tag: Aftershock
+  }
+]

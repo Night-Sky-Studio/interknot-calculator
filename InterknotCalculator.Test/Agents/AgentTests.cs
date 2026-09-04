@@ -16,6 +16,13 @@ public abstract class AgentsTest {
     private static string GetAgentName(uint id) =>
         AgentIdNames.TryGetValue(id, out var name) ? name : id.ToString();
 
+    protected Task VerifyActions(IEnumerable<AgentAction> actions) =>
+        Verify(actions.Select(a => new {
+            a.Name,
+            a.Tag,
+            a.Damage
+        }));
+    
     protected void PrintActions(IEnumerable<AgentAction> actions, double total) {
         foreach (var action in actions) {
             Console.WriteLine(
