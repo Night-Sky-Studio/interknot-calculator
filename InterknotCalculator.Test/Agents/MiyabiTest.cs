@@ -73,8 +73,14 @@ public class MiyabiTests : AgentsTest {
         Assert.That(result.PerAction, Has.Exactly(1).Matches<AgentAction>(action => action.Name == "shatter"));
         
         foreach (var action in Request.Rotation) {
-            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a => 
-                a.Name.Contains(action)));
+            var act = RotationAction.Parse(action, AgentId.Miyabi);
+            if (act is null) {
+                Assert.Fail($"Failed to parse action: {action}");
+                return;
+            }
+
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                a.Name.Contains(act.ActionName)));
         }
         
         await VerifyActions(result.PerAction);

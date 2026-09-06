@@ -127,8 +127,14 @@ public class SilverAnbyTests : AgentsTest {
         Assert.That(result.PerAction, Has.Exactly(12).Matches<AgentAction>(a => a.Tag is SkillTag.Aftershock));
         
         foreach (var action in Request.Rotation) {
-            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a => 
-                a.Name.Contains(action)));
+            var act = RotationAction.Parse(action, AgentId.Soldier0Anby);
+            if (act is null) {
+                Assert.Fail($"Failed to parse action: {action}");
+                return;
+            }
+
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                a.Name.Contains(act.ActionName)));
         }
         
         await VerifyActions(result.PerAction);

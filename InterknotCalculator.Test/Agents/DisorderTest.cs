@@ -44,12 +44,13 @@ public class DisorderTests : AgentsTest {
         
         foreach (var action in Request.Rotation) {
             var act = RotationAction.Parse(action, AgentId.Jane);
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(act, Is.Not.Null);
-                Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
-                    a.Name.Contains(act.ActionName)));
+            if (act is null) {
+                Assert.Fail($"Failed to parse action: {action}");
+                return;
             }
+
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                a.Name.Contains(act.ActionName)));
         }
         
         await VerifyActions(result.PerAction);
