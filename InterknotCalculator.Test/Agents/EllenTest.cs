@@ -8,7 +8,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class EllenTests : AgentsTest {
-    private CalcRequest Ellen { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.Ellen,
         WeaponId = WeaponId.DeepSeaVisitor,
         // Discs = [
@@ -101,10 +101,17 @@ public class EllenTests : AgentsTest {
     };
 
     [Test]
-    public void EllenTest() {
-        var result = Calculator.Calculate(Ellen);
+    public async Task EllenTest() {
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
+        
+        foreach (var action in Request.Rotation) {
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a => 
+                a.Name.Contains(action)));
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
@@ -114,7 +121,7 @@ public class EllenTests : AgentsTest {
 
 [TestFixture]
 public class EllenM6Tests : AgentsTest {
-    private CalcRequest EllenM6 { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.Ellen,
         WeaponId = WeaponId.DeepSeaVisitor,
         Discs = [
@@ -174,10 +181,23 @@ public class EllenM6Tests : AgentsTest {
     };
     
     [Test]
-    public void EllenM6Test() {
-        var result = Calculator.Calculate(EllenM6);
+    public async Task EllenM6Test() {
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
+        
+        foreach (var action in Request.Rotation) {
+            var act = RotationAction.Parse(action, AgentId.Ellen);
+            if (act is null) {
+                Assert.Fail($"Failed to parse action: {action}");
+                return;
+            }
+
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                a.Name.Contains(act.ActionName)));
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

@@ -7,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class JaneTests : AgentsTest {
-    public static CalcRequest Jane { get; } = new() {
+    public static CalcRequest Jane() => new() {
         AgentId = 1261,
         WeaponId = 14126,
         Discs = [
@@ -62,8 +62,10 @@ public class JaneTests : AgentsTest {
         ]
     };
 
+    protected override CalcRequest Request { get; } = Jane();
+
     [Test]
-    public void JaneTest() {
+    public async Task JaneTest() {
         var enemy = new NotoriousDullahan {
             AfflictedAnomaly = Anomaly.GetAnomalyByElement(Element.Fire) with {
                 Stats = new() {
@@ -72,10 +74,23 @@ public class JaneTests : AgentsTest {
                 }
             }
         };
-        var result = Calculator.Calculate(Jane, enemy);
+        var result = Calculator.Calculate(Request, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(action => action.Tag is SkillTag.AttributeAnomaly));
+        
+        foreach (var action in Request.Rotation) {
+            var act = RotationAction.Parse(action, AgentId.Jane);
+            if (act is null) {
+                Assert.Fail($"Failed to parse action: {action}");
+                return;
+            }
+
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                a.Name.Contains(act.ActionName)));
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Assault triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

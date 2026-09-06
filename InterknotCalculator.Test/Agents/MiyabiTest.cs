@@ -7,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class MiyabiTests : AgentsTest {
-    private CalcRequest Miyabi { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = 1091,
         WeaponId = 14109,
         Discs = [
@@ -64,13 +64,26 @@ public class MiyabiTests : AgentsTest {
     };
 
     [Test]
-    public void MiyabiTest() {
-        var result = Calculator.Calculate(Miyabi);
+    public async Task MiyabiTest() {
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
         Assert.That(result.PerAction, Has.Exactly(1).Matches<AgentAction>(action => action.Name == "frostburn"));
         Assert.That(result.PerAction, Has.Exactly(1).Matches<AgentAction>(action => action.Name == "shatter"));
+        
+        foreach (var action in Request.Rotation) {
+            var act = RotationAction.Parse(action, AgentId.Miyabi);
+            if (act is null) {
+                Assert.Fail($"Failed to parse action: {action}");
+                return;
+            }
+
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                a.Name.Contains(act.ActionName)));
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

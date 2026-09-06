@@ -12,14 +12,25 @@ public abstract class AgentsTest {
             .GetFields(BindingFlags.Public | BindingFlags.Static)
             .Where(f => f.IsLiteral && f.FieldType == typeof(uint))
             .ToDictionary(f => (uint)f.GetRawConstantValue()!, f => f.Name);
-    
+
     private static string GetAgentName(uint id) =>
         AgentIdNames.TryGetValue(id, out var name) ? name : id.ToString();
 
+    protected Task VerifyActions(IEnumerable<AgentAction> actions) =>
+        Verify(actions.Select(a => new {
+            a.Name,
+            a.Tag,
+            a.Damage
+        }));
+    
     protected void PrintActions(IEnumerable<AgentAction> actions, double total) {
         foreach (var action in actions) {
-            Console.WriteLine($"{GetAgentName(action.AgentId), -16}{action.Name, -48}{action.Tag, -24}{action.Damage.ToString(CultureInfo.InvariantCulture)}");
+            Console.WriteLine(
+                $"{GetAgentName(action.AgentId),-16}{action.Name,-48}{action.Tag,-24}{action.Damage.ToString(CultureInfo.InvariantCulture)}");
         }
+
         Console.WriteLine($"Total: {total.ToString(CultureInfo.InvariantCulture)}");
     }
+    
+    protected abstract CalcRequest Request { get; }
 }

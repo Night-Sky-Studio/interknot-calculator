@@ -7,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class YanagiTests : AgentsTest {
-    private CalcRequest Yanagi { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = 1221,
         WeaponId = 14122,
         Discs = [
@@ -65,7 +65,7 @@ public class YanagiTests : AgentsTest {
     };
 
     [Test]
-    public void YanagiTest() {
+    public async Task YanagiTest() {
         var enemy = new NotoriousDullahan {
             AfflictedAnomaly = Anomaly.GetAnomalyByElement(Element.Fire)! with {
                 AgentId = 1151,
@@ -75,7 +75,7 @@ public class YanagiTests : AgentsTest {
                 }
             }
         };
-        var result = Calculator.Calculate(Yanagi, enemy);
+        var result = Calculator.Calculate(Request, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
@@ -83,6 +83,19 @@ public class YanagiTests : AgentsTest {
         Assert.That(result.PerAction, Has.Exactly(3).Matches<AgentAction>(action => action is {
             Name: "polarity_disorder", Damage: > 0
         }));
+        
+        foreach (var action in Request.Rotation) {
+            var act = RotationAction.Parse(action, AgentId.Alice);
+            if (act is null) {
+                Assert.Fail($"Failed to parse action: {action}");
+                return;
+            }
+
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                a.Name.Contains(act.ActionName)));
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

@@ -7,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class YixuanTests: AgentsTest {
-    private CalcRequest Yixuan { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.Yixuan,
         WeaponId = WeaponId.QingmingBirdcage,
         Discs = [
@@ -67,12 +67,24 @@ public class YixuanTests: AgentsTest {
     };
 
     [Test]
-    public void YixuanTest() {
-        var result = Calculator.Calculate(Yixuan);
+    public async Task YixuanTest() {
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
-        // Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
+        foreach (var action in Request.Rotation) {
+            var act = RotationAction.Parse(action, AgentId.Yixuan);
+            if (act is null) {
+                Assert.Fail($"Failed to parse action: {action}");
+                return;
+            }
+
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                a.Name.Contains(act.ActionName)));
+        }
+        
+        await VerifyActions(result.PerAction);
+        
         PrintActions(result.PerAction, result.Total);
         Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
     }

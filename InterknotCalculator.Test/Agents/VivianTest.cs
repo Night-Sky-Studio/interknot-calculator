@@ -7,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class VivianTests : AgentsTest {
-    private CalcRequest Vivian { get; } = new CalcRequest {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = 1331,
         WeaponId = 14133,
         Discs = [
@@ -61,8 +61,8 @@ public class VivianTests : AgentsTest {
     };
     
     [Test]
-    public void VivianTest() {
-        var result = Calculator.Calculate(Vivian);
+    public async Task VivianTest() {
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
 
@@ -70,6 +70,19 @@ public class VivianTests : AgentsTest {
             Tag: SkillTag.AttributeAnomaly,
             Name: "abloom_assault"
         }));
+        
+        foreach (var action in Request.Rotation) {
+            var act = RotationAction.Parse(action, AgentId.Alice);
+            if (act is null) {
+                Assert.Fail($"Failed to parse action: {action}");
+                return;
+            }
+
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                a.Name.Contains(act.ActionName)));
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

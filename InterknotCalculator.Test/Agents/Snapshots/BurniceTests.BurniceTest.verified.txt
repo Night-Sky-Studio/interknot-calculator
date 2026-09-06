@@ -1,0 +1,32 @@
+﻿[
+  {
+    Name: fuel-fed_flame,
+    Tag: Chain,
+    Damage: 44106.76
+  },
+  {
+    Name: burn,
+    Tag: AttributeAnomaly,
+    Damage: 166823.42
+  },
+  {
+    Name: intense_heat_stirring_method_double 1,
+    Tag: ExSpecial,
+    Damage: 92388.4
+  },
+  {
+    Name: glorious_inferno,
+    Tag: Ultimate,
+    Damage: 140702.58
+  },
+  {
+    Name: burn,
+    Tag: AttributeAnomaly,
+    Damage: 166823.42
+  },
+  {
+    Name: energizing_speciality_drink,
+    Tag: QuickAssist,
+    Damage: 8153.05
+  }
+]

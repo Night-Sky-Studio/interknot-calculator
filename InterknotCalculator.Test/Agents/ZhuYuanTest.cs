@@ -6,7 +6,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class ZhuYuanTests : AgentsTest {
-    private CalcRequest ZhuYuan { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.ZhuYuan,
         WeaponId = WeaponId.RiotSuppressorMarkVI,
         Discs = [
@@ -70,10 +70,23 @@ public class ZhuYuanTests : AgentsTest {
     };
 
     [Test]
-    public void ZhuYuanTest() {
-        var result = Calculator.Calculate(ZhuYuan);
+    public async Task ZhuYuanTest() {
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
+        
+        foreach (var action in Request.Rotation) {
+            var act = RotationAction.Parse(action, AgentId.ZhuYuan);
+            if (act is null) {
+                Assert.Fail($"Failed to parse action: {action}");
+                return;
+            }
+
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                a.Name.Contains(act.ActionName)));
+        }
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

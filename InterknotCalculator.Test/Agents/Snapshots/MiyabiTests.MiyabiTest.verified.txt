@@ -1,0 +1,57 @@
+﻿[
+  {
+    Name: hisetsu 1,
+    Tag: ExSpecial,
+    Damage: 94874.28
+  },
+  {
+    Name: hisetsu 2,
+    Tag: ExSpecial,
+    Damage: 116405.43
+  },
+  {
+    Name: kazahana 3,
+    Tag: BasicAtk,
+    Damage: 15236.69
+  },
+  {
+    Name: kazahana 4,
+    Tag: BasicAtk,
+    Damage: 23264.24
+  },
+  {
+    Name: kazahana 5,
+    Tag: BasicAtk,
+    Damage: 31147.36
+  },
+  {
+    Name: shimotsuki 3,
+    Tag: BasicAtk,
+    Damage: 906581.84
+  },
+  {
+    Name: springs_call,
+    Tag: Chain,
+    Damage: 151440.19
+  },
+  {
+    Name: lingering_snow,
+    Tag: Ultimate,
+    Damage: 574818.01
+  },
+  {
+    Name: frostburn,
+    Tag: AttributeAnomaly,
+    Damage: 195665.81
+  },
+  {
+    Name: shimotsuki 3,
+    Tag: BasicAtk,
+    Damage: 906581.84
+  },
+  {
+    Name: shatter,
+    Tag: AttributeAnomaly,
+    Damage: 65221.94
+  }
+]

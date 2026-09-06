@@ -7,7 +7,7 @@ using InterknotCalculator.Core.Enums;
 namespace InterknotCalculator.Test.Agents;
 
 public class TriggerTests : AgentsTest {
-    private CalcRequest Trigger { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.Trigger,
         WeaponId = WeaponId.SpectralGaze,
         Discs = [
@@ -75,14 +75,23 @@ public class TriggerTests : AgentsTest {
     };
 
     [Test]
-    public void TriggerTest() {
-        var result = Calculator.Calculate(Trigger);
+    public async Task TriggerTest() {
+        var result = Calculator.Calculate(Request);
 
         Assert.That(result.PerAction, Is.Not.Empty);
-        Assert.That(result.PerAction, Has.Exactly(5).Matches<AgentAction>(a => a is {
-            Tag: SkillTag.Aftershock,
-            AgentId: AgentId.Trigger
-        }));
+        
+        foreach (var action in Request.Rotation) {
+            var act = RotationAction.Parse(action, AgentId.Alice);
+            if (act is null) {
+                Assert.Fail($"Failed to parse action: {action}");
+                return;
+            }
+
+            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
+                a.Name.Contains(act.ActionName)));
+        }
+        
+        await VerifyActions(result.PerAction);
 
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

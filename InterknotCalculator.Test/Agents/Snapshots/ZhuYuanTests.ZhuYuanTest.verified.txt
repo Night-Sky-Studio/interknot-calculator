@@ -1,0 +1,87 @@
+﻿[
+  {
+    Name: eradication_mode,
+    Tag: Chain,
+    Damage: 96718.88
+  },
+  {
+    Name: covering_shot,
+    Tag: QuickAssist,
+    Damage: 8493.8
+  },
+  {
+    Name: full_barrage,
+    Tag: ExSpecial,
+    Damage: 120980.98
+  },
+  {
+    Name: please_do_not_resist 1,
+    Tag: BasicAtk,
+    Damage: 35252.14
+  },
+  {
+    Name: please_do_not_resist 2,
+    Tag: BasicAtk,
+    Damage: 35252.14
+  },
+  {
+    Name: please_do_not_resist 3,
+    Tag: BasicAtk,
+    Damage: 105614.0
+  },
+  {
+    Name: overwhelming_firepower 1,
+    Tag: Dash,
+    Damage: 13929.97
+  },
+  {
+    Name: please_do_not_resist 3,
+    Tag: BasicAtk,
+    Damage: 105614.0
+  },
+  {
+    Name: full_barrage,
+    Tag: ExSpecial,
+    Damage: 120980.98
+  },
+  {
+    Name: max_eradication_mode,
+    Tag: Ultimate,
+    Damage: 325861.89
+  },
+  {
+    Name: please_do_not_resist 1,
+    Tag: BasicAtk,
+    Damage: 35252.14
+  },
+  {
+    Name: please_do_not_resist 2,
+    Tag: BasicAtk,
+    Damage: 35252.14
+  },
+  {
+    Name: please_do_not_resist 3,
+    Tag: BasicAtk,
+    Damage: 105614.0
+  },
+  {
+    Name: overwhelming_firepower 1,
+    Tag: Dash,
+    Damage: 13929.97
+  },
+  {
+    Name: please_do_not_resist 3,
+    Tag: BasicAtk,
+    Damage: 105614.0
+  },
+  {
+    Name: full_barrage,
+    Tag: ExSpecial,
+    Damage: 120980.98
+  },
+  {
+    Name: corruption,
+    Tag: AttributeAnomaly,
+    Damage: 46292.03
+  }
+]
