@@ -7,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class DisorderTests : AgentsTest {
-    protected override CalcRequest Request => JaneTests.Jane;
+    protected override CalcRequest Request { get; } = JaneTests.Jane();
 
     [Test]
     public async Task DisorderTest() {

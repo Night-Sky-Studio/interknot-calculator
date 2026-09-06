@@ -7,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class JaneTests : AgentsTest {
-    public static CalcRequest Jane { get; } = new() {
+    public static CalcRequest Jane() => new() {
         AgentId = 1261,
         WeaponId = 14126,
         Discs = [
@@ -62,7 +62,7 @@ public class JaneTests : AgentsTest {
         ]
     };
 
-    protected override CalcRequest Request => Jane;
+    protected override CalcRequest Request { get; } = Jane();
 
     [Test]
     public async Task JaneTest() {
