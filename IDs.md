@@ -1,4 +1,4 @@
-Game version: 3.0
+Game version: 3.2
 
 # Agents
 ```
@@ -58,6 +58,10 @@ Game version: 3.0
 1551 Pyrois
 1561 Velina
 1571 Norma
+1581 Remielle
+1591 Sigrid
+1611 Claret
+1621 Roxy
 ```
 
 # Weapons
@@ -77,6 +81,7 @@ Game version: 3.0
 12013 [Identity] Base
 12014 [Identity] Inflection
 12015 [Cinder] Cobalt
+12016 [Lunar] Semiluna
 13001 Street Superstar
 13002 Slice of Time
 13003 Rainforest Gourmet
@@ -93,9 +98,11 @@ Game version: 3.0
 13014 Radiowave Journey
 13015 Marcato Desire
 13016 Reel Projector
+13017 Catty Luck
 13018 Boisterous Echoes
 13019 Cauldron of Clarity
 13020 The Simmering Pot
+13021 Bloodmarrow Coffer
 13101 Demara Battery Mark II
 13103 The Vault
 13106 Housekeeper
@@ -155,6 +162,10 @@ Game version: 3.0
 14155 Sol Exuvia
 14156 Joyau Dore
 14157 Chief Sidekick
+14158 Ode of Resurrected Wings
+14159 Knight's Extolment
+14161 Crimson Thirst
+14162 Crimson Moon Casket
 ```
 
 # Drive Disc Sets
@@ -187,4 +198,6 @@ Game version: 3.0
 33800 Notes From the Chained
 33900 Wuthering Salon
 34000 The Sky Ablaze
+34100 Feathered Fate
+34200 Thorned Rose
 ```
