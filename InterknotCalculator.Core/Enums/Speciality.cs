@@ -6,5 +6,6 @@ public enum Speciality {
     Anomaly,
     Stun,
     Support,
-    Rupture
+    Rupture,
+    Armorer
 }

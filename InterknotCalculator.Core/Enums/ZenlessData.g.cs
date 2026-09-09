@@ -1,5 +1,5 @@
 /// AUTO-GENERATED, DO NOT EDIT!!!
-/// Game version: 3.1
+/// Game version: 3.2
 
 namespace InterknotCalculator.Core.Enums;
 
@@ -62,6 +62,8 @@ public static class AgentId {
     public const uint Norma = 1571;
     public const uint Remielle = 1581;
     public const uint Sigrid = 1591;
+    public const uint Claret = 1611;
+    public const uint Roxy = 1621;
 }
 
 public static class WeaponId {
@@ -80,6 +82,7 @@ public static class WeaponId {
     public const uint IdentityBase = 12013;
     public const uint IdentityInflection = 12014;
     public const uint CinderCobalt = 12015;
+    public const uint LunarSemiluna = 12016;
     public const uint StreetSuperstar = 13001;
     public const uint SliceOfTime = 13002;
     public const uint RainforestGourmet = 13003;
@@ -96,9 +99,11 @@ public static class WeaponId {
     public const uint RadiowaveJourney = 13014;
     public const uint MarcatoDesire = 13015;
     public const uint ReelProjector = 13016;
+    public const uint CattyLuck = 13017;
     public const uint BoisterousEchoes = 13018;
     public const uint CauldronOfClarity = 13019;
     public const uint TheSimmeringPot = 13020;
+    public const uint BloodmarrowCoffer = 13021;
     public const uint DemaraBatteryMarkII = 13101;
     public const uint TheVault = 13103;
     public const uint Housekeeper = 13106;
@@ -160,6 +165,8 @@ public static class WeaponId {
     public const uint ChiefSidekick = 14157;
     public const uint OdeOfResurrectedWings = 14158;
     public const uint KnightsExtolment = 14159;
+    public const uint CrimsonThirst = 14161;
+    public const uint CrimsonMoonCasket = 14162;
 }
 
 public static class DriveDiscSetId {
