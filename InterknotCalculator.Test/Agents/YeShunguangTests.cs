@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using InterknotCalculator.Core.Classes;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
@@ -135,16 +136,7 @@ public class YeShunguangTests : AgentsTest {
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
-        foreach (var action in Request.Rotation) {
-            var act = RotationAction.Parse(action, AgentId.YeShunguang);
-            if (act is null) {
-                Assert.Fail($"Failed to parse action: {action}");
-                return;
-            }
-
-            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
-                a.Name.Contains(act.ActionName)));
-        }
+        AssertRotationOrderPreserved(Request.Rotation, result.PerAction.ToImmutableList(), Request.AgentId);
         
         await VerifyActions(result.PerAction);
         
@@ -166,16 +158,7 @@ public class YeShunguangTests : AgentsTest {
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
-        foreach (var action in Request.Rotation) {
-            var act = RotationAction.Parse(action, AgentId.YeShunguang);
-            if (act is null) {
-                Assert.Fail($"Failed to parse action: {action}");
-                return;
-            }
-
-            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
-                a.Name.Contains(act.ActionName)));
-        }
+        AssertRotationOrderPreserved(Request.Rotation, result.PerAction.ToImmutableList(), Request.AgentId);
         
         await VerifyActions(result.PerAction);
         

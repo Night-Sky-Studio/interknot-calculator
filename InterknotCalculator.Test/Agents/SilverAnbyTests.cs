@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using InterknotCalculator.Core.Classes;
 using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
@@ -126,16 +127,7 @@ public class SilverAnbyTests : AgentsTest {
         Assert.That(result.PerAction, Is.Not.Empty);
         Assert.That(result.PerAction, Has.Exactly(12).Matches<AgentAction>(a => a.Tag is SkillTag.Aftershock));
         
-        foreach (var action in Request.Rotation) {
-            var act = RotationAction.Parse(action, AgentId.Soldier0Anby);
-            if (act is null) {
-                Assert.Fail($"Failed to parse action: {action}");
-                return;
-            }
-
-            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
-                a.Name.Contains(act.ActionName)));
-        }
+        AssertRotationOrderPreserved(Request.Rotation, result.PerAction.ToImmutableList(), Request.AgentId);
         
         await VerifyActions(result.PerAction);
         

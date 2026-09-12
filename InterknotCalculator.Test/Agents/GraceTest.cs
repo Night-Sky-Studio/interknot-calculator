@@ -1,5 +1,5 @@
+using System.Collections.Immutable;
 using InterknotCalculator.Core.Classes;
-using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -69,16 +69,7 @@ public class GraceTests : AgentsTest {
         Assert.That(result.PerAction, Is.Not.Empty);
         Assert.That(result.PerAction, Has.Exactly(1).Matches<AgentAction>(action => action.Name == "shock"));
         
-        foreach (var action in Request.Rotation) {
-            var act = RotationAction.Parse(action, AgentId.Grace);
-            if (act is null) {
-                Assert.Fail($"Failed to parse action: {action}");
-                return;
-            }
-
-            Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(a =>
-                a.Name.Contains(act.ActionName)));
-        }
+        AssertRotationOrderPreserved(Request.Rotation, result.PerAction.ToImmutableList(), Request.AgentId);
         
         await VerifyActions(result.PerAction);
         
