@@ -1,0 +1,47 @@
+﻿[
+  {
+    Name: collaborative_construction,
+    Tag: Chain,
+    Damage: 50821.63
+  },
+  {
+    Name: high-pressure_spike 1,
+    Tag: BasicAtk,
+    Damage: 4943.03
+  },
+  {
+    Name: high-pressure_spike 2,
+    Tag: BasicAtk,
+    Damage: 5343.09
+  },
+  {
+    Name: high-pressure_spike 3,
+    Tag: BasicAtk,
+    Damage: 11121.82
+  },
+  {
+    Name: supercharged_obstruction_removal,
+    Tag: ExSpecial,
+    Damage: 29702.63
+  },
+  {
+    Name: high-pressure_spike 4,
+    Tag: BasicAtk,
+    Damage: 16593.82
+  },
+  {
+    Name: supercharged_obstruction_removal,
+    Tag: ExSpecial,
+    Damage: 29702.63
+  },
+  {
+    Name: demolition_blast,
+    Tag: Ultimate,
+    Damage: 131501.47
+  },
+  {
+    Name: shock,
+    Tag: AttributeAnomaly,
+    Damage: 310145.43
+  }
+]

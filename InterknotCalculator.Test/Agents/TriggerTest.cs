@@ -1,13 +1,12 @@
+using System.Collections.Immutable;
 using InterknotCalculator.Core.Classes;
-using InterknotCalculator.Core.Classes.Agents;
-using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Test.Agents;
 
 public class TriggerTests : AgentsTest {
-    private CalcRequest Trigger { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.Trigger,
         WeaponId = WeaponId.SpectralGaze,
         Discs = [
@@ -75,14 +74,14 @@ public class TriggerTests : AgentsTest {
     };
 
     [Test]
-    public void TriggerTest() {
-        var result = Calculator.Calculate(Trigger);
+    public async Task TriggerTest() {
+        var result = Calculator.Calculate(Request);
 
         Assert.That(result.PerAction, Is.Not.Empty);
-        Assert.That(result.PerAction, Has.Exactly(5).Matches<AgentAction>(a => a is {
-            Tag: SkillTag.Aftershock,
-            AgentId: AgentId.Trigger
-        }));
+        
+        AssertRotationOrderPreserved(Request.Rotation, result.PerAction.ToImmutableList(), Request.AgentId);
+        
+        await VerifyActions(result.PerAction);
 
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

@@ -1,0 +1,51 @@
+﻿[
+  {
+    Name: aerial_sweep_cleanout,
+    Tag: ExSpecial
+  },
+  {
+    Name: aerial_sweep_cleanout,
+    Tag: ExSpecial
+  },
+  {
+    Name: assault,
+    Tag: AttributeAnomaly
+  },
+  {
+    Name: violet_requiem,
+    Tag: ExSpecial,
+    Damage: 21011.88
+  },
+  {
+    Name: fluttering_frock_suspension,
+    Tag: BasicAtk,
+    Damage: 2844.71
+  },
+  {
+    Name: aerial_sweep_cleanout,
+    Tag: ExSpecial
+  },
+  {
+    Name: abloom_assault,
+    Tag: AttributeAnomaly,
+    Damage: 85055.64
+  },
+  {
+    Name: aerial_sweep_cleanout,
+    Tag: ExSpecial
+  },
+  {
+    Name: abloom_assault,
+    Tag: AttributeAnomaly,
+    Damage: 85055.64
+  },
+  {
+    Name: assault,
+    Tag: AttributeAnomaly
+  },
+  {
+    Name: abloom_assault,
+    Tag: AttributeAnomaly,
+    Damage: 85055.64
+  }
+]

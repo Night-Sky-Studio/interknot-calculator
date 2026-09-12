@@ -15,4 +15,8 @@
       <ProjectReference Include="..\InterknotCalculator.Core\InterknotCalculator.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Update="Nerdbank.GitVersioning" Version="3.10.94" />
+    </ItemGroup>
+
 </Project>

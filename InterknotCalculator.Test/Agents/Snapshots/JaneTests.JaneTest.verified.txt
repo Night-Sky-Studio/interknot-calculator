@@ -1,0 +1,62 @@
+﻿[
+  {
+    Name: flowers_of_sin,
+    Tag: Chain,
+    Damage: 64938.6
+  },
+  {
+    Name: phantom_thrust,
+    Tag: Dash,
+    Damage: 10718.82
+  },
+  {
+    Name: salchow_jump 1,
+    Tag: BasicAtk,
+    Damage: 30884.56
+  },
+  {
+    Name: salchow_jump 2,
+    Tag: BasicAtk,
+    Damage: 16565.45
+  },
+  {
+    Name: assault,
+    Tag: AttributeAnomaly,
+    Damage: 257584.09
+  },
+  {
+    Name: disorder,
+    Tag: AttributeAnomaly,
+    Damage: 199037.56
+  },
+  {
+    Name: aerial_sweep_cleanout,
+    Tag: ExSpecial,
+    Damage: 58979.15
+  },
+  {
+    Name: aerial_sweep_cleanout,
+    Tag: ExSpecial,
+    Damage: 58979.15
+  },
+  {
+    Name: assault,
+    Tag: AttributeAnomaly,
+    Damage: 261627.56
+  },
+  {
+    Name: phantom_thrust,
+    Tag: Dash,
+    Damage: 10718.82
+  },
+  {
+    Name: final_curtain,
+    Tag: Ultimate,
+    Damage: 150848.14
+  },
+  {
+    Name: assault,
+    Tag: AttributeAnomaly,
+    Damage: 261627.56
+  }
+]

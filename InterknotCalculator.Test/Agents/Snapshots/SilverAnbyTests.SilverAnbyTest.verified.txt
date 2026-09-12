@@ -1,0 +1,127 @@
+﻿[
+  {
+    Name: leaping_thunderstrike,
+    Tag: Chain,
+    Damage: 248708.95
+  },
+  {
+    Name: azure_flash,
+    Tag: Special,
+    Damage: 19180.64
+  },
+  {
+    Name: white_thunder,
+    Tag: Aftershock,
+    Damage: 100396.36
+  },
+  {
+    Name: azure_flash,
+    Tag: Special,
+    Damage: 19180.64
+  },
+  {
+    Name: white_thunder,
+    Tag: Aftershock,
+    Damage: 100396.36
+  },
+  {
+    Name: azure_flash,
+    Tag: Special,
+    Damage: 19180.64
+  },
+  {
+    Name: white_thunder,
+    Tag: Aftershock,
+    Damage: 100396.36
+  },
+  {
+    Name: thunder_smite,
+    Tag: Aftershock,
+    Damage: 112945.9
+  },
+  {
+    Name: voidstrike,
+    Tag: Ultimate,
+    Damage: 765175.22
+  },
+  {
+    Name: azure_flash,
+    Tag: Special,
+    Damage: 19180.64
+  },
+  {
+    Name: white_thunder,
+    Tag: Aftershock,
+    Damage: 100396.36
+  },
+  {
+    Name: azure_flash,
+    Tag: Special,
+    Damage: 19180.64
+  },
+  {
+    Name: white_thunder,
+    Tag: Aftershock,
+    Damage: 100396.36
+  },
+  {
+    Name: azure_flash,
+    Tag: Special,
+    Damage: 19180.64
+  },
+  {
+    Name: white_thunder,
+    Tag: Aftershock,
+    Damage: 100396.36
+  },
+  {
+    Name: thunder_smite,
+    Tag: Aftershock,
+    Damage: 112945.9
+  },
+  {
+    Name: celestial_thunder,
+    Tag: Special,
+    Damage: 26478.1
+  },
+  {
+    Name: sundering_bolt,
+    Tag: ExSpecial,
+    Damage: 167599.1
+  },
+  {
+    Name: azure_flash,
+    Tag: Special,
+    Damage: 19180.64
+  },
+  {
+    Name: white_thunder,
+    Tag: Aftershock,
+    Damage: 100396.36
+  },
+  {
+    Name: azure_flash,
+    Tag: Special,
+    Damage: 19180.64
+  },
+  {
+    Name: white_thunder,
+    Tag: Aftershock,
+    Damage: 100396.36
+  },
+  {
+    Name: azure_flash,
+    Tag: Special,
+    Damage: 19180.64
+  },
+  {
+    Name: white_thunder,
+    Tag: Aftershock,
+    Damage: 100396.36
+  },
+  {
+    Name: thunder_smite,
+    Tag: Aftershock,
+    Damage: 112945.9
+  }
+]

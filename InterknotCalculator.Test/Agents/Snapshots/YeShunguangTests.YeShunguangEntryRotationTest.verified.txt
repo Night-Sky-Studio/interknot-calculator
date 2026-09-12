@@ -1,0 +1,101 @@
+﻿[
+  {
+    Name: special_photography_technique 1,
+    Tag: ExSpecial
+  },
+  {
+    Name: burst_of_frost,
+    Tag: Entry
+  },
+  {
+    Name: illuminating_darkness,
+    Tag: Entry,
+    Damage: 381967.8
+  },
+  {
+    Name: cat's_gaze
+  },
+  {
+    Name: enlightened_mind_sunderlight 1,
+    Tag: BasicAtk,
+    Damage: 159627.79
+  },
+  {
+    Name: cat's_gaze
+  },
+  {
+    Name: enlightened_mind_sunderlight 2,
+    Tag: BasicAtk,
+    Damage: 207245.34
+  },
+  {
+    Name: cat's_gaze
+  },
+  {
+    Name: enlightened_mind_sunderlight_annihilation 2,
+    Tag: BasicAtk,
+    Damage: 1177758.51
+  },
+  {
+    Name: cat's_gaze
+  },
+  {
+    Name: enlightened_mind_sunderlight_maximum,
+    Tag: BasicAtk,
+    Damage: 798997.5
+  },
+  {
+    Name: cat's_gaze
+  },
+  {
+    Name: enlightened_mind_soaring_light 1,
+    Tag: ExSpecial,
+    Damage: 232936.37
+  },
+  {
+    Name: cat's_gaze
+  },
+  {
+    Name: enlightened_mind_skyward_ascent,
+    Tag: BasicAtk,
+    Damage: 120397.79
+  },
+  {
+    Name: cat's_gaze
+  },
+  {
+    Name: enlightened_mind_sunderlight 1,
+    Tag: BasicAtk,
+    Damage: 159627.79
+  },
+  {
+    Name: enlightened_mind_sunderlight 2,
+    Tag: BasicAtk,
+    Damage: 207245.34
+  },
+  {
+    Name: enlightened_mind_sunderlight_annihilation 2,
+    Tag: BasicAtk,
+    Damage: 1177758.51
+  },
+  {
+    Name: enlightened_mind_sunderlight_maximum,
+    Tag: BasicAtk,
+    Damage: 798997.5
+  },
+  {
+    Name: enlightened_mind_soaring_light 1,
+    Tag: ExSpecial,
+    Damage: 232936.37
+  },
+  {
+    Name: enlightened_mind_skyward_ascent,
+    Tag: BasicAtk,
+    Damage: 120397.79
+  },
+  {
+    Name: enlightened_mind_return_to_dust,
+    Tag: ExSpecial,
+    Damage: 1533998.6
+  }
+]

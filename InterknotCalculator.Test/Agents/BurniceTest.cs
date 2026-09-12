@@ -1,5 +1,5 @@
-﻿using InterknotCalculator.Core.Classes;
-using InterknotCalculator.Core.Classes.Enemies;
+﻿using System.Collections.Immutable;
+using InterknotCalculator.Core.Classes;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -7,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class BurniceTests : AgentsTest {
-    private CalcRequest Burnice { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.Burnice,
         WeaponId = 14117,
         Discs = [
@@ -59,14 +59,18 @@ public class BurniceTests : AgentsTest {
     };
 
     [Test]
-    public void BurniceTest() {
-        var result = Calculator.Calculate(Burnice);
+    public async Task BurniceTest() {
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
         Assert.That(result.PerAction, Has.Exactly(2).Matches<AgentAction>(action => action is {
             Name: "burn", Damage: > 0
         }));
+
+        AssertRotationOrderPreserved(Request.Rotation, result.PerAction.ToImmutableList(), Request.AgentId);
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

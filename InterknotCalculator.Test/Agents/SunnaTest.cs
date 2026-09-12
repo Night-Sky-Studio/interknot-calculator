@@ -97,4 +97,6 @@ public class SunnaTest : AgentsTest {
 
         PrintActions(context.Actions, context.Actions.Sum(a => a.AgentId == ellen.Id ? a.Damage : 0));
     }
+
+    protected override CalcRequest Request { get; } = null!;
 }

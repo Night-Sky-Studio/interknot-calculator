@@ -1,0 +1,62 @@
+﻿[
+  {
+    Name: avalanche,
+    Tag: Chain,
+    Damage: 342825.41
+  },
+  {
+    Name: endless_winter,
+    Tag: Ultimate,
+    Damage: 815384.82
+  },
+  {
+    Name: tail_swipe,
+    Tag: ExSpecial,
+    Damage: 144627.08
+  },
+  {
+    Name: sharknami,
+    Tag: ExSpecial,
+    Damage: 212115.39
+  },
+  {
+    Name: icy_blade 2,
+    Tag: BasicAtk,
+    Damage: 95179.62
+  },
+  {
+    Name: flash_freeze_trimming 3,
+    Tag: BasicAtk,
+    Damage: 214222.55
+  },
+  {
+    Name: icy_blade 2,
+    Tag: BasicAtk,
+    Damage: 95179.62
+  },
+  {
+    Name: sharknami,
+    Tag: ExSpecial,
+    Damage: 212115.39
+  },
+  {
+    Name: icy_blade 2,
+    Tag: BasicAtk,
+    Damage: 95179.62
+  },
+  {
+    Name: flash_freeze_trimming 3,
+    Tag: BasicAtk,
+    Damage: 214222.55
+  },
+  {
+    Name: shatter,
+    Tag: AttributeAnomaly,
+    Damage: 40497.51
+  },
+  {
+    Name: icy_blade 2,
+    Tag: BasicAtk,
+    Damage: 95179.62
+  }
+]

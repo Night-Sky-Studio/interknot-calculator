@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using InterknotCalculator.Core.Classes;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
@@ -76,7 +77,7 @@ public class YeShunguangTests : AgentsTest {
         "cleaving_heavens"
     ];
     
-    private CalcRequest YeShunguang { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.YeShunguang,
         WeaponId = WeaponId.CloudcleaveRadiance,
         Discs = [
@@ -123,8 +124,8 @@ public class YeShunguangTests : AgentsTest {
     };
     
     [Test]
-    public void YeShunguangEntryRotationTest() {
-        var request = YeShunguang with {
+    public async Task YeShunguangEntryRotationTest() {
+        var request = Request with {
             Team = [
                 new(AgentId.Zhao, WeaponId.HalfSugarBunny, DriveDiscSetId.BunnyInWonderland),
                 new(AgentId.Sunna, WeaponId.Thoughtbop, DriveDiscSetId.MoonlightLullaby)
@@ -135,14 +136,18 @@ public class YeShunguangTests : AgentsTest {
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
+        AssertRotationOrderPreserved(Request.Rotation, result.PerAction.ToImmutableList(), Request.AgentId);
+        
+        await VerifyActions(result.PerAction);
+        
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
         Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
     }
     
     [Test]
-    public void YeShunguangSixComboRotationTest() {
-        var request = YeShunguang with {
+    public async Task YeShunguangSixComboRotationTest() {
+        var request = Request with {
             Team = [
                 new(AgentId.Dialyn, WeaponId.YesterdayCalls, DriveDiscSetId.KingOfTheSummit),
                 new(AgentId.Sunna, WeaponId.Thoughtbop, DriveDiscSetId.MoonlightLullaby)
@@ -152,6 +157,10 @@ public class YeShunguangTests : AgentsTest {
         var result = Calculator.Calculate(request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
+        
+        AssertRotationOrderPreserved(Request.Rotation, result.PerAction.ToImmutableList(), Request.AgentId);
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

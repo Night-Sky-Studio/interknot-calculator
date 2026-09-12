@@ -1,5 +1,5 @@
+using System.Collections.Immutable;
 using InterknotCalculator.Core.Classes;
-using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -7,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class GraceTests : AgentsTest {
-    private CalcRequest Grace { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = 1181,
         WeaponId = 14118,
         Discs = [
@@ -63,11 +63,15 @@ public class GraceTests : AgentsTest {
     };
 
     [Test]
-    public void GraceTest() {
-        var result = Calculator.Calculate(Grace);
+    public async Task GraceTest() {
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         Assert.That(result.PerAction, Has.Exactly(1).Matches<AgentAction>(action => action.Name == "shock"));
+        
+        AssertRotationOrderPreserved(Request.Rotation, result.PerAction.ToImmutableList(), Request.AgentId);
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);

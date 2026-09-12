@@ -1,6 +1,5 @@
+using System.Collections.Immutable;
 using InterknotCalculator.Core.Classes;
-using InterknotCalculator.Core.Classes.Agents;
-using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -8,7 +7,7 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class EvelynTests : AgentsTest {
-    private CalcRequest Evelyn { get; } = new() {
+    protected override CalcRequest Request { get; } = new() {
         AgentId = AgentId.Evelyn,
         WeaponId = WeaponId.HeartstringNocturne,
         Discs = [
@@ -73,10 +72,14 @@ public class EvelynTests : AgentsTest {
     };
 
     [Test]
-    public void EvelynTest() {
-        var result = Calculator.Calculate(Evelyn);
+    public async Task EvelynTest() {
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
+        
+        AssertRotationOrderPreserved(Request.Rotation, result.PerAction.ToImmutableList(), Request.AgentId);
+        
+        await VerifyActions(result.PerAction);
         
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
