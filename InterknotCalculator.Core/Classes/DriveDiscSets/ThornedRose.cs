@@ -1,4 +1,5 @@
-using InterknotCalculator.Core.Classes.Agents;
+
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.DriveDiscSets;
@@ -8,13 +9,17 @@ public class ThornedRose : DriveDiscSet {
         PartialBonus = [new(Affix.DefRatio, 0.16)];
         FullBonus = [new(Affix.DmgBonus, 0.15)];
     }
+    
+    public override void RegisterHooks(Context ctx, uint equipper = 0) {
+        base.RegisterHooks(ctx, equipper);
+        
+        var agent = ctx.Team[equipper];
 
-    public override void ApplyPassive(Agent agent) {
         if (agent.Def >= 1000) {
-            agent.BonusStats[Affix.CritRate] += 0.08;
+            agent.Stats[Affix.CritRate] += new Modifier(ModifierKey.DiscSet(Id, true), 0.08);
         }
         if (agent.Def >= 1800) {
-            agent.BonusStats[Affix.CritRate] += 0.08;
+            agent.Stats[Affix.CritRate] += new Modifier(ModifierKey.DiscSet(Id, true), 0.08);
         }
     }
 }

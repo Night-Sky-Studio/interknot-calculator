@@ -1,4 +1,4 @@
-using InterknotCalculator.Core.Classes.Agents;
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.DriveDiscSets;
@@ -8,12 +8,18 @@ public class MoonlightLullaby : DriveDiscSet {
         PartialBonus = [new(Affix.EnergyRegenRatio, 0.2)];
         FullBonus = [];
     }
-
-    // TODO(IKC-14): Track applications with context
-    public override void ApplyPassive(Agent agent) {
-        if (agent.Speciality is not Speciality.Support) return;
+    
+    public override void RegisterHooks(Context ctx, uint equipper = 0) {
+        base.RegisterHooks(ctx, equipper);
         
-        agent.BonusStats[Affix.DmgBonus] += 0.18;
-        agent.ExternalBonus[Affix.DmgBonus] += 0.18;
+        var agent = ctx.Team[equipper];
+        if (agent is not { Speciality: Speciality.Support }) return;
+        
+        var key = ModifierKey.DiscSet(Id, true);
+        if (!ctx.TryActivateGlobal(key)) return;
+        
+        foreach (var a in ctx.Team.Values) {
+            a.Stats[Affix.DmgBonus] += new Modifier(key, 0.18, ModifierType.Multiplicative);
+        }
     }
 }

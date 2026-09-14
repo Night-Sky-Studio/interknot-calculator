@@ -11,18 +11,22 @@ public class MutableStatTests {
     public void ValueFoldingTest() {
         var hp = new MutableStat(7673);
         
-        hp += new Modifier(new("disc-1", AgentId.Ellen), 2200);
-        hp += new Modifier(new("disc-4-2", AgentId.Ellen), 0.06, ModifierType.Multiplicative);
-        hp += new Modifier(new("disc-3-3", AgentId.Ellen), 0.03, ModifierType.Multiplicative);
-        hp += new Modifier(new("disc-6-1", AgentId.Ellen), 224);
+        hp += new Modifier(ModifierKey.Agent(AgentId.Ellen) + ModifierKey.Disc(1), 2200);
+        hp += new Modifier(ModifierKey.Agent(AgentId.Ellen) + ModifierKey.Disc(4, 2), 0.06, ModifierType.Multiplicative);
         
-        Assert.That(hp.Value, Is.InRange(10787, 10788));
-        hp.RemoveKey(new("disc-6-1", AgentId.Ellen));
+        var disc33Key = ModifierKey.Agent(AgentId.Ellen) + ModifierKey.Disc(3, 3);
+        hp += new Modifier(disc33Key, 0.03, ModifierType.Multiplicative);
         
-        Assert.That(hp.Value, Is.InRange(10563, 10564));
-        hp.RemoveKey(new("disc-3-3", AgentId.Ellen));
+        var disc61Key = ModifierKey.Agent(AgentId.Ellen) + ModifierKey.Disc(6, 1);
+        hp += new Modifier(disc61Key, 224);
+        
+        Assert.That(hp.Value, Is.EqualTo(10787).Within(1e-9));
+        hp.RemoveKey(disc61Key);
+        
+        Assert.That(hp.Value, Is.EqualTo(10563).Within(1e-9));
+        hp.RemoveKey(disc33Key);
 
-        Assert.That(hp.Value, Is.InRange(10333, 10334));
+        Assert.That(hp.Value, Is.EqualTo(10333).Within(1e-9));
     }
 
     [Test]
@@ -30,9 +34,9 @@ public class MutableStatTests {
         // A weapon's main stat scales with ATK%; a flat passive lands on top of it.
         var atk = new MutableStat(863);
 
-        atk += new Modifier(new("weapon-main", WeaponId.DeepSeaVisitor), 713, ModifierType.Base);
-        atk += new Modifier(new("disc-1", AgentId.Ellen), 0.3, ModifierType.Multiplicative);
-        atk += new Modifier(new("passive", AgentId.Ellen), 100);
+        atk += new Modifier(new("weapon-main", WeaponId.DeepSeaVisitor.ToString()), 713, ModifierType.Base);
+        atk += new Modifier(new("disc-1", AgentId.Ellen.ToString()), 0.3, ModifierType.Multiplicative);
+        atk += new Modifier(new("passive", AgentId.Ellen.ToString()), 100);
 
         Assert.That(atk.Value, Is.EqualTo((863 + 713) * 1.3 + 100).Within(1e-9));
     }
@@ -41,8 +45,8 @@ public class MutableStatTests {
     public void TaggedModifiersOnlyCountForTheirAbilities() {
         var dmgBonus = new MutableStat();
 
-        dmgBonus += new Modifier(new("disc-set-full", DriveDiscSetId.FangedMetal), 0.35);
-        dmgBonus += new Modifier(new("disc-set-full", DriveDiscSetId.PolarMetal), 0.4,
+        dmgBonus += new Modifier(new("disc-set-full", DriveDiscSetId.FangedMetal.ToString()), 0.35);
+        dmgBonus += new Modifier(new("disc-set-full", DriveDiscSetId.PolarMetal.ToString()), 0.4,
             tags: SkillTag.BasicAtk | SkillTag.Dash);
 
         Assert.Multiple(() => {
@@ -60,7 +64,7 @@ public class MutableStatTests {
     [Test]
     public void SameSourceCannotApplyTwice() {
         var critRate = new MutableStat(0.05);
-        var key = new ModifierKey("core", AgentId.Ellen);
+        var key = new ModifierKey("core", AgentId.Ellen.ToString());
 
         critRate.Add(new(key, 0.12));
 
@@ -79,7 +83,7 @@ public class MutableStatTests {
     [Test]
     public void ClearKeepsBaseValue() {
         var impact = new MutableStat(93);
-        impact += new Modifier(new("passive", AgentId.Lycaon), 50);
+        impact += new Modifier(new("passive", AgentId.Lycaon.ToString()), 50);
         Assert.That(impact.Value, Is.EqualTo(143).Within(1e-9));
 
         impact.Clear();
