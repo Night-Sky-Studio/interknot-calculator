@@ -1,4 +1,4 @@
-using InterknotCalculator.Core.Classes.Agents;
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.DriveDiscSets;
@@ -9,11 +9,14 @@ public class TheSkyAblaze : DriveDiscSet {
         FullBonus = [];
     }
 
-    public override void ApplyPassive(Agent agent) {
+    public override void RegisterHooks(Context ctx, uint equipper = 0) {
+        base.RegisterHooks(ctx, equipper);
+        
+        var agent = ctx.Team[equipper];
         if (!agent.Element.Matches(Element.Ether)) return;
-                
-        agent.BonusStats[Affix.CritDamage] += 0.3;
-        agent.TagBonus.Add(new(Affix.CombatAtkRatio, 0.1, 
-            tags: [SkillTag.ExSpecial, SkillTag.Ultimate]));
+
+        agent.Stats[Affix.CritDamage] += new Modifier(ModifierKey.DiscSet(Id, true), 0.3);
+        agent.Stats[Affix.CombatAtkRatio] += new Modifier(ModifierKey.DiscSet(Id, true), 0.1,
+            ModifierType.Multiplicative, SkillTag.ExSpecial | SkillTag.Ultimate);
     }
 }

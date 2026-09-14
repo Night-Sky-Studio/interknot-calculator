@@ -8,7 +8,12 @@ public class ChaosJazz : DriveDiscSet {
         FullBonus = [
             new(Affix.FireDmgBonus, 0.15),
             new(Affix.ElectricDmgBonus, 0.15),
-            new(Affix.DmgBonus, 0.2, tags: [SkillTag.ExSpecial, SkillTag.QuickAssist, SkillTag.DefensiveAssist, SkillTag.EvasiveAssist, SkillTag.FollowUpAssist])
+            new(Affix.DmgBonus, 0.2,
+                tags: SkillTag.ExSpecial
+                      | SkillTag.QuickAssist
+                      | SkillTag.DefensiveAssist
+                      | SkillTag.EvasiveAssist
+                      | SkillTag.FollowUpAssist)
         ];
     }
 }

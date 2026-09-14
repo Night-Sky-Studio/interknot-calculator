@@ -7,7 +7,7 @@ public class YunkuiTales : DriveDiscSet {
         PartialBonus = [new(Affix.HpRatio, 0.1)];
         FullBonus = [
             new(Affix.CritRate, 0.12),
-            new(Affix.SheerBonus, 0.1)
+            new(Affix.SheerForceBonus, 0.1)
         ];
     }
 }
