@@ -11,14 +11,16 @@ public enum ModifierType {
     Base,
     /// <summary>
     /// Ratio scaling the base value and every <see cref="Base"/> modifier.
-    /// The <c>*Ratio</c> affixes (ATK%, HP%, DEF%, ...) are <see cref="Multiplicative"/>.
+    /// The <c>*Ratio</c> affixes (ATK%, HP%, DEF%, ...) are <see cref="Ratio"/>.
     /// </summary>
-    Multiplicative,
+    Ratio,
     /// <summary>
     /// Flat value added <i>after</i> ratio modifiers have been applied.
-    /// Passives that grant a raw amount ("+600 ATK") are <see cref="Additive"/>.
+    /// Passives that grant a raw amount ("+600 ATK") are <see cref="Flat"/>.
     /// </summary>
-    Additive
+    Flat,
+    CombatRatio,
+    CombatFlat
 }
 
 /// <summary>
@@ -43,7 +45,7 @@ public readonly struct Modifier : IEquatable<Modifier> {
     /// </param>
     public Modifier(ModifierKey key,
         double value,
-        ModifierType type = ModifierType.Additive,
+        ModifierType type = ModifierType.Flat,
         SkillTag tags = SkillTag.None
     ) {
         Key = key;
@@ -55,7 +57,7 @@ public readonly struct Modifier : IEquatable<Modifier> {
     public Modifier(ModifierKey key, Stat stat) {
         Key = key;
         Value = stat.Value;
-        Type = stat.Affix.IsMultiplicative() ? ModifierType.Multiplicative : ModifierType.Additive;
+        Type = stat.Affix.IsRatio() ? ModifierType.Ratio : ModifierType.Flat;
         Tags = stat.Tags;
     }
 

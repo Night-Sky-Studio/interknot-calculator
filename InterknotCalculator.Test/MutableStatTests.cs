@@ -12,12 +12,12 @@ public class MutableStatTests {
         var hp = new MutableStat(7673);
         
         hp += new Modifier(ModifierKey.Agent(AgentId.Ellen) + ModifierKey.Disc(1), 2200);
-        hp += new Modifier(ModifierKey.Agent(AgentId.Ellen) + ModifierKey.Disc(4, 2), 0.06, ModifierType.Multiplicative);
+        hp += new Modifier(ModifierKey.Agent(AgentId.Ellen) + ModifierKey.Disc(4) + ModifierKey.Stat(Affix.HpRatio, 2), 0.06, ModifierType.Ratio);
         
-        var disc33Key = ModifierKey.Agent(AgentId.Ellen) + ModifierKey.Disc(3, 3);
-        hp += new Modifier(disc33Key, 0.03, ModifierType.Multiplicative);
+        var disc33Key = ModifierKey.Agent(AgentId.Ellen) + ModifierKey.Disc(3) + ModifierKey.Stat(Affix.HpRatio, 1);
+        hp += new Modifier(disc33Key, 0.03, ModifierType.Ratio);
         
-        var disc61Key = ModifierKey.Agent(AgentId.Ellen) + ModifierKey.Disc(6, 1);
+        var disc61Key = ModifierKey.Agent(AgentId.Ellen) + ModifierKey.Disc(6) + ModifierKey.Stat(Affix.Hp, 1);
         hp += new Modifier(disc61Key, 224);
         
         Assert.That(hp.Value, Is.EqualTo(10787).Within(1e-9));
@@ -35,7 +35,7 @@ public class MutableStatTests {
         var atk = new MutableStat(863);
 
         atk += new Modifier(new("weapon-main", WeaponId.DeepSeaVisitor.ToString()), 713, ModifierType.Base);
-        atk += new Modifier(new("disc-1", AgentId.Ellen.ToString()), 0.3, ModifierType.Multiplicative);
+        atk += new Modifier(new("disc-1", AgentId.Ellen.ToString()), 0.3, ModifierType.Ratio);
         atk += new Modifier(new("passive", AgentId.Ellen.ToString()), 100);
 
         Assert.That(atk.Value, Is.EqualTo((863 + 713) * 1.3 + 100).Within(1e-9));
