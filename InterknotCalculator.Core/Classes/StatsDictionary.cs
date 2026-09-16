@@ -1,4 +1,6 @@
-﻿using InterknotCalculator.Core.Enums;
+﻿using System.Collections.Immutable;
+using InterknotCalculator.Core.Classes.Modifiers;
+using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes;
 
@@ -15,5 +17,23 @@ public class StatsDictionary : Dictionary<Affix, MutableStat> {
             return stat;
         }
         set => base[key] = value;
+    }
+
+    public void RemoveAllModifiers(ModifierKey key) {
+        foreach (var stat in Values) {
+            stat.RemoveKey(key);
+        }
+    }
+
+    public void RemoveAllModifiers(Func<Modifier, bool> predicate) {
+        foreach (var stat in Values) {
+            var toRemove = stat.AppliedModifiers
+                .Where(predicate)
+                .Select(m => m.Key)
+                .ToImmutableArray();
+            foreach (var key in toRemove) {
+                stat.RemoveKey(key);
+            }
+        }
     }
 }
