@@ -6,13 +6,13 @@ namespace InterknotCalculator.Core.Enums;
 public enum Affix {
     Unknown = -1,
 
-    // Additive affixes
+    // Flat affixes
     Hp, Def, Atk, Impact, Pen,
     AnomalyMastery, AnomalyProficiency,
     EnergyRegen, SheerForce, Daze,
-    _Additive,
+    _Flat,
 
-    // Multiplicative affixes
+    // Ratio affixes
     HpRatio, DefRatio, AtkRatio, CombatAtkRatio, ImpactRatio, PenRatio,
     AnomalyMasteryRatio,
     CritRate, CritDamage,
@@ -35,10 +35,10 @@ public enum Affix {
 
     AnomalyBuildupBonus, AnomalyBuildupRes,
 
-    _Multiplicative,
+    _Ratio,
 }
 
 public static class AffixExtensions {
-    public static bool IsMultiplicative(this Affix a) => 
-        a is > Affix._Additive and < Affix._Multiplicative;
+    public static bool IsRatio(this Affix a) => 
+        a is > Affix._Flat and < Affix._Ratio;
 }

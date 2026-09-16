@@ -10,14 +10,14 @@ public struct Stat {
     
     [JsonPropertyName("Value")]
     public double BaseValue { get; set; }
-    public double Level { get; set; } = 1;
+    public uint Level { get; set; } = 1;
     [JsonIgnore]
     public double Value => BaseValue * Level;
     public Affix Affix { get; set; }
     public SkillTag Tags { get; set; } = SkillTag.None;
     
     [JsonConstructor]
-    public Stat(Affix affix, double baseValue, double level = 1, SkillTag tags = SkillTag.None) {
+    public Stat(Affix affix, double baseValue, uint level = 1, SkillTag tags = SkillTag.None) {
         BaseValue = baseValue;
         Level = level;
         Affix = affix;

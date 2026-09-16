@@ -23,7 +23,7 @@ public abstract class Agent(uint id) {
     #endregion
     
     #region Collections
-    public StatsDictionary Stats { get; set; } = new();
+    private StatsDictionary Stats { get; } = new();
     public Dictionary<Element, Anomaly> Anomalies { get; set; } = new();
     public Dictionary<string, Skill> Skills { get; set; } = new();
     public Dictionary<string, IEnumerable<string>> Macros { get; set; } = new();
@@ -42,29 +42,17 @@ public abstract class Agent(uint id) {
     private void RemoveWeaponStats() {
         if (Weapon is not { } w) 
             return;
-        Stats[w.MainStat.Affix].RemoveKey(w.MainStatKey);
-        Stats[w.SecondaryStat.Affix].RemoveKey(w.SecondaryStatKey);
-        if (w.Speciality != Speciality) 
-            return;
-        foreach (var passive in w.Passive) {
-            Stats[passive.Key].Remove(passive.Value);
-        }
-        foreach (var external in w.ExternalBonus) {
-            Stats[external.Key].Remove(external.Value);
-        }
+        Stats.RemoveAllModifiers(m => m.Key.ToString().StartsWith("Weapon"));
     }
     private void AddWeaponStats() {
         if (Weapon is not { } w)
             return;
-        Stats[w.MainStat.Affix].Add(new(w.MainStatKey, w.MainStat.Value, ModifierType.Base));
-        Stats[w.SecondaryStat.Affix].Add(new(w.SecondaryStatKey, w.SecondaryStat));
+        Stats[w.MainStat.Affix].Add(new(ModifierKey.Weapon(w.Id) + ModifierKey.MainStat(), w.MainStat.Value, ModifierType.Base));
+        Stats[w.SecondaryStat.Affix].Add(new(ModifierKey.Weapon(w.Id) + ModifierKey.SecondaryStat(), w.SecondaryStat));
         if (w.Speciality != Speciality) 
             return;
         foreach (var passive in w.Passive) {
-            Stats[passive.Key].Add(passive.Value);
-        }
-        foreach (var external in w.ExternalBonus) {
-            Stats[external.Key].Add(external.Value);
+            Stats[passive.Affix].Add(new(ModifierKey.Weapon(w.Id) + ModifierKey.Passive(), passive));
         }
     }
 
@@ -88,9 +76,11 @@ public abstract class Agent(uint id) {
 
         foreach (var disc in DriveDiscs) {
             setCounts[disc.SetId] += 1;
-            Stats[disc.MainStat.Affix] += new Modifier(disc.Key, disc.MainStat);
+            Stats[disc.MainStat.Affix] += new Modifier(ModifierKey.Disc(disc.Slot) + 
+                                                       ModifierKey.Stat(disc.MainStat.Affix, disc.MainStat.Level), disc.MainStat);
             foreach (var subStat in disc.SubStats) {
-                Stats[subStat.Affix] += new Modifier(disc.Key.CombineWith(subStat.Key), subStat.Value);
+                Stats[subStat.Affix] += new Modifier(ModifierKey.Disc(disc.Slot) + 
+                                                     ModifierKey.Stat(subStat.Affix, subStat.Level), subStat.Value);
             }
         }
         
@@ -101,7 +91,7 @@ public abstract class Agent(uint id) {
         foreach (var setId in partialSets) {
             var set = DriveDiscSetRegistry.CreateInstance(setId);
             foreach (var bonus in set.PartialBonus) {
-                Stats[bonus.Affix] += new Modifier(set.Key.CombineWith(bonus.Key), bonus);
+                Stats[bonus.Affix] += new Modifier(ModifierKey.DiscSet(setId), bonus);
             }
         }
         
@@ -112,7 +102,7 @@ public abstract class Agent(uint id) {
         foreach (var setId in fullSets) {
             var set = DriveDiscSetRegistry.CreateInstance(setId);
             foreach (var bonus in set.FullBonus) {
-                Stats[bonus.Affix] += new Modifier(set.Key.CombineWith(bonus.Key), bonus);
+                Stats[bonus.Affix] += new Modifier(ModifierKey.DiscSet(setId, true), bonus);
             }
         }
     }
@@ -134,28 +124,26 @@ public abstract class Agent(uint id) {
     public Affix RelatedElementDmg => Helpers.GetRelatedAffixDmg(Element);
     public Affix RelatedElementRes => Helpers.GetRelatedAffixRes(Element);
 
-    public double MaxHp => Stats[Affix.Hp];
-    private double _hp;
+    public MutableStat MaxHp => Stats[Affix.Hp];
     public double Hp {
-        get => Math.Clamp(_hp, 0, MaxHp); 
-        set => _hp = Math.Clamp(value, 0, MaxHp);
+        get => Math.Clamp(field, 0, MaxHp); 
+        set => field = Math.Clamp(value, 0, MaxHp);
     }
-    public double InitialAtk => Stats[Affix.Atk];
-    public double Atk => InitialAtk * (1 + Stats[Affix.CombatAtkRatio]);
-    public double Def => Stats[Affix.Def];
-    public double Pen => Stats[Affix.Pen];
-    public double PenRatio => Stats[Affix.PenRatio];
-    public double CritRate => Stats[Affix.CritRate];
-    public double CritDamage => Stats[Affix.CritDamage];
-    public double Impact => Stats[Affix.Impact];
-    public double AnomalyMastery => Stats[Affix.AnomalyMastery];
-    public double AnomalyProficiency => Stats[Affix.AnomalyProficiency];
-    public double EnergyRegen => Stats[Affix.EnergyRegen];
-    public double ElementalDmgBonus => Stats[RelatedElementDmg];
-    public double ElementalResPen => Stats[RelatedElementRes];
-    public double DmgBonus => Stats[Affix.DmgBonus];
-    public double ResPen => Stats[Affix.ResPen];
-    public double DazeBonus => Stats[Affix.DazeBonus];
+    public MutableStat Atk => Stats[Affix.Atk];
+    public MutableStat Def => Stats[Affix.Def];
+    public MutableStat Pen => Stats[Affix.Pen];
+    public MutableStat PenRatio => Stats[Affix.PenRatio];
+    public MutableStat CritRate => Stats[Affix.CritRate];
+    public MutableStat CritDamage => Stats[Affix.CritDamage];
+    public MutableStat Impact => Stats[Affix.Impact];
+    public MutableStat AnomalyMastery => Stats[Affix.AnomalyMastery];
+    public MutableStat AnomalyProficiency => Stats[Affix.AnomalyProficiency];
+    public MutableStat EnergyRegen => Stats[Affix.EnergyRegen];
+    public MutableStat ElementalDmgBonus => Stats[RelatedElementDmg];
+    public MutableStat ElementalResPen => Stats[RelatedElementRes];
+    public MutableStat DmgBonus => Stats[Affix.DmgBonus];
+    public MutableStat ResPen => Stats[Affix.ResPen];
+    public MutableStat DazeBonus => Stats[Affix.DazeBonus];
     
 #if ENERGY_REQUIREMENT_CHECK
     private double _energy = 60;
@@ -165,6 +153,12 @@ public abstract class Agent(uint id) {
     }
 #endif
 
+    protected void InitializeStats(Dictionary<Affix, double> stats) {
+        foreach (var (affix, value) in stats) {
+            Stats[affix] = new(value);
+        }
+    }
+    
     public virtual SafeDictionary<Affix, double> CollectStats() {
         var result = new SafeDictionary<Affix, double>();
 

@@ -94,21 +94,25 @@ public class MutableStat {
     public double For(SkillTag tag) => Value + Tagged(tag);
 
     private void Fold() {
-        var baseSum = 0.0;
-        var multiplicative = 0.0;
-        var additive = 0.0;
-
+        double baseSum = 0.0, 
+               ratioSum = 0.0, flatSum = 0.0,
+               combatRatioSum = 0.0, combatFlatSum = 0.0;
+        
         foreach (var m in Modifiers) {
             // Tagged modifiers only count for the abilities they name; see Tagged().
             if (m.Tags is not SkillTag.None) continue;
             switch (m.Type) {
                 case ModifierType.Base: baseSum += m.Value; break;
-                case ModifierType.Multiplicative: multiplicative += m.Value; break;
-                case ModifierType.Additive: additive += m.Value; break;
+                case ModifierType.Ratio: ratioSum += m.Value; break;
+                case ModifierType.Flat: flatSum += m.Value; break;
+                case ModifierType.CombatRatio: combatRatioSum += m.Value; break;
+                case ModifierType.CombatFlat: combatFlatSum += m.Value; break;
             }
         }
 
-        Value = (BaseValue + baseSum) * (1 + multiplicative) + additive;
+        var initialValue = (BaseValue + baseSum) * (1 + ratioSum) + flatSum;
+        
+        Value = initialValue * (1 + combatRatioSum) + combatFlatSum;
         Dirty = false;
     }
 
