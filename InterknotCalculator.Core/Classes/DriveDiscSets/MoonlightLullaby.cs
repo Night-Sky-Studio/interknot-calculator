@@ -19,7 +19,7 @@ public class MoonlightLullaby : DriveDiscSet {
         if (!ctx.TryActivateGlobal(key)) return;
         
         foreach (var a in ctx.Team.Values) {
-            a.DmgBonus.Add(new(key, 0.18, ModifierType.Ratio));
+            a.DmgBonus.Add(new(key, 0.18));
         }
     }
 }

@@ -14,6 +14,6 @@ public class DawnsBloom : DriveDiscSet {
         var agent = ctx.Team[equipper];
         agent.DmgBonus.Add(new(ModifierKey.DiscSet(Id, true),
             agent.Speciality is Speciality.Attack ? 0.4 : 0.2,
-            ModifierType.Ratio, SkillTag.BasicAtk));
+            tags: SkillTag.BasicAtk));
     }
 }

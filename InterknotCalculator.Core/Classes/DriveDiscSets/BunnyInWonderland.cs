@@ -14,7 +14,7 @@ public class BunnyInWonderland : DriveDiscSet {
         
         foreach (var agent in ctx.Team.Values) {
             if (agent.Speciality is Speciality.Defense) {
-                agent.DmgBonus.Add(new(ModifierKey.DiscSet(Id, true), 0.18, ModifierType.Ratio));
+                agent.DmgBonus.Add(new(ModifierKey.DiscSet(Id, true), 0.18));
             }
         }
     }

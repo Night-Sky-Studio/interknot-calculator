@@ -1,11 +1,16 @@
+using InterknotCalculator.Core.Classes.Agents;
 using InterknotCalculator.Core.Classes.Modifiers;
-using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.EtherVeils;
 
 public class Wellspring : EtherVeil {
-    public Wellspring() {
-        BonusStats[Affix.HpRatio] = new(ModifierKey.EtherVeil(nameof(Wellspring)), 0.05, ModifierType.Multiplicative);
+    private ModifierKey Key { get; } = ModifierKey.EtherVeil(nameof(Wellspring));
+    
+    public override void Enable(Agent agent) {
+        agent.MaxHp.Add(new(Key, 0.05, ModifierType.CombatRatio));
+    }
+    public override void Disable(Agent agent) {
+        agent.MaxHp.RemoveKey(Key);
     }
     
     public override string ToString() => nameof(Wellspring);
