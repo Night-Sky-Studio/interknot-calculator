@@ -1,11 +1,16 @@
+using InterknotCalculator.Core.Classes.Agents;
 using InterknotCalculator.Core.Classes.Modifiers;
-using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.EtherVeils;
 
 public class DelusionReprise : EtherVeil {
-    public DelusionReprise() {
-        BonusStats[Affix.Atk] = new(ModifierKey.EtherVeil(nameof(DelusionReprise)), 50);
+    private ModifierKey Key { get; } = ModifierKey.EtherVeil(nameof(DelusionReprise));
+    
+    public override void Enable(Agent agent) {
+        agent.Atk.Add(new(Key, 50, ModifierType.CombatFlat));
+    }
+    public override void Disable(Agent agent) {
+        agent.Atk.RemoveKey(Key);
     }
 
     public override string ToString() => nameof(DelusionReprise);

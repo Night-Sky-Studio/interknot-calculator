@@ -1,26 +1,24 @@
+using InterknotCalculator.Core.Classes.Agents;
 using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.EtherVeils;
 
 public abstract class EtherVeil {
-    public Dictionary<Affix, Modifier> BonusStats { get; } = new();
-
     public void Activate(Context ctx) {
         foreach (var agent in ctx.Team.Values) {
-            foreach (var (affix, bonus) in BonusStats) {
-                agent.Stats[affix] += bonus;
-            }
+            Enable(agent);
         }
     }
     
     public void Deactivate(Context ctx) {
         foreach (var agent in ctx.Team.Values) {
-            foreach (var bonus in BonusStats.Values) {
-                agent.Stats.RemoveAllModifiers(bonus.Key);
-            }
+            Disable(agent);
         }
     }
+
+    public abstract void Enable(Agent agent);
+    public abstract void Disable(Agent agent);
 
     public abstract new string ToString();
 }
