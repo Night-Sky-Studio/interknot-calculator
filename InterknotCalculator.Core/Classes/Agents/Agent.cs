@@ -144,6 +144,7 @@ public abstract class Agent(uint id) {
     public MutableStat DmgBonus => Stats[Affix.DmgBonus];
     public MutableStat ResPen => Stats[Affix.ResPen];
     public MutableStat DazeBonus => Stats[Affix.DazeBonus];
+    public MutableStat DisorderDmgBonus => Stats[Affix.DisorderDmgBonus];
     
 #if ENERGY_REQUIREMENT_CHECK
     private double _energy = 60;
