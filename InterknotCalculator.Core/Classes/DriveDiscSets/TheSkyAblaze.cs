@@ -15,8 +15,8 @@ public class TheSkyAblaze : DriveDiscSet {
         var agent = ctx.Team[equipper];
         if (!agent.Element.Matches(Element.Ether)) return;
 
-        agent.Stats[Affix.CritDamage] += new Modifier(ModifierKey.DiscSet(Id, true), 0.3);
-        agent.Stats[Affix.CombatAtkRatio] += new Modifier(ModifierKey.DiscSet(Id, true), 0.1,
-            ModifierType.Multiplicative, SkillTag.ExSpecial | SkillTag.Ultimate);
+        agent.CritDamage.Add(new(ModifierKey.DiscSet(Id, true), 0.3));
+        agent.Atk.Add(new(ModifierKey.DiscSet(Id, true), 0.1,
+            ModifierType.CombatRatio, SkillTag.ExSpecial | SkillTag.Ultimate));
     }
 }

@@ -12,7 +12,7 @@ public class FeatheredFate : DriveDiscSet {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
         
-        ctx.MainAgent.Stats[Affix.AnomalyProficiency] += new Modifier(ModifierKey.DiscSet(Id, true), 
-            0.15, ModifierType.Multiplicative);
+        ctx.MainAgent.AnomalyProficiency.Add(new(ModifierKey.DiscSet(Id, true), 
+            0.15, ModifierType.Ratio));
     }
 }

@@ -18,7 +18,7 @@ public class FangedMetal : DriveDiscSet {
         ctx.Events.OnAnomalyTriggered.Add((c, e) => {
             if (e is not { Element: Element.Physical } || IsActive) return;
             IsActive = true;
-            c.Team[equipper].Stats[Affix.DmgBonus] += new Modifier(ModifierKey.DiscSet(Id, true), 0.35, ModifierType.Multiplicative);
+            c.Team[equipper].DmgBonus.Add(new(ModifierKey.DiscSet(Id, true), 0.35, ModifierType.Ratio));
         });
     }
 }

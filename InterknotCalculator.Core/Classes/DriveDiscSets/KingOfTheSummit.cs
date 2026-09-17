@@ -21,7 +21,7 @@ public class KingOfTheSummit : DriveDiscSet {
         if (!ctx.TryActivateGlobal(key)) return;
 
         foreach (var a in ctx.Team.Values) {
-            a.Stats[Affix.CritDamage] += new Modifier(key, bonus);
+            a.CritDamage.Add(new(key, bonus));
         }
     }
 }

@@ -16,7 +16,7 @@ public class AstralVoice : DriveDiscSet {
         if (!ctx.TryActivateGlobal(key)) return;
         
         foreach (var agent in ctx.Team.Values) {
-            agent.Stats[Affix.DmgBonus] += new Modifier(key, 0.24, ModifierType.Multiplicative);
+            agent.DmgBonus.Add(new(key, 0.24, ModifierType.Ratio));
         }
     }
 }
