@@ -1,3 +1,4 @@
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.Weapons;
@@ -8,19 +9,22 @@ public class CloudcleaveRadiance : Weapon {
         Rarity = Rarity.S;
         MainStat = new(Affix.Atk, 743);
         SecondaryStat = new(Affix.CritDamage, 0.48);
-
         Passive = [new(Affix.PhysicalResPen, 0.2)];
     }
 
-    public override void RegisterHooks(Context ctx) {
-        ctx.Events.OnEtherVeilActivated.Add((c, e) => {
-            c.MainAgent.BonusStats[Affix.DmgBonus] += 0.25;
-            c.MainAgent.BonusStats[Affix.CritDamage] += 0.25;
+    public override void RegisterHooks(Context ctx, uint equipper = 0) {
+        base.RegisterHooks(ctx, equipper);
+        
+        var etherVeilPassiveKey = ModifierKey.Weapon(Id) + ModifierKey.Passive() + ModifierKey.EtherVeil("Any");
+        
+        ctx.Events.OnEtherVeilActivated.Add((c, _) => {
+            c.MainAgent.DmgBonus.Add(new(etherVeilPassiveKey, 0.25));
+            c.MainAgent.CritDamage.Add(new(etherVeilPassiveKey, 0.25));
         });
         
         ctx.Events.OnEtherVeilDeactivated.Add((c, e) => {
-            c.MainAgent.BonusStats[Affix.DmgBonus] -= 0.25;
-            c.MainAgent.BonusStats[Affix.CritDamage] -= 0.25;
+            c.MainAgent.DmgBonus.RemoveKey(etherVeilPassiveKey);
+            c.MainAgent.CritDamage.RemoveKey(etherVeilPassiveKey);
         });
     }
 }

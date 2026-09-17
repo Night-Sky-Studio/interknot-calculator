@@ -10,7 +10,7 @@ public class MyriadEclipse : Weapon {
         SecondaryStat = new(Affix.CritRate, 0.24);
         Passive = [
             new(Affix.CritDamage, 0.45),
-            new(Affix.ResPen, 0.25, tags: [SkillTag.ExSpecial, SkillTag.Chain, SkillTag.Ultimate])
+            new(Affix.ResPen, 0.25, tags: SkillTag.ExSpecial | SkillTag.Chain | SkillTag.Ultimate)
         ];
     }
 }

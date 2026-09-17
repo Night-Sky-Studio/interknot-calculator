@@ -11,7 +11,7 @@ public class QingmingBirdcage : Weapon {
         Passive = [
             new(Affix.CritRate, 0.2),
             new(Affix.EtherDmgBonus, 0.16),
-            new(Affix.EtherSheerBonus, 0.2, tags: [SkillTag.ExSpecial, SkillTag.Ultimate])
+            new(Affix.EtherSheerBonus, 0.2, tags:SkillTag.ExSpecial | SkillTag.Ultimate)
         ];
     }
 }
