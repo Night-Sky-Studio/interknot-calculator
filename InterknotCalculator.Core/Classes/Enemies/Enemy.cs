@@ -11,7 +11,7 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     private double BaseAnomalyBuildupThreshold { get; } = anomalyBuildupThreshold;
     public double AnomalyBuildupThreshold { get; private set; } = anomalyBuildupThreshold;
     public Progress Daze { get; set; }
-    public double StunMultiplier { get; set; } = 1.5;
+    public MutableStat StunMultiplier { get; set; } = new(1);
 
     // public SafeDictionary<Affix, double> Stats { get; set; } = new();
 

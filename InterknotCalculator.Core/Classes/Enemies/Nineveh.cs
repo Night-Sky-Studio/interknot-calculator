@@ -5,6 +5,6 @@ public class Nineveh : Enemy {
         Daze = new Progress {
             Maximum = 16747
         };
-        StunMultiplier = stunMultiplier;
+        StunMultiplier = new(stunMultiplier);
     }
 }
