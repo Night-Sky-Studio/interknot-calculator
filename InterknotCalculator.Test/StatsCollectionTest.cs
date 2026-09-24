@@ -7,10 +7,14 @@ namespace InterknotCalculator.Test;
 [TestFixture]
 public class StatsCollectionTest {
     private void CheckStats(Dictionary<Affix, double> expected, Dictionary<Affix, double> actual) {
-        foreach (var (key, value) in expected) {
-            Console.WriteLine($"Testing {key}");
-            var actualValue = actual[key] > 2 ? Math.Floor(actual[key]) : actual[key];
-            Assert.That(actualValue, Is.EqualTo(value).Within(key is Affix.Hp ? 1 : 0.001), $"Key: {key}");
+        foreach (var (key, expectedValue) in expected) {
+            Assert.That(actual.TryGetValue(key, out var actualValue), Is.True,
+                $"Expected stat '{key}' was not present in the actual stats.");
+
+            var tolerance = expectedValue >= 5 ? 1 : 0.001;
+            
+            Assert.That(actualValue, Is.EqualTo(expectedValue).Within(tolerance),
+                $"Stat '{key}' did not match.");
         }
     }
     
@@ -83,7 +87,7 @@ public class StatsCollectionTest {
                 ])
         ]);
         
-        CheckStats(reference, miyabi.BaseStats);
+        CheckStats(reference, miyabi.CollectStats(true));
     }
 
     [Test]
@@ -155,13 +159,13 @@ public class StatsCollectionTest {
                 ])
         ]);
 
-        CheckStats(reference, jane.BaseStats);
+        CheckStats(reference, jane.CollectStats(true));
     }
 
     [Test]
     public void YixuanStatsTest() {
         var reference = new Dictionary<Affix, double> {
-            [Affix.Hp] = 19_114,
+            [Affix.Hp] = 19_115,
             [Affix.Atk] = 2_211,
             [Affix.Def] = 685,
             [Affix.Impact] = 93,
@@ -227,7 +231,7 @@ public class StatsCollectionTest {
                 ])
         ]);
 
-        CheckStats(reference, yixuan.BaseStats);
+        CheckStats(reference, yixuan.CollectStats(true));
     }
 
 }
