@@ -1,7 +1,8 @@
 using InterknotCalculator.Core.Classes;
 using InterknotCalculator.Core.Classes.Modifiers;
-using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
+
+using Throws = NUnit.Framework.Throws;
 
 namespace InterknotCalculator.Test;
 
