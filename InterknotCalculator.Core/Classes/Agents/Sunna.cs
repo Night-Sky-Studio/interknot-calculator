@@ -1,5 +1,5 @@
-using System.IO.Pipes;
 using InterknotCalculator.Core.Classes.EtherVeils;
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
 
@@ -7,11 +7,11 @@ namespace InterknotCalculator.Core.Classes.Agents;
 
 public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<DelusionReprise> {
     public static Sunna Reference(uint weaponId, uint setId) {
-        var sunna = new Sunna {
-            Stats = {
-                [Affix.Atk] = 3500
-            }
-        };
+        var sunna = new Sunna();
+        
+        sunna.InitializeStats(new () {
+            [Affix.Atk] = 3500
+        });
         
         sunna.SetWeaponPassive(weaponId);
         sunna.SetDriveDiscsPassive(setId);
@@ -23,7 +23,7 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
         get;
         set => field = Math.Clamp(value, 0, 6);
     } = 0;
-    private bool CatsGazeActive { get; set; } = false;
+    private bool CatsGazeActive { get; set; }
     private int CatsGazeCooldown { 
         get; 
         set => field = Math.Clamp(value, 0, 4); 
@@ -34,16 +34,18 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
         Element = Element.Physical;
         Rarity = Rarity.S;
         Faction = Faction.AngelsOfDelusion;
-            
-        Stats[Affix.Hp] = 8477;
-        Stats[Affix.Def] = 600;
-        Stats[Affix.Atk] = 750;
-        Stats[Affix.CritRate] = 0.05;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 98;
-        Stats[Affix.AnomalyMastery] = 96;
-        Stats[Affix.AnomalyProficiency] = 95;
-        Stats[Affix.EnergyRegen] = 1;
+        
+        InitializeStats(new () {
+            [Affix.Hp] = 8477,
+            [Affix.Def] = 600,
+            [Affix.Atk] = 750,
+            [Affix.CritRate] = 0.05,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 98,
+            [Affix.AnomalyMastery] = 96,
+            [Affix.AnomalyProficiency] = 95,
+            [Affix.EnergyRegen] = 1
+        });
 
         Skills["mischief_meteor_hammer"] = new(SkillTag.BasicAtk, [
             new(87.4, 38, 12.5, 0.451),
@@ -75,8 +77,14 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
     }
 
     public override void RegisterHooks(Context ctx) {
+        ctx.Events.OnCalculationStarted.Add(c => {
+            if (c.Team.Values.Any(a => a.Speciality is Speciality.Attack || a.Faction == Faction)) {
+                IsTeamPassiveActive = true;
+            }
+        });
+        
         ctx.Events.OnActionExecuted.Add((c, e) => {
-            if (e.Ability is { Tag: Enums.SkillTag.ExSpecial, Name: "special_photography_technique" }) {
+            if (e.Ability is { Tag: SkillTag.ExSpecial, Name: "special_photography_technique" }) {
                 c.ReactivateEtherVeil(this, EtherVeil);
             }
         });
@@ -139,28 +147,18 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
             ClawSharpenersCount += 2;
 
             if (IsTeamPassiveActive && e.Agent == this) {
-                c.Enemy.StunMultiplier += 0.3;
+                c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.3));
             }
         });
         
         ctx.Events.OnEtherVeilDeactivated.Add((c, e) => {
             if (IsTeamPassiveActive && e.Agent == this) {
-                c.Enemy.StunMultiplier -= 0.3;
+                c.Enemy.StunMultiplier.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.TeamPassive());
             }
         });
     }
     
     public DelusionReprise EtherVeil { get; } = new();
 
-    private bool IsTeamPassiveActive { get; set; } = false;
-    
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        if (team.Any(a => a.Speciality is Speciality.Attack || a.Faction == Faction)) {
-            IsTeamPassiveActive = true;
-        }
-        
-        return [];
-    }
+    private bool IsTeamPassiveActive { get; set; }
 }

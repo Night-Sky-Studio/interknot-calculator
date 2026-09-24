@@ -6,6 +6,7 @@
         <PublishAot>True</PublishAot>
         <Nullable>enable</Nullable>
         <LangVersion>latestmajor</LangVersion>
+        <InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
 
     <ItemGroup>

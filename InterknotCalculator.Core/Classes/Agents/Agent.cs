@@ -5,6 +5,7 @@ using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Classes.Weapons;
 using InterknotCalculator.Core.Enums;
+#pragma warning disable CS0618 // Type or member is obsolete
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
@@ -23,7 +24,8 @@ public abstract class Agent(uint id) {
     #endregion
     
     #region Collections
-    private StatsDictionary Stats { get; } = new();
+    [Obsolete("Don't use Stats dictionary directly", false)]
+    protected StatsDictionary Stats { get; } = new();
     public Dictionary<Element, Anomaly> Anomalies { get; set; } = new();
     public Dictionary<string, Skill> Skills { get; set; } = new();
     public Dictionary<string, IEnumerable<string>> Macros { get; set; } = new();
@@ -33,6 +35,8 @@ public abstract class Agent(uint id) {
 
     public Weapon? Weapon { get; private set; }
     public DriveDisc[] DriveDiscs { get; private set; } = [];
+    public List<DriveDiscSet> PartialSets { get; } = [];
+    public List<DriveDiscSet> FullSets { get; } = [];
 
     public void SetWeapon(uint weaponId) {
         RemoveWeaponStats();
@@ -40,19 +44,22 @@ public abstract class Agent(uint id) {
         AddWeaponStats();
     }
     private void RemoveWeaponStats() {
-        if (Weapon is not { } w) 
+        if (Weapon is null) 
             return;
-        Stats.RemoveAllModifiers(m => m.Key.ToString().StartsWith("Weapon"));
+        Stats.RemoveAllModifiers(m => m.Key.StartsWith("Weapon:"));
     }
     private void AddWeaponStats() {
         if (Weapon is not { } w)
             return;
-        Stats[w.MainStat.Affix].Add(new(ModifierKey.Weapon(w.Id) + ModifierKey.MainStat(), w.MainStat.Value, ModifierType.Base));
-        Stats[w.SecondaryStat.Affix].Add(new(ModifierKey.Weapon(w.Id) + ModifierKey.SecondaryStat(), w.SecondaryStat));
+        Stats[w.MainStat.Affix.Flat()].Add(new(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.MainStat(), 
+            w.MainStat.Value, ModifierType.Base));
+        Stats[w.SecondaryStat.Affix.Flat()].Add(new(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.SecondaryStat(), 
+            w.SecondaryStat));
         if (w.Speciality != Speciality) 
             return;
         foreach (var passive in w.Passive) {
-            Stats[passive.Affix].Add(new(ModifierKey.Weapon(w.Id) + ModifierKey.Passive(), passive));
+            Stats[passive.Affix.Flat()].Add(new(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.Passive(), 
+                passive, true));
         }
     }
 
@@ -62,25 +69,20 @@ public abstract class Agent(uint id) {
         AddDiscsStats();
     }
     private void RemoveDiscsStats() {
-        foreach (var value in Stats.Values) {
-            var toRemove = value.AppliedModifiers
-                .Where(m => m.Key.ToString().StartsWith("disc"))
-                .ToImmutableList(); // freeze mods
-            foreach (var mod in toRemove) {
-                value.Remove(mod);
-            }
-        }
+        if (DriveDiscs.Length == 0) 
+            return;
+        Stats.RemoveAllModifiers(m => m.Key.StartsWith("Disc:"));
     }
     private void AddDiscsStats() {
         var setCounts = new SafeDictionary<uint, int>();
 
         foreach (var disc in DriveDiscs) {
             setCounts[disc.SetId] += 1;
-            Stats[disc.MainStat.Affix] += new Modifier(ModifierKey.Disc(disc.Slot) + 
-                                                       ModifierKey.Stat(disc.MainStat.Affix, disc.MainStat.Level), disc.MainStat);
+            Stats[disc.MainStat.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.Disc(disc.Slot) + 
+                                                              ModifierKey.Stat(disc.MainStat.Affix, disc.MainStat.Level), disc.MainStat);
             foreach (var subStat in disc.SubStats) {
-                Stats[subStat.Affix] += new Modifier(ModifierKey.Disc(disc.Slot) + 
-                                                     ModifierKey.Stat(subStat.Affix, subStat.Level), subStat.Value);
+                Stats[subStat.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.Disc(disc.Slot) + 
+                                                            ModifierKey.Stat(subStat.Affix, subStat.Level), subStat);
             }
         }
         
@@ -91,8 +93,9 @@ public abstract class Agent(uint id) {
         foreach (var setId in partialSets) {
             var set = DriveDiscSetRegistry.CreateInstance(setId);
             foreach (var bonus in set.PartialBonus) {
-                Stats[bonus.Affix] += new Modifier(ModifierKey.DiscSet(setId), bonus);
+                Stats[bonus.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.DiscSet(setId), bonus);
             }
+            PartialSets.Add(set);
         }
         
         var fullSets = setCounts
@@ -102,8 +105,10 @@ public abstract class Agent(uint id) {
         foreach (var setId in fullSets) {
             var set = DriveDiscSetRegistry.CreateInstance(setId);
             foreach (var bonus in set.FullBonus) {
-                Stats[bonus.Affix] += new Modifier(ModifierKey.DiscSet(setId, true), bonus);
+                Stats[bonus.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.DiscSet(setId, true), 
+                    bonus, true);
             }
+            FullSets.Add(set);
         }
     }
     #endregion
@@ -111,16 +116,15 @@ public abstract class Agent(uint id) {
     #region Stats
     public SafeDictionary<Affix, double> BaseStats { get; private set; } = new();
     
-    private SafeDictionary<Affix, double>? _finalStats;
     public SafeDictionary<Affix, double> FinalStats {
         // Lazily snapshot stats when first accessed.
         // This way Reference agents that don't go through SetWeapon/SetDriveDiscs
         // (and therefore never trigger ProcessStats) still get a valid snapshot
         // without forcing every implementation to remember to snapshot manually.
-        get => _finalStats ??= CollectStats();
-        private set => _finalStats = value;
+        get => field ??= CollectStats();
+        private set;
     }
-    
+
     public Affix RelatedElementDmg => Helpers.GetRelatedAffixDmg(Element);
     public Affix RelatedElementRes => Helpers.GetRelatedAffixRes(Element);
 
@@ -145,6 +149,7 @@ public abstract class Agent(uint id) {
     public MutableStat ResPen => Stats[Affix.ResPen];
     public MutableStat DazeBonus => Stats[Affix.DazeBonus];
     public MutableStat DisorderDmgBonus => Stats[Affix.DisorderDmgBonus];
+    public MutableStat AnomalyBuildupBonus => Stats[Affix.AnomalyBuildupBonus];
     
 #if ENERGY_REQUIREMENT_CHECK
     private double _energy = 60;
@@ -160,7 +165,7 @@ public abstract class Agent(uint id) {
         }
     }
     
-    public virtual SafeDictionary<Affix, double> CollectStats() {
+    public virtual SafeDictionary<Affix, double> CollectStats(bool initial = false) {
         var result = new SafeDictionary<Affix, double>();
 
         var maxHp = MaxHp;
@@ -180,22 +185,22 @@ public abstract class Agent(uint id) {
         var resPen = ResPen;
         var dazeBonus = DazeBonus;
 
-        Add(Affix.Hp, maxHp);
-        Add(Affix.Atk, atk);
-        Add(Affix.Def, def);
-        Add(Affix.Pen, pen);
-        Add(Affix.PenRatio, penRatio);
-        Add(Affix.CritRate, critRate);
-        Add(Affix.CritDamage, critDamage);
-        Add(Affix.Impact, impact);
-        Add(Affix.AnomalyMastery, anomalyMastery);
-        Add(Affix.AnomalyProficiency, anomalyProficiency);
-        Add(Affix.EnergyRegen, energyRegen);
-        Add(RelatedElementDmg, elemDmg);
-        Add(RelatedElementRes, elemResPen);
-        Add(Affix.DmgBonus, dmgBonus);
-        Add(Affix.ResPen, resPen);
-        Add(Affix.DazeBonus, dazeBonus);
+        Add(Affix.Hp, initial ? maxHp.InitialValue : maxHp);
+        Add(Affix.Atk, initial ? atk.InitialValue : atk);
+        Add(Affix.Def, initial ? def.InitialValue : def);
+        Add(Affix.Pen, initial ? pen.InitialValue : pen);
+        Add(Affix.PenRatio, initial ? penRatio.InitialValue : penRatio);
+        Add(Affix.CritRate, initial ? critRate.InitialValue : critRate);
+        Add(Affix.CritDamage, initial ? critDamage.InitialValue : critDamage);
+        Add(Affix.Impact, initial ? impact.InitialValue : impact);
+        Add(Affix.AnomalyMastery, initial ? anomalyMastery.InitialValue : anomalyMastery);
+        Add(Affix.AnomalyProficiency, initial ? anomalyProficiency.InitialValue : anomalyProficiency);
+        Add(Affix.EnergyRegen, initial ? energyRegen.InitialValue : energyRegen);
+        Add(RelatedElementDmg, initial ? elemDmg.InitialValue : elemDmg);
+        Add(RelatedElementRes, initial ? elemResPen.InitialValue : elemResPen);
+        Add(Affix.DmgBonus, initial ? dmgBonus.InitialValue : dmgBonus);
+        Add(Affix.ResPen, initial ? resPen.InitialValue : resPen);
+        Add(Affix.DazeBonus, initial ? dazeBonus.InitialValue : dazeBonus);
     
         return result;
 
@@ -211,11 +216,13 @@ public abstract class Agent(uint id) {
     /// </summary>
     /// <param name="team">Current team, including current agent</param>
     /// <returns>Collection of stats</returns>
+    [Obsolete("Use RegisterHooks(ctx) instead")]
     public virtual IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) => [];
 
     /// <summary>
     /// Applies agent's passive to themselves
     /// </summary>
+    [Obsolete("Use RegisterHooks(ctx) instead")]
     public virtual void ApplyPassive() { }
 
     protected virtual double GetBaseDamage(double scale) => scale / 100 * Atk;

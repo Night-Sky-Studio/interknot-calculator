@@ -1,3 +1,4 @@
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
@@ -6,20 +7,23 @@ namespace InterknotCalculator.Core.Classes.Agents;
 
 public class Yixuan : RuptureAgent, ICustomAnomaly {
     public Element AnomalyElement { get; set; }
+    
     public Yixuan() : base(AgentId.Yixuan) {
         Element = Element.Ether;
         AnomalyElement = Element.AuricInk;
         Rarity = Rarity.S;
         Faction = Faction.YunkuiSummit;
 
-        Stats[Affix.Hp] = 8373;
-        Stats[Affix.Atk] = 872;
-        Stats[Affix.Def] = 441;
-        Stats[Affix.CritRate] = 0.194;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 93;
-        Stats[Affix.AnomalyMastery] = 92;
-        Stats[Affix.AnomalyProficiency] = 90;
+        InitializeStats(new() {
+            [Affix.Hp] = 8373,
+            [Affix.Atk] = 872,
+            [Affix.Def] = 441,
+            [Affix.CritRate] = 0.194,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 93,
+            [Affix.AnomalyMastery] = 92,
+            [Affix.AnomalyProficiency] = 90,
+        });
 
         Anomalies[Element.AuricInk] = new(62.5 * 20, Element.Ether);
 
@@ -98,7 +102,19 @@ public class Yixuan : RuptureAgent, ICustomAnomaly {
         _ => ability.Name is "auric_array" or "qingming_eruption" ? new(Affix.DmgBonus, 0.6) : null
     };
 
-    private bool IsTeamPassiveActive { get; set; } = false;
+    private bool IsTeamPassiveActive { get; set; }
+
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
+        
+        ctx.Events.OnCalculationStarted.Add(c => {
+            if (c.Team.Values.Any(a => a.Speciality is Speciality.Stun or Speciality.Defense or Speciality.Support
+                                       || a.Faction == Faction)) {
+                IsTeamPassiveActive = true;
+                CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.4));
+            }
+        });
+    }
 
     public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
         if (IsTeamPassiveActive && ctx.Enemy.StunMultiplier > 1.0 
@@ -107,19 +123,5 @@ public class Yixuan : RuptureAgent, ICustomAnomaly {
         }
 
         return base.GetActionDamage(ctx, ability);
-    }
-
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        if (team.Any(a => a.Speciality is Speciality.Stun or Speciality.Defense or Speciality.Support 
-                          || a.Faction == Faction)) {
-            IsTeamPassiveActive = true;
-            return [
-                new (Affix.CritDamage, 0.4)
-            ];
-        }
-
-        return [];
     }
 }

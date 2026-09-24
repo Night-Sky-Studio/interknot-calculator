@@ -1,3 +1,4 @@
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
 
@@ -5,19 +6,17 @@ namespace InterknotCalculator.Core.Classes.Agents;
 
 public class Burnice : SupportAgent, IAgentReference<Burnice> {
     public static Burnice Reference(uint weaponId, uint setId) {
-        var burnice = new Burnice {
-            Stats = {
-                [Affix.Atk] = 2850, 
-                [Affix.AnomalyMastery] = 135, 
-                [Affix.AnomalyProficiency] = 372,
-                [Affix.FireDmgBonus] = 0.3,
-            }
-        };
+        var burnice = new Burnice();
+        
+        burnice.InitializeStats(new() {
+            [Affix.Atk] = 2850, 
+            [Affix.AnomalyMastery] = 135, 
+            [Affix.AnomalyProficiency] = 372,
+            [Affix.FireDmgBonus] = 0.3,
+        });
         
         burnice.SetWeaponPassive(weaponId);
         burnice.SetDriveDiscsPassive(setId);
-        
-        burnice.ApplyPassive();
 
         return burnice;
     }
@@ -28,15 +27,17 @@ public class Burnice : SupportAgent, IAgentReference<Burnice> {
         Rarity = Rarity.S;
         Faction = Faction.SonsOfCalydon;
 
-        Stats[Affix.Hp] = 7368;
-        Stats[Affix.Def] = 600;
-        Stats[Affix.Atk] = 788 + 75;
-        Stats[Affix.CritRate] = 0.05;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 83;
-        Stats[Affix.AnomalyMastery] = 118;
-        Stats[Affix.AnomalyProficiency] = 120;
-        Stats[Affix.EnergyRegen] = 1.2 + 0.36;
+        InitializeStats(new() { 
+            [Affix.Hp] = 7368,
+            [Affix.Def] = 600,
+            [Affix.Atk] = 788 + 75,
+            [Affix.CritRate] = 0.05,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 83,
+            [Affix.AnomalyMastery] = 118,
+            [Affix.AnomalyProficiency] = 120,
+            [Affix.EnergyRegen] = 1.2 + 0.36,
+        });
 
         Skills["direct_flame_blend"] = new(SkillTag.BasicAtk, [
             new(89.9, 28.6, 16.94, 0.61),
@@ -90,15 +91,13 @@ public class Burnice : SupportAgent, IAgentReference<Burnice> {
         ]);
     }
 
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
 
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        if (team.Any(a => a.Speciality == Speciality) ||
-            team.Any(a => a.Faction == Faction)) {
-            return [new(Affix.AnomalyBuildupBonus, 0.65)];
-        }
-
-        return [];
+        ctx.Events.OnCalculationStarted.Add(c => {
+            if (c.Team.Values.Any(a => a.Speciality == Speciality || a.Faction == Faction)) {
+                AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.65));
+            }
+        });
     }
 }

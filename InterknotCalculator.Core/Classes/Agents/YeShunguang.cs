@@ -1,4 +1,5 @@
 using InterknotCalculator.Core.Classes.EtherVeils;
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
@@ -16,15 +17,17 @@ public class YeShunguang : Agent, IEtherVeilAgent<Verdict> {
         Rarity = Rarity.S;
         Faction = Faction.YunkuiSummit;
         
-        Stats[Affix.Hp] = 7673;
-        Stats[Affix.Def] = 606;
-        Stats[Affix.Atk] = 938;
-        Stats[Affix.CritRate] = 0.194;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 83;
-        Stats[Affix.AnomalyMastery] = 94;
-        Stats[Affix.AnomalyProficiency] = 93;
-        Stats[Affix.EnergyRegen] = 1.2;
+        InitializeStats(new () {
+            [Affix.Hp] = 7673,
+            [Affix.Def] = 606,
+            [Affix.Atk] = 938,
+            [Affix.CritRate] = 0.194,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 83,
+            [Affix.AnomalyMastery] = 94,
+            [Affix.AnomalyProficiency] = 93,
+            [Affix.EnergyRegen] = 1.2
+        });
 
         VeilVulnerabilityCap = 1.1;
         MaxQingmingSwordForce = 6;
@@ -91,11 +94,10 @@ public class YeShunguang : Agent, IEtherVeilAgent<Verdict> {
         ];
     }
 
-    private bool IsTeamPassiveActive { get; set; } = false;
-
-    private bool IsEnlightenedMind { get; set; } = false;
+    private bool IsTeamPassiveActive { get; set; }
+    private bool IsEnlightenedMind { get; set; }
     
-    public int QingmingSwordForce {
+    private int QingmingSwordForce {
         get;
         set => field = Math.Clamp(value, 0, MaxQingmingSwordForce);
     }
@@ -118,7 +120,7 @@ public class YeShunguang : Agent, IEtherVeilAgent<Verdict> {
     
     private void EnterEnlightenedMind(Context ctx) {
         if (QingmingSwordForce != 6)
-            throw new InvalidOperationException("Cannot enter Enlightened Mind with less than 6 Qingming Sword Force");
+            throw new InvalidOperationException($"Cannot enter Enlightened Mind with less than 6 Qingming Sword Force ({QingmingSwordForce})");
         
         if (!IsEnlightenedMind) IsEnlightenedMind = true;
         if (ctx.GetEtherVeil<Verdict>() is { } existing) {
@@ -141,13 +143,19 @@ public class YeShunguang : Agent, IEtherVeilAgent<Verdict> {
         Bearer = 0;
     }
     
-    public override void ApplyPassive() {
-        // Core Passive: Burning Clarity
-        BonusStats[Affix.CritRate] += 0.3;
-        BonusStats[Affix.DmgBonus] += 0.25;
-    }
-    
     public override void RegisterHooks(Context ctx) {
+        ctx.Events.OnCalculationStarted.Add(c => {
+            // Core Passive: Burning Clarity
+            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.3));
+            DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25));
+            
+            // Additional Ability: Shadowtrace Flight 
+            // requires a Support or Defense character in the squad
+            if (c.Team.Values.Any(a => a.Speciality is Speciality.Support or Speciality.Defense)) {
+                IsTeamPassiveActive = true;
+            }
+        });
+        
         ctx.Events.OnActionExecuted.Add((c, e) => {
             if (e.Agent != this) return;
 
@@ -183,7 +191,7 @@ public class YeShunguang : Agent, IEtherVeilAgent<Verdict> {
         });
     }
 
-    protected double OriginalEnemyStunMultiplier { get; set; } = 1;
+    protected MutableStat? OriginalEnemyStunMultiplier { get; set; }
     
     public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
         OriginalEnemyStunMultiplier = ctx.Enemy.StunMultiplier; // 1
@@ -192,7 +200,7 @@ public class YeShunguang : Agent, IEtherVeilAgent<Verdict> {
         // Veil Vulnerability: while "Ether Veil: Verdict" is active, the enemy's Stun DMG multiplier
         // is ignored and replaced with the Veil Vulnerability bonus, capped at 110%.
         if (IsEnlightenedMind && ctx.GetEtherVeil<Verdict>() is not null) {
-            ctx.Enemy.StunMultiplier = Math.Min(1 + VeilVulnerabilityCap, OriginalEnemyStunMultiplier + 0.5);
+            ctx.Enemy.StunMultiplier = new(Math.Min(1 + VeilVulnerabilityCap, OriginalEnemyStunMultiplier + 0.5));
         }
 
         try {
@@ -206,18 +214,6 @@ public class YeShunguang : Agent, IEtherVeilAgent<Verdict> {
                 ExitEnlightenedMind(ctx);
             }
         }
-    }
-    
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        // Additional Ability: Shadowtrace Flight 
-        // requires a Support or Defense character in the squad
-        if (team.Any(a => a.Speciality is Speciality.Support or Speciality.Defense)) {
-            IsTeamPassiveActive = true;
-        }
-
-        return [];
     }
     
     public Verdict EtherVeil { get; } = new();

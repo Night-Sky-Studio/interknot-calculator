@@ -1,23 +1,20 @@
-﻿using InterknotCalculator.Core.Enums;
+﻿using InterknotCalculator.Core.Classes.Modifiers;
+using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
 public sealed class Rina : SupportAgent, IAgentReference<Rina> {
     public static Rina Reference(uint weaponId, uint setId) {
-        var rina = new Rina {
-            Stats = {
-                [Affix.Atk] = 2600
-            },
-            BonusStats = {
-                [Affix.PenRatio] = 0.3
-            }
-        };
+        var rina = new Rina();
+        
+        rina.InitializeStats(new () {
+            [Affix.Atk] = 2600
+        });
+        rina.PenRatio.Add(new(ModifierKey.Agent(AgentId.Rina) + ModifierKey.CorePassive(), 0.3));
 
         rina.SetWeaponPassive(weaponId);
         rina.SetDriveDiscsPassive(setId);
-        
-        rina.ApplyPassive();
         
         return rina;
     }
@@ -27,31 +24,36 @@ public sealed class Rina : SupportAgent, IAgentReference<Rina> {
         Rarity = Rarity.S;
         Faction = Faction.VictoriaHousekeeping;
         
-        Stats[Affix.Hp] = 8609;
-        Stats[Affix.Def] = 600;
-        Stats[Affix.Atk] = 642 + 75;
-        Stats[Affix.CritRate] = 0.05;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 83;
-        Stats[Affix.AnomalyMastery] = 92;
-        Stats[Affix.AnomalyProficiency] = 93;
-        Stats[Affix.EnergyRegen] = 1.2;
-
-        Stats[Affix.PenRatio] = 0.144;
+        InitializeStats(new () {
+            [Affix.Hp] = 8609,
+            [Affix.Def] = 600,
+            [Affix.Atk] = 642 + 75,
+            [Affix.CritRate] = 0.05,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 83,
+            [Affix.AnomalyMastery] = 92,
+            [Affix.AnomalyProficiency] = 93,
+            [Affix.EnergyRegen] = 1.2,
+            [Affix.PenRatio] = 0.144
+        });
     }
 
-    public override void ApplyPassive() {
-        ExternalBonus[Affix.PenRatio] += Math.Min(PenRatio * 0.25 + 0.12, 0.3);
-    }
-
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        if (team.Any(a => a.Element == Element) ||
-            team.Any(a => a.Faction == Faction)) {
-            return [new(Affix.ElectricDmgBonus, 0.1)];
-        }
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
         
-        return [];
+        ctx.Events.OnCalculationStarted.Add(c => {
+            foreach (var agent in c.Team.Values) {
+                agent.PenRatio.Add(new(ModifierKey.Agent(AgentId.Rina) + ModifierKey.CorePassive(), 
+                    Math.Min(PenRatio * 0.25 + 0.12, 0.3)));
+            }
+
+            if (c.Team.Values.Any(a => a.Element.Matches(Element) || a.Faction == Faction)) {
+                foreach (var agent in c.Team.Values) {
+                    if (agent.Element.Matches(Element.Electric)) {
+                        agent.ElementalDmgBonus.Add(new(ModifierKey.Agent(AgentId.Rina) + ModifierKey.TeamPassive(), 0.1));
+                    }
+                }
+            }
+        });
     }
 }

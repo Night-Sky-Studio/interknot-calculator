@@ -1,20 +1,19 @@
-﻿using InterknotCalculator.Core.Enums;
+﻿using InterknotCalculator.Core.Classes.Modifiers;
+using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public sealed class Lycaon : SupportAgent, IStunAgent, IAgentReference<Lycaon> {
+public sealed class Lycaon : SupportAgent, IAgentReference<Lycaon> {
     public static Lycaon Reference(uint weaponId, uint setId) {
-        var lycaon = new Lycaon {
-            Stats = {
-                [Affix.CritRate] = 0.5
-            }
-        };
+        var lycaon = new Lycaon();
+        
+        lycaon.InitializeStats(new () {
+            [Affix.CritRate] = 0.5
+        });
 
         lycaon.SetWeaponPassive(weaponId);
         lycaon.SetDriveDiscsPassive(setId);
-        
-        lycaon.ApplyPassive();
         
         return lycaon;
     }
@@ -25,15 +24,17 @@ public sealed class Lycaon : SupportAgent, IStunAgent, IAgentReference<Lycaon> {
         Rarity = Rarity.S;
         Faction = Faction.VictoriaHousekeeping;
         
-        Stats[Affix.Hp] = 8416;
-        Stats[Affix.Def] = 606;
-        Stats[Affix.Atk] = 653 + 75;
-        Stats[Affix.CritRate] = 0.05;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 119 + 18;
-        Stats[Affix.AnomalyMastery] = 90;
-        Stats[Affix.AnomalyProficiency] = 91;
-        Stats[Affix.EnergyRegen] = 1.2;
+        InitializeStats(new () {
+            [Affix.Hp] = 8416,
+            [Affix.Def] = 606,
+            [Affix.Atk] = 653 + 75,
+            [Affix.CritRate] = 0.05,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 119 + 18,
+            [Affix.AnomalyMastery] = 90,
+            [Affix.AnomalyProficiency] = 91,
+            [Affix.EnergyRegen] = 1.2
+        });
         
         Skills["moon_hunter"] = new(SkillTag.BasicAtk, [
             new (58.90, 22.30, element: Element.Physical, energy: 0.50),
@@ -87,21 +88,25 @@ public sealed class Lycaon : SupportAgent, IStunAgent, IAgentReference<Lycaon> {
         ]);
     }
 
-    public override void ApplyPassive() {
-        BonusStats[Affix.DazeBonus] = 0.8;
-        ExternalBonus[Affix.IceResPen] = 0.25;
-    }
-
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
         
-        if (team.Any(a => a.Element == Element) ||
-            team.Any(a => a.Faction == Faction)) {
-            EnemyStunBonusOverride = 0.35;
-        }
+        ctx.Events.OnCalculationStarted.Add(c => {
+            DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.8));
 
-        return [];
+            foreach (var agent in c.Team.Values) {
+                // WORKAROUND:
+                //      Agents don't expose convenient "IceResPen" property.
+                //      Since it won't have any effect on non-Ice agents, we can
+                //      skip adding it for now.
+                if (agent.Element.Matches(Element.Ice)) {
+                    agent.ElementalResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25));
+                }
+            }
+
+            if (c.Team.Values.Any(a => a.Element.Matches(Element) || a.Faction == Faction)) {
+                c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.35));
+            }
+        });
     }
-
-    public double EnemyStunBonusOverride { get; set; }
 }

@@ -25,7 +25,7 @@ public static class Calculator {
         var team = request.Team;
         var rotation = request.Rotation;
         enemy ??= new NotoriousDullahan();
-        enemy.StunMultiplier = request.StunBonus;
+        enemy.StunMultiplier = new(request.StunBonus);
         
         var ctx = new Context {
             Team = {
@@ -48,7 +48,6 @@ public static class Calculator {
         foreach (var member in team) {
             ctx.Team[member.AgentId] = AgentRegistry.CreateReference(member);
         }
-        List<Stat> fullTeamPassive = [];
 
         ctx.Events.OnAnomalyTriggered.Add((c, e) => {
             var element = e.Element;
@@ -66,54 +65,19 @@ public static class Calculator {
             if (sender.AfflictedAnomaly is { } anomaly && !isFrostburnShatter) {
                 if (anomaly.Element != element || anomaly.SelfDisorder) {
                     ctx.ActionsQueue.Add(ctx.Team[agentId].GetAnomalyDamage(ctx, Element.None));
-                } 
-                // else {
-                //     sender.AfflictedAnomaly = null;
-                // }
+                }
             }
         });
         
-        // All supports are rocking "Astral Voice" set
-        // they need to be counted to then subtract excess applications of this set
-        // as "Astral Voice" 4pc bonus can only be applied once
-        var astralVoiceCount = ctx.Team.Values.Count(a => a.Speciality == Speciality.Support);
         foreach (var a in ctx.Team.Values) {
-            fullTeamPassive.AddRange(a.ApplyTeamPassive([..ctx.Team.Values]));
             a.RegisterHooks(ctx);
-            a.Weapon?.RegisterHooks(ctx);
-        }
-        
-        foreach (var stat in fullTeamPassive) {
-            foreach (var character in ctx.Team.Values) {
-                if (stat.SkillTags.Length > 0) {
-                    character.TagBonus.Add(stat);
-                } else {
-                    character.BonusStats[stat.Affix] += stat.Value;
-                }
-            }
-        }
-
-        foreach (var a in ctx.Team.Values) {
-            foreach (var (afx, bonus) in a.ExternalBonus) {
-                ctx.Team[characterId].BonusStats[afx] += bonus;
-            }
-
-            foreach (var stat in a.ExternalTagBonus) {
-                ctx.Team[characterId].TagBonus.Add(stat);
-            }
-
-            if (a is IStunAgent stunAgent) {
-                enemy.StunMultiplier += stunAgent.EnemyStunBonusOverride;
+            a.Weapon?.RegisterHooks(ctx, a.Id);
+            foreach (var set in a.FullSets) {
+                set.RegisterHooks(ctx, a.Id);
             }
         }
         
-        // Subtract excess applications of "Astral Voice" 4pc bonus
-        // I can't believe how hacky this feels...
-        if (astralVoiceCount > 1) {
-            var astralVoice = new AstralVoice(); // Resources.Current.GetDriveDiscSet(32800);
-            var avBonus = astralVoice.FullBonus.First();
-            ctx.Team[characterId].BonusStats[avBonus.Affix] -= avBonus.Value * (astralVoiceCount - 1);
-        }
+        ctx.Events.CalculationStarted(ctx);
         
         // Do the calculation
         // Anomalies should be included automatically

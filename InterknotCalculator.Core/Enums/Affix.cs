@@ -10,14 +10,11 @@ public enum Affix {
     Hp, Def, Atk, Impact, Pen,
     AnomalyMastery, AnomalyProficiency,
     EnergyRegen, SheerForce, Daze,
-    _Flat,
-
-    // Ratio affixes
-    HpRatio, DefRatio, AtkRatio, CombatAtkRatio, ImpactRatio, PenRatio,
-    AnomalyMasteryRatio,
-    CritRate, CritDamage,
-    EnergyRegenRatio, SheerForceBonus, DazeBonus,
-
+    
+    // Treated as flat affixes, despite their names
+    CritRate, CritDamage, PenRatio,
+    SheerForceBonus, DazeBonus,
+    
     DmgBonus, ResPen,
     IceDmgBonus, IceResPen,
     FireDmgBonus, FireResPen,
@@ -34,6 +31,12 @@ public enum Affix {
     EtherSheerBonus,
 
     AnomalyBuildupBonus, AnomalyBuildupRes,
+    
+    _Flat,
+
+    // Ratio affixes - apply as `Base * (1 + Sum(Ratio))`
+    HpRatio, DefRatio, AtkRatio, CombatAtkRatio, ImpactRatio,
+    AnomalyMasteryRatio, EnergyRegenRatio, 
 
     _Ratio,
 }
@@ -41,4 +44,15 @@ public enum Affix {
 public static class AffixExtensions {
     public static bool IsRatio(this Affix a) => 
         a is > Affix._Flat and < Affix._Ratio;
+
+    public static Affix Flat(this Affix a) => a switch {
+        Affix.HpRatio => Affix.Hp,
+        Affix.AtkRatio => Affix.Atk,
+        Affix.CombatAtkRatio => Affix.Atk,
+        Affix.DefRatio => Affix.Def,
+        Affix.ImpactRatio => Affix.Impact,
+        Affix.AnomalyMasteryRatio => Affix.AnomalyMastery,
+        Affix.EnergyRegenRatio => Affix.EnergyRegen,
+        _ => a
+    };
 }

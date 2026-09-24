@@ -1,23 +1,26 @@
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
 public sealed class Grace : Agent {
-    public Grace() : base(1181) {
+    public Grace() : base(AgentId.Grace) {
         Speciality = Speciality.Anomaly;
         Element = Element.Electric;
         Rarity = Rarity.S;
         Faction = Faction.BelobogHeavyIndustries;
 
-        Stats[Affix.Hp] = 7482;
-        Stats[Affix.Def] = 600;
-        Stats[Affix.Atk] = 750 + 75;
-        Stats[Affix.CritRate] = 0.05;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 83;
-        Stats[Affix.AnomalyMastery] = 115 + 36;
-        Stats[Affix.AnomalyProficiency] = 116;
-        Stats[Affix.EnergyRegen] = 1.2;
+        InitializeStats(new () {
+            [Affix.Hp] = 7482,
+            [Affix.Def] = 600,
+            [Affix.Atk] = 750 + 75,
+            [Affix.CritRate] = 0.05,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 83,
+            [Affix.AnomalyMastery] = 115 + 36,
+            [Affix.AnomalyProficiency] = 116,
+            [Affix.EnergyRegen] = 1.2
+        });
         
         Skills["high-pressure_spike"] = new(SkillTag.BasicAtk, [
             new(111.2, 27.9, element: Element.Physical, energy: 0.615),
@@ -56,20 +59,17 @@ public sealed class Grace : Agent {
         ]);
     }
 
-    public override void ApplyPassive() {
-        TagBonus.Add(new(Affix.AnomalyBuildupBonus, 1.3, tags: [SkillTag.Special, SkillTag.ExSpecial]));
-    }
-
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        if (team.Any(a => a.Element == Element) ||
-            team.Any(a => a.Faction == Faction)) {
-            return [
-                new(Affix.DmgBonus, 0.36, tags: [SkillTag.AttributeAnomaly])
-            ];
-        }
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
         
-        return [];
+        ctx.Events.OnCalculationStarted.Add(c => {
+            AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 1.3, 
+                tags: SkillTag.Special | SkillTag.ExSpecial));
+
+            if (c.Team.Values.Any(a => a.Element.Matches(Element) || a.Faction == Faction)) {
+                DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.36, 
+                    tags: SkillTag.AttributeAnomaly));
+            }
+        });
     }
 }

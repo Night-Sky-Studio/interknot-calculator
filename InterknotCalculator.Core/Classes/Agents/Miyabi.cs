@@ -1,4 +1,5 @@
-﻿using InterknotCalculator.Core.Enums;
+﻿using InterknotCalculator.Core.Classes.Modifiers;
+using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
@@ -6,22 +7,24 @@ namespace InterknotCalculator.Core.Classes.Agents;
 public class Miyabi : Agent, ICustomAnomaly {
     public Element AnomalyElement { get; set; }
     
-    public Miyabi() : base(1091) {
+    public Miyabi() : base(AgentId.Miyabi) {
         Speciality = Speciality.Anomaly;
         Element = Element.Ice;
         AnomalyElement = Element.Frost;
         Rarity = Rarity.S;
         Faction = Faction.HollowSpecialOperationsSection6;
 
-        Stats[Affix.Hp] = 7673;
-        Stats[Affix.Def] = 606;
-        Stats[Affix.Atk] = 880;
-        Stats[Affix.CritRate] = 0.05;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 86;
-        Stats[Affix.AnomalyMastery] = 116;
-        Stats[Affix.AnomalyProficiency] = 238;
-        Stats[Affix.EnergyRegen] = 1.2;
+        InitializeStats(new () {
+            [Affix.Hp] = 7673,
+            [Affix.Def] = 606,
+            [Affix.Atk] = 880,
+            [Affix.CritRate] = 0.05,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 86,
+            [Affix.AnomalyMastery] = 116,
+            [Affix.AnomalyProficiency] = 238,
+            [Affix.EnergyRegen] = 1.2
+        });
 
         Anomalies[Element.Frost] = new(1500, Element.Frost);
 
@@ -100,27 +103,20 @@ public class Miyabi : Agent, ICustomAnomaly {
         };
     }
 
-    public override void ApplyPassive() {
-        BonusStats[Affix.IceDmgBonus] += 0.3;
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
+        
+        ctx.Events.OnCalculationStarted.Add(c => {
+            ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.3));
+
+            if (c.Team.Values.Any(a => a.Faction == Faction || a.Speciality is Speciality.Support)) {
+                DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.6, 
+                    tags: SkillTag.BasicAtk));
+                ElementalResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.3, 
+                    tags: SkillTag.BasicAtk));
+            }
+        });
     }
-
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        if (team.Any(a => a.Speciality == Speciality.Support) ||
-            team.Any(a => a.Faction == Faction)) {
-            return [
-                new (Affix.DmgBonus, 0.6, tags: [SkillTag.BasicAtk]),
-                new (Affix.IceResPen, 0.3, tags: [SkillTag.BasicAtk])
-            ];
-        }
-
-        return [];
-    }
-
-    // public override AgentAction GetAnomalyDamage(Element element, Enemy enemy) {
-    //     base.GetAnomalyDamage(element, enemy);
-    // }
 }
 
 public class MiyabiM1 : Miyabi {
@@ -141,9 +137,11 @@ public class MiyabiM1 : Miyabi {
             if (e.Ability is not { Name: "shimotsuki", Scale: 2 } || 
                 c.Enemy.AfflictedAnomaly?.Element is not Element.Frost) return;
             c.Enemy.AfflictedAnomaly = null;
-            foreach (var agent in c.Team) {
-                agent.Value.BonusStats[Affix.AnomalyBuildupBonus] += 0.2;
-            }
+            
+            foreach (var agent in c.Team.Values) {
+                agent.AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) 
+                                                                        + ModifierKey.CorePassive(), 0.2));
+            } 
         });
     }
 }
@@ -155,11 +153,13 @@ public class MiyabiM2 : MiyabiM1 {
         Skills["kan_suzume"].Affixes[Affix.DmgBonus] += 0.3;
     }
 
-    public override void ApplyPassive() {
-        base.ApplyPassive();
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
         
-        // Upon entering the battlefield, Hoshimi Miyabi immediately obtains 6 points
-        // of Fallen Frost and her CRIT Rate increases by 15%.
-        BonusStats[Affix.CritRate] += 0.15;
+        ctx.Events.OnCalculationStarted.Add(_ => {
+            // Upon entering the battlefield, Hoshimi Miyabi immediately obtains 6 points
+            // of Fallen Frost and her CRIT Rate increases by 15%.
+            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(), 0.15));
+        });
     }
 }

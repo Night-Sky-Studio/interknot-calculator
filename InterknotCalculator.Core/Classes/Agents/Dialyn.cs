@@ -1,15 +1,16 @@
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public class Dialyn : SupportAgent, IStunAgent, IAgentReference<Dialyn> {
+public class Dialyn : SupportAgent, IAgentReference<Dialyn> {
     public static Dialyn Reference(uint weaponId, uint setId) {
-        var dialyn = new Dialyn {
-            Stats = {
-                [Affix.CritRate] = 1
-            }
-        };
+        var dialyn = new Dialyn();
+        
+        dialyn.InitializeStats(new() {
+            [Affix.CritRate] = 1
+        });
         
         dialyn.SetWeapon(weaponId);
         dialyn.SetDriveDiscsPassive(setId);
@@ -23,15 +24,17 @@ public class Dialyn : SupportAgent, IStunAgent, IAgentReference<Dialyn> {
         Rarity = Rarity.S;
         Faction = Faction.KrampusComplianceAuthority;
         
-        Stats[Affix.Hp] = 8250;
-        Stats[Affix.Def] = 612;
-        Stats[Affix.Atk] = 758;
-        Stats[Affix.CritRate] = 0.194;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 110;
-        Stats[Affix.AnomalyMastery] = 94;
-        Stats[Affix.AnomalyProficiency] = 93;
-        Stats[Affix.EnergyRegen] = 1.2;
+        InitializeStats(new() {
+            [Affix.Hp] = 8250,
+            [Affix.Def] = 612,
+            [Affix.Atk] = 758,
+            [Affix.CritRate] = 0.194,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 110,
+            [Affix.AnomalyMastery] = 94,
+            [Affix.AnomalyProficiency] = 93,
+            [Affix.EnergyRegen] = 1.2
+        });
         
         Skills["happy_to_be_of_service"] = new(SkillTag.BasicAtk, [
             new(52, 29.3, 22.64, 0.408),
@@ -61,31 +64,31 @@ public class Dialyn : SupportAgent, IStunAgent, IAgentReference<Dialyn> {
         Skills["paper"] = new(SkillTag.ExSpecial, [new(1403.5, 641.4, 138.34, -25)]);
         Skills["welcome_mat"] = new(SkillTag.Chain, [new(1240.8, 272.8, 164.97)]);
         Skills["service_stopped_for_number_dialed"] = new(SkillTag.Ultimate, [new(3245, 1151.7, 680)]);
-
     }
+    
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
 
-    public double EnemyStunBonusOverride { get; set; } = 0.3;
+        ctx.Events.OnCalculationStarted.Add(c => {
+            c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.3));
+            
+            // If her initial CRIT Rate surpasses 50%, her Impact increases
+            // by 2 for each additional 1%, up to a maximum increase of 100.
+            Impact.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(),
+                Math.Min(100, Math.Max(0, CritRate - 0.5) * 2)));
 
-    public override void ApplyPassive() {
-        // If her initial CRIT Rate surpasses 50%, her Impact increases
-        // by 2 for each additional 1%, up to a maximum increase of 100.
-        BonusStats[Affix.Impact] += Math.Min(100, Math.Max(0, CritRate - 0.5) * 2);
-    }
+            // When another character in your squad is an Attack or Rupture character
+            if (c.Team.Values.Any(a => a is { Speciality: Speciality.Attack or Speciality.Rupture })) {
+                // Dialyn's EX Special Attack CRIT DMG is increased by 50%.
+                CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.5, tags: SkillTag.ExSpecial));
 
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        // When another character in your squad is an Attack or Rupture character
-        if (team.Any(a => a is { Speciality: Speciality.Attack or Speciality.Rupture })) {
-            // Dialyn's EX Special Attack CRIT DMG is increased by 50%.
-            TagBonus.Add(new(Affix.CritDamage, 0.5, tags: [SkillTag.ExSpecial]));
-
-            // When an EX Special Attack or Ultimate is activated, all squad members gain the
-            // Overwhelmingly Positive effect.
-            // While Overwhelmingly Positive is active, DMG dealt is increased by 40% for 15s.
-            ExternalBonus[Affix.DmgBonus] += 0.4;
-        }
-        
-        return base.ApplyTeamPassive(team);
+                foreach (var agent in c.Team.Values) {
+                    // When an EX Special Attack or Ultimate is activated, all squad members gain the
+                    // Overwhelmingly Positive effect.
+                    // While Overwhelmingly Positive is active, DMG dealt is increased by 40% for 15s.
+                    agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.4));
+                }
+            }
+        });
     }
 }

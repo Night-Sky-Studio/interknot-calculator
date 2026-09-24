@@ -1,23 +1,26 @@
-﻿using InterknotCalculator.Core.Enums;
+﻿using InterknotCalculator.Core.Classes.Modifiers;
+using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
 public class Evelyn : Agent {
-    public Evelyn() : base(1321) {
+    public Evelyn() : base(AgentId.Evelyn) {
         Speciality = Speciality.Attack;
         Element = Element.Fire;
         Rarity = Rarity.S;
         Faction = Faction.StarsOfLyra;
 
-        Stats[Affix.Hp] = 7788;
-        Stats[Affix.Def] = 612;
-        Stats[Affix.Atk] = 854 + 75;
-        Stats[Affix.CritRate] = 0.05 + 0.144;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 93;
-        Stats[Affix.AnomalyMastery] = 92;
-        Stats[Affix.AnomalyProficiency] = 90;
-        Stats[Affix.EnergyRegen] = 1.2;
+        InitializeStats(new () {
+            [Affix.Hp] = 7788,
+            [Affix.Def] = 612,
+            [Affix.Atk] = 854 + 75,
+            [Affix.CritRate] = 0.05 + 0.144,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 93,
+            [Affix.AnomalyMastery] = 92,
+            [Affix.AnomalyProficiency] = 90,
+            [Affix.EnergyRegen] = 1.2,
+        });
 
         Skills["razor_wire"] = new(SkillTag.BasicAtk, [
             new(102.9, 38.8, element: Element.Physical),
@@ -70,25 +73,20 @@ public class Evelyn : Agent {
         ]);
     }
 
-    public override void ApplyPassive() {
-        BonusStats[Affix.CritRate] += 0.25;
-    }
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
+        
+        ctx.Events.OnCalculationStarted.Add(c => {
+            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25));
 
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
+            if (c.Team.Values.Any(a => a is { Speciality: Speciality.Support or Speciality.Stun })) {
+                var bonusValue = 0.3;
 
-        if (team.Any(a => a.Speciality == Speciality.Support)
-            || team.Any(a => a.Speciality == Speciality.Stun)) {
-            var bonusValue = 0.3;
-
-            if (CritRate >= 0.8) {
-                bonusValue *= 1.25;
+                if (CritRate >= 0.8) {
+                    bonusValue *= 1.25;
+                }
+                DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), bonusValue));
             }
-
-            return [new(Affix.DmgBonus, bonusValue, tags: [SkillTag.Chain, SkillTag.Ultimate])];
-        }
-
-        return [];
-
+        });
     }
 }

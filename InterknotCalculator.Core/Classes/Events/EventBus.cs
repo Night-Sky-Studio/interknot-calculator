@@ -3,6 +3,7 @@ using InterknotCalculator.Core.Classes.EtherVeils;
 namespace InterknotCalculator.Core.Classes.Events;
 
 public sealed class EventBus {
+    public delegate void CalculationStartedEvent(Context ctx);
     public delegate void ActionExecutedEvent(Context ctx, ActionExecutedEventArgs evt);
     public delegate void AftershockEvent(Context ctx, ActionExecutedEventArgs evt);
     public delegate void AnomalyBuildupEvent(Context ctx, AnomalyBuildupEventArgs evt);
@@ -11,6 +12,7 @@ public sealed class EventBus {
     public delegate void EtherVeilActivatedEvent(Context ctx, EtherVeilEventArgs evt);
     public delegate void EtherVeilDeactivatedEvent(Context ctx, EtherVeilEventArgs evt);
     
+    public List<CalculationStartedEvent> OnCalculationStarted { get; } = [];
     public List<ActionExecutedEvent> OnActionExecuted { get; } = [];
     public List<AftershockEvent> OnAftershock { get; } = [];
     public List<AnomalyBuildupEvent> OnAnomalyBuildup { get; } = [];
@@ -19,6 +21,11 @@ public sealed class EventBus {
     public List<EtherVeilActivatedEvent> OnEtherVeilActivated { get; } = [];
     public List<EtherVeilDeactivatedEvent> OnEtherVeilDeactivated { get; } = [];
 
+    public void CalculationStarted(Context ctx) {
+        foreach (var calculationStartedEvent in OnCalculationStarted) {
+            calculationStartedEvent(ctx);
+        }
+    }
     public void ActionExecuted(Context ctx, ActionExecutedEventArgs e) {
         foreach (var actionExecutedEvent in OnActionExecuted) {
             actionExecutedEvent(ctx, e);

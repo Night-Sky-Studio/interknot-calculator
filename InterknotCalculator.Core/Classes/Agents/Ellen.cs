@@ -1,23 +1,26 @@
-﻿using InterknotCalculator.Core.Enums;
+﻿using InterknotCalculator.Core.Classes.Modifiers;
+using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
 public class Ellen : Agent {
-    public Ellen() : base(1191) {
+    public Ellen() : base(AgentId.Ellen) {
         Speciality = Speciality.Attack;
         Element = Element.Ice;
         Rarity = Rarity.S;
         Faction = Faction.VictoriaHousekeeping;
 
-        Stats[Affix.Hp] = 7673;
-        Stats[Affix.Def] = 606;
-        Stats[Affix.Atk] = 863 + 75;
-        Stats[Affix.CritRate] = 0.05 + 0.144;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 93;
-        Stats[Affix.AnomalyMastery] = 94;
-        Stats[Affix.AnomalyProficiency] = 93;
-        Stats[Affix.EnergyRegen] = 1.2;
+        InitializeStats(new() {
+            [Affix.Hp] = 7673,
+            [Affix.Def] = 606,
+            [Affix.Atk] = 863 + 75,
+            [Affix.CritRate] = 0.05 + 0.144,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 93,
+            [Affix.AnomalyMastery] = 94,
+            [Affix.AnomalyProficiency] = 93,
+            [Affix.EnergyRegen] = 1.2,
+        });
 
         Skills["saw_teeth_trimming"] = new(SkillTag.BasicAtk, [
             new(98.3, 37.6, element: Element.Physical),
@@ -99,30 +102,29 @@ public class Ellen : Agent {
         }
     }
 
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
 
-        if (team.Any(a => a.Element == Element) ||
-            team.Any(a => a.Faction == Faction)) {
-            return [
-                new(Affix.IceDmgBonus, 0.3),
+        ctx.Events.OnCalculationStarted.Add(c => {
+            if (c.Team.Values.Any(a => a.Element == Element || a.Faction == Faction)) {
+                ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.3));
                 // STR 6
-                new(Affix.CritDamage, 0.48),
-                new(Affix.IceResPen, 0.1)
-            ];
-        }
-
-        return [];
+                CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.48));
+                ElementalResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.1));
+            }
+        });
     }
 }
 
 public class EllenM1 : Ellen {
-    public override void ApplyPassive() {
-        base.ApplyPassive();
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
         
-        // For each point of Flash Freeze Charge consumed, Ellen’s CRIT Rate
-        // is increased by 2% for 15s, stacking up
-        BonusStats[Affix.CritRate] += 0.02 * 6;
+        ctx.Events.OnCalculationStarted.Add(_ => {
+            // For each point of Flash Freeze Charge consumed, Ellen’s CRIT Rate
+            // is increased by 2% for 15s, stacking up
+            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.02 * 6));
+        });
     }
 }
 
@@ -141,7 +143,7 @@ public class EllenM4: EllenM3 { }
 public class EllenM5: EllenM4 { }
 
 public class EllenM6 : EllenM5 {
-    public EllenM6() : base() {
+    public EllenM6() {
         Skills["saw_teeth_trimming"] = new(SkillTag.BasicAtk, [
             new(116.3, 42.4, element: Element.Physical, energy: 0.679),
             new(262.6, 146.8, element: Element.Physical, energy: 2.415),
@@ -182,17 +184,15 @@ public class EllenM6 : EllenM5 {
         Skills["avalanche"] = new(SkillTag.Chain, [new(1879.1, 598.7, 522.83)]);
         Skills["endless_winter"] = new(SkillTag.Ultimate, [new(4469.3, 312.7, 168.33)]);
     }
-    
-    public override void ApplyPassive() {
-        base.ApplyPassive();
-
-        BonusStats[Affix.PenRatio] += 0.2;
-    }
 
     private int FeastStacks { get; set => field = Math.Min(value, 3); } = 0;
 
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
+
+        ctx.Events.OnCalculationStarted.Add(_ => {
+            PenRatio.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 0.2));
+        });
         
         ctx.Events.OnActionExecuted.Add((c, e) => {
             // When Ellen uses an EX Special Attack, Chain Attack, or gains Quick Charge [...]

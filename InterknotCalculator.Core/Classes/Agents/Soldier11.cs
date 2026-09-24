@@ -1,23 +1,26 @@
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
 public sealed class Soldier11 : Agent {
-    public Soldier11() : base(1041) {
+    public Soldier11() : base(AgentId.Soldier11) {
         Speciality = Speciality.Attack;
         Element = Element.Fire;
         Rarity = Rarity.S;
         Faction = Faction.NewEriduDefenseForce;
 
-        Stats[Affix.Hp] = 7673;
-        Stats[Affix.Def] = 612;
-        Stats[Affix.Atk] = 813 + 75;
-        Stats[Affix.CritRate] = 0.05 + 0.144;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 93;
-        Stats[Affix.AnomalyMastery] = 94;
-        Stats[Affix.AnomalyProficiency] = 93;
-        Stats[Affix.EnergyRegen] = 1.2;
+        InitializeStats(new () {
+            [Affix.Hp] = 7673,
+            [Affix.Def] = 612,
+            [Affix.Atk] = 813 + 75,
+            [Affix.CritRate] = 0.05 + 0.144,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 93,
+            [Affix.AnomalyMastery] = 94,
+            [Affix.AnomalyProficiency] = 93,
+            [Affix.EnergyRegen] = 1.2
+        });
 
         Skills["warming_sparks"] = new(SkillTag.BasicAtk, [
             new(69.6, 26, element: Element.Physical),
@@ -73,14 +76,13 @@ public sealed class Soldier11 : Agent {
         ]);
     }
 
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        if (team.Any(a => a.Element == Element) ||
-            team.Any(a => a.Faction == Faction)) {
-            return [new(Affix.FireDmgBonus, 0.325)];
-        }
-
-        return [];
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
+        
+        ctx.Events.OnCalculationStarted.Add(c => {
+            if (c.Team.Values.Any(a => a.Element.Matches(Element) || a.Faction == Faction)) {
+                ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.325));
+            }
+        });
     }
 }

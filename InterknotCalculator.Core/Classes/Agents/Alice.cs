@@ -1,3 +1,4 @@
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
@@ -13,16 +14,18 @@ public class Alice : Agent, ICustomAnomaly {
         AnomalyElement = Element.Physical;
         Rarity = Rarity.S;
         Faction = Faction.SpookShack;
-
-        Stats[Affix.Hp] = 7673;
-        Stats[Affix.Def] = 606;
-        Stats[Affix.Atk] = 880;
-        Stats[Affix.CritRate] = 0.05;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 86;
-        Stats[Affix.AnomalyMastery] = 142;
-        Stats[Affix.AnomalyProficiency] = 118;
-        Stats[Affix.EnergyRegen] = 1.2;
+        
+        InitializeStats(new() {
+            [Affix.Hp] = 7673,
+            [Affix.Def] = 606,
+            [Affix.Atk] = 880,
+            [Affix.CritRate] = 0.05,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 86,
+            [Affix.AnomalyMastery] = 142,
+            [Affix.AnomalyProficiency] = 18,
+            [Affix.EnergyRegen] = 1.2,
+        });
 
         // Anomalies[Element.Physical] = Anomaly.GetAnomalyByElement(Element.Physical);
         Anomalies[Element.Physical] = Anomaly.GetAnomalyByElement(Element.Physical) with {
@@ -78,15 +81,17 @@ public class Alice : Agent, ICustomAnomaly {
             new(4524.7, 364.7, 722.25)
         ]);
     }
-    
-    public override void ApplyPassive() {
-        BonusStats[Affix.AnomalyProficiency] += Math.Max(AnomalyMastery - 140, 0) * 1.6;
-        base.ApplyPassive();
-    }
 
-    private bool BuildupBonusActive { get; set; } = false;
+    private bool BuildupBonusActive { get; set; }
     
     public override void RegisterHooks(Context ctx) {
+        ctx.Events.OnCalculationStarted.Add(c => {
+            // Team passive
+            if (c.Team.Values.Any(a => a is { Speciality: Speciality.Anomaly or Speciality.Support })) {
+                AnomalyProficiency.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), Math.Max(AnomalyMastery - 140, 0) * 1.6));
+            }
+        });
+        
         // Core passive
         ctx.Events.OnAnomalyTriggered.Add((c, e) => {
             // After any squad member inflicts a Physical Anomaly on an enemy, Alice deals
@@ -108,7 +113,7 @@ public class Alice : Agent, ICustomAnomaly {
             if (BuildupBonusActive) return;
             
             BuildupBonusActive = true;
-            BonusStats[Affix.AnomalyBuildupBonus] += 0.25;
+            AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25));
         });
         
         // Hold BA for polarity assault
@@ -133,13 +138,13 @@ public class Alice : Agent, ICustomAnomaly {
             // for every 1s of remaining Physical Anomaly duration, the Disorder DMG
             // multiplier increases by 18%, up to a max of 180.0%.
             
-            // We use assume that there are still 7s of physical anomaly left
+            // We assume that there are still 7s of physical anomaly left
             const double bonus = 0.18 * 7;
-            BonusStats[Affix.DisorderDmgBonus] += bonus;
+            DisorderDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), bonus));
             try {
                 return base.GetAnomalyDamage(ctx, element, skipEvents);
             } finally {
-                BonusStats[Affix.DisorderDmgBonus] -= bonus;
+                DisorderDmgBonus.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.CorePassive());
             }
         }
         

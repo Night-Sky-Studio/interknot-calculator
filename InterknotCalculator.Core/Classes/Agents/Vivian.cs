@@ -1,3 +1,4 @@
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
@@ -6,18 +7,17 @@ namespace InterknotCalculator.Core.Classes.Agents;
 
 public sealed class Vivian : SupportAgent, IAgentReference<Vivian> {
     public static Vivian Reference(uint weaponId, uint setId) {
-        var vivian = new Vivian {
-            Stats = {
-                [Affix.Atk] = 2200,
-                [Affix.AnomalyMastery] = 198,
-                [Affix.AnomalyProficiency] = 415
-            }
-        };
+        var vivian = new Vivian();
+        
+        vivian.InitializeStats(new () {
+            [Affix.Atk] = 2200,
+            [Affix.AnomalyMastery] = 198,
+            [Affix.AnomalyProficiency] = 415
+        });
         
         vivian.SetWeaponPassive(weaponId);
         vivian.SetDriveDiscsPassive(setId);
-        
-        vivian.ApplyPassive();
+
         return vivian;
     }
     
@@ -42,15 +42,17 @@ public sealed class Vivian : SupportAgent, IAgentReference<Vivian> {
         Rarity = Rarity.S;
         Faction = Faction.Mockingbird;
         
-        Stats[Affix.Hp] = 7673;
-        Stats[Affix.Def] = 606;
-        Stats[Affix.Atk] = 805 + 75;
-        Stats[Affix.CritRate] = 0.05;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 86;
-        Stats[Affix.AnomalyMastery] = 108 + 36;
-        Stats[Affix.AnomalyProficiency] = 118;
-        Stats[Affix.EnergyRegen] = 1.2;
+        InitializeStats(new () {
+            [Affix.Hp] = 7673,
+            [Affix.Def] = 606,
+            [Affix.Atk] = 805 + 75,
+            [Affix.CritRate] = 0.05,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 86,
+            [Affix.AnomalyMastery] = 108 + 36,
+            [Affix.AnomalyProficiency] = 118,
+            [Affix.EnergyRegen] = 1.2,
+        });
 
         Skills["feathered_strike"] = new(SkillTag.BasicAtk, [
             new (68.20, 64.40, element: Element.Physical, energy: 1.39),
@@ -159,6 +161,12 @@ public sealed class Vivian : SupportAgent, IAgentReference<Vivian> {
     }
     
     public override void RegisterHooks(Context ctx) {
+        ctx.Events.OnCalculationStarted.Add(c => {
+            if (c.Team.Values.Any(a => a.Speciality == Speciality || a.Element.Matches(Element))) {
+                DisorderDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.12));
+            }
+        });
+        
         ctx.Events.OnActionExecuted.Add((c, e) => {
             if (e.Ability.Tag is not SkillTag.ExSpecial || c.Enemy.AfflictedAnomaly is null) return;
             ProcessAbloom(c, e.Agent, c.Enemy.AfflictedAnomaly.Element);
@@ -186,16 +194,5 @@ public sealed class Vivian : SupportAgent, IAgentReference<Vivian> {
         }
     
         return base.GetActionDamage(ctx, ability);
-    }
-    
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        if (team.Any(a => a.Speciality == Speciality) ||
-            team.Any(a => a.Element == Element)) {
-            return [new(Affix.DisorderDmgBonus, 0.12)];
-        }
-
-        return [];   
     }
 }

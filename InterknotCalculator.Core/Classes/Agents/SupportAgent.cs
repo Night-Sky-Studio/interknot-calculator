@@ -1,5 +1,8 @@
 using InterknotCalculator.Core.Classes.DriveDiscSets;
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Classes.Weapons;
+
+#pragma warning disable CS0618 // Type or member is obsolete
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
@@ -11,51 +14,41 @@ namespace InterknotCalculator.Core.Classes.Agents;
 /// <param name="id">Agent ID</param>
 public abstract class SupportAgent(uint id) : Agent(id) {
     protected void SetWeaponPassive(uint weaponId) {
+        RemoveWeaponPassive();
         if (weaponId == 0) return;
-        
-        var weapon = WeaponRegistry.CreateInstance(weaponId);
 
+        var weapon = WeaponRegistry.CreateInstance(weaponId);
         if (weapon.Speciality != Speciality) return;
-        
+
+        // Only the passive is applied here, keyed the same way Agent.AddWeaponStats keys it,
+        // so it can be removed cleanly and so tagged passives route through MutableStat.Tagged.
         foreach (var passive in weapon.Passive) {
-            if (passive.SkillTags.Length != 0) {
-                TagBonus.Add(passive);
-            } else {
-                BonusStats[passive.Affix] += passive.Value;
-            }
-        }
-            
-        foreach (var stat in weapon.ExternalBonus) {
-            if (stat.SkillTags.Length != 0) {
-                ExternalTagBonus.Add(stat);
-            } else {
-                ExternalBonus[stat.Affix] += stat.Value;
-            }
+            Stats[passive.Affix].Add(new(ModifierKey.Weapon(weapon.Id) + ModifierKey.CorePassive(), passive));
         }
     }
 
+    private void RemoveWeaponPassive() {
+        Stats.RemoveAllModifiers(m => m.Key.ToString().StartsWith("Weapon"));
+    }
+
     protected void SetDriveDiscsPassive(uint driveDiscSetId, bool partial = false) {
+        RemoveDiscSetPassive();
         if (driveDiscSetId == 0) return;
-        
+
         var set = DriveDiscSetRegistry.CreateInstance(driveDiscSetId);
-        
+
         if (partial) {
             foreach (var bonus in set.PartialBonus) {
-                if (bonus.SkillTags.Length != 0) {
-                    TagBonus.Add(bonus);
-                } else {
-                    BonusStats[bonus.Affix] += bonus.Value;
-                }
+                Stats[bonus.Affix].Add(new(ModifierKey.DiscSet(set.Id), bonus));
             }
         }
-        
+
         foreach (var bonus in set.FullBonus) {
-            if (bonus.SkillTags.Length != 0) {
-                TagBonus.Add(bonus);
-            } else {
-                BonusStats[bonus.Affix] += bonus.Value;
-            }
+            Stats[bonus.Affix].Add(new(ModifierKey.DiscSet(set.Id, true), bonus));
         }
-        set.ApplyPassive(this);
+    }
+
+    private void RemoveDiscSetPassive() {
+        Stats.RemoveAllModifiers(m => m.Key.ToString().StartsWith("Disc"));
     }
 }

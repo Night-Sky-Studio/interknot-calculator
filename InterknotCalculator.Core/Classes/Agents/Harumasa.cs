@@ -1,3 +1,4 @@
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.Agents;
@@ -9,16 +10,18 @@ public class Harumasa : Agent {
         Rarity = Rarity.S;
         Faction = Faction.HollowSpecialOperationsSection6;
 
-        Stats[Affix.Hp] = 7405;
-        Stats[Affix.Def] = 600;
-        Stats[Affix.Atk] = 840 + 75;
-        Stats[Affix.CritRate] = 0.05 + 0.144;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 90;
-        Stats[Affix.AnomalyMastery] = 80;
-        Stats[Affix.AnomalyProficiency] = 95;
-        Stats[Affix.EnergyRegen] = 1.2;
-
+        InitializeStats(new () {
+            [Affix.Hp] = 7405,
+            [Affix.Def] = 600,
+            [Affix.Atk] = 840 + 75,
+            [Affix.CritRate] = 0.05 + 0.144,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 90,
+            [Affix.AnomalyMastery] = 80,
+            [Affix.AnomalyProficiency] = 95,
+            [Affix.EnergyRegen] = 1.2
+        });
+        
         Skills["cloud_piercer"] = new(SkillTag.BasicAtk, [
             new(85.3, 40.8, element: Element.Physical),
             new(80.5, 67.4, element: Element.Physical),
@@ -79,14 +82,13 @@ public class Harumasa : Agent {
         ]);
     }
 
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
 
-        if (team.Any(a => a.Speciality == Speciality.Stun) ||
-            team.Any(a => a.Speciality == Speciality.Anomaly)) {
-            return [new(Affix.DmgBonus, 0.4)];
-        }
-
-        return [];
+        ctx.Events.OnCalculationStarted.Add(c => {
+            if (c.Team.Values.Any(a => a is { Speciality: Speciality.Stun or Speciality.Anomaly })) {
+                DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.4));
+            }
+        });
     }
 }

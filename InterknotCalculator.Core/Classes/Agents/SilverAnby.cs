@@ -1,3 +1,4 @@
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
 
@@ -6,9 +7,10 @@ namespace InterknotCalculator.Core.Classes.Agents;
 public class SilverAnby : SupportAgent, IAgentReference<SilverAnby> {
     public static SilverAnby Reference(uint weaponId, uint setId) {
         var silverAnby = new SilverAnby();
+        
         silverAnby.SetWeaponPassive(weaponId);
         silverAnby.SetDriveDiscsPassive(setId);
-        silverAnby.ApplyPassive();
+        
         return silverAnby;
     }
     
@@ -18,15 +20,17 @@ public class SilverAnby : SupportAgent, IAgentReference<SilverAnby> {
         Rarity = Rarity.S;
         Faction = Faction.NewEriduDefenseForce;
         
-        Stats[Affix.Hp] = 7673;
-        Stats[Affix.Def] = 612;
-        Stats[Affix.Atk] = 854 + 75;
-        Stats[Affix.CritRate] = 0.05 + 0.144;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 93;
-        Stats[Affix.AnomalyMastery] = 94;
-        Stats[Affix.AnomalyProficiency] = 93;
-        Stats[Affix.EnergyRegen] = 1.2;
+        InitializeStats(new () {
+            [Affix.Hp] = 7673,
+            [Affix.Def] = 612,
+            [Affix.Atk] = 854 + 75,
+            [Affix.CritRate] = 0.05 + 0.144,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 93,
+            [Affix.AnomalyMastery] = 94,
+            [Affix.AnomalyProficiency] = 93,
+            [Affix.EnergyRegen] = 1.2
+        });
         
         Skills["penetrating_shock"] = new(SkillTag.BasicAtk, [
             new (65.70, 42.20, 25.32, 0.91),
@@ -84,22 +88,22 @@ public class SilverAnby : SupportAgent, IAgentReference<SilverAnby> {
         ]);
     }
 
-    public override void ApplyPassive() {
-        BonusStats[Affix.DmgBonus] += 0.25;
-        TagBonus.Add(new(Affix.CritDamage, 0.3 * CritDamage, tags: [SkillTag.Aftershock]));
-    }
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
+        
+        ctx.Events.OnCalculationStarted.Add(c => {
+            DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25));
+            CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), CritDamage * 0.3, 
+                tags: SkillTag.Aftershock));
 
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        if (team.Any(a => a.Speciality == Speciality.Stun) ||
-            team.Any(a => a.Speciality == Speciality.Support)) {
-            ExternalTagBonus.Add(new(Affix.DmgBonus, 0.25, tags: [SkillTag.Aftershock]));
-            return [
-                new(Affix.CritRate, 0.1)
-            ];
-        }
-
-        return [];
+            if (c.Team.Values.Any(a => a is { Speciality: Speciality.Stun or Speciality.Support })) {
+                CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.1));
+                
+                foreach (var agent in c.Team.Values) {
+                    agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                        0.25, tags: SkillTag.Aftershock));
+                }
+            }
+        });
     }
 }

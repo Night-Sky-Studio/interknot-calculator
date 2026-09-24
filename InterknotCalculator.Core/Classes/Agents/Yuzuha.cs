@@ -1,3 +1,4 @@
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
@@ -6,22 +7,20 @@ namespace InterknotCalculator.Core.Classes.Agents;
 
 public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
     public static Yuzuha Reference(uint weaponId, uint setId) {
-        var yuzuha = new Yuzuha {
-            Stats = {
-                [Affix.Atk] = 3000,
-                [Affix.AnomalyMastery] = 200
-            }
-        };
+        var yuzuha = new Yuzuha();
+        
+        yuzuha.InitializeStats(new () {
+            [Affix.Atk] = 3000,
+            [Affix.AnomalyMastery] = 200
+        });
 
         yuzuha.SetWeaponPassive(weaponId);
         yuzuha.SetDriveDiscsPassive(setId);
         
-        yuzuha.ApplyPassive();
-        
         return yuzuha;
     }
 
-    private bool SweetScareActive { get; set; } = false;
+    private bool SweetScareActive { get; set; }
     
     public Yuzuha() : base(AgentId.Yuzuha) {
         Speciality = Speciality.Support;
@@ -29,15 +28,17 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
         Rarity = Rarity.S;
         Faction = Faction.SpookShack;
 
-        Stats[Affix.Hp] = 8829;
-        Stats[Affix.Def] = 612;
-        Stats[Affix.Atk] = 758;
-        Stats[Affix.CritRate] = 0.05;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 86;
-        Stats[Affix.AnomalyMastery] = 124;
-        Stats[Affix.AnomalyProficiency] = 93;
-        Stats[Affix.EnergyRegen] = 1.2;
+        InitializeStats(new () {
+            [Affix.Hp] = 8829,
+            [Affix.Def] = 612,
+            [Affix.Atk] = 758,
+            [Affix.CritRate] = 0.05,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 86,
+            [Affix.AnomalyMastery] = 124,
+            [Affix.AnomalyProficiency] = 93,
+            [Affix.EnergyRegen] = 1.2
+        });
 
         Skills["cavity_alert"] = new(SkillTag.ExSpecial, [
             new(842.3, 632.2, 482.08, -60)
@@ -53,11 +54,9 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
         // it by making 4 triggers of Sugarburst Sparkles.
         Skills["sugarburst_sparkles"] = new(SkillTag.BasicAtk, [
             new(55, 0, anomalyBuildup: 17.66 * 4)
-        ]) {
-            Affixes = {
-                [Affix.AnomalyBuildupBonus] = 0.25
-            }
-        };
+        ], new () {
+            [Affix.AnomalyBuildupBonus] = 0.25
+        });
     }
 
     public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
@@ -68,6 +67,26 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
     }
 
     public override void RegisterHooks(Context ctx) {
+        ctx.Events.OnCalculationStarted.Add(c => {
+            foreach (var agent in c.Team.Values) {
+                // Tanuki Wish grants an ATK increase equal to 40% of Yuzuha's initial ATK,
+                // up to a maximum increase of 1,200, and increases the DMG dealt by those
+                // with the effect by 15%, lasting 40s. Repeated triggers reset the duration.
+                agent.Atk.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    Math.Min(Atk.InitialValue * 0.4, 1200)));
+                agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.15));
+            }
+
+            if (c.Team.Values.Any(a => a.Speciality is Speciality.Anomaly || a.Faction == Faction)) {
+                // If Yuzuha's Anomaly Mastery exceeds 100, every point over increases
+                // the Anomaly Buildup Rate of characters with Tanuki Wish by 0.2%, up
+                // to a maximum of 20%, and all Attribute Anomaly DMG and Disorder DMG
+                // by 0.2%, up to a maximum of 20%.
+                AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    Math.Min(Math.Max(AnomalyMastery - 100, 0) * 0.002, 0.2)));
+            }
+        });
+        
         ctx.Events.OnActionExecuted.Add((c, e) => {
             // The Sweet Scare state lasts for 40.0s, repeated triggers reset the duration.
             //
@@ -91,30 +110,5 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
             var buildup = GetAnomalyBuildup(new(SkillTag.BasicAtk, "sugarburst_sparkles"));
             c.Enemy.AddBuildupContribution(c, this, buildup, e.Agent.Element); // Flavor Match
         });
-    }
-
-    public override void ApplyPassive() {
-        // Tanuki Wish grants an ATK increase equal to 40% of Yuzuha's initial ATK,
-        // up to a maximum increase of 1,200, and increases the DMG dealt by those
-        // with the effect by 15%, lasting 40s. Repeated triggers reset the duration.
-        ExternalBonus[Affix.Atk] += Math.Min(InitialAtk * 0.4, 1200);
-        ExternalBonus[Affix.DmgBonus] += 0.15;
-    }
-
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        if (team.Any(a => a.Speciality is Speciality.Anomaly || a.Faction == Faction)) {
-            // If Yuzuha's Anomaly Mastery exceeds 100, every point over increases
-            // the Anomaly Buildup Rate of characters with Tanuki Wish by 0.2%, up
-            // to a maximum of 20%, and all Attribute Anomaly DMG and Disorder DMG
-            // by 0.2%, up to a maximum of 20%.
-            return [
-                new(Affix.AnomalyBuildupBonus, 
-                    Math.Min(Math.Max(AnomalyMastery - 100, 0) * 0.002, 0.2))
-            ];
-        }
-
-        return [];
     }
 }

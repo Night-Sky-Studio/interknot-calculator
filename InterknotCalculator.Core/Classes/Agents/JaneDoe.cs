@@ -1,3 +1,4 @@
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
 
@@ -5,19 +6,17 @@ namespace InterknotCalculator.Core.Classes.Agents;
 
 public class JaneDoe : SupportAgent, IAgentReference<JaneDoe> {
     public static JaneDoe Reference(uint weaponId, uint setId) {
-        var jane = new JaneDoe {
-            Stats = {
-                [Affix.Atk] = 3000,
-                [Affix.AnomalyProficiency] = 420,
-                [Affix.AnomalyMastery] = 195,
-                [Affix.PhysicalDmgBonus] = 0.36
-            }
-        };
+        var jane = new JaneDoe();
+        
+        jane.InitializeStats(new () {
+            [Affix.Atk] = 3000,
+            [Affix.AnomalyProficiency] = 420,
+            [Affix.AnomalyMastery] = 195,
+            [Affix.PhysicalDmgBonus] = 0.36
+        });
 
         jane.SetWeaponPassive(weaponId);
         jane.SetDriveDiscsPassive(setId);
-
-        jane.ApplyPassive();
         
         return jane;
     }
@@ -28,15 +27,17 @@ public class JaneDoe : SupportAgent, IAgentReference<JaneDoe> {
         Rarity = Rarity.S;
         Faction = Faction.CriminalInvestigationSpecialResponseTeam;
 
-        Stats[Affix.Hp] = 7788;
-        Stats[Affix.Def] = 606;
-        Stats[Affix.Atk] = 880;
-        Stats[Affix.CritRate] = 0.05;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 86;
-        Stats[Affix.AnomalyMastery] = 148;
-        Stats[Affix.AnomalyProficiency] = 114;
-        Stats[Affix.EnergyRegen] = 1.2;
+        InitializeStats(new () {
+            [Affix.Hp] = 7788,
+            [Affix.Def] = 606,
+            [Affix.Atk] = 880,
+            [Affix.CritRate] = 0.05,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 86,
+            [Affix.AnomalyMastery] = 148,
+            [Affix.AnomalyProficiency] = 114,
+            [Affix.EnergyRegen] = 1.2
+        });
 
         Skills["dancing_blades"] = new(SkillTag.BasicAtk, [
             new(72.4, 23.0, 21.34, 0.501),
@@ -97,55 +98,48 @@ public class JaneDoe : SupportAgent, IAgentReference<JaneDoe> {
     }
 
     public override void RegisterHooks(Context ctx) {
-        double critRate = 0.05 + Math.Min(0.4 + AnomalyProficiency * 0.0016, 1), 
-            critDamage = 0.5;
+        ctx.Events.OnCalculationStarted.Add(c => {
+            double critRate = 0.05 + Math.Min(0.4 + AnomalyProficiency * 0.0016, 1), 
+                critDamage = 0.5;
 
-        ctx.AnomalyCritMultiplier = 1 + critRate * critDamage;
-    }
+            c.AnomalyCritMultiplier = 1 + critRate * critDamage;
+            
+            AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25));
+            if (AnomalyProficiency > 120) {
+                Atk.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), Math.Min((AnomalyProficiency - 120) * 2, 600), 
+                    ModifierType.CombatRatio));
+            }
 
-    public override void ApplyPassive() {
-        BonusStats[Affix.AnomalyBuildupBonus] += 0.25;
-        
-        if (AnomalyProficiency > 120) {
-            BonusStats[Affix.Atk] += Math.Min((AnomalyProficiency - 120) * 2, 600);
-        }
-    }
-
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        if (team.Any(a => a.Speciality == Speciality) ||
-            team.Any(a => a.Faction == Faction)) {
-            return [new(Affix.AnomalyBuildupBonus, 0.35)];
-        }
-
-        return [];   
+            if (c.Team.Values.Any(a => a.Speciality == Speciality || a.Faction == Faction)) {
+                AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.35));
+            }
+        });
     }
 }
 
 public class JaneDoeM1 : JaneDoe {
-    public override void ApplyPassive() {
-        base.ApplyPassive();
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
         
-        BonusStats[Affix.AnomalyBuildupBonus] += 0.15;
-        BonusStats[Affix.DmgBonus] += AnomalyProficiency * 0.001;
+        ctx.Events.OnCalculationStarted.Add(c => {
+            AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 0.15));
+            DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
+                AnomalyProficiency * 0.001));
+        });
     }
 }
 
 public class JaneDoeM2 : JaneDoeM1 {
-    private bool IgnoresEnemyDefense { get; set; } = false;
+    private bool IgnoresEnemyDefense { get; set; }
     
     public override void RegisterHooks(Context ctx) {
-        double critRate = 0.05 + Math.Min(0.4 + AnomalyProficiency * 0.0016, 1), 
-            critDamage = 1;
-
-        ctx.AnomalyCritMultiplier = 1 + critRate * critDamage;
+        base.RegisterHooks(ctx);
         
         ctx.Events.OnAnomalyTriggered.Add((_, e) => {
             if (e.Element is not (Element.Physical or Element.HonedEdge)) return;
             if (IgnoresEnemyDefense) return;
                 
-            BonusStats[Affix.ResPen] += 0.15;
+            ResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(), 0.15));
             IgnoresEnemyDefense = true;
         });
     }

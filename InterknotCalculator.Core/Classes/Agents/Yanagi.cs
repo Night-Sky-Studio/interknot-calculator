@@ -1,3 +1,4 @@
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
@@ -6,6 +7,9 @@ namespace InterknotCalculator.Core.Classes.Agents;
 
 public sealed class Yanagi : Agent, IPolarityDisorderAgent {
     private bool KagenActive { get; set; }
+
+    private static ModifierKey JougenKey { get; } = new("Jougen");
+    private static ModifierKey KagenKey { get; } = new("Kagen");
     
     private void ToggleStance() {
         // Yanagi has two stances: Jougen and Kagen
@@ -13,29 +17,31 @@ public sealed class Yanagi : Agent, IPolarityDisorderAgent {
         // so, unless it's used - these buffs are not applied
         KagenActive = !KagenActive;
         if (KagenActive) {
-            BonusStats[Affix.ElectricDmgBonus] -= 0.1;
-            BonusStats[Affix.PenRatio] += 0.1;
+            ElementalDmgBonus.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + JougenKey);
+            PenRatio.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + KagenKey, 0.1));
         } else {
-            BonusStats[Affix.ElectricDmgBonus] += 0.1;
-            BonusStats[Affix.PenRatio] -= 0.1;
+            PenRatio.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + KagenKey);
+            ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + JougenKey, 0.1));
         }
     }
     
-    public Yanagi() : base(1221) {
+    public Yanagi() : base(AgentId.Yanagi) {
         Speciality = Speciality.Anomaly;
         Element = Element.Electric;
         Rarity = Rarity.S;
         Faction = Faction.HollowSpecialOperationsSection6;
         
-        Stats[Affix.Hp] = 7788;
-        Stats[Affix.Def] = 612;
-        Stats[Affix.Atk] = 797 + 75;
-        Stats[Affix.CritRate] = 0.05;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 86;
-        Stats[Affix.AnomalyMastery] = 112 + 36;
-        Stats[Affix.AnomalyProficiency] = 114;
-        Stats[Affix.EnergyRegen] = 1.2;
+        InitializeStats(new () {
+            [Affix.Hp] = 7788,
+            [Affix.Def] = 612,
+            [Affix.Atk] = 797 + 75,
+            [Affix.CritRate] = 0.05,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 86,
+            [Affix.AnomalyMastery] = 112 + 36,
+            [Affix.AnomalyProficiency] = 114,
+            [Affix.EnergyRegen] = 1.2
+        });
         
         Skills["tsukuyomi_kagura_jougen"] = new(SkillTag.BasicAtk, [
             new(113.8, 42.1, element: Element.Physical, energy: 1.009),
@@ -106,6 +112,14 @@ public sealed class Yanagi : Agent, IPolarityDisorderAgent {
     }
     
     public override void RegisterHooks(Context ctx) {
+        ctx.Events.OnCalculationStarted.Add(c => {
+            ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.2));
+
+            if (c.Team.Values.Any(a => a.Speciality == Speciality || a.Element.Matches(Element))) {
+                AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.45));
+            }
+        });
+        
         ctx.Events.OnActionExecuted.Add((c, e) => {
             if (e.Agent != this) return;
             if (e.Ability.Tag is not (SkillTag.Ultimate or SkillTag.ExSpecial)) return;
@@ -116,20 +130,5 @@ public sealed class Yanagi : Agent, IPolarityDisorderAgent {
 
             ctx.ActionsQueue.Add(GetPolarityDisorder(ctx));
         });
-    }
-
-    public override void ApplyPassive() {
-        BonusStats[Affix.ElectricDmgBonus] += 0.2;
-    }
-
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        if (team.Any(a => a.Speciality == Speciality) ||
-            team.Any(a => a.Element == Element)) {
-            return [new(Affix.AnomalyBuildupBonus, 0.45)];
-        }
-
-        return [];
     }
 }

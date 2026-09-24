@@ -1,3 +1,4 @@
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -12,15 +13,17 @@ public sealed class ZhuYuan : Agent {
         Rarity = Rarity.S;
         Faction = Faction.CriminalInvestigationSpecialResponseTeam;
 
-        Stats[Affix.Hp] = 7482;
-        Stats[Affix.Def] = 600;
-        Stats[Affix.Atk] = 919;
-        Stats[Affix.CritRate] = 0.05;
-        Stats[Affix.CritDamage] = 0.788;
-        Stats[Affix.Impact] = 90;
-        Stats[Affix.AnomalyMastery] = 93;
-        Stats[Affix.AnomalyProficiency] = 92;
-        Stats[Affix.EnergyRegen] = 1.2;
+        InitializeStats(new () {
+            [Affix.Hp] = 7482,
+            [Affix.Def] = 600,
+            [Affix.Atk] = 919,
+            [Affix.CritRate] = 0.05,
+            [Affix.CritDamage] = 0.788,
+            [Affix.Impact] = 90,
+            [Affix.AnomalyMastery] = 93,
+            [Affix.AnomalyProficiency] = 92,
+            [Affix.EnergyRegen] = 1.2
+        });
 
         Skills["dont_move"] = new(SkillTag.BasicAtk, [
             new(87.1, 32.6, element: Element.Physical),
@@ -73,6 +76,16 @@ public sealed class ZhuYuan : Agent {
         ]);
     }
 
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
+        
+        ctx.Events.OnCalculationStarted.Add(c => {
+            if (c.Team.Values.Any(a => a.Speciality is Speciality.Support || a.Faction == Faction)) {
+                CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.3));
+            }
+        });
+    }
+
     public override Stat? ApplyAbilityPassive(Ability ability) {
         if (ability.Name is "please_do_not_resist" or "overwhelming_firepower") {
             return new(Affix.DmgBonus, IsEnemyStunned ? 0.8 : 0.4);
@@ -85,15 +98,4 @@ public sealed class ZhuYuan : Agent {
 
         return base.GetActionDamage(ctx, ability);  
     } 
-
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        if (team.Any(a => a.Speciality == Speciality.Support) ||
-            team.Any(a => a.Faction == Faction)) {
-            return [new(Affix.CritRate, 0.3)];
-        }
-
-        return [];
-    }
 }

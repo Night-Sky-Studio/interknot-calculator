@@ -1,23 +1,22 @@
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public class Trigger : SupportAgent, IStunAgent, IAgentReference<Trigger> {
+public class Trigger : SupportAgent, IAgentReference<Trigger> {
     public double EnemyStunBonusOverride { get; set; }
     
     public static Trigger Reference(uint weaponId, uint setId) {
-        var trigger = new Trigger {
-            Stats = {
-                [Affix.CritRate] = 0.5
-            }
-        };
+        var trigger = new Trigger();
+        
+        trigger.InitializeStats(new () {
+            [Affix.CritRate] = 0.5
+        });
         
         trigger.SetWeaponPassive(weaponId);
         trigger.SetDriveDiscsPassive(setId);
-        
-        trigger.ApplyPassive();
         
         return trigger;
     }
@@ -28,15 +27,17 @@ public class Trigger : SupportAgent, IStunAgent, IAgentReference<Trigger> {
         Rarity = Rarity.S;
         Faction = Faction.NewEriduDefenseForce;
         
-        Stats[Affix.Hp] = 7923;
-        Stats[Affix.Def] = 600;
-        Stats[Affix.Atk] = 675 + 75;
-        Stats[Affix.CritRate] = 0.05;
-        Stats[Affix.CritDamage] = 0.5;
-        Stats[Affix.Impact] = 113 + 18;
-        Stats[Affix.AnomalyMastery] = 96;
-        Stats[Affix.AnomalyProficiency] = 95;
-        Stats[Affix.EnergyRegen] = 1.2;
+        InitializeStats(new () {
+            [Affix.Hp] = 7923,
+            [Affix.Def] = 600,
+            [Affix.Atk] = 675 + 75,
+            [Affix.CritRate] = 0.05,
+            [Affix.CritDamage] = 0.5,
+            [Affix.Impact] = 113 + 18,
+            [Affix.AnomalyMastery] = 96,
+            [Affix.AnomalyProficiency] = 95,
+            [Affix.EnergyRegen] = 1.2
+        });
         
         Skills["cold_bore_shot"] = new(SkillTag.BasicAtk, [
             new (69.70, 26.10, element: Element.Physical, energy: 0.99),
@@ -92,9 +93,20 @@ public class Trigger : SupportAgent, IStunAgent, IAgentReference<Trigger> {
             new (2961.10, 1384.00, 76.66),
         ]);
     }
-    
-    public override void ApplyPassive() {
-        EnemyStunBonusOverride = 0.35;
+
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
+        
+        ctx.Events.OnCalculationStarted.Add(c => {
+            c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.35));
+
+            if (c.Team.Values.Any(a => a.Speciality is Speciality.Attack || a.Element.Matches(Element))) {
+                if (CritRate > 0.4) {
+                    DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                        Math.Min((CritRate - 0.4) * 0.015, 0.75), tags: SkillTag.Aftershock));
+                }
+            }
+        });
     }
 
     public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
@@ -116,19 +128,5 @@ public class Trigger : SupportAgent, IStunAgent, IAgentReference<Trigger> {
         };
 
         return result;
-    }
-
-    public override IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) {
-        if (team.Count < 2) return [];
-
-        if (team.Any(a => a.Speciality is Speciality.Attack || a.Element is Element.Electric)) {
-            if (CritRate > 0.4) {
-                return [
-                    new(Affix.DazeBonus, Math.Min((CritRate - 0.4) * 0.015, 0.75), tags: [SkillTag.Aftershock])
-                ];
-            }
-        }
-
-        return [];
     }
 }
