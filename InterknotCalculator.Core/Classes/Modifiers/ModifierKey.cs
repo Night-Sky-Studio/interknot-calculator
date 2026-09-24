@@ -9,9 +9,11 @@ namespace InterknotCalculator.Core.Classes.Modifiers;
 public readonly struct ModifierKey(params string[] components) : IEquatable<ModifierKey> {
     public override string ToString() => string.Join(';', Components);
     public ModifierKey CombineWith(ModifierKey other) => 
-        new(ToString(), other.ToString());
+        new([..Components, ..other.Components]);
     
-    private string[] Components { get; init; } = components;
+    private string[] Components { get; } = components;
+    
+    public bool StartsWith(string prefix) => Components.FirstOrDefault()?.StartsWith(prefix) ?? false;
     
     public bool Equals(ModifierKey other) => ToString() == other.ToString();
     public override bool Equals(object? obj) => obj is ModifierKey other && Equals(other);
@@ -31,6 +33,9 @@ public readonly struct ModifierKey(params string[] components) : IEquatable<Modi
         new($"DiscSet:{id}:{(fullBonus ? "full" : "partial")}");
     public static ModifierKey EtherVeil(string name) => new($"EtherVeil:{name}");
     public static ModifierKey Passive() => new("Passive");
+    public static ModifierKey CorePassive() => new("CorePassive");
+    public static ModifierKey TeamPassive() => new("TeamPassive");
+    public static ModifierKey Mindscape(uint level) => new($"Mindscape:{level}");
     public static ModifierKey MainStat() => new("Main");
     public static ModifierKey SecondaryStat() => new("Secondary");
 }

@@ -17,6 +17,6 @@ public class FlightOfFancy : Weapon {
         base.RegisterHooks(ctx, equipper);
 
         var agent = ctx.Team[equipper];
-        agent.AnomalyProficiency.Add(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(), 20 * 6));
+        agent.AnomalyProficiency.Add(new(ModifierKey.Weapon(Id) + ModifierKey.CorePassive(), 20 * 6));
     }
 }

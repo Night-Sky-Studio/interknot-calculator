@@ -15,7 +15,7 @@ public class Metanukimorphosis : Weapon {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
         
-        var key = ModifierKey.Weapon(Id) + ModifierKey.Passive();
+        var key = ModifierKey.Weapon(Id) + ModifierKey.CorePassive();
         
         if (!ctx.TryActivateGlobal(key)) return;
 

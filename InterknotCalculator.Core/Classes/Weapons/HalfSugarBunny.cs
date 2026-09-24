@@ -14,7 +14,7 @@ public class HalfSugarBunny : Weapon {
     private bool EtherVeilBonusActive { get; set; }
     
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
-        var key = ModifierKey.Weapon(Id) + ModifierKey.Passive();
+        var key = ModifierKey.Weapon(Id) + ModifierKey.CorePassive();
         
         if (!ctx.TryActivateGlobal(key)) {
             foreach (var agent in ctx.Team.Values) {

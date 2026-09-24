@@ -15,11 +15,12 @@ public class CloudcleaveRadiance : Weapon {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
         
-        var etherVeilPassiveKey = ModifierKey.Weapon(Id) + ModifierKey.Passive() + ModifierKey.EtherVeil("Any");
+        var etherVeilPassiveKey = ModifierKey.Weapon(Id) + ModifierKey.CorePassive() + ModifierKey.EtherVeil("Any");
         
         ctx.Events.OnEtherVeilActivated.Add((c, _) => {
-            c.MainAgent.DmgBonus.Add(new(etherVeilPassiveKey, 0.25));
-            c.MainAgent.CritDamage.Add(new(etherVeilPassiveKey, 0.25));
+            if (c.MainAgent.DmgBonus.Contains(etherVeilPassiveKey)) return;
+            c.MainAgent.DmgBonus.AddUnique(new(etherVeilPassiveKey, 0.25));
+            c.MainAgent.CritDamage.AddUnique(new(etherVeilPassiveKey, 0.25));
         });
         
         ctx.Events.OnEtherVeilDeactivated.Add((c, e) => {
