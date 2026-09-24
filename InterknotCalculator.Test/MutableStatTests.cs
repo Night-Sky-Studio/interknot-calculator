@@ -20,13 +20,13 @@ public class MutableStatTests {
         var disc61Key = ModifierKey.Agent(AgentId.Ellen) + ModifierKey.Disc(6) + ModifierKey.Stat(Affix.Hp, 1);
         hp += new Modifier(disc61Key, 224);
         
-        Assert.That(hp.Value, Is.EqualTo(10787).Within(1e-9));
+        Assert.That(hp.Value, Is.EqualTo(10787.57).Within(1e-9));
         hp.RemoveKey(disc61Key);
         
-        Assert.That(hp.Value, Is.EqualTo(10563).Within(1e-9));
+        Assert.That(hp.Value, Is.EqualTo(10563.57).Within(1e-9));
         hp.RemoveKey(disc33Key);
 
-        Assert.That(hp.Value, Is.EqualTo(10333).Within(1e-9));
+        Assert.That(hp.Value, Is.EqualTo(10333.38).Within(1e-9));
     }
 
     [Test]
@@ -69,14 +69,14 @@ public class MutableStatTests {
         critRate.Add(new(key, 0.12));
 
         Assert.Multiple(() => {
-            Assert.That(critRate.Has(key), Is.True);
-            Assert.That(() => critRate.Add(new(key, 0.12)), Throws.ArgumentException);
+            Assert.That(critRate.Contains(key), Is.True);
+            Assert.That(() => critRate.AddUnique(new(key, 0.12)), Throws.ArgumentException);
             Assert.That(critRate.Value, Is.EqualTo(0.17).Within(1e-9));
         });
 
         // ...but it can once it has been removed.
         critRate.RemoveKey(key);
-        Assert.That(critRate.Has(key), Is.False);
+        Assert.That(critRate.Contains(key), Is.False);
         Assert.That(() => critRate.Add(new(key, 0.12)), Throws.Nothing);
     }
 

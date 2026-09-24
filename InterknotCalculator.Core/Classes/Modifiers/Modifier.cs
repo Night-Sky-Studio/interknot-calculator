@@ -1,4 +1,3 @@
-using System.Collections;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.Modifiers;
@@ -54,10 +53,12 @@ public readonly struct Modifier : IEquatable<Modifier> {
         Tags = tags;
     }
 
-    public Modifier(ModifierKey key, Stat stat) {
+    public Modifier(ModifierKey key, Stat stat, bool combat = false) {
         Key = key;
         Value = stat.Value;
-        Type = stat.Affix.IsRatio() ? ModifierType.Ratio : ModifierType.Flat;
+        Type = stat.Affix.IsRatio() 
+            ? combat ? ModifierType.CombatRatio : ModifierType.Ratio 
+            : combat ? ModifierType.CombatFlat : ModifierType.Flat;
         Tags = stat.Tags;
     }
 

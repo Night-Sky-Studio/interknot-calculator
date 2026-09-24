@@ -37,6 +37,14 @@ public class MutableStat {
         private set;
     } = 0;
 
+    public double InitialValue {
+        get {
+            if (Dirty) Fold();
+            return field;
+        }
+        private set;
+    } = 0;
+
     public IReadOnlyList<Modifier> AppliedModifiers => Modifiers;
 
     /// <summary>
@@ -48,6 +56,11 @@ public class MutableStat {
     /// counted twice.
     /// </exception>
     public void Add(Modifier modifier) {
+        Modifiers.Add(modifier);
+        Dirty = true;
+    }
+
+    public void AddUnique(Modifier modifier) {
         if (Modifiers.Exists(m => m == modifier)) {
             throw new ArgumentException(
                 $"Modifier {modifier.Key} is already applied to this stat", nameof(modifier));
@@ -64,7 +77,7 @@ public class MutableStat {
         if (Modifiers.RemoveAll(m => m.Key == key) > 0) Dirty = true;
     }
 
-    public bool Has(ModifierKey key) => Modifiers.Exists(m => m.Key == key);
+    public bool Contains(ModifierKey key) => Modifiers.Exists(m => m.Key == key);
 
     /// <summary>
     /// Drops every modifier, keeping <see cref="BaseValue"/>. Used when equipment is re-applied,
@@ -111,6 +124,8 @@ public class MutableStat {
         }
 
         var initialValue = (BaseValue + baseSum) * (1 + ratioSum) + flatSum;
+        
+        InitialValue = initialValue;
         
         Value = initialValue * (1 + combatRatioSum) + combatFlatSum;
         Dirty = false;

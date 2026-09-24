@@ -7,7 +7,7 @@ public class ColdBlooded : EtherVeil {
     private ModifierKey Key { get; } = ModifierKey.EtherVeil(nameof(ColdBlooded));
     
     public override void Enable(Agent agent) {
-        agent.CritDamage.Add(new(Key, 0.05));
+        agent.CritDamage.AddUnique(new(Key, 0.05));
     }
     public override void Disable(Agent agent) {
         agent.CritDamage.RemoveKey(Key);
