@@ -46,12 +46,15 @@ public class JuFufu : SupportAgent, IAgentReference<JuFufu> {
             var initialAtk = Math.Max(Atk.InitialValue - 2800, 0);
 
             foreach (var agent in c.Team.Values) {
-                agent.CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.2 + Math.Min(initialAtk / 5, 0.3)));
-                agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.2, tags: SkillTag.Chain));
-                agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.4, tags: SkillTag.Ultimate));
+                agent.CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    0.2 + Math.Min(initialAtk / 5, 0.3), ModifierType.CombatFlat));
+                agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    0.2, ModifierType.CombatFlat, SkillTag.Chain));
+                agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    0.4, ModifierType.CombatFlat, SkillTag.Ultimate));
             }
             
-            Impact.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 50));
+            Impact.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 50, ModifierType.CombatFlat));
         });
     }
 }

@@ -46,8 +46,8 @@ public sealed class AstraYao : SupportAgent, IAgentReference<AstraYao> {
 
             foreach (var agent in c.Team.Values) {
                 agent.Atk.Add(new(key, Math.Min(Atk * 0.35, 1200), ModifierType.CombatFlat));
-                agent.DmgBonus.Add(new(key, 0.2));
-                agent.CritDamage.Add(new(key, 0.25));
+                agent.DmgBonus.Add(new(key, 0.2, ModifierType.CombatFlat));
+                agent.CritDamage.Add(new(key, 0.25, ModifierType.CombatFlat));
             }
         });
     }

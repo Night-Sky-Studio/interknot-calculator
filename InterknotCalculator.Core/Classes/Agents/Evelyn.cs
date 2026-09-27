@@ -77,7 +77,7 @@ public class Evelyn : Agent {
         base.RegisterHooks(ctx);
         
         ctx.Events.OnCalculationStarted.Add(c => {
-            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25));
+            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25, ModifierType.CombatFlat));
 
             if (c.HasTeammates(a => a is { Speciality: Speciality.Support or Speciality.Stun }, Id)) {
                 var bonusValue = 0.3;
@@ -85,7 +85,8 @@ public class Evelyn : Agent {
                 if (CritRate >= 0.8) {
                     bonusValue *= 1.25;
                 }
-                DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), bonusValue));
+                DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), bonusValue, 
+                    ModifierType.CombatFlat, SkillTag.Chain | SkillTag.Ultimate));
             }
         });
     }
