@@ -6,8 +6,6 @@ using InterknotCalculator.Core.Interfaces;
 namespace InterknotCalculator.Core.Classes.Agents;
 
 public class Trigger : SupportAgent, IAgentReference<Trigger> {
-    public double EnemyStunBonusOverride { get; set; }
-    
     public static Trigger Reference(uint weaponId, uint setId) {
         var trigger = new Trigger();
         
@@ -98,12 +96,12 @@ public class Trigger : SupportAgent, IAgentReference<Trigger> {
         base.RegisterHooks(ctx);
         
         ctx.Events.OnCalculationStarted.Add(c => {
-            c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.35));
+            c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.35, ModifierType.CombatFlat));
 
             if (c.HasTeammates(a => a.Speciality is Speciality.Attack || a.Element.Matches(Element), Id)) {
                 if (CritRate > 0.4) {
                     DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                        Math.Min((CritRate - 0.4) * 0.015, 0.75), tags: SkillTag.Aftershock));
+                        Math.Min((CritRate - 0.4) * 0.015, 0.75), ModifierType.CombatFlat, SkillTag.Aftershock));
                 }
             }
         });

@@ -6,12 +6,12 @@
   {
     Name: harmonizing_shot_tartarus_(x3),
     Tag: Aftershock,
-    Damage: 13421.53
+    Damage: 12536.86
   },
   {
     Name: harmonizing_shot_tartarus_(finisher),
     Tag: Aftershock,
-    Damage: 8947.68
+    Damage: 8357.91
   },
   {
     Name: azure_flash,
@@ -20,7 +20,7 @@
   {
     Name: harmonizing_shot_(x2),
     Tag: Aftershock,
-    Damage: 18854.75
+    Damage: 17611.96
   },
   {
     Name: white_thunder,
@@ -33,7 +33,7 @@
   {
     Name: harmonizing_shot_(x2),
     Tag: Aftershock,
-    Damage: 18854.75
+    Damage: 17611.96
   },
   {
     Name: white_thunder,
@@ -46,7 +46,7 @@
   {
     Name: harmonizing_shot_(x2),
     Tag: Aftershock,
-    Damage: 18854.75
+    Damage: 17611.96
   },
   {
     Name: white_thunder,
