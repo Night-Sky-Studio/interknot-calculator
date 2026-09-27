@@ -17,23 +17,21 @@ public class StatsCollectionTest {
                 $"Stat '{key}' did not match.");
         }
     }
-    
-    [Test]
-    public void MiyabiStatsTest() {
-        var reference = new Dictionary<Affix, double> {
-            [Affix.Hp] = 11_129,
-            [Affix.Atk] = 2_899,
-            [Affix.Def] = 790,
-            [Affix.Impact] = 86,
-            [Affix.CritRate] = 0.706,
-            [Affix.CritDamage] = 1.668,
-            [Affix.EnergyRegen] = 1.2,
-            [Affix.AnomalyProficiency] = 247,
-            [Affix.AnomalyMastery] = 116,
-            [Affix.Pen] = 36,
-            [Affix.PenRatio] = 0.24
-        };
+
+    private Agent WithContext(Agent agent) {
+        var context = new Context();
+        agent.RegisterHooks(context);
+        agent.Weapon?.RegisterHooks(context, agent.Id);
+        foreach (var set in agent.FullSets) {
+            set.RegisterHooks(context, agent.Id);
+        }
+
+        context.Events.CalculationStarted(context);
         
+        return agent;
+    }
+    
+    private Agent Miyabi() {
         var miyabi = new Miyabi();
         miyabi.SetWeapon(WeaponId.HailstormShrine);
         miyabi.SetDriveDiscs([
@@ -86,26 +84,51 @@ public class StatsCollectionTest {
                     Stat.SubStat.Get(Rarity.S, Affix.CritRate)
                 ])
         ]);
+
+        return miyabi;
+    }
+    
+    [Test]
+    public void MiyabiBaseStatsTest() {
+        var reference = new SafeDictionary<Affix, double> {
+            [Affix.Hp] = 11_129,
+            [Affix.Atk] = 2_899,
+            [Affix.Def] = 790,
+            [Affix.Impact] = 86,
+            [Affix.CritRate] = 0.706,
+            [Affix.CritDamage] = 1.668,
+            [Affix.EnergyRegen] = 1.2,
+            [Affix.AnomalyProficiency] = 247,
+            [Affix.AnomalyMastery] = 116,
+            [Affix.Pen] = 36,
+            [Affix.PenRatio] = 0.24
+        };
         
+        var miyabi = Miyabi();
         CheckStats(reference, miyabi.CollectStats(true));
     }
 
     [Test]
-    public void JaneStatsTest() {
+    public void MiyabiCombatStatsTest() {
         var reference = new Dictionary<Affix, double> {
-            [Affix.Hp] = 11_837,
-            [Affix.Atk] = 2_673,
-            [Affix.Def] = 965,
-            [Affix.Impact] = 86,
-            [Affix.CritRate] = 0.098,
-            [Affix.CritDamage] = 0.596,
-            [Affix.EnergyRegen] = 1.2,
-            [Affix.AnomalyProficiency] = 425,
-            [Affix.AnomalyMastery] = 192,
+            [Affix.Hp] = 11129.76,
+            [Affix.Atk] = 2899.73,
+            [Affix.Def] = 790,
             [Affix.Pen] = 36,
-            [Affix.PhysicalDmgBonus] = 0.4
+            [Affix.PenRatio] = 0.23999999999999999,
+            [Affix.CritRate] = 0.82600000000000018,
+            [Affix.CritDamage] = 2.468,
+            [Affix.Impact] = 86,
+            [Affix.AnomalyMastery] = 116,
+            [Affix.AnomalyProficiency] = 247,
+            [Affix.EnergyRegen] = 1.2,
+            [Affix.IceDmgBonus] = 0.69999999999999996,
         };
+        
+        CheckStats(reference, WithContext(Miyabi()).CollectStats());
+    }
 
+    private Agent Jane() {
         var jane = new JaneDoe();
         jane.SetWeapon(WeaponId.SharpenedStinger);
         jane.SetDriveDiscs([
@@ -158,26 +181,51 @@ public class StatsCollectionTest {
                     Stat.SubStat.Get(Rarity.S, Affix.HpRatio, 2)
                 ])
         ]);
+        
+        return jane;
+    }
+    
+    [Test]
+    public void JaneBaseStatsTest() {
+        var reference = new SafeDictionary<Affix, double> {
+            [Affix.Hp] = 11_837,
+            [Affix.Atk] = 2_673,
+            [Affix.Def] = 965,
+            [Affix.Impact] = 86,
+            [Affix.CritRate] = 0.098,
+            [Affix.CritDamage] = 0.596,
+            [Affix.EnergyRegen] = 1.2,
+            [Affix.AnomalyProficiency] = 425,
+            [Affix.AnomalyMastery] = 192,
+            [Affix.Pen] = 36,
+            [Affix.PhysicalDmgBonus] = 0.4
+        };
 
+        var jane = Jane();
         CheckStats(reference, jane.CollectStats(true));
     }
 
     [Test]
-    public void YixuanStatsTest() {
+    public void JaneCombatStatsTest() {
         var reference = new Dictionary<Affix, double> {
-            [Affix.Hp] = 19_115,
-            [Affix.Atk] = 2_211,
-            [Affix.Def] = 685,
-            [Affix.Impact] = 93,
-            [Affix.CritRate] = 0.458,
-            [Affix.CritDamage] = 1.764,
-            [Affix.AnomalyProficiency] = 90,
-            [Affix.AnomalyMastery] = 92,
-            [Affix.Pen] = 9,
-            [Affix.SheerForce] = 2_574,
-            [Affix.EtherDmgBonus] = 0.3
+            [Affix.Hp] = 11837.84,
+            [Affix.Atk] = 3273.6399999999999,
+            [Affix.Def] = 965.43999999999994,
+            [Affix.Pen] = 36,
+            [Affix.CritRate] = 0.098000000000000004,
+            [Affix.CritDamage] = 0.59599999999999997,
+            [Affix.Impact] = 86,
+            [Affix.AnomalyMastery] = 192.40000000000001,
+            [Affix.AnomalyProficiency] = 425,
+            [Affix.EnergyRegen] = 1.2,
+            [Affix.PhysicalDmgBonus] = 0.76000000000000001,
+            [Affix.DmgBonus] = 0.34999999999999998,
         };
+        
+        CheckStats(reference, WithContext(Jane()).CollectStats());
+    }
 
+    private Agent Yixuan() { 
         var yixuan = new Yixuan();
         yixuan.SetWeapon(WeaponId.QingmingBirdcage);
         yixuan.SetDriveDiscs([
@@ -231,7 +279,48 @@ public class StatsCollectionTest {
                 ])
         ]);
 
+        return yixuan;
+    }
+    
+    [Test]
+    public void YixuanBaseStatsTest() {
+        var reference = new SafeDictionary<Affix, double> {
+            [Affix.Hp] = 19_115,
+            [Affix.Atk] = 2_211,
+            [Affix.Def] = 685,
+            [Affix.Impact] = 93,
+            [Affix.CritRate] = 0.458,
+            [Affix.CritDamage] = 1.764,
+            [Affix.AnomalyProficiency] = 90,
+            [Affix.AnomalyMastery] = 92,
+            [Affix.Pen] = 9,
+            [Affix.SheerForce] = 2_574,
+            [Affix.EtherDmgBonus] = 0.3
+        };
+
+        var yixuan = Yixuan();
         CheckStats(reference, yixuan.CollectStats(true));
+    }
+
+    [Test]
+    public void YixuanCombatStatsTest() {
+        var reference = new Dictionary<Affix, double> {
+            [Affix.Hp] = 19115.619999999999,
+            [Affix.Atk] = 2211.25,
+            [Affix.Def] = 685,
+            [Affix.Pen] = 9,
+            [Affix.CritRate] = 0.77800000000000002,
+            [Affix.CritDamage] = 1.764,
+            [Affix.Impact] = 93,
+            [Affix.AnomalyMastery] = 92,
+            [Affix.AnomalyProficiency] = 90,
+            [Affix.EtherDmgBonus] = 0.46000000000000008,
+            [Affix.SheerForce] = 2574.9369999999999,
+            [Affix.SheerForceBonus] = 0.10000000000000001,
+            [Affix.EtherSheerBonus] = 0
+        };
+        
+        CheckStats(reference, WithContext(Yixuan()).CollectStats());
     }
 
 }
