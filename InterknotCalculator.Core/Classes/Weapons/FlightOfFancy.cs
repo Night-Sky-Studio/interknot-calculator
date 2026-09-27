@@ -1,4 +1,3 @@
-using InterknotCalculator.Core.Classes.Agents;
 using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 
@@ -16,7 +15,10 @@ public class FlightOfFancy : Weapon {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
 
-        var agent = ctx.Team[equipper];
-        agent.AnomalyProficiency.Add(new(ModifierKey.Weapon(Id) + ModifierKey.CorePassive(), 20 * 6));
+        ctx.Events.OnCalculationStarted.Add(c => {
+            var agent = c.Team[equipper];
+            agent.AnomalyProficiency.Add(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(), 
+                20 * 6, ModifierType.CombatFlat));
+        });
     }
 }

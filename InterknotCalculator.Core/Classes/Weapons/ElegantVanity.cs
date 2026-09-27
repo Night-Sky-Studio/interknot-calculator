@@ -14,8 +14,11 @@ public class ElegantVanity : Weapon {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
 
-        foreach (var agent in ctx.Team.Values) {
-            agent.DmgBonus.Add(new(ModifierKey.Weapon(Id) + ModifierKey.CorePassive(), 0.2));
-        }
+        ctx.Events.OnCalculationStarted.Add(c => {
+            foreach (var agent in c.Team.Values) {
+                agent.DmgBonus.Add(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(), 
+                    0.2, ModifierType.CombatFlat));
+            }
+        });
     }
 }

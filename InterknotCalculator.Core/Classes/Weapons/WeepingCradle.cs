@@ -14,12 +14,14 @@ public class WeepingCradle : Weapon {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
         
-        var key = ModifierKey.Weapon(Id) + ModifierKey.CorePassive();
+        ctx.Events.OnCalculationStarted.Add(c => {
+            var key = ModifierKey.Weapon(Id) + ModifierKey.Passive();
         
-        if (!ctx.TryActivateGlobal(key)) return;
+            if (!c.TryActivateGlobal(key)) return;
         
-        foreach (var agent in ctx.Team.Values) {
-            agent.DmgBonus.Add(new(key, 0.202));
-        }
+            foreach (var agent in c.Team.Values) {
+                agent.DmgBonus.Add(new(key, 0.202, ModifierType.CombatFlat));
+            }
+        });
     }
 }

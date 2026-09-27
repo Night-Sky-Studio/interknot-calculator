@@ -1,4 +1,3 @@
-using InterknotCalculator.Core.Classes.Agents;
 using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 
@@ -19,9 +18,11 @@ public class Timeweaver : Weapon {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
 
-        var agent = ctx.Team[equipper];
+        ctx.Events.OnCalculationStarted.Add(c => {
+            var agent = c.Team[equipper];
         
-        agent.DisorderDmgBonus.Add(new(ModifierKey.Weapon(Id) + ModifierKey.CorePassive(), 
-            agent.AnomalyProficiency > 375 ? 0.25 : 0));
+            agent.DisorderDmgBonus.Add(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(), 
+                agent.AnomalyProficiency > 375 ? 0.25 : 0, ModifierType.CombatFlat));
+        });
     }
 }

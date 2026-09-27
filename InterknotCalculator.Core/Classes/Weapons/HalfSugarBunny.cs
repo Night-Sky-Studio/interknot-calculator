@@ -14,20 +14,22 @@ public class HalfSugarBunny : Weapon {
     private bool EtherVeilBonusActive { get; set; }
     
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
-        var key = ModifierKey.Weapon(Id) + ModifierKey.CorePassive();
+        var key = ModifierKey.Weapon(Id) + ModifierKey.Passive();
         
-        if (!ctx.TryActivateGlobal(key)) {
-            foreach (var agent in ctx.Team.Values) {
+        ctx.Events.OnCalculationStarted.Add(c => {
+            if (c.TryActivateGlobal(key)) return;
+            
+            foreach (var agent in c.Team.Values) {
                 agent.Atk.Add(new(key, 0.1, ModifierType.CombatRatio));
                 agent.MaxHp.Add(new(key, 0.1, ModifierType.CombatRatio));
             }
-        }
+        });
         
-        ctx.Events.OnEtherVeilActivated.Add((c, veil) => {
+        ctx.Events.OnEtherVeilActivated.Add((c, _) => {
             if (EtherVeilBonusActive) return;
 
-            foreach (var (_, agent) in ctx.Team) {
-                agent.CritDamage.Add(new(key, 0.3));
+            foreach (var (_, agent) in c.Team) {
+                agent.CritDamage.Add(new(key, 0.3, ModifierType.CombatFlat));
             }
             
             EtherVeilBonusActive = true;
