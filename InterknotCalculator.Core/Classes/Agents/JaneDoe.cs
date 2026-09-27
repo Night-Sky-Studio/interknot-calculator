@@ -107,7 +107,7 @@ public class JaneDoe : SupportAgent, IAgentReference<JaneDoe> {
             AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25));
             if (AnomalyProficiency > 120) {
                 Atk.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), Math.Min((AnomalyProficiency - 120) * 2, 600), 
-                    ModifierType.CombatRatio));
+                    ModifierType.CombatFlat));
             }
 
             if (c.Team.Values.Any(a => a.Speciality == Speciality || a.Faction == Faction)) {
