@@ -13,13 +13,15 @@ public class ThornedRose : DriveDiscSet {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
         
-        var agent = ctx.Team[equipper];
+        ctx.Events.OnCalculationStarted.Add(c => {
+            var agent = c.Team[equipper];
 
-        if (agent.Def >= 1000) {
-            agent.CritRate.Add(new(ModifierKey.DiscSet(Id, true), 0.08));
-        }
-        if (agent.Def >= 1800) {
-            agent.CritRate.Add(new(ModifierKey.DiscSet(Id, true), 0.08));
-        }
+            if (agent.Def >= 1000) {
+                agent.CritRate.Add(new(ModifierKey.DiscSet(Id, true), 0.08, ModifierType.CombatFlat));
+            }
+            if (agent.Def >= 1800) {
+                agent.CritRate.Add(new(ModifierKey.DiscSet(Id, true), 0.08, ModifierType.CombatFlat));
+            }
+        });
     }
 }

@@ -11,9 +11,13 @@ public class DawnsBloom : DriveDiscSet {
 
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
-        var agent = ctx.Team[equipper];
-        agent.DmgBonus.Add(new(ModifierKey.DiscSet(Id, true),
-            agent.Speciality is Speciality.Attack ? 0.4 : 0.2,
-            tags: SkillTag.BasicAtk));
+        
+        ctx.Events.OnCalculationStarted.Add(c => {
+            var agent = c.Team[equipper];
+            
+            agent.DmgBonus.Add(new(ModifierKey.DiscSet(Id, true),
+                agent.Speciality is Speciality.Attack ? 0.4 : 0.2, 
+                ModifierType.CombatFlat, SkillTag.BasicAtk));
+        });
     }
 }

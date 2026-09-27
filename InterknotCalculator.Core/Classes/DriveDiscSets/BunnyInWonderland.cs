@@ -12,10 +12,12 @@ public class BunnyInWonderland : DriveDiscSet {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
         
-        foreach (var agent in ctx.Team.Values) {
-            if (agent.Speciality is Speciality.Defense) {
-                agent.DmgBonus.Add(new(ModifierKey.DiscSet(Id, true), 0.18));
+        ctx.Events.OnCalculationStarted.Add(c => {
+            foreach (var agent in c.Team.Values) {
+                if (agent.Speciality is Speciality.Defense) {
+                    agent.DmgBonus.Add(new(ModifierKey.DiscSet(Id, true), 0.18, ModifierType.CombatFlat));
+                }
             }
-        }
+        });
     }
 }
