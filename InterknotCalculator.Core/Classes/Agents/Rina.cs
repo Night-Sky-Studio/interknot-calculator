@@ -47,7 +47,7 @@ public sealed class Rina : SupportAgent, IAgentReference<Rina> {
                     Math.Min(PenRatio * 0.25 + 0.12, 0.3)));
             }
 
-            if (c.Team.Values.Any(a => a.Element.Matches(Element) || a.Faction == Faction)) {
+            if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
                 foreach (var agent in c.Team.Values) {
                     if (agent.Element.Matches(Element.Electric)) {
                         agent.ElementalDmgBonus.Add(new(ModifierKey.Agent(AgentId.Rina) + ModifierKey.TeamPassive(), 0.1));

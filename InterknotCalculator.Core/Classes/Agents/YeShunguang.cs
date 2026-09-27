@@ -151,7 +151,7 @@ public class YeShunguang : Agent, IEtherVeilAgent<Verdict> {
             
             // Additional Ability: Shadowtrace Flight 
             // requires a Support or Defense character in the squad
-            if (c.Team.Values.Any(a => a.Speciality is Speciality.Support or Speciality.Defense)) {
+            if (c.HasTeammates(a => a.Speciality is Speciality.Support or Speciality.Defense, Id)) {
                 IsTeamPassiveActive = true;
             }
         });

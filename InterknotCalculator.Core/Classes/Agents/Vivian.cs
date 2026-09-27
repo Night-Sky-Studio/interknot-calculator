@@ -162,7 +162,7 @@ public sealed class Vivian : SupportAgent, IAgentReference<Vivian> {
     
     public override void RegisterHooks(Context ctx) {
         ctx.Events.OnCalculationStarted.Add(c => {
-            if (c.Team.Values.Any(a => a.Speciality == Speciality || a.Element.Matches(Element))) {
+            if (c.HasTeammates(a => a.Speciality == Speciality || a.Element.Matches(Element), Id)) {
                 DisorderDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.12));
             }
         });

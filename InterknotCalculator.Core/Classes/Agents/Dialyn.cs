@@ -78,7 +78,7 @@ public class Dialyn : SupportAgent, IAgentReference<Dialyn> {
                 Math.Min(100, Math.Max(0, CritRate - 0.5) * 2)));
 
             // When another character in your squad is an Attack or Rupture character
-            if (c.Team.Values.Any(a => a is { Speciality: Speciality.Attack or Speciality.Rupture })) {
+            if (c.HasTeammates(a => a is { Speciality: Speciality.Attack or Speciality.Rupture }, Id)) {
                 // Dialyn's EX Special Attack CRIT DMG is increased by 50%.
                 CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.5, tags: SkillTag.ExSpecial));
 

@@ -100,7 +100,7 @@ public class Trigger : SupportAgent, IAgentReference<Trigger> {
         ctx.Events.OnCalculationStarted.Add(c => {
             c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.35));
 
-            if (c.Team.Values.Any(a => a.Speciality is Speciality.Attack || a.Element.Matches(Element))) {
+            if (c.HasTeammates(a => a.Speciality is Speciality.Attack || a.Element.Matches(Element), Id)) {
                 if (CritRate > 0.4) {
                     DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
                         Math.Min((CritRate - 0.4) * 0.015, 0.75), tags: SkillTag.Aftershock));

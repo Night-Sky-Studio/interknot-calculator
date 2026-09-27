@@ -77,7 +77,7 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
                 agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.15));
             }
 
-            if (c.Team.Values.Any(a => a.Speciality is Speciality.Anomaly || a.Faction == Faction)) {
+            if (c.HasTeammates(a => a.Speciality is Speciality.Anomaly || a.Faction == Faction, Id)) {
                 // If Yuzuha's Anomaly Mastery exceeds 100, every point over increases
                 // the Anomaly Buildup Rate of characters with Tanuki Wish by 0.2%, up
                 // to a maximum of 20%, and all Attribute Anomaly DMG and Disorder DMG

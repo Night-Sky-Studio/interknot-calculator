@@ -78,7 +78,7 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
 
     public override void RegisterHooks(Context ctx) {
         ctx.Events.OnCalculationStarted.Add(c => {
-            if (c.Team.Values.Any(a => a.Speciality is Speciality.Attack || a.Faction == Faction)) {
+            if (c.HasTeammates(a => a.Speciality is Speciality.Attack || a.Faction == Faction, Id)) {
                 IsTeamPassiveActive = true;
             }
         });

@@ -109,7 +109,7 @@ public class Miyabi : Agent, ICustomAnomaly {
         ctx.Events.OnCalculationStarted.Add(c => {
             ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.3));
 
-            if (c.Team.Values.Any(a => a.Faction == Faction || a.Speciality is Speciality.Support)) {
+            if (c.HasTeammates(a => a.Faction == Faction || a.Speciality is Speciality.Support, Id)) {
                 DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.6, 
                     tags: SkillTag.BasicAtk));
                 ElementalResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.3, 

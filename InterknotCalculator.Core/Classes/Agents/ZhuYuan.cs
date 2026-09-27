@@ -80,7 +80,7 @@ public sealed class ZhuYuan : Agent {
         base.RegisterHooks(ctx);
         
         ctx.Events.OnCalculationStarted.Add(c => {
-            if (c.Team.Values.Any(a => a.Speciality is Speciality.Support || a.Faction == Faction)) {
+            if (c.HasTeammates(a => a.Speciality is Speciality.Support || a.Faction == Faction, Id)) {
                 CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.3));
             }
         });

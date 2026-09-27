@@ -104,7 +104,7 @@ public sealed class Lycaon : SupportAgent, IAgentReference<Lycaon> {
                 }
             }
 
-            if (c.Team.Values.Any(a => a.Element.Matches(Element) || a.Faction == Faction)) {
+            if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
                 c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.35));
             }
         });

@@ -79,7 +79,7 @@ public class Evelyn : Agent {
         ctx.Events.OnCalculationStarted.Add(c => {
             CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25));
 
-            if (c.Team.Values.Any(a => a is { Speciality: Speciality.Support or Speciality.Stun })) {
+            if (c.HasTeammates(a => a is { Speciality: Speciality.Support or Speciality.Stun }, Id)) {
                 var bonusValue = 0.3;
 
                 if (CritRate >= 0.8) {

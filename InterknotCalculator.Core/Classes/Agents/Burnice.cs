@@ -95,7 +95,7 @@ public class Burnice : SupportAgent, IAgentReference<Burnice> {
         base.RegisterHooks(ctx);
 
         ctx.Events.OnCalculationStarted.Add(c => {
-            if (c.Team.Values.Any(a => a.Speciality == Speciality || a.Faction == Faction)) {
+            if (c.HasTeammates(a => a.Speciality == Speciality || a.Faction == Faction, Id)) {
                 AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.65));
             }
         });

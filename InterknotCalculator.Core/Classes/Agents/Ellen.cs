@@ -106,7 +106,7 @@ public class Ellen : Agent {
         base.RegisterHooks(ctx);
 
         ctx.Events.OnCalculationStarted.Add(c => {
-            if (c.Team.Values.Any(a => a.Element == Element || a.Faction == Faction)) {
+            if (c.HasTeammates(a => a.Element == Element || a.Faction == Faction, Id)) {
                 ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.3));
                 // STR 6
                 CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.48));

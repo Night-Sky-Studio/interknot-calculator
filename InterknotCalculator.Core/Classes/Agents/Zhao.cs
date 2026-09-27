@@ -45,7 +45,7 @@ public class Zhao : SupportAgent, IAgentReference<Zhao>, IEtherVeilAgent<Wellspr
 
     public override void RegisterHooks(Context ctx) {
         ctx.Events.OnCalculationStarted.Add(c => {
-            if (c.Team.Values.Any(a => a.Speciality is Speciality.Attack or Speciality.Anomaly or Speciality.Support)) {
+            if (c.HasTeammates(a => a.Speciality is Speciality.Attack or Speciality.Anomaly or Speciality.Support, Id)) {
                 IsTeamPassiveActive = true;
             }
         });

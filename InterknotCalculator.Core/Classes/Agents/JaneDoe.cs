@@ -110,7 +110,7 @@ public class JaneDoe : SupportAgent, IAgentReference<JaneDoe> {
                     ModifierType.CombatFlat));
             }
 
-            if (c.Team.Values.Any(a => a.Speciality == Speciality || a.Faction == Faction)) {
+            if (c.HasTeammates(a => a.Speciality == Speciality || a.Faction == Faction, Id)) {
                 AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.35));
             }
         });

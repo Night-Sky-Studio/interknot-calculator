@@ -115,7 +115,7 @@ public sealed class Yanagi : Agent, IPolarityDisorderAgent {
         ctx.Events.OnCalculationStarted.Add(c => {
             ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.2));
 
-            if (c.Team.Values.Any(a => a.Speciality == Speciality || a.Element.Matches(Element))) {
+            if (c.HasTeammates(a => a.Speciality == Speciality || a.Element.Matches(Element), Id)) {
                 AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.45));
             }
         });

@@ -87,7 +87,7 @@ public class Alice : Agent, ICustomAnomaly {
     public override void RegisterHooks(Context ctx) {
         ctx.Events.OnCalculationStarted.Add(c => {
             // Team passive
-            if (c.Team.Values.Any(a => a is { Speciality: Speciality.Anomaly or Speciality.Support })) {
+            if (c.HasTeammates(a => a is { Speciality: Speciality.Anomaly or Speciality.Support }, Id)) {
                 AnomalyProficiency.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), Math.Max(AnomalyMastery - 140, 0) * 1.6));
             }
         });

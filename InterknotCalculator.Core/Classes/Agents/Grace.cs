@@ -66,7 +66,7 @@ public sealed class Grace : Agent {
             AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 1.3, 
                 tags: SkillTag.Special | SkillTag.ExSpecial));
 
-            if (c.Team.Values.Any(a => a.Element.Matches(Element) || a.Faction == Faction)) {
+            if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
                 DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.36, 
                     tags: SkillTag.AttributeAnomaly));
             }

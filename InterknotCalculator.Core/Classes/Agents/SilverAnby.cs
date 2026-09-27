@@ -96,7 +96,7 @@ public class SilverAnby : SupportAgent, IAgentReference<SilverAnby> {
             CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), CritDamage * 0.3, 
                 tags: SkillTag.Aftershock));
 
-            if (c.Team.Values.Any(a => a is { Speciality: Speciality.Stun or Speciality.Support })) {
+            if (c.HasTeammates(a => a is { Speciality: Speciality.Stun or Speciality.Support }, Id)) {
                 CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.1));
                 
                 foreach (var agent in c.Team.Values) {

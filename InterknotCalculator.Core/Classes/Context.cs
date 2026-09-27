@@ -21,6 +21,10 @@ public sealed class Context {
 
     public bool TryActivateGlobal(ModifierKey key) => GlobalModifiers.Add(key);
     
+    public bool HasTeammates(Func<Agent, bool> predicate, uint currentAgentId) => Team.Values
+        .Where(a => a.Id != currentAgentId)
+        .Any(predicate);
+    
     /// <remarks>
     /// Apparently, Jane's critting assault applies
     /// to the entire team, not just to her...

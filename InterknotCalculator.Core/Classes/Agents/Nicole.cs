@@ -52,7 +52,7 @@ public class Nicole : SupportAgent, IAgentReference<Nicole> {
                                                              + ModifierKey.CorePassive(), 0.15));
             }
 
-            if (c.Team.Values.Any(a => a.Element.Matches(Element) || a.Faction == Faction)) {
+            if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
                 ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.25));
             }
         });

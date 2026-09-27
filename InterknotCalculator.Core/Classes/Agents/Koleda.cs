@@ -50,9 +50,9 @@ public class Koleda : SupportAgent, IAgentReference<Koleda> {
             DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.6,
                 tags: SkillTag.ExSpecial));
 
-            if (c.Team.Values.Any(a => a.Element.Matches(Element)
-                                       || a.Faction == Faction
-                                       || a.Speciality is Speciality.Rupture)
+            if (c.HasTeammates(a => a.Element.Matches(Element)
+                                    || a.Faction == Faction
+                                    || a.Speciality is Speciality.Rupture, Id)
                 && c.Enemy.StunMultiplier > 1.0) {
                 foreach (var agent in c.Team.Values) {
                     agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.35 * 2,
