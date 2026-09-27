@@ -17,18 +17,19 @@ public abstract class SupportAgent(uint id) : Agent(id) {
         RemoveWeaponPassive();
         if (weaponId == 0) return;
 
-        var weapon = WeaponRegistry.CreateInstance(weaponId);
-        if (weapon.Speciality != Speciality) return;
+        Weapon = WeaponRegistry.CreateInstance(weaponId);
+        if (Weapon.Speciality != Speciality) return;
 
         // Only the passive is applied here, keyed the same way Agent.AddWeaponStats keys it,
         // so it can be removed cleanly and so tagged passives route through MutableStat.Tagged.
-        foreach (var passive in weapon.Passive) {
-            Stats[passive.Affix].Add(new(ModifierKey.Weapon(weapon.Id) + ModifierKey.CorePassive(), passive));
+        foreach (var passive in Weapon.Passive) {
+            Stats[passive.Affix].Add(new(ModifierKey.Weapon(Weapon.Id) + ModifierKey.CorePassive(), passive));
         }
     }
 
     private void RemoveWeaponPassive() {
         Stats.RemoveAllModifiers(m => m.Key.ToString().StartsWith("Weapon"));
+        Weapon = null;
     }
 
     protected void SetDriveDiscsPassive(uint driveDiscSetId, bool partial = false) {
@@ -46,9 +47,12 @@ public abstract class SupportAgent(uint id) : Agent(id) {
         foreach (var bonus in set.FullBonus) {
             Stats[bonus.Affix].Add(new(ModifierKey.DiscSet(set.Id, true), bonus));
         }
+        
+        FullSets.Add(set);
     }
 
     private void RemoveDiscSetPassive() {
         Stats.RemoveAllModifiers(m => m.Key.ToString().StartsWith("Disc"));
+        FullSets.Clear();
     }
 }

@@ -33,8 +33,8 @@ public abstract class Agent(uint id) {
 
     #region Equipment
 
-    public Weapon? Weapon { get; private set; }
-    public DriveDisc[] DriveDiscs { get; private set; } = [];
+    public Weapon? Weapon { get; protected set; }
+    public DriveDisc[] DriveDiscs { get; protected set; } = [];
     public List<DriveDiscSet> PartialSets { get; } = [];
     public List<DriveDiscSet> FullSets { get; } = [];
 
