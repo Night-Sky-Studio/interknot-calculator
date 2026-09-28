@@ -71,7 +71,9 @@ public static class Calculator {
         
         foreach (var a in ctx.Team.Values) {
             a.RegisterHooks(ctx);
-            a.Weapon?.RegisterHooks(ctx, a.Id);
+            if (a.Weapon is { } w && w.Speciality == a.Speciality) {
+                w.RegisterHooks(ctx, a.Id);
+            }
             foreach (var set in a.FullSets) {
                 set.RegisterHooks(ctx, a.Id);
             }
