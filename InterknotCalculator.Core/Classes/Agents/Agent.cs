@@ -114,17 +114,6 @@ public abstract class Agent(uint id) {
     #endregion
     
     #region Stats
-    public SafeDictionary<Affix, double> BaseStats { get; private set; } = new();
-    
-    public SafeDictionary<Affix, double> FinalStats {
-        // Lazily snapshot stats when first accessed.
-        // This way Reference agents that don't go through SetWeapon/SetDriveDiscs
-        // (and therefore never trigger ProcessStats) still get a valid snapshot
-        // without forcing every implementation to remember to snapshot manually.
-        get => field ??= CollectStats();
-        private set;
-    }
-
     public Affix RelatedElementDmg => Helpers.GetRelatedAffixDmg(Element);
     public Affix RelatedElementRes => Helpers.GetRelatedAffixRes(Element);
 
@@ -335,7 +324,7 @@ public abstract class Agent(uint id) {
         const double dazeMv = 2;
         const double dazeLevelMultiplier = 1 + 0.0075 * 60; // 60 - character level
         var dazeMultiplier = 1 + Stats[Affix.DazeBonus].For(SkillTag.AttributeAnomaly)
-                               + anomaly.Stats[Affix.DazeBonus];
+                               + anomaly.Stats?[Affix.DazeBonus] ?? 0;
         const double dazeTakenMultiplier = 1;
         const double dazeRes = 1;
         return dazeMv * dazeLevelMultiplier * Impact * dazeRes * dazeMultiplier * dazeTakenMultiplier;
@@ -358,7 +347,7 @@ public abstract class Agent(uint id) {
     public virtual AgentAction GetAnomalyDamage(Context ctx, Element element, bool skipEvents = false) {
         // Agents can override default anomalies
         if (!Anomalies.TryGetValue(element, out var data)) {
-            data = Anomaly.GetAnomalyByElement(element)!;
+            data = Anomaly.GetAnomalyByElement(element);
         }
         
         // Prevent Abloom from causing a stack overflow by recursion
@@ -371,12 +360,12 @@ public abstract class Agent(uint id) {
 
         var anomalyProficiency = element != Element.None 
             ? AnomalyProficiency 
-            : ctx.Enemy.AfflictedAnomaly?.Stats[Affix.AnomalyProficiency] ?? 0;
+            : ctx.Enemy.AfflictedAnomaly?.Stats?[Affix.AnomalyProficiency] ?? 0;
 
         // Calculate anomaly damage according to formula
         var anomalyBaseDmg = element != Element.None 
             ? data.Scale / 100 * Atk 
-            : GetDisorderBaseMultiplier(ctx.Enemy.AfflictedAnomaly!.Element, ctx.Enemy.AfflictedAnomaly?.Stats[Affix.Atk] ?? 0);
+            : GetDisorderBaseMultiplier(ctx.Enemy.AfflictedAnomaly!.Element, ctx.Enemy.AfflictedAnomaly?.Stats?[Affix.Atk] ?? 0);
         
         var anomalyProficiencyMultiplier = anomalyProficiency / 100;
         const double anomalyLevelMultiplier = 2;
@@ -390,17 +379,17 @@ public abstract class Agent(uint id) {
         if (element is Element.None && ctx.Enemy.AfflictedAnomaly is { } enemyAnomaly) {
             var disorderElementalDmgBonus = Helpers.GetRelatedAffixDmg(enemyAnomaly.Element);
             var disorderElementalResPen = Helpers.GetRelatedAffixRes(enemyAnomaly.Element);
-            disorderElementalMultiplier += enemyAnomaly.Stats[disorderElementalDmgBonus];
-            disorderElementalRes += enemyAnomaly.Stats[disorderElementalResPen];
+            disorderElementalMultiplier += enemyAnomaly.Stats?[disorderElementalDmgBonus] ?? 0;
+            disorderElementalRes += enemyAnomaly.Stats?[disorderElementalResPen] ?? 0;
 
-            dmgBonusMultiplier += Stats[Affix.DisorderDmgBonus].Value + enemyAnomaly.Stats[Affix.DmgBonus];
-            resMultiplier += enemyAnomaly.Stats[Affix.ResPen];
+            dmgBonusMultiplier += Stats[Affix.DisorderDmgBonus].Value + enemyAnomaly.Stats?[Affix.DmgBonus] ?? 0;
+            resMultiplier += enemyAnomaly.Stats?[Affix.ResPen] ?? 0;
         }
         
         var total = anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier
                     * dmgBonusMultiplier 
-                    * ctx.Enemy.GetDefenseMultiplier(ctx.Enemy.AfflictedAnomaly?.Stats[Affix.PenRatio] ?? PenRatio,
-                        ctx.Enemy.AfflictedAnomaly?.Stats[Affix.Pen] ?? Pen) 
+                    * ctx.Enemy.GetDefenseMultiplier(ctx.Enemy.AfflictedAnomaly?.Stats?[Affix.PenRatio] ?? PenRatio,
+                        ctx.Enemy.AfflictedAnomaly?.Stats?[Affix.Pen] ?? Pen) 
                     * resMultiplier * 
                     (element is Element.None ? ctx.Enemy.StunMultiplier : 1) * disorderElementalMultiplier * disorderElementalRes;
 

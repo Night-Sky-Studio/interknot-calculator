@@ -38,7 +38,7 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
             anomaly = agent.Anomalies[element];
         }
         
-        anomaly.Stats = agent.FinalStats;
+        anomaly.Stats ??= agent.CollectStats();
         anomaly.AgentId = agent.Id;
         
         var threshold = element.Matches(Element.Physical) 

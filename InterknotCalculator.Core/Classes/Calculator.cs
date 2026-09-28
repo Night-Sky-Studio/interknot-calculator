@@ -1,9 +1,7 @@
 ﻿using InterknotCalculator.Core.Classes.Agents;
-using InterknotCalculator.Core.Classes.DriveDiscSets;
 using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
-using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes;
 
@@ -129,7 +127,7 @@ public static class Calculator {
         
         return new CalcResult {
             FinalStats = {
-                BaseStats = ctx.MainAgent.BaseStats,
+                BaseStats = ctx.MainAgent.CollectStats(true),
                 CalculatedStats = ctx.MainAgent.CollectStats()
             },
             Enemy = ctx.Enemy,
