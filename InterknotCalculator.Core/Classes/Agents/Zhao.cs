@@ -64,10 +64,13 @@ public class Zhao : SupportAgent, IAgentReference<Zhao>, IEtherVeilAgent<Wellspr
 
         // Core Passive
         ctx.Events.OnEtherVeilActivated.Add((c, e) => {
+            var teamPassiveKey = ModifierKey.Agent(Id) + ModifierKey.TeamPassive();
+            
             // Team passive
             if (IsTeamPassiveActive) {
                 foreach (var agent in c.Team.Values) {
-                    agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    if (agent.DmgBonus.Contains(teamPassiveKey)) continue;
+                    agent.DmgBonus.AddUnique(new(teamPassiveKey, 
                         0.1 + Math.Min(0.4, Math.Max(0, MaxHp - 15000) / 400)));
                 }
             }
