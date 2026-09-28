@@ -13,7 +13,7 @@ public readonly struct ModifierKey(params string[] components) : IEquatable<Modi
     
     private string[] Components { get; } = components;
     
-    public bool ComponentStartsWith(string prefix) => Components.FirstOrDefault()?.StartsWith(prefix) ?? false;
+    public bool ComponentStartsWith(string prefix) => Components.Any(c => c.StartsWith(prefix));
     
     public bool Equals(ModifierKey other) => ToString() == other.ToString();
     public override bool Equals(object? obj) => obj is ModifierKey other && Equals(other);
