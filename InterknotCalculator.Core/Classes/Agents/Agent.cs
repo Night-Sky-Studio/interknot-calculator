@@ -46,7 +46,7 @@ public abstract class Agent(uint id) {
     private void RemoveWeaponStats() {
         if (Weapon is null) 
             return;
-        Stats.RemoveAllModifiers(m => m.Key.StartsWith("Weapon:"));
+        Stats.RemoveAllModifiers(m => m.Key.ComponentStartsWith("Weapon:"));
     }
     private void AddWeaponStats() {
         if (Weapon is not { } w)
@@ -71,7 +71,7 @@ public abstract class Agent(uint id) {
     private void RemoveDiscsStats() {
         if (DriveDiscs.Length == 0) 
             return;
-        Stats.RemoveAllModifiers(m => m.Key.StartsWith("Disc:"));
+        Stats.RemoveAllModifiers(m => m.Key.ComponentStartsWith("Disc:"));
     }
     private void AddDiscsStats() {
         var setCounts = new SafeDictionary<uint, int>();
