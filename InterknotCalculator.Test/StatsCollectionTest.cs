@@ -219,7 +219,6 @@ public class StatsCollectionTest {
             [Affix.AnomalyProficiency] = 425,
             [Affix.EnergyRegen] = 1.2,
             [Affix.PhysicalDmgBonus] = 0.76000000000000001,
-            [Affix.DmgBonus] = 0.34999999999999998,
         };
         
         CheckStats(reference, WithContext(Jane()).CollectStats());

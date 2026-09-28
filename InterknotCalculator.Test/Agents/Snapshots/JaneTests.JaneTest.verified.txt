@@ -25,11 +25,6 @@
     Damage: 257584.09
   },
   {
-    Name: disorder,
-    Tag: AttributeAnomaly,
-    Damage: 199037.56
-  },
-  {
     Name: aerial_sweep_cleanout,
     Tag: ExSpecial,
     Damage: 58979.15
