@@ -17,7 +17,7 @@ public class HalfSugarBunny : Weapon {
         var key = ModifierKey.Weapon(Id) + ModifierKey.Passive();
         
         ctx.Events.OnCalculationStarted.Add(c => {
-            if (c.TryActivateGlobal(key)) return;
+            if (!c.TryActivateGlobal(key)) return;
             
             foreach (var agent in c.Team.Values) {
                 agent.Atk.Add(new(key, 0.1, ModifierType.CombatRatio));
