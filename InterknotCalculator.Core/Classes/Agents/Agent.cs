@@ -293,8 +293,8 @@ public abstract class Agent(uint id) {
             : ctx.Enemy.GetDefenseMultiplier(PenRatio, Pen);
 
         var sheerMultiplier = Speciality is Speciality.Rupture 
-            ? 1 + GetSheerMultiplier() + Stats[Affix.SheerForceBonus].For(tag) + Stats[relatedAffixSheer].For(tag)
-              + data.Affixes[Affix.SheerForceBonus] + data.Affixes[relatedAffixSheer] 
+            ? 1 + GetSheerMultiplier() + Stats[Affix.SheerDmgBonus].For(tag) + Stats[relatedAffixSheer].For(tag)
+              + data.Affixes[Affix.SheerDmgBonus] + data.Affixes[relatedAffixSheer] 
             : 1;
         
         var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * enemyDefenseMultiplier

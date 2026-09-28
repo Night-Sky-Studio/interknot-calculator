@@ -12,8 +12,7 @@ public enum Affix {
     EnergyRegen, SheerForce, Daze,
     
     // Treated as flat affixes, despite their names
-    CritRate, CritDamage, PenRatio,
-    SheerForceBonus, DazeBonus,
+    CritRate, CritDamage, PenRatio, DazeBonus,
     
     DmgBonus, ResPen,
     IceDmgBonus, IceResPen,
@@ -24,11 +23,12 @@ public enum Affix {
     WindDmgBonus, WindResPen,
     DisorderDmgBonus, AnomalyDmgBonus,
 
-    IceSheerBonus, 
-    FireSheerBonus, 
-    PhysicalSheerBonus, 
-    ElectricSheerBonus, 
-    EtherSheerBonus,
+    SheerDmgBonus,
+    IceSheerDmgBonus, 
+    FireSheerDmgBonus, 
+    PhysicalSheerDmgBonus, 
+    ElectricSheerDmgBonus, 
+    EtherSheerDmgBonus,
 
     AnomalyBuildupBonus, AnomalyBuildupRes,
     

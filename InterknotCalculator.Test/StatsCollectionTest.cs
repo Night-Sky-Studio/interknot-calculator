@@ -315,8 +315,8 @@ public class StatsCollectionTest {
             [Affix.AnomalyProficiency] = 90,
             [Affix.EtherDmgBonus] = 0.46000000000000008,
             [Affix.SheerForce] = 2574.9369999999999,
-            [Affix.SheerForceBonus] = 0.10000000000000001,
-            [Affix.EtherSheerBonus] = 0
+            [Affix.SheerDmgBonus] = 0.10000000000000001,
+            [Affix.EtherSheerDmgBonus] = 0
         };
         
         CheckStats(reference, WithContext(Yixuan()).CollectStats());
