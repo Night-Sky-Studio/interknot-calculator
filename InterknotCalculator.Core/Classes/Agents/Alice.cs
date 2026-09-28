@@ -23,7 +23,7 @@ public class Alice : Agent, ICustomAnomaly {
             [Affix.CritDamage] = 0.5,
             [Affix.Impact] = 86,
             [Affix.AnomalyMastery] = 142,
-            [Affix.AnomalyProficiency] = 18,
+            [Affix.AnomalyProficiency] = 118,
             [Affix.EnergyRegen] = 1.2,
         });
 

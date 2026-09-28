@@ -82,8 +82,10 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
                 // the Anomaly Buildup Rate of characters with Tanuki Wish by 0.2%, up
                 // to a maximum of 20%, and all Attribute Anomaly DMG and Disorder DMG
                 // by 0.2%, up to a maximum of 20%.
-                AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    Math.Min(Math.Max(AnomalyMastery - 100, 0) * 0.002, 0.2)));
+                foreach (var agent in c.Team.Values) {
+                    agent.AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(),
+                        Math.Min(Math.Max(AnomalyMastery - 100, 0) * 0.002, 0.2)));
+                }
             }
         });
         
