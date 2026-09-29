@@ -30,7 +30,7 @@ public readonly struct ModifierKey(params string[] components) : IEquatable<Modi
     public static ModifierKey Disc(uint slot) => new($"Disc:{slot}");
     public static ModifierKey Stat(Affix affix, uint level) => new($"Stat:{affix}:{level}");
     public static ModifierKey DiscSet(uint id, bool fullBonus = false) => 
-        new($"DiscSet:{id}:{(fullBonus ? "full" : "partial")}");
+        new($"Disc:Set:{id}:{(fullBonus ? "full" : "partial")}");
     public static ModifierKey EtherVeil(string name) => new($"EtherVeil:{name}");
     public static ModifierKey Passive() => new("Passive");
     public static ModifierKey CorePassive() => new("CorePassive");
