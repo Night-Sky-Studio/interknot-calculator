@@ -1,9 +1,12 @@
+using InterknotCalculator.Core.Enums;
+
 namespace InterknotCalculator.Core.Classes.Enemies;
 
 public readonly struct AnomalyBuildup {
     public AnomalyBuildup() { }
     public double Current => Contributions.Values.Sum();
     public Dictionary<uint, double> Contributions { get; } = new();
+    public Dictionary<uint, SafeDictionary<Affix, double>> Snapshots { get; } = new();
     
     public void AddContribution(uint agentId, double contribution) {
         if (!Contributions.TryAdd(agentId, contribution)) {
@@ -13,6 +16,7 @@ public readonly struct AnomalyBuildup {
     
     public void Reset() {
         Contributions.Clear();
+        Snapshots.Clear();
     }
 
     // percentage of total contributions

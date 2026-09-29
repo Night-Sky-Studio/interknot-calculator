@@ -34,7 +34,7 @@ public abstract class Agent(uint id) {
     #region Equipment
 
     public Weapon? Weapon { get; protected set; }
-    public DriveDisc[] DriveDiscs { get; protected set; } = [];
+    public DriveDisc[] DriveDiscs { get; private set; } = [];
     public List<DriveDiscSet> PartialSets { get; } = [];
     public List<DriveDiscSet> FullSets { get; } = [];
 
@@ -46,6 +46,7 @@ public abstract class Agent(uint id) {
     private void RemoveWeaponStats() {
         if (Weapon is null) 
             return;
+        Weapon = null;
         Stats.RemoveAllModifiers(m => m.Key.ComponentStartsWith("Weapon:"));
     }
     private void AddWeaponStats() {
@@ -71,6 +72,8 @@ public abstract class Agent(uint id) {
     private void RemoveDiscsStats() {
         if (DriveDiscs.Length == 0) 
             return;
+        FullSets.Clear();
+        PartialSets.Clear();
         Stats.RemoveAllModifiers(m => m.Key.ComponentStartsWith("Disc:"));
     }
     private void AddDiscsStats() {
@@ -324,7 +327,7 @@ public abstract class Agent(uint id) {
         const double dazeMv = 2;
         const double dazeLevelMultiplier = 1 + 0.0075 * 60; // 60 - character level
         var dazeMultiplier = 1 + Stats[Affix.DazeBonus].For(SkillTag.AttributeAnomaly)
-                               + anomaly.Stats?[Affix.DazeBonus] ?? 0;
+                               + anomaly.Stats[Affix.DazeBonus];
         const double dazeTakenMultiplier = 1;
         const double dazeRes = 1;
         return dazeMv * dazeLevelMultiplier * Impact * dazeRes * dazeMultiplier * dazeTakenMultiplier;
@@ -360,12 +363,12 @@ public abstract class Agent(uint id) {
 
         var anomalyProficiency = element != Element.None 
             ? AnomalyProficiency 
-            : ctx.Enemy.AfflictedAnomaly?.Stats?[Affix.AnomalyProficiency] ?? 0;
+            : ctx.Enemy.AfflictedAnomaly?.Stats[Affix.AnomalyProficiency] ?? 0;
 
         // Calculate anomaly damage according to formula
         var anomalyBaseDmg = element != Element.None 
             ? data.Scale / 100 * Atk 
-            : GetDisorderBaseMultiplier(ctx.Enemy.AfflictedAnomaly!.Element, ctx.Enemy.AfflictedAnomaly?.Stats?[Affix.Atk] ?? 0);
+            : GetDisorderBaseMultiplier(ctx.Enemy.AfflictedAnomaly!.Element, ctx.Enemy.AfflictedAnomaly?.Stats[Affix.Atk] ?? 0);
         
         var anomalyProficiencyMultiplier = anomalyProficiency / 100;
         const double anomalyLevelMultiplier = 2;
@@ -379,17 +382,17 @@ public abstract class Agent(uint id) {
         if (element is Element.None && ctx.Enemy.AfflictedAnomaly is { } enemyAnomaly) {
             var disorderElementalDmgBonus = Helpers.GetRelatedAffixDmg(enemyAnomaly.Element);
             var disorderElementalResPen = Helpers.GetRelatedAffixRes(enemyAnomaly.Element);
-            disorderElementalMultiplier += enemyAnomaly.Stats?[disorderElementalDmgBonus] ?? 0;
-            disorderElementalRes += enemyAnomaly.Stats?[disorderElementalResPen] ?? 0;
+            disorderElementalMultiplier += enemyAnomaly.Stats[disorderElementalDmgBonus];
+            disorderElementalRes += enemyAnomaly.Stats[disorderElementalResPen];
 
-            dmgBonusMultiplier += Stats[Affix.DisorderDmgBonus].Value + enemyAnomaly.Stats?[Affix.DmgBonus] ?? 0;
-            resMultiplier += enemyAnomaly.Stats?[Affix.ResPen] ?? 0;
+            dmgBonusMultiplier += Stats[Affix.DisorderDmgBonus].Value + enemyAnomaly.Stats[Affix.DmgBonus];
+            resMultiplier += enemyAnomaly.Stats[Affix.ResPen];
         }
         
         var total = anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier
                     * dmgBonusMultiplier 
-                    * ctx.Enemy.GetDefenseMultiplier(ctx.Enemy.AfflictedAnomaly?.Stats?[Affix.PenRatio] ?? PenRatio,
-                        ctx.Enemy.AfflictedAnomaly?.Stats?[Affix.Pen] ?? Pen) 
+                    * ctx.Enemy.GetDefenseMultiplier(ctx.Enemy.AfflictedAnomaly?.Stats[Affix.PenRatio] ?? PenRatio,
+                        ctx.Enemy.AfflictedAnomaly?.Stats[Affix.Pen] ?? Pen) 
                     * resMultiplier * 
                     (element is Element.None ? ctx.Enemy.StunMultiplier : 1) * disorderElementalMultiplier * disorderElementalRes;
 
