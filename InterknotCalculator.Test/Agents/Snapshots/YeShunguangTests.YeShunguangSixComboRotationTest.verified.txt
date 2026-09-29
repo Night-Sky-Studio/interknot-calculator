@@ -22,87 +22,92 @@
   {
     Name: chasing_storms,
     Tag: Ultimate,
-    Damage: 1509012.78
+    Damage: 1284391.08
   },
   {
-    Name: cat's_gaze
-  },
-  {
-    Name: enlightened_mind_sunderlight 1,
-    Tag: BasicAtk,
-    Damage: 124339.22
-  },
-  {
-    Name: cat's_gaze
-  },
-  {
-    Name: enlightened_mind_sunderlight 2,
-    Tag: BasicAtk,
-    Damage: 161430.07
-  },
-  {
-    Name: cat's_gaze
-  },
-  {
-    Name: enlightened_mind_sunderlight_annihilation 2,
-    Tag: BasicAtk,
-    Damage: 917394.03
-  },
-  {
-    Name: cat's_gaze
-  },
-  {
-    Name: enlightened_mind_sunderlight_maximum,
-    Tag: BasicAtk,
-    Damage: 622364.88
-  },
-  {
-    Name: cat's_gaze
-  },
-  {
-    Name: enlightened_mind_soaring_light 1,
-    Tag: ExSpecial,
-    Damage: 181441.64
-  },
-  {
-    Name: enlightened_mind_skyward_ascent,
-    Tag: BasicAtk,
-    Damage: 93781.71
+    Name: cat's_gaze,
+    Tag: DirectHit
   },
   {
     Name: enlightened_mind_sunderlight 1,
     Tag: BasicAtk,
-    Damage: 124339.22
+    Damage: 105830.91
+  },
+  {
+    Name: cat's_gaze,
+    Tag: DirectHit
   },
   {
     Name: enlightened_mind_sunderlight 2,
     Tag: BasicAtk,
-    Damage: 161430.07
+    Damage: 137400.66
+  },
+  {
+    Name: cat's_gaze,
+    Tag: DirectHit
   },
   {
     Name: enlightened_mind_sunderlight_annihilation 2,
     Tag: BasicAtk,
-    Damage: 917394.03
+    Damage: 780836.8
+  },
+  {
+    Name: cat's_gaze,
+    Tag: DirectHit
   },
   {
     Name: enlightened_mind_sunderlight_maximum,
     Tag: BasicAtk,
-    Damage: 622364.88
+    Damage: 529723.75
+  },
+  {
+    Name: cat's_gaze,
+    Tag: DirectHit
   },
   {
     Name: enlightened_mind_soaring_light 1,
     Tag: ExSpecial,
-    Damage: 181441.64
+    Damage: 154433.43
   },
   {
     Name: enlightened_mind_skyward_ascent,
     Tag: BasicAtk,
-    Damage: 93781.71
+    Damage: 79821.99
+  },
+  {
+    Name: enlightened_mind_sunderlight 1,
+    Tag: BasicAtk,
+    Damage: 105830.91
+  },
+  {
+    Name: enlightened_mind_sunderlight 2,
+    Tag: BasicAtk,
+    Damage: 137400.66
+  },
+  {
+    Name: enlightened_mind_sunderlight_annihilation 2,
+    Tag: BasicAtk,
+    Damage: 780836.8
+  },
+  {
+    Name: enlightened_mind_sunderlight_maximum,
+    Tag: BasicAtk,
+    Damage: 529723.75
+  },
+  {
+    Name: enlightened_mind_soaring_light 1,
+    Tag: ExSpecial,
+    Damage: 154433.43
+  },
+  {
+    Name: enlightened_mind_skyward_ascent,
+    Tag: BasicAtk,
+    Damage: 79821.99
   },
   {
     Name: enlightened_mind_return_to_dust,
     Tag: ExSpecial,
-    Damage: 1194880.9
+    Damage: 1017018.81
   },
   {
     Name: special_photography_technique 1,
@@ -111,161 +116,166 @@
   {
     Name: illuminating_darkness,
     Tag: Entry,
-    Damage: 313874.66
+    Damage: 267153.35
   },
   {
-    Name: cat's_gaze
-  },
-  {
-    Name: enlightened_mind_sunderlight 1,
-    Tag: BasicAtk,
-    Damage: 124339.22
-  },
-  {
-    Name: cat's_gaze
-  },
-  {
-    Name: enlightened_mind_sunderlight 2,
-    Tag: BasicAtk,
-    Damage: 161430.07
-  },
-  {
-    Name: cat's_gaze
-  },
-  {
-    Name: enlightened_mind_sunderlight_annihilation 2,
-    Tag: BasicAtk,
-    Damage: 917394.03
-  },
-  {
-    Name: cat's_gaze
-  },
-  {
-    Name: enlightened_mind_sunderlight_maximum,
-    Tag: BasicAtk,
-    Damage: 622364.88
-  },
-  {
-    Name: cat's_gaze
-  },
-  {
-    Name: enlightened_mind_soaring_light 1,
-    Tag: ExSpecial,
-    Damage: 181441.64
-  },
-  {
-    Name: enlightened_mind_skyward_ascent,
-    Tag: BasicAtk,
-    Damage: 93781.71
+    Name: cat's_gaze,
+    Tag: DirectHit
   },
   {
     Name: enlightened_mind_sunderlight 1,
     Tag: BasicAtk,
-    Damage: 124339.22
+    Damage: 105830.91
+  },
+  {
+    Name: cat's_gaze,
+    Tag: DirectHit
   },
   {
     Name: enlightened_mind_sunderlight 2,
     Tag: BasicAtk,
-    Damage: 161430.07
+    Damage: 137400.66
+  },
+  {
+    Name: cat's_gaze,
+    Tag: DirectHit
   },
   {
     Name: enlightened_mind_sunderlight_annihilation 2,
     Tag: BasicAtk,
-    Damage: 917394.03
+    Damage: 780836.8
+  },
+  {
+    Name: cat's_gaze,
+    Tag: DirectHit
   },
   {
     Name: enlightened_mind_sunderlight_maximum,
     Tag: BasicAtk,
-    Damage: 622364.88
+    Damage: 529723.75
+  },
+  {
+    Name: cat's_gaze,
+    Tag: DirectHit
   },
   {
     Name: enlightened_mind_soaring_light 1,
     Tag: ExSpecial,
-    Damage: 181441.64
+    Damage: 154433.43
   },
   {
     Name: enlightened_mind_skyward_ascent,
     Tag: BasicAtk,
-    Damage: 93781.71
+    Damage: 79821.99
+  },
+  {
+    Name: enlightened_mind_sunderlight 1,
+    Tag: BasicAtk,
+    Damage: 105830.91
+  },
+  {
+    Name: enlightened_mind_sunderlight 2,
+    Tag: BasicAtk,
+    Damage: 137400.66
+  },
+  {
+    Name: enlightened_mind_sunderlight_annihilation 2,
+    Tag: BasicAtk,
+    Damage: 780836.8
+  },
+  {
+    Name: enlightened_mind_sunderlight_maximum,
+    Tag: BasicAtk,
+    Damage: 529723.75
+  },
+  {
+    Name: enlightened_mind_soaring_light 1,
+    Tag: ExSpecial,
+    Damage: 154433.43
+  },
+  {
+    Name: enlightened_mind_skyward_ascent,
+    Tag: BasicAtk,
+    Damage: 79821.99
   },
   {
     Name: enlightened_mind_return_to_dust,
     Tag: ExSpecial,
-    Damage: 1194880.9
+    Damage: 1017018.81
   },
   {
     Name: chasing_storms,
     Tag: Ultimate,
-    Damage: 1509012.78
+    Damage: 1284391.08
   },
   {
     Name: enlightened_mind_sunderlight 1,
     Tag: BasicAtk,
-    Damage: 124339.22
+    Damage: 105830.91
   },
   {
     Name: enlightened_mind_sunderlight 2,
     Tag: BasicAtk,
-    Damage: 161430.07
+    Damage: 137400.66
   },
   {
     Name: assault,
     Tag: AttributeAnomaly,
-    Damage: 83877.87
+    Damage: 75856.62
   },
   {
     Name: enlightened_mind_sunderlight_annihilation 2,
     Tag: BasicAtk,
-    Damage: 917394.03
+    Damage: 780836.8
   },
   {
     Name: enlightened_mind_sunderlight_maximum,
     Tag: BasicAtk,
-    Damage: 622364.88
+    Damage: 529723.75
   },
   {
     Name: enlightened_mind_soaring_light 1,
     Tag: ExSpecial,
-    Damage: 181441.64
+    Damage: 154433.43
   },
   {
     Name: enlightened_mind_skyward_ascent,
     Tag: BasicAtk,
-    Damage: 93781.71
+    Damage: 79821.99
   },
   {
     Name: enlightened_mind_sunderlight 1,
     Tag: BasicAtk,
-    Damage: 124339.22
+    Damage: 105830.91
   },
   {
     Name: enlightened_mind_sunderlight 2,
     Tag: BasicAtk,
-    Damage: 161430.07
+    Damage: 137400.66
   },
   {
     Name: enlightened_mind_sunderlight_annihilation 2,
     Tag: BasicAtk,
-    Damage: 917394.03
+    Damage: 780836.8
   },
   {
     Name: enlightened_mind_sunderlight_maximum,
     Tag: BasicAtk,
-    Damage: 622364.88
+    Damage: 529723.75
   },
   {
     Name: enlightened_mind_soaring_light 1,
     Tag: ExSpecial,
-    Damage: 181441.64
+    Damage: 154433.43
   },
   {
     Name: enlightened_mind_skyward_ascent,
     Tag: BasicAtk,
-    Damage: 93781.71
+    Damage: 79821.99
   },
   {
     Name: cleaving_heavens,
     Tag: Ultimate,
-    Damage: 3173402.43
+    Damage: 2701030.66
   }
 ]

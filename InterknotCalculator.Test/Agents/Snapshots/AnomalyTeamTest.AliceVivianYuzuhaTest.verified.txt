@@ -14,7 +14,7 @@
   {
     Name: intertwined_stab,
     Tag: QuickAssist,
-    Damage: 26689.3
+    Damage: 22922.67
   },
   {
     Name: sugarburst_sparkles_x4,
@@ -32,12 +32,12 @@
   {
     Name: assault,
     Tag: AttributeAnomaly,
-    Damage: 377778.78
+    Damage: 324463.23
   },
   {
     Name: twin_rainbows_of_the_swordheart,
     Tag: AttributeAnomaly,
-    Damage: 66111.29
+    Damage: 56781.06
   },
   {
     Name: abloom_,
@@ -55,7 +55,7 @@
   {
     Name: disorder,
     Tag: AttributeAnomaly,
-    Damage: 507287.06
+    Damage: 785534.87
   },
   {
     Name: aurora_thrust_northern_cross,
@@ -87,7 +87,7 @@
   {
     Name: disorder,
     Tag: AttributeAnomaly,
-    Damage: 507287.06
+    Damage: 785534.87
   },
   {
     Name: twin_rainbows_of_the_swordheart,
@@ -120,6 +120,6 @@
   {
     Name: disorder,
     Tag: AttributeAnomaly,
-    Damage: 507287.06
+    Damage: 886987.72
   }
 ]
