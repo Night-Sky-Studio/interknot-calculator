@@ -46,7 +46,11 @@ public class Soukaku : SupportAgent, IAgentReference<Soukaku> {
                     Math.Min(Atk.InitialValue * 2 * 0.2, 1000), ModifierType.CombatFlat));
             }
             
-            ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.2));
+            if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
+                foreach (var agent in c.Team.Values) {
+                    agent.ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.2));
+                }
+            }
         });
     }
 }
