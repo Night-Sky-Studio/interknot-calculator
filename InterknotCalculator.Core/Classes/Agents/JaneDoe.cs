@@ -135,6 +135,13 @@ public class JaneDoeM2 : JaneDoeM1 {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
+        ctx.Events.OnCalculationStarted.Add(c => {
+            double critRate = 0.05 + Math.Min(0.4 + AnomalyProficiency * 0.0016, 1), 
+                critDamage = 1;
+
+            c.AnomalyCritMultiplier = 1 + critRate * critDamage;
+        });
+        
         ctx.Events.OnAnomalyTriggered.Add((_, e) => {
             if (e.Element is not (Element.Physical or Element.HonedEdge)) return;
             if (IgnoresEnemyDefense) return;
