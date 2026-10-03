@@ -79,7 +79,6 @@ public class Koleda : SupportAgent, IAgentReference<Koleda> {
 
     public override Stat? ApplyAbilityPassive(Ability ability) {
         return ability.Tag switch {
-            SkillTag.ExSpecial => new(Affix.DazeBonus, 0.6),
             SkillTag.BasicAtk => IsFurnaceFireActive
                 ? new(Affix.DazeBonus, 0.6)
                 : null,
