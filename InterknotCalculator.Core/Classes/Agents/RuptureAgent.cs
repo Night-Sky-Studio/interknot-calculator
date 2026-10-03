@@ -29,5 +29,4 @@ public abstract class RuptureAgent : Agent {
     }
     
     protected override double GetBaseDamage(double scale) => scale / 100 * (BaseSheerForce + SheerForce);
-    protected override double GetSheerMultiplier() => Stats[Affix.SheerDmgBonus] + ElementalSheerDmgBonus;
 }

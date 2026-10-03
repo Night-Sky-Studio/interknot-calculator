@@ -218,8 +218,6 @@ public abstract class Agent(uint id) {
     public virtual void ApplyPassive() { }
 
     protected virtual double GetBaseDamage(double scale) => scale / 100 * Atk;
-
-    protected virtual double GetSheerMultiplier() => 1;
     
     /// <summary>
     /// Applies agent's ability's passive
@@ -284,8 +282,9 @@ public abstract class Agent(uint id) {
             ? 1 
             : ctx.Enemy.GetDefenseMultiplier(PenRatio, Pen);
 
-        var sheerMultiplier = Speciality is Speciality.Rupture 
-            ? 1 + GetSheerMultiplier() + Stats[Affix.SheerDmgBonus].For(tag) + Stats[relatedAffixSheer].For(tag)
+        var sheerMultiplier = Speciality is Speciality.Rupture
+            ? 1 + Stats[relatedAffixSheer].For(tag) + Stats[Affix.SheerDmgBonus].For(tag) + 
+                + data.Affixes[relatedAffixSheer] + data.Affixes[Affix.SheerDmgBonus]
               + data.Affixes[Affix.SheerDmgBonus] + data.Affixes[relatedAffixSheer] 
             : 1;
         

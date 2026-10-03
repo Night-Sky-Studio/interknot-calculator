@@ -2,41 +2,41 @@
   {
     Name: auric_ink_rush,
     Tag: Chain,
-    Damage: 452865.61
+    Damage: 415126.81
   },
   {
     Name: ink_manifestation_charged,
     Tag: ExSpecial,
-    Damage: 409481.11
+    Damage: 380232.46
   },
   {
     Name: cloud_shaper,
     Tag: ExSpecial,
-    Damage: 692765.68
+    Damage: 643282.41
   },
   {
     Name: ashen_ink_becomes_shadows,
     Tag: ExSpecial,
-    Damage: 241558.15
+    Damage: 224303.99
   },
   {
     Name: endless_talisman_suppression,
     Tag: Ultimate,
-    Damage: 1570721.18
+    Damage: 1458526.81
   },
   {
     Name: qingming_skyshade,
     Tag: Ultimate,
-    Damage: 1985509.41
+    Damage: 1843687.31
   },
   {
     Name: auric_array,
     Tag: BasicAtk,
-    Damage: 238331.97
+    Damage: 218470.97
   },
   {
     Name: qingming_eruption,
     Tag: BasicAtk,
-    Damage: 86478.23
+    Damage: 79271.71
   }
 ]
