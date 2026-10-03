@@ -117,7 +117,7 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
                 ? agent.Atk * 4.8 : agent.Atk * 3.0;
             var critMultiplier = agent.Speciality is Speciality.Anomaly
                 ? 1 + 1 * (1.5 + agent.CritDamage)
-                : 1 + agent.CritRate * agent.CritDamage;
+                : 1 + Math.Min(agent.CritRate, 1) * agent.CritDamage;
             var dmgBonus = 1 + agent.ElementalDmgBonus + agent.DmgBonus;
             var resPen = 1 + agent.ElementalResPen + agent.ResPen;
             var stunBonus = 1 + c.Enemy.StunMultiplier;
