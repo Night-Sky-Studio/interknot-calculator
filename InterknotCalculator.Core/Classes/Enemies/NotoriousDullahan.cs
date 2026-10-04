@@ -5,6 +5,6 @@ public class NotoriousDullahan : Enemy {
         Daze = new Progress {
             Maximum = 9257
         };
-        StunMultiplier = stunMultiplier;
+        StunMultiplier = new(stunMultiplier);
     }
 }

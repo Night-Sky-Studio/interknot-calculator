@@ -1,4 +1,4 @@
-using InterknotCalculator.Core.Classes.Agents;
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.DriveDiscSets;
@@ -9,9 +9,15 @@ public class FeatheredFate : DriveDiscSet {
         FullBonus = [new(Affix.AnomalyProficiency, 50)];
     }
 
-    public override void ApplyPassive(Agent agent) {
-        if (agent.Element.Matches(Element.Lumiflux)) {
-            agent.BonusStats[Affix.AnomalyDmgBonus] += 0.15;
-        }
+    public override void RegisterHooks(Context ctx, uint equipper = 0) {
+        base.RegisterHooks(ctx, equipper);
+        
+        ctx.Events.OnCalculationStarted.Add(c => {
+            var agent = c.Team[equipper];
+            
+            agent.AnomalyProficiency.Add(new(ModifierKey.DiscSet(Id, true), 
+                0.15, ModifierType.CombatRatio));
+        });
+        
     }
 }
