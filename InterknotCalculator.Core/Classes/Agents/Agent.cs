@@ -43,19 +43,21 @@ public abstract class Agent(uint id) {
         Weapon = WeaponRegistry.CreateInstance(weaponId);
         AddWeaponStats();
     }
-    private void RemoveWeaponStats() {
+    protected void RemoveWeaponStats() {
         if (Weapon is null) 
             return;
         Weapon = null;
         Stats.RemoveAllModifiers(m => m.Key.ComponentStartsWith("Weapon:"));
     }
-    private void AddWeaponStats() {
+    protected void AddWeaponStats(bool passiveOnly = false) {
         if (Weapon is not { } w)
             return;
-        Stats[w.MainStat.Affix.Flat()].Add(new(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.MainStat(), 
-            w.MainStat.Value, ModifierType.Base));
-        Stats[w.SecondaryStat.Affix.Flat()].Add(new(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.SecondaryStat(), 
-            w.SecondaryStat));
+        if (!passiveOnly) {
+            Stats[w.MainStat.Affix.Flat()].Add(new(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.MainStat(),
+                w.MainStat.Value, ModifierType.Base));
+            Stats[w.SecondaryStat.Affix.Flat()].Add(new(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.SecondaryStat(),
+                w.SecondaryStat));
+        }
         if (w.Speciality != Speciality) 
             return;
         foreach (var passive in w.Passive) {
@@ -69,49 +71,49 @@ public abstract class Agent(uint id) {
         DriveDiscs = discs;
         AddDiscsStats();
     }
-    private void RemoveDiscsStats() {
-        if (DriveDiscs.Length == 0) 
+    protected  void RemoveDiscsStats() {
+        if (DriveDiscs.Length == 0 && FullSets.Count == 0 && PartialSets.Count == 0)
             return;
         FullSets.Clear();
         PartialSets.Clear();
         Stats.RemoveAllModifiers(m => m.Key.ComponentStartsWith("Disc:"));
     }
-    private void AddDiscsStats() {
-        var setCounts = new SafeDictionary<uint, int>();
+    protected void AddDiscsStats(bool passiveOnly = false) {
+        if (!passiveOnly) {
+            var setCounts = new SafeDictionary<uint, int>();
 
-        foreach (var disc in DriveDiscs) {
-            setCounts[disc.SetId] += 1;
-            Stats[disc.MainStat.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.Disc(disc.Slot) + 
-                                                              ModifierKey.Stat(disc.MainStat.Affix, disc.MainStat.Level), disc.MainStat);
-            foreach (var subStat in disc.SubStats) {
-                Stats[subStat.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.Disc(disc.Slot) + 
-                                                            ModifierKey.Stat(subStat.Affix, subStat.Level), subStat);
+            // First pass: count set membership and resolve which sets are partial/full.
+            foreach (var disc in DriveDiscs) {
+                setCounts[disc.SetId] += 1;
+            }
+
+            foreach (var (setId, count) in setCounts) {
+                if (count >= 2) PartialSets.Add(DriveDiscSetRegistry.CreateInstance(setId));
+                if (count >= 4) FullSets.Add(DriveDiscSetRegistry.CreateInstance(setId));
+            }
+
+            // Second pass: apply each disc's main stat and substats.
+            foreach (var disc in DriveDiscs) {
+                Stats[disc.MainStat.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.Disc(disc.Slot) +
+                                                                  ModifierKey.Stat(disc.MainStat.Affix, disc.MainStat.Level), disc.MainStat);
+                foreach (var subStat in disc.SubStats) {
+                    Stats[subStat.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.Disc(disc.Slot) +
+                                                                ModifierKey.Stat(subStat.Affix, subStat.Level), subStat);
+                }
             }
         }
         
-        var partialSets = setCounts
-            .Where(kvp => kvp.Value >= 2)
-            .Select(kvp => kvp.Key);
-        
-        foreach (var setId in partialSets) {
-            var set = DriveDiscSetRegistry.CreateInstance(setId);
+        foreach (var set in PartialSets) {
             foreach (var bonus in set.PartialBonus) {
-                Stats[bonus.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.DiscSet(setId), bonus);
+                Stats[bonus.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.DiscSet(set.Id), bonus);
             }
-            PartialSets.Add(set);
         }
-        
-        var fullSets = setCounts
-            .Where(kvp => kvp.Value >= 4)
-            .Select(kvp => kvp.Key);
-        
-        foreach (var setId in fullSets) {
-            var set = DriveDiscSetRegistry.CreateInstance(setId);
+
+        foreach (var set in FullSets) {
             foreach (var bonus in set.FullBonus) {
-                Stats[bonus.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.DiscSet(setId, true), 
+                Stats[bonus.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.DiscSet(set.Id, true),
                     bonus, true);
             }
-            FullSets.Add(set);
         }
     }
     #endregion

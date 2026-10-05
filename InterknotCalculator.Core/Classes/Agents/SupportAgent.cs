@@ -14,45 +14,21 @@ namespace InterknotCalculator.Core.Classes.Agents;
 /// <param name="id">Agent ID</param>
 public abstract class SupportAgent(uint id) : Agent(id) {
     protected void SetWeaponPassive(uint weaponId) {
-        RemoveWeaponPassive();
         if (weaponId == 0) return;
-
+        RemoveWeaponStats();
         Weapon = WeaponRegistry.CreateInstance(weaponId);
-        if (Weapon.Speciality != Speciality) return;
-
-        // Only the passive is applied here, keyed the same way Agent.AddWeaponStats keys it,
-        // so it can be removed cleanly and so tagged passives route through MutableStat.Tagged.
-        foreach (var passive in Weapon.Passive) {
-            Stats[passive.Affix].Add(new(ModifierKey.Weapon(Weapon.Id) + ModifierKey.CorePassive(), passive));
-        }
-    }
-
-    private void RemoveWeaponPassive() {
-        Stats.RemoveAllModifiers(m => m.Key.ToString().StartsWith("Weapon"));
-        Weapon = null;
+        AddWeaponStats(true);
     }
 
     protected void SetDriveDiscsPassive(uint driveDiscSetId, bool partial = false) {
-        RemoveDiscSetPassive();
         if (driveDiscSetId == 0) return;
-
-        var set = DriveDiscSetRegistry.CreateInstance(driveDiscSetId);
-
-        if (partial) {
-            foreach (var bonus in set.PartialBonus) {
-                Stats[bonus.Affix].Add(new(ModifierKey.DiscSet(set.Id), bonus));
-            }
-        }
-
-        foreach (var bonus in set.FullBonus) {
-            Stats[bonus.Affix].Add(new(ModifierKey.DiscSet(set.Id, true), bonus));
-        }
         
-        FullSets.Add(set);
-    }
-
-    private void RemoveDiscSetPassive() {
-        Stats.RemoveAllModifiers(m => m.Key.ToString().StartsWith("Disc"));
-        FullSets.Clear();
+        RemoveDiscsStats();
+        if (partial) {
+            PartialSets.Add(DriveDiscSetRegistry.CreateInstance(driveDiscSetId));
+        } else {
+            FullSets.Add(DriveDiscSetRegistry.CreateInstance(driveDiscSetId));
+        }
+        AddDiscsStats(true);
     }
 }
