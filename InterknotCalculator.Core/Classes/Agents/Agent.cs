@@ -142,6 +142,7 @@ public abstract class Agent(uint id) {
     public MutableStat DmgBonus => Stats[Affix.DmgBonus];
     public MutableStat ResPen => Stats[Affix.ResPen];
     public MutableStat DazeBonus => Stats[Affix.DazeBonus];
+    public MutableStat AnomalyDmgBonus => Stats[Affix.AnomalyDmgBonus];
     public MutableStat DisorderDmgBonus => Stats[Affix.DisorderDmgBonus];
     public MutableStat AnomalyBuildupBonus => Stats[Affix.AnomalyBuildupBonus];
     

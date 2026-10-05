@@ -6,7 +6,7 @@ namespace InterknotCalculator.Core.Classes.DriveDiscSets;
 public class FeatheredFate : DriveDiscSet {
     public FeatheredFate() : base(DriveDiscSetId.FeatheredFate) {
         PartialBonus = [new(Affix.AnomalyProficiency, 30)];
-        FullBonus = [new(Affix.AnomalyProficiency, 50)];
+        FullBonus = [];
     }
 
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
@@ -16,7 +16,12 @@ public class FeatheredFate : DriveDiscSet {
             var agent = c.Team[equipper];
             
             agent.AnomalyProficiency.Add(new(ModifierKey.DiscSet(Id, true), 
-                0.15, ModifierType.CombatRatio));
+                50, ModifierType.CombatFlat));
+
+            if (agent.Element.Matches(Element.Lumiflux)) {
+                agent.AnomalyDmgBonus.Add(new(ModifierKey.DiscSet(Id, true),
+                    0.15, ModifierType.CombatRatio));
+            }
         });
         
     }
