@@ -23,7 +23,7 @@ public readonly struct ModifierKey(params string[] components) : IEquatable<Modi
     public static bool operator!=(ModifierKey left, ModifierKey right) => !left.Equals(right);
     
     public static ModifierKey operator+(ModifierKey left, ModifierKey right) => left.CombineWith(right);
-    
+    public static implicit operator string(ModifierKey key) => key.ToString();
     
     public static ModifierKey Agent(uint id) => new($"Agent:{id}");
     public static ModifierKey Weapon(uint id) => new($"Weapon:{id}");
