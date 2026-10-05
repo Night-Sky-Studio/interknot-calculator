@@ -14,13 +14,14 @@ public class TheSkyAblaze : DriveDiscSet {
         
         ctx.Events.OnCalculationStarted.Add(c => {
             var agent = c.Team[equipper];
-            if (!agent.Element.Matches(Element.Ether)) return;
-
+            
             var key = ModifierKey.DiscSet(Id, true);
-        
-            agent.CritDamage.Add(new(key, 0.3, ModifierType.CombatFlat));
-            agent.Atk.Add(new(key, 0.1,
-                ModifierType.CombatRatio, SkillTag.ExSpecial | SkillTag.Ultimate));
+            
+            if (agent.Element.Matches(Element.Ether)) {
+                agent.CritDamage.Add(new(key, 0.3, ModifierType.CombatFlat));
+            }
+            
+            agent.Atk.Add(new(key, 0.1, ModifierType.CombatRatio));
         });
     }
 }
