@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.Modifiers;
@@ -6,6 +7,7 @@ namespace InterknotCalculator.Core.Classes.Modifiers;
 /// A unique identifier for a modifier. Should be enough to
 /// understand where a stat mod came from.
 /// </summary>
+[JsonConverter(typeof(ModifierKeyJsonConverter))]
 public readonly struct ModifierKey(params string[] components) : IEquatable<ModifierKey> {
     public override string ToString() => string.Join(';', Components);
     public ModifierKey CombineWith(ModifierKey other) => 
@@ -21,9 +23,7 @@ public readonly struct ModifierKey(params string[] components) : IEquatable<Modi
     
     public static bool operator==(ModifierKey left, ModifierKey right) => left.Equals(right);
     public static bool operator!=(ModifierKey left, ModifierKey right) => !left.Equals(right);
-    
     public static ModifierKey operator+(ModifierKey left, ModifierKey right) => left.CombineWith(right);
-    public static implicit operator string(ModifierKey key) => key.ToString();
     
     public static ModifierKey Agent(uint id) => new($"Agent:{id}");
     public static ModifierKey Weapon(uint id) => new($"Weapon:{id}");
