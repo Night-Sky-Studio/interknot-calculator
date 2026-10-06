@@ -10,7 +10,7 @@ public class PuzzleSphere : Weapon {
         SecondaryStat = new(Affix.AtkRatio, 0.25);
         Passive = [
             new(Affix.CritDamage, 0.256),
-            new(Affix.DmgBonus, 0.32, tags: [SkillTag.ExSpecial])
+            new(Affix.DmgBonus, 0.32, tags: SkillTag.ExSpecial)
         ];
     }
 }

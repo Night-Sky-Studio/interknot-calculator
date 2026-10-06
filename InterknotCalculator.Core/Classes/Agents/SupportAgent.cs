@@ -12,50 +12,20 @@ namespace InterknotCalculator.Core.Classes.Agents;
 public abstract class SupportAgent(uint id) : Agent(id) {
     protected void SetWeaponPassive(uint weaponId) {
         if (weaponId == 0) return;
-        
-        var weapon = WeaponRegistry.CreateInstance(weaponId);
-
-        if (weapon.Speciality != Speciality) return;
-        
-        foreach (var passive in weapon.Passive) {
-            if (passive.SkillTags.Length != 0) {
-                TagBonus.Add(passive);
-            } else {
-                BonusStats[passive.Affix] += passive.Value;
-            }
-        }
-            
-        foreach (var stat in weapon.ExternalBonus) {
-            if (stat.SkillTags.Length != 0) {
-                ExternalTagBonus.Add(stat);
-            } else {
-                ExternalBonus[stat.Affix] += stat.Value;
-            }
-        }
+        RemoveWeaponStats();
+        Weapon = WeaponRegistry.CreateInstance(weaponId);
+        AddWeaponStats(true);
     }
 
     protected void SetDriveDiscsPassive(uint driveDiscSetId, bool partial = false) {
         if (driveDiscSetId == 0) return;
         
-        var set = DriveDiscSetRegistry.CreateInstance(driveDiscSetId);
-        
+        RemoveDiscsStats();
         if (partial) {
-            foreach (var bonus in set.PartialBonus) {
-                if (bonus.SkillTags.Length != 0) {
-                    TagBonus.Add(bonus);
-                } else {
-                    BonusStats[bonus.Affix] += bonus.Value;
-                }
-            }
+            PartialSets.Add(DriveDiscSetRegistry.CreateInstance(driveDiscSetId));
+        } else {
+            FullSets.Add(DriveDiscSetRegistry.CreateInstance(driveDiscSetId));
         }
-        
-        foreach (var bonus in set.FullBonus) {
-            if (bonus.SkillTags.Length != 0) {
-                TagBonus.Add(bonus);
-            } else {
-                BonusStats[bonus.Affix] += bonus.Value;
-            }
-        }
-        set.ApplyPassive(this);
+        AddDiscsStats(true);
     }
 }

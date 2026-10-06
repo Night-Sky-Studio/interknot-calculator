@@ -11,9 +11,9 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     private double BaseAnomalyBuildupThreshold { get; } = anomalyBuildupThreshold;
     public double AnomalyBuildupThreshold { get; private set; } = anomalyBuildupThreshold;
     public Progress Daze { get; set; }
-    public double StunMultiplier { get; set; } = 1.5;
-
-    // public SafeDictionary<Affix, double> Stats { get; set; } = new();
+    public MutableStat StunMultiplier { get; set; } = new(1);
+    // TODO(IKC-53): Decouple Enemy stun state from Stun Multiplier
+    public bool IsStunned => StunMultiplier.BaseValue > 1;
 
     public Dictionary<Element, AnomalyBuildup> AnomalyBuildup { get; } = new();
     private AnomalyBuildup GetBuildup(Element el) => 
@@ -37,9 +37,6 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
             element = customAnomaly.AnomalyElement;
             anomaly = agent.Anomalies[element];
         }
-        
-        anomaly.Stats = agent.FinalStats;
-        anomaly.AgentId = agent.Id;
         
         var threshold = element.Matches(Element.Physical) 
             ? AnomalyBuildupThreshold * 1.2
@@ -68,16 +65,18 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
                     return;
                 }
             }
-            
+            var stats = buildup.Snapshots[agent.Id];
             buildup.Reset();
             AnomalyBuildupThreshold = BaseAnomalyBuildupThreshold * Math.Pow(1.02, Math.Min(10, ++AnomalyTriggerCount));
             ctx.Events.AnomalyTriggered(ctx, new(agent, element));
-            AfflictedAnomaly = anomaly;
+            AfflictedAnomaly = anomaly with { Stats = stats, AgentId = agent.Id };
         }
     }
     
     public void AddBuildupContribution(Context ctx, Agent agent, double value, Element element) {
         var buildup = GetBuildup(element);
+        if (!buildup.Snapshots.ContainsKey(agent.Id))
+            buildup.Snapshots[agent.Id] = agent.CollectStats();
         buildup.AddContribution(agent.Id, value);
         ctx.Events.AnomalyBuildup(ctx, new(agent, buildup.Current, element));
     }

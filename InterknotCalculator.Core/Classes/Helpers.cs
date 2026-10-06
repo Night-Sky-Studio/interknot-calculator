@@ -39,11 +39,11 @@ public static class Helpers {
     
     public static Affix GetRelatedSheerDmg(Element? element) {
         return element switch {
-            Element.Ice or Element.Frost => Affix.IceSheerBonus,
-            Element.Fire => Affix.FireSheerBonus,
-            Element.Electric => Affix.ElectricSheerBonus,
-            Element.Physical or Element.HonedEdge => Affix.PhysicalSheerBonus,
-            Element.Ether or Element.AuricInk => Affix.EtherSheerBonus,
+            Element.Ice or Element.Frost => Affix.IceSheerDmgBonus,
+            Element.Fire => Affix.FireSheerDmgBonus,
+            Element.Electric => Affix.ElectricSheerDmgBonus,
+            Element.Physical or Element.HonedEdge => Affix.PhysicalSheerDmgBonus,
+            Element.Ether or Element.AuricInk => Affix.EtherSheerDmgBonus,
             _ => Affix.Unknown,
         };
     }

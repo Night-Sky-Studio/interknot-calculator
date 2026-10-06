@@ -68,7 +68,7 @@ public class JaneTests : AgentsTest {
     [Test]
     public async Task JaneTest() {
         var enemy = new NotoriousDullahan {
-            AfflictedAnomaly = Anomaly.GetAnomalyByElement(Element.Fire) with {
+            AfflictedAnomaly = Anomaly.GetAnomalyByElement(Element.Physical) with {
                 Stats = new() {
                     [Affix.Atk] = 2358,
                     [Affix.AnomalyProficiency] = 353
@@ -78,7 +78,8 @@ public class JaneTests : AgentsTest {
         var result = Calculator.Calculate(Request, enemy);
         
         Assert.That(result.PerAction, Is.Not.Empty);
-        Assert.That(result.PerAction, Has.Some.Matches<AgentAction>(action => action.Tag is SkillTag.AttributeAnomaly));
+        Assert.That(result.PerAction, Has.Exactly(3)
+            .Matches<AgentAction>(action => action.Tag is SkillTag.AttributeAnomaly));
         
         AssertRotationOrderPreserved(Request.Rotation, result.PerAction.ToImmutableList(), Request.AgentId);
         

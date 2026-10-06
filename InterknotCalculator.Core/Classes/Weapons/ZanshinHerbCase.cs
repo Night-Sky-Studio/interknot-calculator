@@ -10,7 +10,7 @@ public class ZanshinHerbCase : Weapon {
         SecondaryStat = new(Affix.CritDamage, 0.48);
         Passive = [
             new(Affix.CritRate, 0.2),
-            new(Affix.ElectricDmgBonus, 0.4, tags: [SkillTag.Dash])
+            new(Affix.ElectricDmgBonus, 0.4, tags: SkillTag.Dash)
         ];
     }
 }

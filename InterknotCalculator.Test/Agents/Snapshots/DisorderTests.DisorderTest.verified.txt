@@ -20,18 +20,14 @@
     Tag: Chain
   },
   {
-    Name: burn,
-    Tag: AttributeAnomaly
-  },
-  {
     Name: flowers_of_sin,
     Tag: Chain,
-    Damage: 79500.86
+    Damage: 66313.51
   },
   {
     Name: phantom_thrust,
     Tag: Dash,
-    Damage: 13122.48
+    Damage: 10945.76
   },
   {
     Name: salchow_jump 1,
@@ -41,12 +37,12 @@
   {
     Name: assault,
     Tag: AttributeAnomaly,
-    Damage: 309636.88
+    Damage: 258275.31
   },
   {
     Name: disorder,
     Tag: AttributeAnomaly,
-    Damage: 329570.01
+    Damage: 398953.17
   },
   {
     Name: salchow_jump 2,
@@ -59,14 +55,14 @@
     Damage: 72205.01
   },
   {
-    Name: assault,
-    Tag: AttributeAnomaly,
-    Damage: 314497.46
-  },
-  {
     Name: aerial_sweep_cleanout,
     Tag: ExSpecial,
     Damage: 72205.01
+  },
+  {
+    Name: assault,
+    Tag: AttributeAnomaly,
+    Damage: 314497.46
   },
   {
     Name: phantom_thrust,

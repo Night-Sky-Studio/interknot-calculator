@@ -10,7 +10,7 @@ public class RiotSuppressorMarkVI : Weapon {
         SecondaryStat = new(Affix.CritDamage, 0.48);
         Passive = [
             new(Affix.CritRate, 0.15),
-            new(Affix.DmgBonus, 0.35, tags: [SkillTag.Special, SkillTag.ExSpecial])
+            new(Affix.DmgBonus, 0.35, tags: SkillTag.Special | SkillTag.ExSpecial)
         ];
     }
 }

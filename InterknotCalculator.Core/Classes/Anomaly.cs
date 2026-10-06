@@ -7,7 +7,7 @@ public record Anomaly(
     Element Element,
     bool SelfDisorder = false
 ) {
-    public uint AgentId { get; set; } = 0;
+    public uint AgentId { get; set; }
     public SafeDictionary<Affix, double> Stats { get; set; } = new();
     
     /// <summary>

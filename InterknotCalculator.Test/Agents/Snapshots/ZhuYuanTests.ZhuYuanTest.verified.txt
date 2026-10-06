@@ -32,7 +32,7 @@
   {
     Name: overwhelming_firepower 1,
     Tag: Dash,
-    Damage: 13929.97
+    Damage: 11397.25
   },
   {
     Name: please_do_not_resist 3,
@@ -67,7 +67,7 @@
   {
     Name: overwhelming_firepower 1,
     Tag: Dash,
-    Damage: 13929.97
+    Damage: 11397.25
   },
   {
     Name: please_do_not_resist 3,

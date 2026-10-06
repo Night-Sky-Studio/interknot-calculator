@@ -1,4 +1,4 @@
-using InterknotCalculator.Core.Classes.Agents;
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.Weapons;
@@ -15,7 +15,14 @@ public class Timeweaver : Weapon {
         ];
     }
 
-    public override void ApplyPassive(Agent agent) {
-        agent.BonusStats[Affix.DisorderDmgBonus] += agent.AnomalyProficiency > 375 ? 0.25 : 0;
+    public override void RegisterHooks(Context ctx, uint equipper = 0) {
+        base.RegisterHooks(ctx, equipper);
+
+        ctx.Events.OnCalculationStarted.Add(c => {
+            var agent = c.Team[equipper];
+        
+            agent.DisorderDmgBonus.Add(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(), 
+                agent.AnomalyProficiency > 375 ? 0.25 : 0, ModifierType.CombatFlat));
+        });
     }
 }

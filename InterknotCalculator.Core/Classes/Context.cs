@@ -2,6 +2,7 @@ using InterknotCalculator.Core.Classes.Agents;
 using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.EtherVeils;
 using InterknotCalculator.Core.Classes.Events;
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Classes.Server;
 
 namespace InterknotCalculator.Core.Classes;
@@ -16,12 +17,21 @@ public sealed class Context {
     public List<AgentAction> ActionsQueue { get; } = [];
     public EventBus Events { get; } = new();
 
+    public HashSet<ModifierKey> GlobalModifiers { get; } = [];
+
+    public bool TryActivateGlobal(ModifierKey key) => GlobalModifiers.Add(key);
+    
+    public bool HasTeammates(Func<Agent, bool> predicate, uint currentAgentId) => Team.Values
+        .Where(a => a.Id != currentAgentId)
+        .Any(predicate);
+    
     /// <remarks>
     /// Apparently, Jane's critting assault applies
     /// to the entire team, not just to her...
     /// </remarks>
     public double AnomalyCritMultiplier { get; set; } = 1;
 
+    #region Ether Veils
     private List<EtherVeil> EtherVeils { get; set; } = [];
     public bool IsEtherVeilActive => EtherVeils.Count > 0;
     public T? GetEtherVeil<T>() where T : EtherVeil => EtherVeils.OfType<T>().FirstOrDefault();
@@ -44,7 +54,8 @@ public sealed class Context {
         }
         ActivateEtherVeil(agent, veil);
     }
-
+    #endregion
+    
     public void ProcessActionsQueue() { 
         if (ActionsQueue.Count > 0) {
             Actions.AddRange(ActionsQueue);

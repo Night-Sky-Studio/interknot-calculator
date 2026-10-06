@@ -10,7 +10,7 @@ public class HeartstringNocturne : Weapon {
         SecondaryStat = new(Affix.CritRate, 0.24);
         Passive = [
             new(Affix.CritDamage, 0.5),
-            new(Affix.FireResPen, 0.25, tags: [SkillTag.Chain, SkillTag.Ultimate])
+            new(Affix.FireResPen, 0.25, tags: SkillTag.Chain | SkillTag.Ultimate)
         ];
     }
 }

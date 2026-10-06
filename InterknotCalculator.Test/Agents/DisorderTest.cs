@@ -35,7 +35,7 @@ public class DisorderTests : AgentsTest {
         
         Assert.That(result.PerAction, Is.Not.Empty);
         
-        Assert.That(result.PerAction, Has.Exactly(6)
+        Assert.That(result.PerAction, Has.Exactly(5)
             .Matches<AgentAction>(action => action.Tag is SkillTag.AttributeAnomaly));
 
         Assert.That(result.PerAction, Has.Exactly(1).Matches<AgentAction>(action => action is {

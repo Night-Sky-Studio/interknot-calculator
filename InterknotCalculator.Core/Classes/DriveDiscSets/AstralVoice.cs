@@ -1,4 +1,4 @@
-using InterknotCalculator.Core.Classes.Agents;
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.DriveDiscSets;
@@ -9,9 +9,17 @@ public class AstralVoice : DriveDiscSet {
         FullBonus = [];
     }
 
-    // TODO(IKC-14): Track applications with context
-    public override void ApplyPassive(Agent agent) {
-        agent.BonusStats[Affix.DmgBonus] += 0.24;
-        agent.ExternalBonus[Affix.DmgBonus] += 0.24;
+    public override void RegisterHooks(Context ctx, uint equipper = 0) {
+        base.RegisterHooks(ctx, equipper);
+        
+        ctx.Events.OnCalculationStarted.Add(c => {
+            var key = ModifierKey.DiscSet(Id, true);
+            
+            if (!c.TryActivateGlobal(key)) return;
+        
+            foreach (var agent in c.Team.Values) {
+                agent.DmgBonus.Add(new(key, 0.24, ModifierType.CombatFlat));
+            }
+        });
     }
 }

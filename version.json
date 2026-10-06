@@ -1,13 +1,13 @@
 {
-    "$schema": "https://raw.githubusercontent.com/dotnet/Nerdbank.GitVersioning/main/src/NerdBank.GitVersioning/version.schema.json",
-    "version": "0.2.8-beta.{height}",
-    "pathFilters": [
-        "./InterknotCalculator.Core",
-        "./InterknotCalculator.Server",
-        "./InterknotCalculator.Generators",
-        ":!/version.json"
-    ],
-    "publicReleaseRefSpec": [
-        "^refs/heads/main$"
-    ]
+  "$schema": "https://raw.githubusercontent.com/dotnet/Nerdbank.GitVersioning/main/src/NerdBank.GitVersioning/version.schema.json",
+  "version": "0.3.0-beta",
+  "publicReleaseRefSpec": [
+    "^refs/heads/main$"
+  ],
+  "pathFilters": [
+    "./InterknotCalculator.Core",
+    "./InterknotCalculator.Server",
+    "./InterknotCalculator.Generators",
+    ":!/version.json"
+  ]
 }

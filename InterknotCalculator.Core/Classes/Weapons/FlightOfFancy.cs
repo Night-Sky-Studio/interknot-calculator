@@ -1,4 +1,4 @@
-using InterknotCalculator.Core.Classes.Agents;
+using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.Weapons;
@@ -12,9 +12,15 @@ public class FlightOfFancy : Weapon {
         Passive = [new(Affix.AnomalyBuildupBonus, 0.4)];
     }
 
-    public override void ApplyPassive(Agent agent) {
-        if (agent.Element is Element.Ether) {
-            agent.BonusStats[Affix.AnomalyProficiency] += 20 * 6;
-        }
+    public override void RegisterHooks(Context ctx, uint equipper = 0) {
+        base.RegisterHooks(ctx, equipper);
+
+        ctx.Events.OnCalculationStarted.Add(c => {
+            var agent = c.Team[equipper];
+            if (!agent.Element.Matches(Element.Ether)) return;
+            
+            agent.AnomalyProficiency.Add(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(),
+                20 * 6, ModifierType.CombatFlat));
+        });
     }
 }
