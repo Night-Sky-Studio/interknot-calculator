@@ -143,7 +143,7 @@ public abstract class Agent(uint id) {
     public MutableStat DisorderDmgBonus => Stats[Affix.DisorderDmgBonus];
     public MutableStat AnomalyBuildupBonus => Stats[Affix.AnomalyBuildupBonus];
     
-    public MutableStat GetStat(Affix affix) => Stats.TryGetValue(affix, out var stat) ? stat : new();
+    public MutableStat GetStat(Affix affix) => Stats[affix];
     
 #if ENERGY_REQUIREMENT_CHECK
     private double _energy = 60;
