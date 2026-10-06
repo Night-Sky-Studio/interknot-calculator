@@ -10,7 +10,7 @@
   {
     Name: illuminating_darkness,
     Tag: Entry,
-    Damage: 300422.99
+    Damage: 415970.3
   },
   {
     Name: cat's_gaze,
@@ -19,7 +19,7 @@
   {
     Name: enlightened_mind_sunderlight 1,
     Tag: BasicAtk,
-    Damage: 125549.48
+    Damage: 146474.39
   },
   {
     Name: cat's_gaze,
@@ -28,7 +28,7 @@
   {
     Name: enlightened_mind_sunderlight 2,
     Tag: BasicAtk,
-    Damage: 163001.35
+    Damage: 190168.24
   },
   {
     Name: cat's_gaze,
@@ -37,7 +37,7 @@
   {
     Name: enlightened_mind_sunderlight_annihilation 2,
     Tag: BasicAtk,
-    Damage: 926323.46
+    Damage: 1080710.71
   },
   {
     Name: cat's_gaze,
@@ -46,7 +46,7 @@
   {
     Name: enlightened_mind_sunderlight_maximum,
     Tag: BasicAtk,
-    Damage: 628422.66
+    Damage: 733159.77
   },
   {
     Name: cat's_gaze,
@@ -55,7 +55,7 @@
   {
     Name: enlightened_mind_soaring_light 1,
     Tag: ExSpecial,
-    Damage: 183207.7
+    Damage: 213742.31
   },
   {
     Name: cat's_gaze,
@@ -64,7 +64,7 @@
   {
     Name: enlightened_mind_skyward_ascent,
     Tag: BasicAtk,
-    Damage: 94694.54
+    Damage: 110476.96
   },
   {
     Name: cat's_gaze,
@@ -73,36 +73,36 @@
   {
     Name: enlightened_mind_sunderlight 1,
     Tag: BasicAtk,
-    Damage: 125549.48
+    Damage: 146474.39
   },
   {
     Name: enlightened_mind_sunderlight 2,
     Tag: BasicAtk,
-    Damage: 163001.35
+    Damage: 190168.24
   },
   {
     Name: enlightened_mind_sunderlight_annihilation 2,
     Tag: BasicAtk,
-    Damage: 926323.46
+    Damage: 1080710.71
   },
   {
     Name: enlightened_mind_sunderlight_maximum,
     Tag: BasicAtk,
-    Damage: 628422.66
+    Damage: 733159.77
   },
   {
     Name: enlightened_mind_soaring_light 1,
     Tag: ExSpecial,
-    Damage: 183207.7
+    Damage: 213742.31
   },
   {
     Name: enlightened_mind_skyward_ascent,
     Tag: BasicAtk,
-    Damage: 94694.54
+    Damage: 110476.96
   },
   {
     Name: enlightened_mind_return_to_dust,
     Tag: ExSpecial,
-    Damage: 1206511.25
+    Damage: 1407596.46
   }
 ]

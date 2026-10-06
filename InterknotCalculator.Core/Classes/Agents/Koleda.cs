@@ -53,7 +53,7 @@ public class Koleda : SupportAgent, IAgentReference<Koleda> {
             if (c.HasTeammates(a => a.Element.Matches(Element)
                                     || a.Faction == Faction
                                     || a.Speciality is Speciality.Rupture, Id)
-                && c.Enemy.StunMultiplier > 1.0) {
+                && c.Enemy.IsStunned) {
                 foreach (var agent in c.Team.Values) {
                     agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.35 * 2,
                         tags: SkillTag.Chain));

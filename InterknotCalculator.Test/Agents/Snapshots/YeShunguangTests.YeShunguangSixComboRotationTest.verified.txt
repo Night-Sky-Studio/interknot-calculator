@@ -22,7 +22,7 @@
   {
     Name: chasing_storms,
     Tag: Ultimate,
-    Damage: 1284391.08
+    Damage: 1685763.3
   },
   {
     Name: cat's_gaze,
@@ -116,7 +116,7 @@
   {
     Name: illuminating_darkness,
     Tag: Entry,
-    Damage: 267153.35
+    Damage: 350638.77
   },
   {
     Name: cat's_gaze,
@@ -206,7 +206,7 @@
   {
     Name: chasing_storms,
     Tag: Ultimate,
-    Damage: 1284391.08
+    Damage: 1685763.3
   },
   {
     Name: enlightened_mind_sunderlight 1,

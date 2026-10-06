@@ -98,7 +98,7 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
                 CatsGazeActive = true;
                 CatsGazeCooldown = 4;
             } else {
-                if (c.Enemy.StunMultiplier > 1 && CatsGazeActive) {
+                if (c.Enemy.IsStunned && CatsGazeActive) {
                     CatsGazeCooldown -= 4;
                 } else {
                     CatsGazeCooldown--;

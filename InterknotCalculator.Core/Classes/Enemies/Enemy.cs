@@ -12,8 +12,8 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     public double AnomalyBuildupThreshold { get; private set; } = anomalyBuildupThreshold;
     public Progress Daze { get; set; }
     public MutableStat StunMultiplier { get; set; } = new(1);
-
-    // public SafeDictionary<Affix, double> Stats { get; set; } = new();
+    // TODO(IKC-53): Decouple Enemy stun state from Stun Multiplier
+    public bool IsStunned => StunMultiplier.BaseValue > 1;
 
     public Dictionary<Element, AnomalyBuildup> AnomalyBuildup { get; } = new();
     private AnomalyBuildup GetBuildup(Element el) => 

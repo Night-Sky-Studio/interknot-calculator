@@ -117,7 +117,7 @@ public class Yixuan : RuptureAgent, ICustomAnomaly {
     }
 
     public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
-        if (IsTeamPassiveActive && ctx.Enemy.StunMultiplier > 1.0 
+        if (IsTeamPassiveActive && ctx.Enemy.IsStunned
                                 && ability.Name is "cloud_shaper" or "ashen_ink_becomes_shadows") {
             Skills[ability.Name].Affixes[Affix.DmgBonus] = 0.3;
         }

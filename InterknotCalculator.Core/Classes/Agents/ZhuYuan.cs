@@ -94,7 +94,7 @@ public sealed class ZhuYuan : Agent {
     }
 
     public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
-        IsEnemyStunned = ctx.Enemy.StunMultiplier > 1;
+        IsEnemyStunned = ctx.Enemy.IsStunned;
 
         return base.GetActionDamage(ctx, ability);  
     } 

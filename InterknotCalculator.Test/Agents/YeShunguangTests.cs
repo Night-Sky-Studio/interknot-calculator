@@ -119,7 +119,7 @@ public class YeShunguangTests : AgentsTest {
             }
         ],
         Team = [],
-        StunBonus = 1,
+        StunBonus = 1.5,
         Rotation = []
     };
     
