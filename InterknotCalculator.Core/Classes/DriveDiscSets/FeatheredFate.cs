@@ -20,7 +20,7 @@ public class FeatheredFate : DriveDiscSet {
 
             if (agent.Element.Matches(Element.Lumiflux)) {
                 agent.AnomalyDmgBonus.Add(new(ModifierKey.DiscSet(Id, true),
-                    0.15, ModifierType.CombatRatio));
+                    0.15, ModifierType.CombatFlat));
             }
         });
         
