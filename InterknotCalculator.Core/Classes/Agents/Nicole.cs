@@ -54,7 +54,7 @@ public class Nicole : SupportAgent, IAgentReference<Nicole> {
 
             if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
                 foreach (var agent in c.Team.Values) {
-                    agent.ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.25));
+                    agent.GetStat(Affix.EtherDmgBonus).Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.25));
                 }
             }
         });

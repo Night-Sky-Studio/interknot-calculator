@@ -48,7 +48,7 @@ public class Soukaku : SupportAgent, IAgentReference<Soukaku> {
             
             if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
                 foreach (var agent in c.Team.Values) {
-                    agent.ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.2));
+                    agent.GetStat(Affix.IceDmgBonus).Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.2));
                 }
             }
         });
