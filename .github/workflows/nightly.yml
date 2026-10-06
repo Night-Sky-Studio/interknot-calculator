@@ -47,7 +47,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release delete nightly --repo "$GITHUB_REPOSITORY" --yes || true
+          gh release delete nightly --repo "$GITHUB_REPOSITORY" --cleanup-tag --yes || true
 
       - name: Publish nightly release
         env:
