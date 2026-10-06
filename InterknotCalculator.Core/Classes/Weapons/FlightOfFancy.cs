@@ -17,7 +17,9 @@ public class FlightOfFancy : Weapon {
 
         ctx.Events.OnCalculationStarted.Add(c => {
             var agent = c.Team[equipper];
-            agent.AnomalyProficiency.Add(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(), 
+            if (!agent.Element.Matches(Element.Ether)) return;
+            
+            agent.AnomalyProficiency.Add(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(),
                 20 * 6, ModifierType.CombatFlat));
         });
     }
