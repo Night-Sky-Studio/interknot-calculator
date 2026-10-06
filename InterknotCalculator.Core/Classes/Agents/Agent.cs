@@ -305,7 +305,7 @@ public abstract class Agent(uint id) {
         var data = Skills[ability.Name];
         
         var dazeScale = data.Scales[ability.Scale].Daze / 100;
-        var dazeIncrease = 1 + Stats[Affix.DazeBonus].For(data.Tag);
+        var dazeIncrease = Stats[Affix.DazeBonus].For(data.Tag);
         
         var abilityPassive = ApplyAbilityPassive(ability);
         if (abilityPassive is { Affix: Affix.DazeBonus } passive) {
