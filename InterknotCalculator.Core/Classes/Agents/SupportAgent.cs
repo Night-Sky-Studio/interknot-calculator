@@ -1,8 +1,5 @@
 using InterknotCalculator.Core.Classes.DriveDiscSets;
-using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Classes.Weapons;
-
-#pragma warning disable CS0618 // Type or member is obsolete
 
 namespace InterknotCalculator.Core.Classes.Agents;
 

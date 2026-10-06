@@ -1,11 +1,9 @@
-﻿using System.Collections.Immutable;
-using InterknotCalculator.Core.Classes.DriveDiscSets;
+﻿using InterknotCalculator.Core.Classes.DriveDiscSets;
 using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Modifiers;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Classes.Weapons;
 using InterknotCalculator.Core.Enums;
-#pragma warning disable CS0618 // Type or member is obsolete
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
@@ -24,8 +22,7 @@ public abstract class Agent(uint id) {
     #endregion
     
     #region Collections
-    [Obsolete("Don't use Stats dictionary directly", false)]
-    protected StatsDictionary Stats { get; } = new();
+    private StatsDictionary Stats { get; } = new();
     public Dictionary<Element, Anomaly> Anomalies { get; set; } = new();
     public Dictionary<string, Skill> Skills { get; set; } = new();
     public Dictionary<string, IEnumerable<string>> Macros { get; set; } = new();
@@ -71,7 +68,7 @@ public abstract class Agent(uint id) {
         DriveDiscs = discs;
         AddDiscsStats();
     }
-    protected  void RemoveDiscsStats() {
+    protected void RemoveDiscsStats() {
         if (DriveDiscs.Length == 0 && FullSets.Count == 0 && PartialSets.Count == 0)
             return;
         FullSets.Clear();
@@ -145,6 +142,8 @@ public abstract class Agent(uint id) {
     public MutableStat AnomalyDmgBonus => Stats[Affix.AnomalyDmgBonus];
     public MutableStat DisorderDmgBonus => Stats[Affix.DisorderDmgBonus];
     public MutableStat AnomalyBuildupBonus => Stats[Affix.AnomalyBuildupBonus];
+    
+    public MutableStat GetStat(Affix affix) => Stats.TryGetValue(affix, out var stat) ? stat : new();
     
 #if ENERGY_REQUIREMENT_CHECK
     private double _energy = 60;
