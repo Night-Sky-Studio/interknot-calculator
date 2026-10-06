@@ -304,16 +304,15 @@ public abstract class Agent(uint id) {
 
     public virtual double GetDaze(Ability ability) {
         var data = Skills[ability.Name];
-
-        var tagDazeBonus = 1.0 + Stats[Affix.DazeBonus].Tagged(data.Tag);
+        
+        var dazeScale = data.Scales[ability.Scale].Daze / 100;
+        var dazeIncrease = 1 + Stats[Affix.DazeBonus].For(data.Tag);
         
         var abilityPassive = ApplyAbilityPassive(ability);
         if (abilityPassive is { Affix: Affix.DazeBonus } passive) {
-            tagDazeBonus += passive.Value;
+            dazeIncrease += passive.Value;
         }
         
-        var dazeScale = data.Scales[ability.Scale].Daze / 100;
-        var dazeIncrease = 0.0 + tagDazeBonus;
         const double dazeReduction = 0.0;
         const double dazeRes = 0.0;
         const double dazeTakenIncrease = 0.0;
