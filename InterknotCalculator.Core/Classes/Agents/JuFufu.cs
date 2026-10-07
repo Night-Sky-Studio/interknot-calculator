@@ -43,11 +43,18 @@ public class JuFufu : SupportAgent, IAgentReference<JuFufu> {
         
         ctx.Events.OnCalculationStarted.Add(c => {
             // every 100 atk over 2800, crit dmg + 0.05
-            var initialAtk = Math.Max(Atk.InitialValue - 2800, 0);
-
+            const double atkThreshold = 2800;
+            const double atkStep = 100;
+            const double critDmgPerStep = 0.05;
+            const double bonusCap = 0.3;
+            
             foreach (var agent in c.Team.Values) {
+                var atkOverThreshold = Math.Max(Atk.InitialValue - atkThreshold, 0);
+                var steps = atkOverThreshold / atkStep;
+                var critDmgBonus = Math.Min(steps * critDmgPerStep, bonusCap);
+                
                 agent.CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                    0.2 + Math.Min(initialAtk / 5, 0.3), ModifierType.CombatFlat));
+                    critDmgBonus, ModifierType.CombatFlat));
                 agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                     0.2, ModifierType.CombatFlat, SkillTag.Chain));
                 agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
