@@ -101,7 +101,7 @@ public class Trigger : SupportAgent, IAgentReference<Trigger> {
             if (c.HasTeammates(a => a.Speciality is Speciality.Attack || a.Element.Matches(Element), Id)) {
                 if (CritRate > 0.4) {
                     DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                        Math.Min((CritRate - 0.4) * 0.015, 0.75), ModifierType.CombatFlat, SkillTag.Aftershock));
+                        Math.Min((CritRate - 0.4) * 1.5, 0.75), ModifierType.CombatFlat, SkillTag.Aftershock));
                 }
             }
         });

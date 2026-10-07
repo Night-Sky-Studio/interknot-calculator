@@ -75,7 +75,7 @@ public class Dialyn : SupportAgent, IAgentReference<Dialyn> {
             // If her initial CRIT Rate surpasses 50%, her Impact increases
             // by 2 for each additional 1%, up to a maximum increase of 100.
             Impact.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(),
-                Math.Min(100, Math.Max(0, CritRate - 0.5) * 2)));
+                Math.Min(100, Math.Max(0, CritRate.InitialValue - 0.5) * 2 * 100)));
 
             // When another character in your squad is an Attack or Rupture character
             if (c.HasTeammates(a => a is { Speciality: Speciality.Attack or Speciality.Rupture }, Id)) {
