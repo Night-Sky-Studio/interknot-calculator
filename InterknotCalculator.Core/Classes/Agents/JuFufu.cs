@@ -51,7 +51,7 @@ public class JuFufu : SupportAgent, IAgentReference<JuFufu> {
             foreach (var agent in c.Team.Values) {
                 var atkOverThreshold = Math.Max(Atk.InitialValue - atkThreshold, 0);
                 var steps = atkOverThreshold / atkStep;
-                var critDmgBonus = Math.Min(steps * critDmgPerStep, bonusCap);
+                var critDmgBonus = 0.2 + Math.Min(steps * critDmgPerStep, bonusCap);
                 
                 agent.CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                     critDmgBonus, ModifierType.CombatFlat));
