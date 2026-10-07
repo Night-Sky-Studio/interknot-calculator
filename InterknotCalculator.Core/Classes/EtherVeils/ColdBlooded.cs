@@ -4,7 +4,7 @@ using InterknotCalculator.Core.Classes.Modifiers;
 namespace InterknotCalculator.Core.Classes.EtherVeils;
 
 public class ColdBlooded : EtherVeil {
-    private ModifierKey Key { get; } = ModifierKey.EtherVeil(nameof(ColdBlooded));
+    private ModifierKey Key { get; } = ModifierKey.EtherVeil<ColdBlooded>();
     
     public override void Enable(Agent agent) {
         agent.CritDamage.AddUnique(new(Key, 0.05));

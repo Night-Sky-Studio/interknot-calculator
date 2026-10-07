@@ -4,7 +4,7 @@ using InterknotCalculator.Core.Classes.Modifiers;
 namespace InterknotCalculator.Core.Classes.EtherVeils;
 
 public class DelusionReprise : EtherVeil {
-    private ModifierKey Key { get; } = ModifierKey.EtherVeil(nameof(DelusionReprise));
+    private ModifierKey Key { get; } = ModifierKey.EtherVeil<DelusionReprise>();
     
     public override void Enable(Agent agent) {
         agent.Atk.AddUnique(new(Key, 50, ModifierType.CombatFlat));

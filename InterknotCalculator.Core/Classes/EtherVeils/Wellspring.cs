@@ -4,7 +4,7 @@ using InterknotCalculator.Core.Classes.Modifiers;
 namespace InterknotCalculator.Core.Classes.EtherVeils;
 
 public class Wellspring : EtherVeil {
-    private ModifierKey Key { get; } = ModifierKey.EtherVeil(nameof(Wellspring));
+    private ModifierKey Key { get; } = ModifierKey.EtherVeil<DelusionReprise>();
     
     public override void Enable(Agent agent) {
         agent.MaxHp.AddUnique(new(Key, 0.05, ModifierType.CombatRatio));
