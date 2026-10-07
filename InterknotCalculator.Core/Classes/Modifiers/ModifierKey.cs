@@ -8,22 +8,41 @@ namespace InterknotCalculator.Core.Classes.Modifiers;
 /// understand where a stat mod came from.
 /// </summary>
 [JsonConverter(typeof(ModifierKeyJsonConverter))]
-public readonly struct ModifierKey(params string[] components) : IEquatable<ModifierKey> {
-    public override string ToString() => string.Join(';', Components);
-    public ModifierKey CombineWith(ModifierKey other) => 
-        new([..Components, ..other.Components]);
-    
-    private string[] Components { get; } = components;
-    
-    public bool ComponentStartsWith(string prefix) => Components.Any(c => c.StartsWith(prefix));
-    
-    public bool Equals(ModifierKey other) => ToString() == other.ToString();
+public readonly struct ModifierKey : IEquatable<ModifierKey> {
+    private string Value { get; }
+
+    public ModifierKey(params string[] components) : this(string.Join(';', components)) { }
+
+    private ModifierKey(string value) => Value = value;
+
+    public override string ToString() =>
+        Value ?? throw new ArgumentNullException(nameof(Value), "ModifierKey must be initialized using a constructor.");
+
+    public ModifierKey CombineWith(ModifierKey other) =>
+        new(string.Concat(Value, ";", other.Value));
+
+    public bool ComponentStartsWith(string prefix) {
+        if (Value is null) return false;
+
+        ReadOnlySpan<char> span = Value;
+        while (!span.IsEmpty) {
+            var sep = span.IndexOf(';');
+            var component = sep < 0 ? span : span[..sep];
+            if (component.StartsWith(prefix, StringComparison.Ordinal))
+                return true;
+            if (sep < 0) break;
+            span = span[(sep + 1)..];
+        }
+
+        return false;
+    }
+    public bool Equals(ModifierKey other) => string.Equals(Value, other.Value, StringComparison.Ordinal);
     public override bool Equals(object? obj) => obj is ModifierKey other && Equals(other);
-    public override int GetHashCode() => ToString().GetHashCode();
+    public override int GetHashCode() => Value?.GetHashCode(StringComparison.Ordinal) ?? 0;
     
-    public static bool operator==(ModifierKey left, ModifierKey right) => left.Equals(right);
-    public static bool operator!=(ModifierKey left, ModifierKey right) => !left.Equals(right);
-    public static ModifierKey operator+(ModifierKey left, ModifierKey right) => left.CombineWith(right);
+    public static bool operator ==(ModifierKey left, ModifierKey right) => left.Equals(right);
+    public static bool operator !=(ModifierKey left, ModifierKey right) => !left.Equals(right);
+    public static ModifierKey operator +(ModifierKey left, ModifierKey right) => left.CombineWith(right);
     
     public static ModifierKey Agent(uint id) => new($"Agent:{id}");
     public static ModifierKey Weapon(uint id) => new($"Weapon:{id}");
