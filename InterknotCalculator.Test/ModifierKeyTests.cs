@@ -1,5 +1,6 @@
 using System.Text.Json;
 using InterknotCalculator.Core.Classes.Modifiers;
+using Throws = NUnit.Framework.Throws;
 
 namespace InterknotCalculator.Test;
 
@@ -16,6 +17,12 @@ public class ModifierKeyTests {
             Assert.That(complexKey.ToString(), Is.EqualTo("Agent:1401;Weapon:14140"));
             Assert.That(combinedKey.ToString(), Is.EqualTo("Agent:1401;Weapon:14140;Passive"));
         }
+    }
+    
+    [Test]
+    public void InvalidComponentTest() {
+        Assert.That(() => new ModifierKey("EtherVeil:name;Weapon:1"),
+            Throws.ArgumentException);
     }
 
     [Test]

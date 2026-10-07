@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using InterknotCalculator.Core.Classes.EtherVeils;
 using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.Modifiers;
@@ -11,7 +12,12 @@ namespace InterknotCalculator.Core.Classes.Modifiers;
 public readonly struct ModifierKey : IEquatable<ModifierKey> {
     private string Value { get; }
 
-    public ModifierKey(params string[] components) : this(string.Join(';', components)) { }
+    public ModifierKey(params string[] components) : this(string.Join(';', components)) {
+        foreach (var c in components) {
+            if (c.Contains(';'))
+                throw new ArgumentException($"ModifierKey component must not contain ';': '{c}'", nameof(components));
+        }
+    }
 
     private ModifierKey(string value) => Value = value;
 
@@ -50,7 +56,8 @@ public readonly struct ModifierKey : IEquatable<ModifierKey> {
     public static ModifierKey Stat(Affix affix, uint level) => new($"Stat:{affix}:{level}");
     public static ModifierKey DiscSet(uint id, bool fullBonus = false) => 
         new($"Disc:Set:{id}:{(fullBonus ? "full" : "partial")}");
-    public static ModifierKey EtherVeil(string name) => new($"EtherVeil:{name}");
+    public static ModifierKey EtherVeil() => new("EtherVeil:Any");
+    public static ModifierKey EtherVeil<T>() where T : EtherVeil => new($"EtherVeil:{typeof(T).Name}");
     public static ModifierKey Passive() => new("Passive");
     public static ModifierKey CorePassive() => new("CorePassive");
     public static ModifierKey TeamPassive() => new("TeamPassive");

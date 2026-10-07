@@ -15,7 +15,7 @@ public class CloudcleaveRadiance : Weapon {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
         
-        var etherVeilPassiveKey = ModifierKey.Weapon(Id) + ModifierKey.Passive() + ModifierKey.EtherVeil("Any");
+        var etherVeilPassiveKey = ModifierKey.Weapon(Id) + ModifierKey.Passive() + ModifierKey.EtherVeil();
         
         ctx.Events.OnEtherVeilActivated.Add((c, _) => {
             if (c.MainAgent.DmgBonus.Contains(etherVeilPassiveKey)) return;
