@@ -10,7 +10,7 @@
   {
     Name: illuminating_darkness,
     Tag: Entry,
-    Damage: 415970.3
+    Damage: 400620.84
   },
   {
     Name: cat's_gaze,
@@ -19,7 +19,7 @@
   {
     Name: enlightened_mind_sunderlight 1,
     Tag: BasicAtk,
-    Damage: 146474.39
+    Damage: 141069.43
   },
   {
     Name: cat's_gaze,
@@ -28,7 +28,7 @@
   {
     Name: enlightened_mind_sunderlight 2,
     Tag: BasicAtk,
-    Damage: 190168.24
+    Damage: 183150.96
   },
   {
     Name: cat's_gaze,
@@ -37,7 +37,7 @@
   {
     Name: enlightened_mind_sunderlight_annihilation 2,
     Tag: BasicAtk,
-    Damage: 1080710.71
+    Damage: 1040832.08
   },
   {
     Name: cat's_gaze,
@@ -46,7 +46,7 @@
   {
     Name: enlightened_mind_sunderlight_maximum,
     Tag: BasicAtk,
-    Damage: 733159.77
+    Damage: 706105.9
   },
   {
     Name: cat's_gaze,
@@ -55,7 +55,7 @@
   {
     Name: enlightened_mind_soaring_light 1,
     Tag: ExSpecial,
-    Damage: 213742.31
+    Damage: 205855.14
   },
   {
     Name: cat's_gaze,
@@ -64,7 +64,7 @@
   {
     Name: enlightened_mind_skyward_ascent,
     Tag: BasicAtk,
-    Damage: 110476.96
+    Damage: 106400.32
   },
   {
     Name: cat's_gaze,
@@ -73,36 +73,36 @@
   {
     Name: enlightened_mind_sunderlight 1,
     Tag: BasicAtk,
-    Damage: 146474.39
+    Damage: 141069.43
   },
   {
     Name: enlightened_mind_sunderlight 2,
     Tag: BasicAtk,
-    Damage: 190168.24
+    Damage: 183150.96
   },
   {
     Name: enlightened_mind_sunderlight_annihilation 2,
     Tag: BasicAtk,
-    Damage: 1080710.71
+    Damage: 1040832.08
   },
   {
     Name: enlightened_mind_sunderlight_maximum,
     Tag: BasicAtk,
-    Damage: 733159.77
+    Damage: 706105.9
   },
   {
     Name: enlightened_mind_soaring_light 1,
     Tag: ExSpecial,
-    Damage: 213742.31
+    Damage: 205855.14
   },
   {
     Name: enlightened_mind_skyward_ascent,
     Tag: BasicAtk,
-    Damage: 110476.96
+    Damage: 106400.32
   },
   {
     Name: enlightened_mind_return_to_dust,
     Tag: ExSpecial,
-    Damage: 1407596.46
+    Damage: 1355655.63
   }
 ]

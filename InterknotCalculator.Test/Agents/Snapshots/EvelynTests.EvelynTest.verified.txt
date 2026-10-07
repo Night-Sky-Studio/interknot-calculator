@@ -2,72 +2,72 @@
   {
     Name: locked_position,
     Tag: Special,
-    Damage: 36705.39
+    Damage: 35058.67
   },
   {
     Name: binding_sunder_first 1,
     Tag: Special,
-    Damage: 28323.57
+    Damage: 27052.89
   },
   {
     Name: razor_wire 3,
     Tag: BasicAtk,
-    Damage: 54970.78
+    Damage: 52504.62
   },
   {
     Name: razor_wire 4,
     Tag: BasicAtk,
-    Damage: 130511.95
+    Damage: 124656.77
   },
   {
     Name: razor_wire 5,
     Tag: BasicAtk,
-    Damage: 156390.82
+    Damage: 149374.63
   },
   {
     Name: binding_sunder_second 1,
     Tag: ExSpecial,
-    Damage: 378020.16
+    Damage: 361060.97
   },
   {
     Name: garrote 1,
     Tag: BasicAtk,
-    Damage: 158206.88
+    Damage: 151109.22
   },
   {
     Name: garrote 2,
     Tag: BasicAtk,
-    Damage: 171303.48
+    Damage: 163618.26
   },
   {
     Name: lunalux,
     Tag: Chain,
-    Damage: 950395.44
+    Damage: 907757.69
   },
   {
     Name: lunalux,
     Tag: Chain,
-    Damage: 950395.44
+    Damage: 907757.69
   },
   {
     Name: lunalux_garrote,
     Tag: Ultimate,
-    Damage: 2467626.39
+    Damage: 2356920.85
   },
   {
     Name: binding_sunder_second 1,
     Tag: ExSpecial,
-    Damage: 378020.16
+    Damage: 361060.97
   },
   {
     Name: garrote 1,
     Tag: BasicAtk,
-    Damage: 158206.88
+    Damage: 151109.22
   },
   {
     Name: lunalux,
     Tag: Chain,
-    Damage: 950395.44
+    Damage: 907757.69
   },
   {
     Name: burn,
