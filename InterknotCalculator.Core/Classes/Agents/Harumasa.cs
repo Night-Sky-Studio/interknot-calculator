@@ -87,7 +87,8 @@ public class Harumasa : Agent {
 
         ctx.Events.OnCalculationStarted.Add(c => {
             if (c.HasTeammates(a => a is { Speciality: Speciality.Stun or Speciality.Anomaly }, Id)) {
-                DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.4));
+                DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.4, ModifierType.CombatFlat));
             }
         });
     }

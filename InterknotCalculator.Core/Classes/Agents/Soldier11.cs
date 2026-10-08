@@ -81,7 +81,8 @@ public sealed class Soldier11 : Agent {
         
         ctx.Events.OnCalculationStarted.Add(c => {
             if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
-                ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.325));
+                ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.325, ModifierType.CombatFlat));
             }
         });
     }

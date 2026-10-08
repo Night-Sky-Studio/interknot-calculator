@@ -45,16 +45,18 @@ public class Nicole : SupportAgent, IAgentReference<Nicole> {
 
         ctx.Events.OnCalculationStarted.Add(c => {
             foreach (var agent in c.Team.Values) {
-                agent.ResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.4));
+                agent.ResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    0.4, ModifierType.CombatFlat));
                 
                 // M6
-                agent.CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) 
-                                                             + ModifierKey.CorePassive(), 0.15));
+                agent.CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 
+                    0.15, ModifierType.CombatFlat));
             }
 
             if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
                 foreach (var agent in c.Team.Values) {
-                    agent.GetStat(Affix.EtherDmgBonus).Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.25));
+                    agent.GetStat(Affix.EtherDmgBonus).Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                        0.25, ModifierType.CombatFlat));
                 }
             }
         });

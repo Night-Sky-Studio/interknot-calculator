@@ -81,7 +81,8 @@ public sealed class ZhuYuan : Agent {
         
         ctx.Events.OnCalculationStarted.Add(c => {
             if (c.HasTeammates(a => a.Speciality is Speciality.Support || a.Faction == Faction, Id)) {
-                CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.3));
+                CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.3, ModifierType.CombatFlat));
             }
         });
     }

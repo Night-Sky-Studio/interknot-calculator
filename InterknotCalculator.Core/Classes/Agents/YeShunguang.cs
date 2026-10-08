@@ -146,8 +146,8 @@ public class YeShunguang : Agent, IEtherVeilAgent<Verdict> {
     public override void RegisterHooks(Context ctx) {
         ctx.Events.OnCalculationStarted.Add(c => {
             // Core Passive: Burning Clarity
-            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.3));
-            DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25));
+            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.3, ModifierType.CombatFlat));
+            DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25, ModifierType.CombatFlat));
             
             // Additional Ability: Shadowtrace Flight 
             // requires a Support or Defense character in the squad

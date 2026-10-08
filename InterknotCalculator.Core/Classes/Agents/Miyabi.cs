@@ -107,12 +107,15 @@ public class Miyabi : Agent, ICustomAnomaly {
         base.RegisterHooks(ctx);
         
         ctx.Events.OnCalculationStarted.Add(c => {
-            ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.3));
+            ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                0.3, ModifierType.CombatFlat));
 
             if (c.HasTeammates(a => a.Faction == Faction || a.Speciality is Speciality.Support, Id)) {
-                DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.6, 
+                DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.6, ModifierType.CombatFlat,
                     tags: SkillTag.BasicAtk));
-                ElementalResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.3, 
+                ElementalResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.3, ModifierType.CombatFlat,
                     tags: SkillTag.BasicAtk));
             }
         });
@@ -139,8 +142,8 @@ public class MiyabiM1 : Miyabi {
             c.Enemy.AfflictedAnomaly = null;
             
             foreach (var agent in c.Team.Values) {
-                agent.AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) 
-                                                                        + ModifierKey.CorePassive(), 0.2));
+                agent.AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
+                    0.2, ModifierType.CombatFlat));
             } 
         });
     }
@@ -159,7 +162,8 @@ public class MiyabiM2 : MiyabiM1 {
         ctx.Events.OnCalculationStarted.Add(_ => {
             // Upon entering the battlefield, Hoshimi Miyabi immediately obtains 6 points
             // of Fallen Frost and her CRIT Rate increases by 15%.
-            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(), 0.15));
+            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(), 
+                0.15, ModifierType.CombatFlat));
         });
     }
 }

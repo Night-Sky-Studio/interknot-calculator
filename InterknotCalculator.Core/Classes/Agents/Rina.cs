@@ -11,7 +11,8 @@ public sealed class Rina : SupportAgent, IAgentReference<Rina> {
         rina.InitializeStats(new () {
             [Affix.Atk] = 2600
         });
-        rina.PenRatio.Add(new(ModifierKey.Agent(AgentId.Rina) + ModifierKey.CorePassive(), 0.3));
+        rina.PenRatio.Add(new(ModifierKey.Agent(AgentId.Rina) + ModifierKey.CorePassive(), 
+            0.3, ModifierType.CombatFlat));
 
         rina.SetWeaponPassive(weaponId);
         rina.SetDriveDiscsPassive(setId);
@@ -44,13 +45,14 @@ public sealed class Rina : SupportAgent, IAgentReference<Rina> {
         ctx.Events.OnCalculationStarted.Add(c => {
             foreach (var agent in c.Team.Values) {
                 agent.PenRatio.Add(new(ModifierKey.Agent(AgentId.Rina) + ModifierKey.CorePassive(), 
-                    Math.Min(PenRatio * 0.25 + 0.12, 0.3)));
+                    Math.Min(PenRatio * 0.25 + 0.12, 0.3), ModifierType.CombatFlat));
             }
 
             if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
                 foreach (var agent in c.Team.Values) {
                     if (agent.Element.Matches(Element.Electric)) {
-                        agent.ElementalDmgBonus.Add(new(ModifierKey.Agent(AgentId.Rina) + ModifierKey.TeamPassive(), 0.1));
+                        agent.ElementalDmgBonus.Add(new(ModifierKey.Agent(AgentId.Rina) + ModifierKey.TeamPassive(), 
+                            0.1, ModifierType.CombatFlat));
                     }
                 }
             }

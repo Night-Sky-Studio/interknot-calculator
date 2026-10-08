@@ -111,7 +111,8 @@ public class Yixuan : RuptureAgent, ICustomAnomaly {
             if (c.HasTeammates(a => a.Speciality is Speciality.Stun or Speciality.Defense or Speciality.Support
                                     || a.Faction == Faction, Id)) {
                 IsTeamPassiveActive = true;
-                CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.4));
+                CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.4, ModifierType.CombatFlat));
             }
         });
     }
