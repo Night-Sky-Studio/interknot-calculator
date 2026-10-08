@@ -71,7 +71,7 @@ public class Zhao : SupportAgent, IAgentReference<Zhao>, IEtherVeilAgent<Wellspr
                 foreach (var agent in c.Team.Values) {
                     if (agent.DmgBonus.Contains(teamPassiveKey)) continue;
                     agent.DmgBonus.AddUnique(new(teamPassiveKey, 
-                        Math.Min(0.4, 0.1 + Math.Max(0, MaxHp.InitialValue - 15000) / 400 * 0.01)));
+                        Math.Min(0.4, 0.1 + Math.Max(0, MaxHp.InitialValue - 15000) / 400 * 0.01), ModifierType.CombatFlat));
                 }
             }
             

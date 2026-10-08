@@ -44,11 +44,11 @@ public class Lucy : SupportAgent, IAgentReference<Lucy> {
             foreach (var agent in c.Team.Values) {
                 // M6
                 agent.Atk.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 
-                    Math.Min(Atk.InitialValue * 0.258 + 104, 600)));
+                    Math.Min(Atk.InitialValue * 0.258 + 104, 600), ModifierType.CombatFlat));
                 
                 // M4
-                agent.CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(4) 
-                                                               + ModifierKey.CorePassive(), 0.1));
+                agent.CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(4) + ModifierKey.CorePassive(), 
+                    0.1, ModifierType.CombatFlat));
             }
         });
     }

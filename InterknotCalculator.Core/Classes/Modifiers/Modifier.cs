@@ -44,7 +44,7 @@ public readonly struct Modifier : IEquatable<Modifier> {
     /// </param>
     public Modifier(ModifierKey key,
         double value,
-        ModifierType type = ModifierType.Flat,
+        ModifierType type,
         SkillTag tags = SkillTag.None
     ) {
         Key = key;

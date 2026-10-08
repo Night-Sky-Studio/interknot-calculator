@@ -165,7 +165,8 @@ public sealed class Vivian : SupportAgent, IAgentReference<Vivian> {
             if (!c.HasTeammates(a => a.Speciality == Speciality || a.Element.Matches(Element), Id)) return;
             
             foreach (var agent in c.Team.Values) {
-                agent.DisorderDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.12));
+                agent.DisorderDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.12, ModifierType.CombatFlat));
             }
         });
         

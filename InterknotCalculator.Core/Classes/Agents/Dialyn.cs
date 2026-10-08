@@ -70,23 +70,26 @@ public class Dialyn : SupportAgent, IAgentReference<Dialyn> {
         base.RegisterHooks(ctx);
 
         ctx.Events.OnCalculationStarted.Add(c => {
-            c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.3));
+            c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                0.3, ModifierType.CombatFlat));
             
             // If her initial CRIT Rate surpasses 50%, her Impact increases
             // by 2 for each additional 1%, up to a maximum increase of 100.
             Impact.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(),
-                Math.Min(100, Math.Max(0, CritRate.InitialValue - 0.5) * 2 * 100)));
+                Math.Min(100, Math.Max(0, CritRate.InitialValue - 0.5) * 2 * 100), ModifierType.CombatFlat));
 
             // When another character in your squad is an Attack or Rupture character
             if (c.HasTeammates(a => a is { Speciality: Speciality.Attack or Speciality.Rupture }, Id)) {
                 // Dialyn's EX Special Attack CRIT DMG is increased by 50%.
-                CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.5, tags: SkillTag.ExSpecial));
+                CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    0.5, ModifierType.CombatFlat, tags: SkillTag.ExSpecial));
 
                 foreach (var agent in c.Team.Values) {
                     // When an EX Special Attack or Ultimate is activated, all squad members gain the
                     // Overwhelmingly Positive effect.
                     // While Overwhelmingly Positive is active, DMG dealt is increased by 40% for 15s.
-                    agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.4));
+                    agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                        0.4, ModifierType.CombatFlat));
                 }
             }
         });

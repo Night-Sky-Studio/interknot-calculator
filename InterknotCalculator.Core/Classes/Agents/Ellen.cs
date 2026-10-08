@@ -107,10 +107,14 @@ public class Ellen : Agent {
 
         ctx.Events.OnCalculationStarted.Add(c => {
             if (c.HasTeammates(a => a.Element == Element || a.Faction == Faction, Id)) {
-                ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.3));
+                ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.3, ModifierType.CombatFlat));
+                
                 // STR 6
-                CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.48));
-                ElementalResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.1));
+                CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.48, ModifierType.CombatFlat));
+                ElementalResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.1, ModifierType.CombatFlat));
             }
         });
     }
@@ -123,7 +127,8 @@ public class EllenM1 : Ellen {
         ctx.Events.OnCalculationStarted.Add(_ => {
             // For each point of Flash Freeze Charge consumed, Ellen’s CRIT Rate
             // is increased by 2% for 15s, stacking up
-            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.02 * 6));
+            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                0.02 * 6, ModifierType.CombatFlat));
         });
     }
 }
@@ -191,7 +196,8 @@ public class EllenM6 : EllenM5 {
         base.RegisterHooks(ctx);
 
         ctx.Events.OnCalculationStarted.Add(_ => {
-            PenRatio.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 0.2));
+            PenRatio.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 
+                0.2, ModifierType.CombatFlat));
         });
         
         ctx.Events.OnActionExecuted.Add((c, e) => {

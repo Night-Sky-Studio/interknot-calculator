@@ -63,11 +63,13 @@ public sealed class Grace : Agent {
         base.RegisterHooks(ctx);
         
         ctx.Events.OnCalculationStarted.Add(c => {
-            AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 1.3, 
+            AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                1.3, ModifierType.CombatFlat, 
                 tags: SkillTag.Special | SkillTag.ExSpecial));
 
             if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
-                DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.36, 
+                DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.36, ModifierType.CombatFlat,
                     tags: SkillTag.AttributeAnomaly));
             }
         });

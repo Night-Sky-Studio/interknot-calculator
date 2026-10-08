@@ -53,7 +53,7 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
         // To get any meaningful Anomaly Buildup buff, we estimate
         // it by making 4 triggers of Sugarburst Sparkles.
         Skills["sugarburst_sparkles"] = new(SkillTag.BasicAtk, [
-            new(55, 0, anomalyBuildup: 17.66 * 4)
+            new(55 * 4, 0, anomalyBuildup: 17.66 * 4)
         ], new () {
             [Affix.AnomalyBuildupBonus] = 0.25
         });
@@ -73,8 +73,9 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
                 // up to a maximum increase of 1,200, and increases the DMG dealt by those
                 // with the effect by 15%, lasting 40s. Repeated triggers reset the duration.
                 agent.Atk.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                    Math.Min(Atk.InitialValue * 0.4, 1200)));
-                agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.15));
+                    Math.Min(Atk.InitialValue * 0.4, 1200), ModifierType.CombatFlat));
+                agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    0.15, ModifierType.CombatFlat));
             }
 
             if (c.HasTeammates(a => a.Speciality is Speciality.Anomaly || a.Faction == Faction, Id)) {
@@ -84,7 +85,7 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
                 // by 0.2%, up to a maximum of 20%.
                 foreach (var agent in c.Team.Values) {
                     agent.AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(),
-                        Math.Min(Math.Max(AnomalyMastery - 100, 0) * 0.002, 0.2)));
+                        Math.Min(Math.Max(AnomalyMastery - 100, 0) * 0.002, 0.2), ModifierType.CombatFlat));
                 }
             }
         });

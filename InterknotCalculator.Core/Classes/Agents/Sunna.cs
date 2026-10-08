@@ -147,7 +147,8 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
             ClawSharpenersCount += 2;
 
             if (IsTeamPassiveActive && e.Agent == this) {
-                c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.3));
+                c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.3, ModifierType.CombatFlat));
             }
         });
         

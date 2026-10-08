@@ -92,20 +92,17 @@ public sealed class Lycaon : SupportAgent, IAgentReference<Lycaon> {
         base.RegisterHooks(ctx);
         
         ctx.Events.OnCalculationStarted.Add(c => {
-            DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.8));
+            DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                0.8, ModifierType.CombatFlat));
 
             foreach (var agent in c.Team.Values) {
-                // WORKAROUND:
-                //      Agents don't expose convenient "IceResPen" property.
-                //      Since it won't have any effect on non-Ice agents, we can
-                //      skip adding it for now.
-                if (agent.Element.Matches(Element.Ice)) {
-                    agent.ElementalResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25));
-                }
+                agent.GetStat(Affix.IceResPen).Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    0.25, ModifierType.CombatFlat));
             }
 
             if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
-                c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.35));
+                c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    0.35, ModifierType.CombatFlat));
             }
         });
     }

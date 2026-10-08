@@ -88,7 +88,8 @@ public class Alice : Agent, ICustomAnomaly {
         ctx.Events.OnCalculationStarted.Add(c => {
             // Team passive
             if (c.HasTeammates(a => a is { Speciality: Speciality.Anomaly or Speciality.Support }, Id)) {
-                AnomalyProficiency.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), Math.Max(AnomalyMastery - 140, 0) * 1.6));
+                AnomalyProficiency.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    Math.Max(AnomalyMastery - 140, 0) * 1.6, ModifierType.CombatFlat));
             }
         });
         
@@ -113,7 +114,8 @@ public class Alice : Agent, ICustomAnomaly {
             if (BuildupBonusActive) return;
             
             BuildupBonusActive = true;
-            AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25));
+            AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                0.25, ModifierType.CombatFlat));
         });
         
         // Hold BA for polarity assault
@@ -140,7 +142,8 @@ public class Alice : Agent, ICustomAnomaly {
             
             // We assume that there are still 7s of physical anomaly left
             const double bonus = 0.18 * 7;
-            DisorderDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), bonus));
+            DisorderDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                bonus, ModifierType.CombatFlat));
             try {
                 return base.GetAnomalyDamage(ctx, element, skipEvents);
             } finally {

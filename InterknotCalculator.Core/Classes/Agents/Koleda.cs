@@ -47,7 +47,8 @@ public class Koleda : SupportAgent, IAgentReference<Koleda> {
         base.RegisterHooks(ctx);
 
         ctx.Events.OnCalculationStarted.Add(c => {
-            DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.6,
+            DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                0.6, ModifierType.CombatFlat,
                 tags: SkillTag.ExSpecial));
 
             if (c.HasTeammates(a => a.Element.Matches(Element)
@@ -55,7 +56,8 @@ public class Koleda : SupportAgent, IAgentReference<Koleda> {
                                     || a.Speciality is Speciality.Rupture, Id)
                 && c.Enemy.IsStunned) {
                 foreach (var agent in c.Team.Values) {
-                    agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.35 * 2,
+                    agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                        0.35 * 2, ModifierType.CombatFlat,
                         tags: SkillTag.Chain));
                 }
             }
