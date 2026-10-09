@@ -1,125 +1,161 @@
 ﻿[
   {
-    Name: violet_requiem,
-    Tag: ExSpecial
+    AgentId: 1331,
+    Tag: ExSpecial,
+    Name: violet_requiem
   },
   {
-    Name: fluttering_frock_suspension,
-    Tag: BasicAtk
-  },
-  {
-    Name: cavity_alert,
-    Tag: ExSpecial
-  },
-  {
-    Name: intertwined_stab,
-    Tag: QuickAssist,
-    Damage: 22922.67
-  },
-  {
-    Name: sugarburst_sparkles_x4,
-    Tag: BasicAtk
-  },
-  {
-    Name: starshine_waltz 3,
+    AgentId: 1331,
     Tag: BasicAtk,
-    Damage: 157550.09
+    Name: fluttering_frock_suspension
   },
   {
-    Name: sugarburst_sparkles_x4,
-    Tag: BasicAtk
+    AgentId: 1411,
+    Tag: ExSpecial,
+    Name: cavity_alert
   },
   {
-    Name: assault,
+    AgentId: 1401,
+    Tag: QuickAssist,
+    Name: intertwined_stab,
+    Damage: 22922.67,
+    Daze: 189.72
+  },
+  {
+    AgentId: 1411,
+    Tag: BasicAtk,
+    Name: sugarburst_sparkles_x4
+  },
+  {
+    AgentId: 1401,
+    Tag: BasicAtk,
+    Name: starshine_waltz 3,
+    Damage: 157550.09,
+    Daze: 254.73
+  },
+  {
+    AgentId: 1411,
+    Tag: BasicAtk,
+    Name: sugarburst_sparkles_x4
+  },
+  {
+    AgentId: 1401,
     Tag: AttributeAnomaly,
+    Name: assault,
     Damage: 324463.23
   },
   {
-    Name: twin_rainbows_of_the_swordheart,
+    AgentId: 1401,
     Tag: AttributeAnomaly,
+    Name: twin_rainbows_of_the_swordheart,
     Damage: 56781.06
   },
   {
-    Name: abloom_,
-    Tag: AttributeAnomaly
+    AgentId: 1331,
+    Tag: AttributeAnomaly,
+    Name: abloom_
   },
   {
+    AgentId: 1401,
+    Tag: AttributeAnomaly,
     Name: polarity_assault,
-    Tag: AttributeAnomaly,
     Damage: 377778.78
   },
   {
-    Name: abloom_assault,
-    Tag: AttributeAnomaly
-  },
-  {
-    Name: disorder,
+    AgentId: 1331,
     Tag: AttributeAnomaly,
-    Damage: 785534.87
+    Name: abloom_assault
   },
   {
+    AgentId: 1401,
+    Tag: AttributeAnomaly,
+    Name: disorder,
+    Damage: 785534.87,
+    Daze: 249.4
+  },
+  {
+    AgentId: 1401,
+    Tag: ExSpecial,
     Name: aurora_thrust_northern_cross,
-    Tag: ExSpecial,
-    Damage: 75116.69
+    Damage: 75116.69,
+    Daze: 445.39
   },
   {
-    Name: abloom_assault,
-    Tag: AttributeAnomaly
-  },
-  {
-    Name: sugarburst_sparkles_x4,
-    Tag: BasicAtk
-  },
-  {
-    Name: aurora_thrust_southern_cross,
-    Tag: ExSpecial,
-    Damage: 86821.81
-  },
-  {
-    Name: sugarburst_sparkles_x4,
-    Tag: BasicAtk
-  },
-  {
-    Name: assault,
+    AgentId: 1331,
     Tag: AttributeAnomaly,
+    Name: abloom_assault
+  },
+  {
+    AgentId: 1411,
+    Tag: BasicAtk,
+    Name: sugarburst_sparkles_x4
+  },
+  {
+    AgentId: 1401,
+    Tag: ExSpecial,
+    Name: aurora_thrust_southern_cross,
+    Damage: 86821.81,
+    Daze: 523.57
+  },
+  {
+    AgentId: 1411,
+    Tag: BasicAtk,
+    Name: sugarburst_sparkles_x4
+  },
+  {
+    AgentId: 1401,
+    Tag: AttributeAnomaly,
+    Name: assault,
     Damage: 377778.78
   },
   {
-    Name: disorder,
+    AgentId: 1401,
     Tag: AttributeAnomaly,
-    Damage: 785534.87
+    Name: disorder,
+    Damage: 785534.87,
+    Daze: 249.4
   },
   {
-    Name: twin_rainbows_of_the_swordheart,
+    AgentId: 1401,
     Tag: AttributeAnomaly,
+    Name: twin_rainbows_of_the_swordheart,
     Damage: 66111.29
   },
   {
+    AgentId: 1401,
+    Tag: BasicAtk,
     Name: celestial_overture 6,
+    Damage: 35661.87,
+    Daze: 272.19
+  },
+  {
+    AgentId: 1411,
     Tag: BasicAtk,
-    Damage: 35661.87
+    Name: sugarburst_sparkles_x4
   },
   {
-    Name: sugarburst_sparkles_x4,
-    Tag: BasicAtk
-  },
-  {
+    AgentId: 1401,
+    Tag: BasicAtk,
     Name: starshine_waltz 3,
+    Damage: 157550.09,
+    Daze: 254.73
+  },
+  {
+    AgentId: 1411,
     Tag: BasicAtk,
-    Damage: 157550.09
+    Name: sugarburst_sparkles_x4
   },
   {
-    Name: sugarburst_sparkles_x4,
-    Tag: BasicAtk
-  },
-  {
-    Name: polarity_assault,
+    AgentId: 1401,
     Tag: AttributeAnomaly,
+    Name: polarity_assault,
     Damage: 377778.78
   },
   {
-    Name: disorder,
+    AgentId: 1401,
     Tag: AttributeAnomaly,
-    Damage: 886987.72
+    Name: disorder,
+    Damage: 886987.72,
+    Daze: 249.4
   }
 ]

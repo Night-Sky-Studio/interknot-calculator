@@ -1,87 +1,120 @@
 ﻿[
   {
-    Name: eradication_mode,
+    AgentId: 1241,
     Tag: Chain,
-    Damage: 96718.88
+    Name: eradication_mode,
+    Damage: 96718.88,
+    Daze: 201.06
   },
   {
-    Name: covering_shot,
+    AgentId: 1241,
     Tag: QuickAssist,
-    Damage: 8493.8
+    Name: covering_shot,
+    Damage: 8493.8,
+    Daze: 70.02
   },
   {
-    Name: full_barrage,
+    AgentId: 1241,
     Tag: ExSpecial,
-    Damage: 120980.98
+    Name: full_barrage,
+    Damage: 120980.98,
+    Daze: 648.81
   },
   {
+    AgentId: 1241,
+    Tag: BasicAtk,
     Name: please_do_not_resist 1,
-    Tag: BasicAtk,
-    Damage: 35252.14
+    Damage: 35252.14,
+    Daze: 81.36
   },
   {
+    AgentId: 1241,
+    Tag: BasicAtk,
     Name: please_do_not_resist 2,
-    Tag: BasicAtk,
-    Damage: 35252.14
+    Damage: 35252.14,
+    Daze: 81.36
   },
   {
+    AgentId: 1241,
+    Tag: BasicAtk,
     Name: please_do_not_resist 3,
-    Tag: BasicAtk,
-    Damage: 105614.0
+    Damage: 105614.0,
+    Daze: 242.01
   },
   {
-    Name: overwhelming_firepower 1,
+    AgentId: 1241,
     Tag: Dash,
-    Damage: 11397.25
+    Name: overwhelming_firepower 1,
+    Damage: 11397.25,
+    Daze: 81.36
   },
   {
-    Name: please_do_not_resist 3,
+    AgentId: 1241,
     Tag: BasicAtk,
-    Damage: 105614.0
+    Name: please_do_not_resist 3,
+    Damage: 105614.0,
+    Daze: 242.01
   },
   {
-    Name: full_barrage,
+    AgentId: 1241,
     Tag: ExSpecial,
-    Damage: 120980.98
+    Name: full_barrage,
+    Damage: 120980.98,
+    Daze: 648.81
   },
   {
-    Name: max_eradication_mode,
+    AgentId: 1241,
     Tag: Ultimate,
-    Damage: 325861.89
+    Name: max_eradication_mode,
+    Damage: 325861.89,
+    Daze: 174.6
   },
   {
+    AgentId: 1241,
+    Tag: BasicAtk,
     Name: please_do_not_resist 1,
-    Tag: BasicAtk,
-    Damage: 35252.14
+    Damage: 35252.14,
+    Daze: 81.36
   },
   {
+    AgentId: 1241,
+    Tag: BasicAtk,
     Name: please_do_not_resist 2,
-    Tag: BasicAtk,
-    Damage: 35252.14
+    Damage: 35252.14,
+    Daze: 81.36
   },
   {
+    AgentId: 1241,
+    Tag: BasicAtk,
     Name: please_do_not_resist 3,
-    Tag: BasicAtk,
-    Damage: 105614.0
+    Damage: 105614.0,
+    Daze: 242.01
   },
   {
-    Name: overwhelming_firepower 1,
+    AgentId: 1241,
     Tag: Dash,
-    Damage: 11397.25
+    Name: overwhelming_firepower 1,
+    Damage: 11397.25,
+    Daze: 81.36
   },
   {
-    Name: please_do_not_resist 3,
+    AgentId: 1241,
     Tag: BasicAtk,
-    Damage: 105614.0
+    Name: please_do_not_resist 3,
+    Damage: 105614.0,
+    Daze: 242.01
   },
   {
-    Name: full_barrage,
+    AgentId: 1241,
     Tag: ExSpecial,
-    Damage: 120980.98
+    Name: full_barrage,
+    Damage: 120980.98,
+    Daze: 648.81
   },
   {
-    Name: corruption,
+    AgentId: 1241,
     Tag: AttributeAnomaly,
+    Name: corruption,
     Damage: 46292.03
   }
 ]

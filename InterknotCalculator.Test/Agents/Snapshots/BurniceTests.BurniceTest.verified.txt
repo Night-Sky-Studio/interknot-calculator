@@ -1,32 +1,42 @@
 ﻿[
   {
-    Name: fuel-fed_flame,
+    AgentId: 1171,
     Tag: Chain,
-    Damage: 44106.76
+    Name: fuel-fed_flame,
+    Damage: 44106.76,
+    Daze: 301.29
   },
   {
-    Name: burn,
+    AgentId: 1171,
     Tag: AttributeAnomaly,
+    Name: burn,
     Damage: 166823.42
   },
   {
-    Name: intense_heat_stirring_method_double 1,
+    AgentId: 1171,
     Tag: ExSpecial,
-    Damage: 92388.4
+    Name: intense_heat_stirring_method_double 1,
+    Damage: 92388.4,
+    Daze: 729.9
   },
   {
-    Name: glorious_inferno,
+    AgentId: 1171,
     Tag: Ultimate,
-    Damage: 140702.58
+    Name: glorious_inferno,
+    Damage: 140702.58,
+    Daze: 133.05
   },
   {
-    Name: burn,
+    AgentId: 1171,
     Tag: AttributeAnomaly,
+    Name: burn,
     Damage: 166823.42
   },
   {
-    Name: energizing_speciality_drink,
+    AgentId: 1171,
     Tag: QuickAssist,
-    Damage: 8153.05
+    Name: energizing_speciality_drink,
+    Damage: 8153.05,
+    Daze: 105.66
   }
 ]

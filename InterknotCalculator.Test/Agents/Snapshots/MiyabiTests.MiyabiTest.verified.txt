@@ -1,57 +1,77 @@
 ﻿[
   {
+    AgentId: 1091,
+    Tag: ExSpecial,
     Name: hisetsu 1,
-    Tag: ExSpecial,
-    Damage: 94874.28
+    Damage: 94874.28,
+    Daze: 415.72
   },
   {
+    AgentId: 1091,
+    Tag: ExSpecial,
     Name: hisetsu 2,
-    Tag: ExSpecial,
-    Damage: 116405.43
+    Damage: 116405.43,
+    Daze: 523.31
   },
   {
+    AgentId: 1091,
+    Tag: BasicAtk,
     Name: kazahana 3,
-    Tag: BasicAtk,
-    Damage: 15236.69
+    Damage: 15236.69,
+    Daze: 60.72
   },
   {
+    AgentId: 1091,
+    Tag: BasicAtk,
     Name: kazahana 4,
-    Tag: BasicAtk,
-    Damage: 23264.24
+    Damage: 23264.24,
+    Daze: 106.55
   },
   {
+    AgentId: 1091,
+    Tag: BasicAtk,
     Name: kazahana 5,
-    Tag: BasicAtk,
-    Damage: 31147.36
+    Damage: 31147.36,
+    Daze: 169.42
   },
   {
+    AgentId: 1091,
+    Tag: BasicAtk,
     Name: shimotsuki 3,
-    Tag: BasicAtk,
-    Damage: 906581.84
+    Damage: 906581.84,
+    Daze: 487.62
   },
   {
-    Name: springs_call,
+    AgentId: 1091,
     Tag: Chain,
-    Damage: 151440.19
+    Name: springs_call,
+    Damage: 151440.19,
+    Daze: 244.84
   },
   {
-    Name: lingering_snow,
+    AgentId: 1091,
     Tag: Ultimate,
-    Damage: 574818.01
+    Name: lingering_snow,
+    Damage: 574818.01,
+    Daze: 478.42
   },
   {
-    Name: frostburn,
+    AgentId: 1091,
     Tag: AttributeAnomaly,
+    Name: frostburn,
     Damage: 195665.81
   },
   {
-    Name: shimotsuki 3,
+    AgentId: 1091,
     Tag: BasicAtk,
-    Damage: 906581.84
+    Name: shimotsuki 3,
+    Damage: 906581.84,
+    Daze: 487.62
   },
   {
-    Name: shatter,
+    AgentId: 1091,
     Tag: AttributeAnomaly,
+    Name: shatter,
     Damage: 65221.94
   }
 ]
