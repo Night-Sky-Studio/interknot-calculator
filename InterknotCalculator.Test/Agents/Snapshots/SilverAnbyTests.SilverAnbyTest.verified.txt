@@ -1,127 +1,165 @@
 ﻿[
   {
-    Name: leaping_thunderstrike,
+    AgentId: 1381,
     Tag: Chain,
-    Damage: 248708.95
+    Name: leaping_thunderstrike,
+    Damage: 248708.95,
+    Daze: 277.33
   },
   {
-    Name: azure_flash,
+    AgentId: 1381,
     Tag: Special,
-    Damage: 19180.64
+    Name: azure_flash,
+    Damage: 19180.64,
+    Daze: 47.15
   },
   {
-    Name: white_thunder,
+    AgentId: 1381,
     Tag: Aftershock,
+    Name: white_thunder,
     Damage: 100396.36
   },
   {
-    Name: azure_flash,
+    AgentId: 1381,
     Tag: Special,
-    Damage: 19180.64
+    Name: azure_flash,
+    Damage: 19180.64,
+    Daze: 47.15
   },
   {
-    Name: white_thunder,
+    AgentId: 1381,
     Tag: Aftershock,
+    Name: white_thunder,
     Damage: 100396.36
   },
   {
-    Name: azure_flash,
+    AgentId: 1381,
     Tag: Special,
-    Damage: 19180.64
+    Name: azure_flash,
+    Damage: 19180.64,
+    Daze: 47.15
   },
   {
-    Name: white_thunder,
+    AgentId: 1381,
     Tag: Aftershock,
+    Name: white_thunder,
     Damage: 100396.36
   },
   {
+    AgentId: 1381,
+    Tag: Aftershock,
     Name: thunder_smite,
-    Tag: Aftershock,
     Damage: 112945.9
   },
   {
-    Name: voidstrike,
+    AgentId: 1381,
     Tag: Ultimate,
-    Damage: 765175.22
+    Name: voidstrike,
+    Damage: 765175.22,
+    Daze: 386.42
   },
   {
-    Name: azure_flash,
+    AgentId: 1381,
     Tag: Special,
-    Damage: 19180.64
+    Name: azure_flash,
+    Damage: 19180.64,
+    Daze: 47.15
   },
   {
-    Name: white_thunder,
+    AgentId: 1381,
     Tag: Aftershock,
+    Name: white_thunder,
     Damage: 100396.36
   },
   {
-    Name: azure_flash,
+    AgentId: 1381,
     Tag: Special,
-    Damage: 19180.64
+    Name: azure_flash,
+    Damage: 19180.64,
+    Daze: 47.15
   },
   {
-    Name: white_thunder,
+    AgentId: 1381,
     Tag: Aftershock,
+    Name: white_thunder,
     Damage: 100396.36
   },
   {
-    Name: azure_flash,
+    AgentId: 1381,
     Tag: Special,
-    Damage: 19180.64
+    Name: azure_flash,
+    Damage: 19180.64,
+    Daze: 47.15
   },
   {
-    Name: white_thunder,
+    AgentId: 1381,
     Tag: Aftershock,
+    Name: white_thunder,
     Damage: 100396.36
   },
   {
+    AgentId: 1381,
+    Tag: Aftershock,
     Name: thunder_smite,
-    Tag: Aftershock,
     Damage: 112945.9
   },
   {
+    AgentId: 1381,
+    Tag: Special,
     Name: celestial_thunder,
-    Tag: Special,
-    Damage: 26478.1
+    Damage: 26478.1,
+    Daze: 84.07
   },
   {
-    Name: sundering_bolt,
+    AgentId: 1381,
     Tag: ExSpecial,
-    Damage: 167599.1
+    Name: sundering_bolt,
+    Damage: 167599.1,
+    Daze: 640.3
   },
   {
-    Name: azure_flash,
+    AgentId: 1381,
     Tag: Special,
-    Damage: 19180.64
+    Name: azure_flash,
+    Damage: 19180.64,
+    Daze: 47.15
   },
   {
-    Name: white_thunder,
+    AgentId: 1381,
     Tag: Aftershock,
+    Name: white_thunder,
     Damage: 100396.36
   },
   {
-    Name: azure_flash,
+    AgentId: 1381,
     Tag: Special,
-    Damage: 19180.64
+    Name: azure_flash,
+    Damage: 19180.64,
+    Daze: 47.15
   },
   {
-    Name: white_thunder,
+    AgentId: 1381,
     Tag: Aftershock,
+    Name: white_thunder,
     Damage: 100396.36
   },
   {
-    Name: azure_flash,
+    AgentId: 1381,
     Tag: Special,
-    Damage: 19180.64
+    Name: azure_flash,
+    Damage: 19180.64,
+    Daze: 47.15
   },
   {
-    Name: white_thunder,
+    AgentId: 1381,
     Tag: Aftershock,
+    Name: white_thunder,
     Damage: 100396.36
   },
   {
+    AgentId: 1381,
+    Tag: Aftershock,
     Name: thunder_smite,
-    Tag: Aftershock,
     Damage: 112945.9
   }
 ]

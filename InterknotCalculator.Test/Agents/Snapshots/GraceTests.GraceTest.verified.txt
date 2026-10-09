@@ -1,47 +1,64 @@
 ﻿[
   {
-    Name: collaborative_construction,
+    AgentId: 1181,
     Tag: Chain,
-    Damage: 50821.63
+    Name: collaborative_construction,
+    Damage: 50821.63,
+    Daze: 190.32
   },
   {
+    AgentId: 1181,
+    Tag: BasicAtk,
     Name: high-pressure_spike 1,
-    Tag: BasicAtk,
-    Damage: 3295.35
+    Damage: 3295.35,
+    Daze: 23.16
   },
   {
+    AgentId: 1181,
+    Tag: BasicAtk,
     Name: high-pressure_spike 2,
-    Tag: BasicAtk,
-    Damage: 3562.06
+    Damage: 3562.06,
+    Daze: 43.41
   },
   {
+    AgentId: 1181,
+    Tag: BasicAtk,
     Name: high-pressure_spike 3,
-    Tag: BasicAtk,
-    Damage: 11121.82
+    Damage: 11121.82,
+    Daze: 89.56
   },
   {
-    Name: supercharged_obstruction_removal,
+    AgentId: 1181,
     Tag: ExSpecial,
-    Damage: 29702.63
+    Name: supercharged_obstruction_removal,
+    Damage: 29702.63,
+    Daze: 334.16
   },
   {
+    AgentId: 1181,
+    Tag: BasicAtk,
     Name: high-pressure_spike 4,
-    Tag: BasicAtk,
-    Damage: 11062.55
+    Damage: 11062.55,
+    Daze: 133.71
   },
   {
-    Name: supercharged_obstruction_removal,
+    AgentId: 1181,
     Tag: ExSpecial,
-    Damage: 29702.63
+    Name: supercharged_obstruction_removal,
+    Damage: 29702.63,
+    Daze: 334.16
   },
   {
-    Name: demolition_blast,
+    AgentId: 1181,
     Tag: Ultimate,
-    Damage: 131501.47
+    Name: demolition_blast,
+    Damage: 131501.47,
+    Daze: 166.17
   },
   {
-    Name: shock,
+    AgentId: 1181,
     Tag: AttributeAnomaly,
+    Name: shock,
     Damage: 310145.43
   }
 ]

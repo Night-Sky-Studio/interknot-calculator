@@ -1,82 +1,108 @@
 ﻿[
   {
-    Name: energizing_speciality_drink,
-    Tag: QuickAssist
+    AgentId: 1171,
+    Tag: QuickAssist,
+    Name: energizing_speciality_drink
   },
   {
-    Name: intense_heat_stirring_method 1,
-    Tag: ExSpecial
+    AgentId: 1171,
+    Tag: ExSpecial,
+    Name: intense_heat_stirring_method 1
   },
   {
-    Name: intense_heat_stirring_method_double 1,
-    Tag: ExSpecial
+    AgentId: 1171,
+    Tag: ExSpecial,
+    Name: intense_heat_stirring_method_double 1
   },
   {
-    Name: burn,
-    Tag: AttributeAnomaly
-  },
-  {
-    Name: fuel-fed_flame,
-    Tag: Chain
-  },
-  {
-    Name: flowers_of_sin,
-    Tag: Chain,
-    Damage: 66313.51
-  },
-  {
-    Name: phantom_thrust,
-    Tag: Dash,
-    Damage: 10945.76
-  },
-  {
-    Name: salchow_jump 1,
-    Tag: BasicAtk,
-    Damage: 37810.31
-  },
-  {
-    Name: assault,
+    AgentId: 1171,
     Tag: AttributeAnomaly,
+    Name: burn
+  },
+  {
+    AgentId: 1171,
+    Tag: Chain,
+    Name: fuel-fed_flame
+  },
+  {
+    AgentId: 1261,
+    Tag: Chain,
+    Name: flowers_of_sin,
+    Damage: 66313.51,
+    Daze: 306.5
+  },
+  {
+    AgentId: 1261,
+    Tag: Dash,
+    Name: phantom_thrust,
+    Damage: 10945.76,
+    Daze: 67.68
+  },
+  {
+    AgentId: 1261,
+    Tag: BasicAtk,
+    Name: salchow_jump 1,
+    Damage: 37810.31,
+    Daze: 296.44
+  },
+  {
+    AgentId: 1261,
+    Tag: AttributeAnomaly,
+    Name: assault,
     Damage: 258275.31
   },
   {
+    AgentId: 1261,
+    Tag: AttributeAnomaly,
     Name: disorder,
-    Tag: AttributeAnomaly,
-    Damage: 398953.17
+    Damage: 398953.17,
+    Daze: 249.4
   },
   {
-    Name: salchow_jump 2,
+    AgentId: 1261,
     Tag: BasicAtk,
-    Damage: 20280.19
+    Name: salchow_jump 2,
+    Damage: 20280.19,
+    Daze: 158.67
   },
   {
-    Name: aerial_sweep_cleanout,
+    AgentId: 1261,
     Tag: ExSpecial,
-    Damage: 72205.01
-  },
-  {
     Name: aerial_sweep_cleanout,
-    Tag: ExSpecial,
-    Damage: 72205.01
+    Damage: 72205.01,
+    Daze: 604.06
   },
   {
-    Name: assault,
+    AgentId: 1261,
+    Tag: ExSpecial,
+    Name: aerial_sweep_cleanout,
+    Damage: 72205.01,
+    Daze: 604.06
+  },
+  {
+    AgentId: 1261,
     Tag: AttributeAnomaly,
+    Name: assault,
     Damage: 314497.46
   },
   {
-    Name: phantom_thrust,
+    AgentId: 1261,
     Tag: Dash,
-    Damage: 13122.48
+    Name: phantom_thrust,
+    Damage: 13122.48,
+    Daze: 67.68
   },
   {
-    Name: final_curtain,
+    AgentId: 1261,
     Tag: Ultimate,
-    Damage: 184675.31
+    Name: final_curtain,
+    Damage: 184675.31,
+    Daze: 240.8
   },
   {
-    Name: assault,
+    AgentId: 1261,
     Tag: AttributeAnomaly,
+    Name: assault,
     Damage: 314497.46
   }
 ]

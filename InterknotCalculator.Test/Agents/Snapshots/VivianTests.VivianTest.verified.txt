@@ -1,51 +1,64 @@
 ﻿[
   {
-    Name: aerial_sweep_cleanout,
-    Tag: ExSpecial
-  },
-  {
-    Name: aerial_sweep_cleanout,
-    Tag: ExSpecial
-  },
-  {
-    Name: assault,
-    Tag: AttributeAnomaly
-  },
-  {
-    Name: violet_requiem,
+    AgentId: 1261,
     Tag: ExSpecial,
-    Damage: 21011.88
+    Name: aerial_sweep_cleanout
   },
   {
-    Name: fluttering_frock_suspension,
+    AgentId: 1261,
+    Tag: ExSpecial,
+    Name: aerial_sweep_cleanout
+  },
+  {
+    AgentId: 1261,
+    Tag: AttributeAnomaly,
+    Name: assault
+  },
+  {
+    AgentId: 1331,
+    Tag: ExSpecial,
+    Name: violet_requiem,
+    Damage: 21011.88,
+    Daze: 625.99
+  },
+  {
+    AgentId: 1331,
     Tag: BasicAtk,
-    Damage: 2844.71
+    Name: fluttering_frock_suspension,
+    Damage: 2844.71,
+    Daze: 81.1
   },
   {
-    Name: aerial_sweep_cleanout,
-    Tag: ExSpecial
+    AgentId: 1261,
+    Tag: ExSpecial,
+    Name: aerial_sweep_cleanout
   },
   {
-    Name: abloom_assault,
+    AgentId: 1331,
     Tag: AttributeAnomaly,
+    Name: abloom_assault,
     Damage: 85055.64
   },
   {
-    Name: aerial_sweep_cleanout,
-    Tag: ExSpecial
+    AgentId: 1261,
+    Tag: ExSpecial,
+    Name: aerial_sweep_cleanout
   },
   {
-    Name: abloom_assault,
+    AgentId: 1331,
     Tag: AttributeAnomaly,
+    Name: abloom_assault,
     Damage: 85055.64
   },
   {
-    Name: assault,
-    Tag: AttributeAnomaly
+    AgentId: 1261,
+    Tag: AttributeAnomaly,
+    Name: assault
   },
   {
-    Name: abloom_assault,
+    AgentId: 1331,
     Tag: AttributeAnomaly,
+    Name: abloom_assault,
     Damage: 85055.64
   }
 ]

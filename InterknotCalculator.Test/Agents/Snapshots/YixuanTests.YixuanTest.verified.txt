@@ -1,42 +1,58 @@
 ﻿[
   {
-    Name: auric_ink_rush,
+    AgentId: 1371,
     Tag: Chain,
-    Damage: 415126.81
+    Name: auric_ink_rush,
+    Damage: 415126.81,
+    Daze: 317.87
   },
   {
+    AgentId: 1371,
+    Tag: ExSpecial,
     Name: ink_manifestation_charged,
-    Tag: ExSpecial,
-    Damage: 380232.46
+    Damage: 380232.46,
+    Daze: 347.91
   },
   {
+    AgentId: 1371,
+    Tag: ExSpecial,
     Name: cloud_shaper,
-    Tag: ExSpecial,
-    Damage: 643282.41
+    Damage: 643282.41,
+    Daze: 670.44
   },
   {
+    AgentId: 1371,
+    Tag: ExSpecial,
     Name: ashen_ink_becomes_shadows,
-    Tag: ExSpecial,
-    Damage: 224303.99
+    Damage: 224303.99,
+    Daze: 198.65
   },
   {
+    AgentId: 1371,
+    Tag: Ultimate,
     Name: endless_talisman_suppression,
-    Tag: Ultimate,
-    Damage: 1458526.81
+    Damage: 1458526.81,
+    Daze: 348.56
   },
   {
+    AgentId: 1371,
+    Tag: Ultimate,
     Name: qingming_skyshade,
-    Tag: Ultimate,
-    Damage: 1843687.31
+    Damage: 1843687.31,
+    Daze: 568.88
   },
   {
+    AgentId: 1371,
+    Tag: BasicAtk,
     Name: auric_array,
-    Tag: BasicAtk,
-    Damage: 218470.97
+    Damage: 218470.97,
+    Daze: 409.94
   },
   {
-    Name: qingming_eruption,
+    AgentId: 1371,
     Tag: BasicAtk,
-    Damage: 79271.71
+    Name: qingming_eruption,
+    Damage: 79271.71,
+    Daze: 148.99
   }
 ]

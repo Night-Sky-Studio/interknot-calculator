@@ -1,77 +1,106 @@
 ﻿[
   {
+    AgentId: 1321,
+    Tag: Special,
     Name: locked_position,
-    Tag: Special,
-    Damage: 36705.39
+    Damage: 36705.39,
+    Daze: 73.19
   },
   {
+    AgentId: 1321,
+    Tag: Special,
     Name: binding_sunder_first 1,
-    Tag: Special,
-    Damage: 28323.57
+    Damage: 28323.57,
+    Daze: 57.01
   },
   {
+    AgentId: 1321,
+    Tag: BasicAtk,
     Name: razor_wire 3,
-    Tag: BasicAtk,
-    Damage: 54970.78
+    Damage: 54970.78,
+    Daze: 87.42
   },
   {
+    AgentId: 1321,
+    Tag: BasicAtk,
     Name: razor_wire 4,
-    Tag: BasicAtk,
-    Damage: 130511.95
+    Damage: 130511.95,
+    Daze: 213.9
   },
   {
+    AgentId: 1321,
+    Tag: BasicAtk,
     Name: razor_wire 5,
-    Tag: BasicAtk,
-    Damage: 156390.82
+    Damage: 156390.82,
+    Daze: 235.29
   },
   {
-    Name: binding_sunder_second 1,
+    AgentId: 1321,
     Tag: ExSpecial,
-    Damage: 378020.16
+    Name: binding_sunder_second 1,
+    Damage: 378020.16,
+    Daze: 610.08
   },
   {
-    Name: garrote 1,
+    AgentId: 1321,
     Tag: BasicAtk,
-    Damage: 158206.88
+    Name: garrote 1,
+    Damage: 158206.88,
+    Daze: 169.91
   },
   {
+    AgentId: 1321,
+    Tag: BasicAtk,
     Name: garrote 2,
-    Tag: BasicAtk,
-    Damage: 171303.48
+    Damage: 171303.48,
+    Daze: 174.38
   },
   {
-    Name: lunalux,
+    AgentId: 1321,
     Tag: Chain,
-    Damage: 950395.44
-  },
-  {
     Name: lunalux,
-    Tag: Chain,
-    Damage: 950395.44
+    Damage: 950395.44,
+    Daze: 330.52
   },
   {
-    Name: lunalux_garrote,
+    AgentId: 1321,
+    Tag: Chain,
+    Name: lunalux,
+    Damage: 950395.44,
+    Daze: 330.52
+  },
+  {
+    AgentId: 1321,
     Tag: Ultimate,
-    Damage: 2467626.39
+    Name: lunalux_garrote,
+    Damage: 2467626.39,
+    Daze: 363.91
   },
   {
-    Name: binding_sunder_second 1,
+    AgentId: 1321,
     Tag: ExSpecial,
-    Damage: 378020.16
+    Name: binding_sunder_second 1,
+    Damage: 378020.16,
+    Daze: 610.08
   },
   {
-    Name: garrote 1,
+    AgentId: 1321,
     Tag: BasicAtk,
-    Damage: 158206.88
+    Name: garrote 1,
+    Damage: 158206.88,
+    Daze: 169.91
   },
   {
-    Name: lunalux,
+    AgentId: 1321,
     Tag: Chain,
-    Damage: 950395.44
+    Name: lunalux,
+    Damage: 950395.44,
+    Daze: 330.52
   },
   {
-    Name: burn,
+    AgentId: 1321,
     Tag: AttributeAnomaly,
+    Name: burn,
     Damage: 122211.4
   }
 ]

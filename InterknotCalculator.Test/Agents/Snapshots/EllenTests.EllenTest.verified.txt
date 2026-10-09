@@ -1,37 +1,51 @@
 ﻿[
   {
-    Name: avalanche,
+    AgentId: 1191,
     Tag: Chain,
-    Damage: 624693.34
+    Name: avalanche,
+    Damage: 624693.34,
+    Daze: 496.53
   },
   {
-    Name: tail_swipe,
+    AgentId: 1191,
     Tag: ExSpecial,
-    Damage: 221211.36
+    Name: tail_swipe,
+    Damage: 221211.36,
+    Daze: 566.0
   },
   {
-    Name: flash_freeze_trimming 3,
+    AgentId: 1191,
     Tag: BasicAtk,
-    Damage: 390320.38
+    Name: flash_freeze_trimming 3,
+    Damage: 390320.38,
+    Daze: 342.89
   },
   {
-    Name: endless_winter,
+    AgentId: 1191,
     Tag: Ultimate,
-    Damage: 1485881.39
+    Name: endless_winter,
+    Damage: 1485881.39,
+    Daze: 259.19
   },
   {
+    AgentId: 1191,
+    Tag: ExSpecial,
     Name: tail_swipe,
-    Tag: ExSpecial,
-    Damage: 221211.36
+    Damage: 221211.36,
+    Daze: 566.0
   },
   {
+    AgentId: 1191,
+    Tag: ExSpecial,
     Name: sharknami,
-    Tag: ExSpecial,
-    Damage: 324443.33
+    Damage: 324443.33,
+    Daze: 518.57
   },
   {
-    Name: flash_freeze_trimming 3,
+    AgentId: 1191,
     Tag: BasicAtk,
-    Damage: 390320.38
+    Name: flash_freeze_trimming 3,
+    Damage: 390320.38,
+    Daze: 342.89
   }
 ]
