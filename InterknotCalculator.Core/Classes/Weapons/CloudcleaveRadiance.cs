@@ -23,7 +23,7 @@ public class CloudcleaveRadiance : Weapon {
             c.MainAgent.CritDamage.AddUnique(new(etherVeilPassiveKey, 0.25, ModifierType.CombatFlat));
         });
         
-        ctx.Events.OnEtherVeilDeactivated.Add((c, e) => {
+        ctx.Events.OnEtherVeilDeactivated.Add((c, _) => {
             c.MainAgent.DmgBonus.RemoveKey(etherVeilPassiveKey);
             c.MainAgent.CritDamage.RemoveKey(etherVeilPassiveKey);
         });

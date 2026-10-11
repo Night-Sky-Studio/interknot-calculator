@@ -7,15 +7,6 @@ namespace InterknotCalculator.Test.Agents;
 
 [TestFixture]
 public class YeShunguangTests : AgentsTest {
-    private static string[] Combo { get; } = [
-        "enlightened_mind_sunderlight 1",
-        "enlightened_mind_sunderlight 2",
-        "enlightened_mind_sunderlight_annihilation 2",
-        "enlightened_mind_sunderlight_maximum",
-        "enlightened_mind_soaring_light",
-        "enlightened_mind_skyward_ascent",
-    ];
-    
     private static string[] EntryRotation { get; } = [
         $"{AgentId.Sunna}.special_photography_technique",
         $"{AgentId.Zhao}.burst_of_frost",

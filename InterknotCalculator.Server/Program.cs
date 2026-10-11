@@ -12,7 +12,7 @@ public static class Program {
     private static string RequestFilePath { get; } = Path.Combine(Path.GetTempPath(), "interknot_calculator.request");
     private static string ResultFilePath  { get; } = Path.Combine(Path.GetTempPath(), "interknot_calculator.result");
     
-    private static bool IsRecalculating { get; set; } = false;
+    private static bool IsRecalculating { get; set; }
     
     public static async Task Main(string[] args) {
         // Create web app

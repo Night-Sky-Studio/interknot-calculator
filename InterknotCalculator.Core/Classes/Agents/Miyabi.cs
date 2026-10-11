@@ -123,7 +123,7 @@ public class Miyabi : Agent, ICustomAnomaly {
 }
 
 public class MiyabiM1 : Miyabi {
-    public MiyabiM1() : base() {
+    public MiyabiM1() {
         // While in Shimotsuki Stance, every 1 point of Fallen Frost consumed will allow
         // Basic Attack: Shimotsuki to ignore 6% of DEF, stacking up to 6 times
         Skills["shimotsuki"].Affixes[Affix.ResPen] += 0.06 * 6;
@@ -150,7 +150,7 @@ public class MiyabiM1 : Miyabi {
 }
 
 public class MiyabiM2 : MiyabiM1 {
-    public MiyabiM2() : base() {
+    public MiyabiM2() {
         // Basic Attack: Kazahana and Dodge Counter DMG increases by 30%.
         Skills["kazahana"].Affixes[Affix.DmgBonus] += 0.3;
         Skills["kan_suzume"].Affixes[Affix.DmgBonus] += 0.3;
