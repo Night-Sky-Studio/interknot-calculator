@@ -51,7 +51,7 @@ public class EtherVeilTests {
         var cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
         await using var registration = cts.Token.Register(() => task.TrySetException(new TimeoutException()));
 
-        Context.Events.OnEtherVeilActivated.Add((c, e) => {
+        Context.Events.OnEtherVeilActivated.Add((c, _) => {
             if (c.GetEtherVeil<Wellspring>() is { } wellspring && 
                 c.GetEtherVeil<DelusionReprise>() is { } reprise) {
                 task.SetResult([wellspring, reprise]);

@@ -200,7 +200,7 @@ public class EllenM6 : EllenM5 {
                 0.2, ModifierType.CombatFlat));
         });
         
-        ctx.Events.OnActionExecuted.Add((c, e) => {
+        ctx.Events.OnActionExecuted.Add((_, e) => {
             // When Ellen uses an EX Special Attack, Chain Attack, or gains Quick Charge [...]
             // She gains 1 stack of The Feast Begins, up to a maximum of 3 stacks.
 

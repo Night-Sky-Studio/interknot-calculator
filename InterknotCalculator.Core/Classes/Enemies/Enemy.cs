@@ -22,11 +22,11 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     public double GetDefenseMultiplier(double penRatio, double pen) => 
         LevelFactor / (Math.Max(Defense * (1 - penRatio) - pen, 0) + LevelFactor);
     
-    private int AnomalyTriggerCount { get; set; } = 0;
+    private int AnomalyTriggerCount { get; set; }
     
-    private bool WaitingForShatter { get; set; } = false;
+    private bool WaitingForShatter { get; set; }
     
-    public Anomaly? AfflictedAnomaly { get; set; } = null;
+    public Anomaly? AfflictedAnomaly { get; set; }
     
     private void TryTriggerAnomaly(Context ctx, Agent agent, Element element) {
         var buildup = GetBuildup(element);

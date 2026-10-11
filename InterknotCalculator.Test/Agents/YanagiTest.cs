@@ -68,7 +68,7 @@ public class YanagiTests : AgentsTest {
     [Test]
     public async Task YanagiTest() {
         var enemy = new NotoriousDullahan {
-            AfflictedAnomaly = Anomaly.GetAnomalyByElement(Element.Fire)! with {
+            AfflictedAnomaly = Anomaly.GetAnomalyByElement(Element.Fire) with {
                 AgentId = 1151,
                 Stats = new() {
                     [Affix.Atk] = 2500,

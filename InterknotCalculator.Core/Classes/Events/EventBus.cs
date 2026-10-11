@@ -1,5 +1,3 @@
-using InterknotCalculator.Core.Classes.EtherVeils;
-
 namespace InterknotCalculator.Core.Classes.Events;
 
 public sealed class EventBus {

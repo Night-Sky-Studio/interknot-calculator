@@ -1,6 +1,4 @@
 using InterknotCalculator.Core.Classes.Agents;
-using InterknotCalculator.Core.Classes.Modifiers;
-using InterknotCalculator.Core.Enums;
 
 namespace InterknotCalculator.Core.Classes.EtherVeils;
 
