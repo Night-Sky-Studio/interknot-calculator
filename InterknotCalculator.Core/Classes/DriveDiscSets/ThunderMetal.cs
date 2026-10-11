@@ -14,7 +14,7 @@ public class ThunderMetal : DriveDiscSet {
     void Activate(Context c, uint equipper) {
         if (IsActive) return;
         IsActive = true;
-        c.Team[equipper].Atk.Add(new(ModifierKey.DiscSet(Id, true), 0.28, ModifierType.CombatFlat));
+        c.Team[equipper].Atk.Add(new(ModifierKey.DiscSet(Id, true), 0.28, ModifierType.CombatRatio));
     }
 
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
