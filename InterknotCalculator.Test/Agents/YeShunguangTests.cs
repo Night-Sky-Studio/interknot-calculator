@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using InterknotCalculator.Core.Classes;
+using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -110,7 +111,7 @@ public class YeShunguangTests : AgentsTest {
             }
         ],
         Team = [],
-        StunBonus = 1.5,
+        Enemy = new(nameof(NotoriousDullahan), 1.5),
         Rotation = []
     };
     

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using InterknotCalculator.Core.Classes;
+using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -49,7 +50,7 @@ public class BurniceTests : AgentsTest {
             },
         ],
         Team = [new(AgentId.Lucy)],
-        StunBonus = 1.5,
+        Enemy = new(nameof(NotoriousDullahan), 1.5),
         Rotation = [
             "fuel-fed_flame",
             "intense_heat_stirring_method_double",

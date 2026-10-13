@@ -10,4 +10,8 @@ public class SafeDictionary<TKey, TValue> : Dictionary<TKey, TValue> where TKey 
         get => TryGetValue(key, out TValue value) ? value : default;
         set => base[key] = value;
     }
+    
+    public SafeDictionary() { }
+    
+    public SafeDictionary(Dictionary<TKey, TValue> dictionary) : base(dictionary) { }
 }

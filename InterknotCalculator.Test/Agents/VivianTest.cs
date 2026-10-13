@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using InterknotCalculator.Core.Classes;
+using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -49,7 +50,7 @@ public class VivianTests : AgentsTest {
             },
         ],
         Team = [new(AgentId.Jane)],
-        StunBonus = 1,
+        Enemy = new(nameof(NotoriousDullahan), 1),
         Rotation = [
             "1261.aerial_sweep_cleanout",
             "1261.aerial_sweep_cleanout",

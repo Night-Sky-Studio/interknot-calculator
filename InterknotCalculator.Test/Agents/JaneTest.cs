@@ -50,7 +50,10 @@ public class JaneTests : AgentsTest {
             },
         ],
         Team = [],
-        StunBonus = 1.5,
+        Enemy = new(
+            nameof(NotoriousDullahan), 
+            1.5
+        ),
         Rotation = [
             "flowers_of_sin",
             "phantom_thrust",
@@ -63,19 +66,20 @@ public class JaneTests : AgentsTest {
         ]
     };
 
-    protected override CalcRequest Request { get; } = Jane();
+    protected override CalcRequest Request { get; } = Jane() with {
+        Enemy = new(
+            nameof(NotoriousDullahan), 
+            1.5, 
+            new(Element.Physical, 0, new() {
+                [Affix.Atk] = 2358,
+                [Affix.AnomalyProficiency] = 353
+            })
+        ),
+    };
 
     [Test]
     public async Task JaneTest() {
-        var enemy = new NotoriousDullahan {
-            AfflictedAnomaly = Anomaly.GetAnomalyByElement(Element.Physical) with {
-                Stats = new() {
-                    [Affix.Atk] = 2358,
-                    [Affix.AnomalyProficiency] = 353
-                }
-            }
-        };
-        var result = Calculator.Calculate(Request, enemy);
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         Assert.That(result.PerAction, Has.Exactly(3)
