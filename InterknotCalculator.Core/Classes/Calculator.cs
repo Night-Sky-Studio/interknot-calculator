@@ -19,7 +19,7 @@ public static class Calculator {
         };
 
         if (request.AfflictedAnomaly is { } anomaly) {
-            enemy.AfflictedAnomaly = Anomaly.GetAnomalyByElement(anomaly.Element) with {
+            enemy.AfflictedAnomaly = Anomaly.GetDefaultAnomalyByElement(anomaly.Element) with {
                 AgentId = anomaly.AgentId,
                 Stats = new(anomaly.Stats.ToDictionary())
             };

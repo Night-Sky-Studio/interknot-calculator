@@ -6,14 +6,14 @@ using InterknotCalculator.Core.Interfaces;
 
 namespace InterknotCalculator.Core.Classes.Agents;
 
-public class YeShunguang : Agent, IEtherVeilAgent<Verdict> {
+public class YeShunguang : Agent, ICustomAnomaly, IEtherVeilAgent<Verdict> {
     protected double VeilVulnerabilityCap { get; }
     protected int MaxQingmingSwordForce { get; }
     protected int MaxBearer { get; }
     
     public YeShunguang() : base(AgentId.YeShunguang) {
         Speciality = Speciality.Attack;
-        Element = Element.HonedEdge;
+        Element = Element.Physical;
         Rarity = Rarity.S;
         Faction = Faction.YunkuiSummit;
         
@@ -32,6 +32,8 @@ public class YeShunguang : Agent, IEtherVeilAgent<Verdict> {
         VeilVulnerabilityCap = 1.1;
         MaxQingmingSwordForce = 6;
         MaxBearer = 3;
+        
+        Anomalies[Element.HonedEdge] = Anomaly.GetDefaultAnomalyByElement(Element.Physical);
         
         Skills["swiftedge"] = new(SkillTag.BasicAtk, [
             new(159.7, 40.8, element: Element.Physical, energy: 1.734),
@@ -217,4 +219,5 @@ public class YeShunguang : Agent, IEtherVeilAgent<Verdict> {
     }
     
     public Verdict EtherVeil { get; } = new();
+    public Element AnomalyElement { get; set; } = Element.HonedEdge;
 }

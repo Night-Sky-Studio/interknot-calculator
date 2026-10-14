@@ -28,7 +28,7 @@ public class Alice : Agent, ICustomAnomaly {
         });
 
         // Anomalies[Element.Physical] = Anomaly.GetAnomalyByElement(Element.Physical);
-        Anomalies[Element.Physical] = Anomaly.GetAnomalyByElement(Element.Physical) with {
+        Anomalies[Element.Physical] = Anomaly.GetDefaultAnomalyByElement(Element.Physical) with {
             SelfDisorder = true
         };
         

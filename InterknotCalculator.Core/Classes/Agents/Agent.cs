@@ -349,7 +349,7 @@ public abstract class Agent(uint id) {
     public virtual AgentAction GetAnomalyDamage(Context ctx, Element element, bool skipEvents = false) {
         // Agents can override default anomalies
         if (!Anomalies.TryGetValue(element, out var data)) {
-            data = Anomaly.GetAnomalyByElement(element);
+            data = Anomaly.GetDefaultAnomalyByElement(element);
         }
         
         // Prevent Abloom from causing a stack overflow by recursion

@@ -116,7 +116,7 @@ public sealed class Vivian : SupportAgent, IAgentReference<Vivian> {
             _ => throw new ArgumentOutOfRangeException(nameof(element), element, null)
         };
 
-        var baseAnomaly = Anomaly.GetAnomalyByElement(anomalyElement);
+        var baseAnomaly = Anomaly.GetDefaultAnomalyByElement(anomalyElement);
 
         double scale = element switch {
             Element.Fire =>
