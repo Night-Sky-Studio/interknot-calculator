@@ -19,12 +19,24 @@ public record TeamMemberRequest(uint AgentId = 0, uint WeaponId = 0, uint DriveD
     public uint DriveDiscSetId { get; set; } = DriveDiscSetId;
 }
 
+public record EnemyAnomalyRequest(
+    Element Element,
+    uint AgentId,
+    Dictionary<Affix, double> Stats
+);
+
+public record EnemyRequest(
+    string EnemyName, 
+    double StunBonus,
+    EnemyAnomalyRequest? AfflictedAnomaly = null
+);
+
 public record CalcRequest {
     public uint AgentId { get; set; }
     public uint WeaponId { get; set; }
     public DriveDiscRequest[] Discs { get; set; } = [];
     public TeamMemberRequest[] Team { get; set; } = [];
-    public double StunBonus { get; set; }
     public string[] Rotation { get; set; } = [];
     public uint Mindscape { get; set; }
+    public EnemyRequest? Enemy { get; set; }
 }

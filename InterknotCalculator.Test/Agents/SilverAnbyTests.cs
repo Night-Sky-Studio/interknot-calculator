@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using InterknotCalculator.Core.Classes;
+using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -86,7 +87,7 @@ public class SilverAnbyTests : AgentsTest {
         //     },
         // ],
         Team = [new(AgentId.Trigger, WeaponId.SpectralGaze, DriveDiscSetId.KingOfTheSummit)],
-        StunBonus = 1.5,
+        Enemy = new(nameof(NotoriousDullahan), 1.5),
         Rotation = [
             "leaping_thunderstrike",
             "azure_flash",

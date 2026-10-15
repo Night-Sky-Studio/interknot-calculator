@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using InterknotCalculator.Core.Classes;
+using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -87,7 +88,7 @@ public class EllenTests : AgentsTest {
             },
         ],
         Team = [new(AgentId.Lycaon), new(AgentId.Rina)],
-        StunBonus = 1.5,
+        Enemy = new(nameof(NotoriousDullahan), 1.5),
         Rotation = [
             "avalanche",
             "tail_swipe",
@@ -160,7 +161,7 @@ public class EllenM6Tests : AgentsTest {
         ],
         Mindscape = 6,
         Team = [], //[new(AgentId.Lycaon)],
-        StunBonus = 1.5,
+        Enemy = new(nameof(NotoriousDullahan), 1.5),
         Rotation = [
             "avalanche",
             "endless_winter",

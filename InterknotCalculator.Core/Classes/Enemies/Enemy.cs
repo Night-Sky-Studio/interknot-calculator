@@ -31,13 +31,6 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     private void TryTriggerAnomaly(Context ctx, Agent agent, Element element) {
         var buildup = GetBuildup(element);
         
-        var anomaly = Anomaly.GetAnomalyByElement(element);
-        
-        if (agent is ICustomAnomaly customAnomaly) {
-            element = customAnomaly.AnomalyElement;
-            anomaly = agent.Anomalies[element];
-        }
-        
         var threshold = element.Matches(Element.Physical) 
             ? AnomalyBuildupThreshold * 1.2
             : AnomalyBuildupThreshold;
@@ -69,6 +62,15 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
             buildup.Reset();
             AnomalyBuildupThreshold = BaseAnomalyBuildupThreshold * Math.Pow(1.02, Math.Min(10, ++AnomalyTriggerCount));
             ctx.Events.AnomalyTriggered(ctx, new(agent, element));
+            
+            Anomaly? anomaly = null;
+            if (agent is ICustomAnomaly && agent.Anomalies.TryGetValue(element, out var customAnomaly)) {
+                // TODO: log a warning if agent is ICustomAnomaly,
+                //       but doesn't have an anomaly for the given element
+                anomaly = customAnomaly;
+            }
+            anomaly ??= Anomaly.GetDefaultAnomalyByElement(element);
+            
             AfflictedAnomaly = anomaly with { Stats = stats, AgentId = agent.Id };
         }
     }
@@ -82,7 +84,15 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     }
     
     public void AddAnomalyBuildup(Context ctx, Agent agent, double value, Element? elementOverride = null) {
-        var element = elementOverride ?? agent.Element;
+        Element element;
+        if (elementOverride is { } overrideElement) {
+            element = overrideElement;
+        } else if (agent is ICustomAnomaly customAnomaly) {
+            element = customAnomaly.AnomalyElement;
+        } else {
+            element = agent.Element;
+        }
+
         AddBuildupContribution(ctx, agent, value, element);
         TryTriggerAnomaly(ctx, agent, element);
     }

@@ -34,12 +34,26 @@ public record TeamMember(
 );
 
 [MessagePackObject]
+public record Anomaly(
+    [property: Key(0)] Element Element,
+    [property: Key(1)] uint AgentId,
+    [property: Key(2)] Dictionary<Affix, double> Stats
+);
+
+[MessagePackObject]
+public record Enemy(
+    [property: Key(0)] string Name,
+    [property: Key(1)] double StunMultiplier,
+    [property: Key(2)] Anomaly? Anomaly
+);
+
+[MessagePackObject]
 public record Leaderboard(
     [property: Key(0)] uint Id,
     [property: Key(1)] uint CharacterId,
     [property: Key(2)] uint WeaponId,
     [property: Key(3)] IEnumerable<TeamMember> Team,
     [property: Key(4)] byte Mindscape,
-    [property: Key(5)] double StunMultiplier,
+    [property: Key(5)] Enemy Enemy,
     [property: Key(6)] IEnumerable<string> Rotation
 );

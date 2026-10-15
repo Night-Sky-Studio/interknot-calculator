@@ -11,8 +11,6 @@ public class DisorderTests : AgentsTest {
 
     [Test]
     public async Task DisorderTest() {
-        var prevTeam = Request.Team.Clone();
-        var prevRotation = Request.Rotation.Clone();
         Request.Team = [
             new(AgentId.Burnice),
             new(AgentId.Lucy)
@@ -49,8 +47,5 @@ public class DisorderTests : AgentsTest {
         Console.WriteLine($"Total Anomaly triggers: {result.PerAction.Count(action => action.Tag == SkillTag.AttributeAnomaly)}");
         PrintActions(result.PerAction, result.Total);
         Console.WriteLine($"\nEnemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
-        
-        Request.Team = (TeamMemberRequest[])prevTeam;
-        Request.Rotation = (string[])prevRotation;
     }
 }

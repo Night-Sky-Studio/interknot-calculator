@@ -114,13 +114,19 @@ public static class Program {
                                     Levels = [d.MainStat.Level, ..d.SubStats.Select(p => p.Level)]
                                 }).ToArray();
 
+                            var lbEnemy = leaderboard.Enemy;
+                            var lbEnemyAnomaly = lbEnemy.Anomaly;
+                            
+                            var enemyAnomaly = lbEnemyAnomaly is null ? null : new EnemyAnomalyRequest(lbEnemyAnomaly.Element, lbEnemyAnomaly.AgentId, lbEnemyAnomaly.Stats);
+                            var enemy = new EnemyRequest(lbEnemy.Name, lbEnemy.StunMultiplier, enemyAnomaly);
+                            
                             var result = Calculator.Calculate(new() {
                                 AgentId = leaderboard.CharacterId,
                                 WeaponId = leaderboard.WeaponId,
                                 Discs = discs,
                                 Mindscape = leaderboard.Mindscape,
                                 Rotation = leaderboard.Rotation.ToArray(),
-                                StunBonus = leaderboard.StunMultiplier,
+                                Enemy = enemy,
                                 Team = leaderboard.Team.Select(t =>
                                     new TeamMemberRequest(t.AgentId, t.WeaponId, t.DriveDiscSetId)).ToArray()
                             });

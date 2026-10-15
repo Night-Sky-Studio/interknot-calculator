@@ -9,10 +9,29 @@ namespace InterknotCalculator.Core.Classes;
 /// Damage Calculator
 /// </summary>
 public static class Calculator {
+    private static Enemy CreateEnemy(EnemyRequest? request) {
+        if (request is null) return new NotoriousDullahan();
+        
+        Enemy enemy = request.EnemyName switch {
+            nameof(NotoriousDullahan) => new NotoriousDullahan(request.StunBonus),
+            nameof(Nineveh)           => new Nineveh(request.StunBonus),
+            _ => throw new NotImplementedException($"Enemy '{request.EnemyName}' is not implemented")
+        };
+
+        if (request.AfflictedAnomaly is { } anomaly) {
+            enemy.AfflictedAnomaly = Anomaly.GetDefaultAnomalyByElement(anomaly.Element) with {
+                AgentId = anomaly.AgentId,
+                Stats = new(anomaly.Stats.ToDictionary())
+            };
+        }
+
+        return enemy;
+    }
+    
     /// <summary>
     /// Main damage calculation function
     /// </summary>
-    public static CalcResult Calculate(CalcRequest request, Enemy? enemy = null) {
+    public static CalcResult Calculate(CalcRequest request) {
         var characterId = request.AgentId;
         var weaponId = request.WeaponId;
         var mindscape = request.Mindscape;
@@ -22,8 +41,7 @@ public static class Calculator {
                 disc.StatsLevels.Skip(1).Select(p => Stat.SubStat.Get(disc.Rarity, p.Key, p.Value)))).ToArray();
         var team = request.Team;
         var rotation = request.Rotation;
-        enemy ??= new NotoriousDullahan();
-        enemy.StunMultiplier = new(request.StunBonus);
+        var enemy = CreateEnemy(request.Enemy);
         
         var ctx = new Context {
             Team = {

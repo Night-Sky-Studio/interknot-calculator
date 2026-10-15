@@ -49,8 +49,15 @@ public class YanagiTests : AgentsTest {
                 Levels = [15, 3, 2, 2, 2]
             },
         ],
-        Team = [new(1171)],
-        StunBonus = 1,
+        Team = [new(AgentId.Burnice)],
+        Enemy = new(
+            nameof(NotoriousDullahan), 
+            1, 
+            new(Element.Fire, AgentId.Burnice, new() {
+                [Affix.Atk] = 2500,
+                [Affix.AnomalyProficiency] = 372
+            })
+        ),
         Rotation = [
             "1171.energizing_speciality_drink",
             "1171.intense_heat_stirring_method",
@@ -67,16 +74,7 @@ public class YanagiTests : AgentsTest {
 
     [Test]
     public async Task YanagiTest() {
-        var enemy = new NotoriousDullahan {
-            AfflictedAnomaly = Anomaly.GetAnomalyByElement(Element.Fire) with {
-                AgentId = 1151,
-                Stats = new() {
-                    [Affix.Atk] = 2500,
-                    [Affix.AnomalyProficiency] = 372
-                }
-            }
-        };
-        var result = Calculator.Calculate(Request, enemy);
+        var result = Calculator.Calculate(Request);
         
         Assert.That(result.PerAction, Is.Not.Empty);
         

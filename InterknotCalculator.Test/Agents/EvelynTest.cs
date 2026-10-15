@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using InterknotCalculator.Core.Classes;
+using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -52,7 +53,7 @@ public class EvelynTests : AgentsTest {
             new(AgentId.JuFufu, WeaponId.RoaringFurnace, DriveDiscSetId.KingOfTheSummit), 
             new(AgentId.AstraYao, WeaponId.ElegantVanity, DriveDiscSetId.AstralVoice)
         ],
-        StunBonus = 1.5,
+        Enemy = new(nameof(NotoriousDullahan), 1.5),
         Rotation = [
             "locked_position",
             "binding_sunder_first",

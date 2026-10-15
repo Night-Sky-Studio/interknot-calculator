@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using InterknotCalculator.Core.Classes;
+using InterknotCalculator.Core.Classes.Enemies;
 using InterknotCalculator.Core.Classes.Server;
 using InterknotCalculator.Core.Enums;
 
@@ -51,7 +52,7 @@ public class AnomalyTeamTest : AgentsTest {
             new(AgentId.Vivian, WeaponId.ElegantVanity),
             new(AgentId.Yuzuha, WeaponId.Metanukimorphosis, DriveDiscSetId.MoonlightLullaby)
         ],
-        StunBonus = 1.5,
+        Enemy = new(nameof(NotoriousDullahan), 1.5),
         Rotation = [
             $"{AgentId.Vivian}.violet_requiem",
             $"{AgentId.Vivian}.fluttering_frock_suspension",
