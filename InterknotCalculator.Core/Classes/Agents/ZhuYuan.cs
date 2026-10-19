@@ -94,7 +94,7 @@ public sealed class ZhuYuan : Agent {
         return null;
     }
 
-    public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
+    public override AgentAction GetActionDamage(Context ctx, Ability ability) {
         IsEnemyStunned = ctx.Enemy.IsStunned;
 
         return base.GetActionDamage(ctx, ability);  
