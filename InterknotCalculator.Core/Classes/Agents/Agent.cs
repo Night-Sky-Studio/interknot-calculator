@@ -234,14 +234,14 @@ public abstract class Agent(uint id) {
     /// <param name="ctx">Current context</param>
     /// <param name="ability">Current skill</param>
     /// <returns><see cref="AgentAction"/> with calculated damage</returns>
-    public virtual IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
+    public virtual AgentAction GetActionDamage(Context ctx, Ability ability) {
         var data = Skills[ability.Name];
         var attribute = data.Scales[ability.Scale].Element ?? Element;
         var relatedAffixDmg   = Helpers.GetRelatedAffixDmg(attribute);
         var relatedAffixSheer = Helpers.GetRelatedSheerDmg(attribute);
         var relatedAffixRes   = Helpers.GetRelatedAffixRes(attribute);
 
-        ctx.Events.ActionExecuted(ctx, new (this, ability));
+        ctx.Events.ActionExecuting(ctx, new (this, ability));
         
 #if ENERGY_REQUIREMENT_CHECK
         // Energy requirement check
@@ -292,13 +292,17 @@ public abstract class Agent(uint id) {
         var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * enemyDefenseMultiplier
                     * resMultiplier * sheerMultiplier * DamageTakenMultiplier * ctx.Enemy.StunMultiplier;
 
-        return [new(
-            Id, 
-            $"{ability.Name} {(ability.Scale == 0 && data.Scales.Count == 1 ? "" : ability.Scale + 1)}".Trim(), 
-            data.Tag, 
+        var action = new AgentAction(
+            Id,
+            $"{ability.Name} {(ability.Scale == 0 && data.Scales.Count == 1 ? "" : ability.Scale + 1)}".Trim(),
+            data.Tag,
             total,
             GetDaze(ability)
-        )];
+        );
+        
+        ctx.Events.ActionExecuted(ctx, new(this, action));
+        
+        return action;
     }
 
     public virtual double GetDaze(Ability ability) {
@@ -354,7 +358,7 @@ public abstract class Agent(uint id) {
         
         // Prevent Abloom from causing a stack overflow by recursion
         if (!skipEvents)
-            ctx.Events.ActionExecuted(ctx, new(this, new(SkillTag.AttributeAnomaly, data.ToString())));
+            ctx.Events.ActionExecuting(ctx, new(this, new(SkillTag.AttributeAnomaly, data.ToString())));
         
         // Some characters can make anomalies crit
         // ...for the entire team, apparently...

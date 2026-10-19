@@ -1,9 +1,9 @@
 using InterknotCalculator.Core.Classes.Agents;
-using InterknotCalculator.Core.Interfaces;
+using InterknotCalculator.Core.Classes.Server;
 
 namespace InterknotCalculator.Core.Classes.Events;
 
-public class ActionExecutedEventArgs(Agent agent, Ability ability) : EventArgs, ICalcEventArgs {
+public class ActionExecutedEventArgs(Agent agent, AgentAction action) : EventArgs {
     public Agent Agent { get; } = agent;
-    public Ability Ability { get; } = ability;
+    public AgentAction Action { get; } = action;
 }

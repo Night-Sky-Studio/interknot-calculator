@@ -124,7 +124,7 @@ public sealed class Yanagi : Agent, IPolarityDisorderAgent {
             }
         });
         
-        ctx.Events.OnActionExecuted.Add((c, e) => {
+        ctx.Events.OnActionExecuting.Add((c, e) => {
             if (e.Agent != this) return;
             if (e.Ability.Tag is not (SkillTag.Ultimate or SkillTag.ExSpecial)) return;
             ToggleStance();

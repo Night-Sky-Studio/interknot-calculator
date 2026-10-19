@@ -50,7 +50,7 @@ public class Zhao : SupportAgent, IAgentReference<Zhao>, IEtherVeilAgent<Wellspr
             }
         });
         
-        ctx.Events.OnActionExecuted.Add((c, e) => {
+        ctx.Events.OnActionExecuting.Add((c, e) => {
             // Zhao triggered an action
             if (e.Agent != this) return;
 

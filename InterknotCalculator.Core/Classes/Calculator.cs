@@ -54,6 +54,10 @@ public static class Calculator {
             Enemy = enemy
         };
 
+        ctx.Events.OnActionExecuted += (context, evt) => {
+            Console.WriteLine($"Action({evt.Action.AgentId}, {evt.Action.Tag}, {evt.Action.Damage})");
+        };
+
         ctx.MainAgent.SetWeapon(weaponId);
         ctx.MainAgent.SetDriveDiscs(driveDiscs);
         ctx.MainAgent.Hp = ctx.Team[characterId].MaxHp;
@@ -75,7 +79,7 @@ public static class Calculator {
             // Process anomaly damage
             var action = ctx.Team[agentId].GetAnomalyDamage(ctx, element, true);
             ctx.ActionsQueue.Add(action);
-            ctx.Events.ActionExecuted(ctx, new(e.Agent, new(SkillTag.AttributeAnomaly, action.Name)));
+            ctx.Events.ActionExecuting(ctx, new(e.Agent, new(SkillTag.AttributeAnomaly, action.Name)));
 
             // Then process disorders
             if (sender.AfflictedAnomaly is { } anomaly && !isFrostburnShatter) {
@@ -96,6 +100,8 @@ public static class Calculator {
         }
         
         ctx.Events.CalculationStarted(ctx);
+
+        var groups = new List<ActionGroup>();
         
         // Do the calculation
         // Anomalies should be included automatically
@@ -110,8 +116,11 @@ public static class Calculator {
                 ? macro.Select(m => RotationAction.Parse(m, characterId))
                     .Where(a => a is not null)
                     .Cast<RotationAction>()
+                    .ToArray()
                 : [act];
 
+            var startIdx = ctx.Actions.Count;
+            
             foreach (var ability in abilities.Select(a => a.ToAbility(agent))) {
                 // Step 1: Perform action
                 ctx.Actions.AddRange(agent.GetActionDamage(ctx, ability));
@@ -128,14 +137,19 @@ public static class Calculator {
                 // Step 4: Process Aftershock side effects
                 ctx.ProcessActionsQueue();
             }
+
+            if (abilities.Length > 1) {
+                var actionIds = ctx.Actions.Skip(startIdx).Select(a => a.Id).ToArray();
+                groups.Add(new(act.AgentId, action, actionIds));
+            }
         }
         
         // Cleanup ctx.Actions - remove all damage/daze from other agents
-        ctx.Actions.ForEach(action => {
-            if (action.AgentId == characterId) return;
-            action.Damage = 0;
-            action.Daze = 0;
-        });
+        // ctx.Actions.ForEach(action => {
+        //     if (action.AgentId == characterId) return;
+        //     action.Damage = 0;
+        //     action.Daze = 0;
+        // });
 
         // var total = calcType switch {
         //     CalculationType.Damage => ctx.Actions.Sum(action => action.Damage),
@@ -150,6 +164,7 @@ public static class Calculator {
             },
             Enemy = ctx.Enemy,
             PerAction = ctx.Actions,
+            Groups = groups,
             Total = ctx.Actions.Sum(action => action.Damage)
         };
     }
