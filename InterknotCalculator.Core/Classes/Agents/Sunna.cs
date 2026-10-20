@@ -123,7 +123,12 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
             var stunBonus = 1 + c.Enemy.StunMultiplier;
                 
             c.ActionsQueue.Add(new(
-                Id, // TODO: bad! give attribution back to the attacking agent >:C
+                Id, // TODO: This uses Sunna's ID to de-clutter final dmg output.
+                    //       Technically, "Cat's Gaze" is applied in such a way that it counts as
+                    //       triggering agent's own damage, not Sunna's. This does increase the total DPS,
+                    //       but has no effect on leaderboards results, except for scaling them up by
+                    //       a fixed amount. This is incorrect per in-game definition, but not fatal
+                    //       at the moment.
                 "cat's_gaze", 
                 SkillTag.DirectHit, 
                 baseDmg * critMultiplier * dmgBonus * resPen * c.Enemy.GetDefenseMultiplier(agent.PenRatio, agent.Pen) * stunBonus, 
