@@ -8,14 +8,14 @@
     AgentId: 1361,
     Tag: Aftershock,
     Name: harmonizing_shot_tartarus_(x3),
-    Damage: 12536.86,
+    Damage: 11642.13,
     Daze: 219.81
   },
   {
     AgentId: 1361,
     Tag: Aftershock,
     Name: harmonizing_shot_tartarus_(finisher),
-    Damage: 8357.91,
+    Damage: 7761.42,
     Daze: 146.54
   },
   {
@@ -27,7 +27,7 @@
     AgentId: 1361,
     Tag: Aftershock,
     Name: harmonizing_shot_(x2),
-    Damage: 17611.96,
+    Damage: 16355.02,
     Daze: 310.12
   },
   {
@@ -44,7 +44,7 @@
     AgentId: 1361,
     Tag: Aftershock,
     Name: harmonizing_shot_(x2),
-    Damage: 17611.96,
+    Damage: 16355.02,
     Daze: 310.12
   },
   {
@@ -61,7 +61,7 @@
     AgentId: 1361,
     Tag: Aftershock,
     Name: harmonizing_shot_(x2),
-    Damage: 17611.96,
+    Damage: 16355.02,
     Daze: 310.12
   },
   {

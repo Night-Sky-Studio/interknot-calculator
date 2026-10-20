@@ -149,7 +149,8 @@ public class JaneDoeM2 : JaneDoeM1 {
             if (e.Element is not (Element.Physical or Element.HonedEdge)) return;
             if (IgnoresEnemyDefense) return;
                 
-            ResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(), 
+            // Ignores 15% of the target's DEF
+            DefPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(),
                 0.15, ModifierType.CombatFlat));
             IgnoresEnemyDefense = true;
         });
