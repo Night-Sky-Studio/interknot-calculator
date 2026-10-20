@@ -59,6 +59,10 @@ public class MutableStat {
         Modifiers.Add(modifier);
         Dirty = true;
     }
+    public void Subtract(Modifier modifier) {
+        Modifiers.Add(modifier.Negate());
+        Dirty = true;
+    }
 
     public void AddUnique(Modifier modifier) {
         if (Modifiers.Exists(m => m == modifier)) {
@@ -137,7 +141,7 @@ public class MutableStat {
     }
 
     public static MutableStat operator -(MutableStat left, Modifier right) {
-        left.Remove(right);
+        left.Subtract(right);
         return left;
     }
 

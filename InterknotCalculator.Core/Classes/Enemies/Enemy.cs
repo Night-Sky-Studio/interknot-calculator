@@ -6,7 +6,7 @@ using InterknotCalculator.Core.Interfaces;
 namespace InterknotCalculator.Core.Classes.Enemies;
 
 public abstract class Enemy(double defense, double levelFactor, double anomalyBuildupThreshold) {
-    public double Defense { get; } = defense;
+    public MutableStat Defense { get; } = new(defense);
     public double LevelFactor { get; } = levelFactor;
     private double BaseAnomalyBuildupThreshold { get; } = anomalyBuildupThreshold;
     public double AnomalyBuildupThreshold { get; private set; } = anomalyBuildupThreshold;
