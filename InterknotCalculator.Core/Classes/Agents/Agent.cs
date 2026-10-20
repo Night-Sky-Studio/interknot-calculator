@@ -128,6 +128,7 @@ public abstract class Agent(uint id) {
     public MutableStat Def => Stats[Affix.Def];
     public MutableStat Pen => Stats[Affix.Pen];
     public MutableStat PenRatio => Stats[Affix.PenRatio];
+    public MutableStat DefPen => Stats[Affix.DefPen];
     public MutableStat CritRate => Stats[Affix.CritRate];
     public MutableStat CritDamage => Stats[Affix.CritDamage];
     public MutableStat Impact => Stats[Affix.Impact];
@@ -167,6 +168,7 @@ public abstract class Agent(uint id) {
         var def = Def;
         var pen = Pen;
         var penRatio = PenRatio;
+        var defPen = DefPen;
         var critRate = CritRate;
         var critDamage = CritDamage;
         var impact = Impact;
@@ -184,6 +186,7 @@ public abstract class Agent(uint id) {
         Add(Affix.Def, initial ? def.InitialValue : def);
         Add(Affix.Pen, initial ? pen.InitialValue : pen);
         Add(Affix.PenRatio, initial ? penRatio.InitialValue : penRatio);
+        Add(Affix.DefPen, initial ? defPen.InitialValue : defPen);
         Add(Affix.CritRate, initial ? critRate.InitialValue : critRate);
         Add(Affix.CritDamage, initial ? critDamage.InitialValue : critDamage);
         Add(Affix.Impact, initial ? impact.InitialValue : impact);
@@ -280,9 +283,10 @@ public abstract class Agent(uint id) {
                             + abilityDmgBonus[relatedAffixRes] + abilityDmgBonus[Affix.ResPen]
                             + data.Affixes[relatedAffixRes] + data.Affixes[Affix.ResPen];
 
-        var enemyDefenseMultiplier = Speciality is Speciality.Rupture 
-            ? 1 
-            : ctx.Enemy.GetDefenseMultiplier(PenRatio, Pen);
+        var defPen = Stats[Affix.DefPen].For(tag) + abilityDmgBonus[Affix.DefPen] + data.Affixes[Affix.DefPen];
+        var enemyDefenseMultiplier = Speciality is Speciality.Rupture
+            ? 1
+            : ctx.Enemy.GetDefenseMultiplier(defPen, PenRatio, Pen);
 
         var sheerMultiplier = Speciality is Speciality.Rupture
             ? 1 + Stats[relatedAffixSheer].For(tag) + Stats[Affix.SheerDmgBonus].For(tag)
@@ -390,7 +394,9 @@ public abstract class Agent(uint id) {
         
         var total = anomalyBaseDmg * anomalyProficiencyMultiplier * anomalyCritMultiplier * anomalyLevelMultiplier
                     * dmgBonusMultiplier 
-                    * ctx.Enemy.GetDefenseMultiplier(ctx.Enemy.AfflictedAnomaly?.Stats[Affix.PenRatio] ?? PenRatio,
+                    * ctx.Enemy.GetDefenseMultiplier(
+                        ctx.Enemy.AfflictedAnomaly?.Stats[Affix.DefPen] ?? DefPen,
+                        ctx.Enemy.AfflictedAnomaly?.Stats[Affix.PenRatio] ?? PenRatio,
                         ctx.Enemy.AfflictedAnomaly?.Stats[Affix.Pen] ?? Pen) 
                     * resMultiplier * 
                     (element is Element.None ? ctx.Enemy.StunMultiplier : 1) * disorderElementalMultiplier * disorderElementalRes;

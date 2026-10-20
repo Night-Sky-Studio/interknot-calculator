@@ -121,6 +121,8 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
             var dmgBonus = 1 + agent.ElementalDmgBonus + agent.DmgBonus;
             var resPen = 1 + agent.ElementalResPen + agent.ResPen;
             var stunBonus = 1 + c.Enemy.StunMultiplier;
+            var enemyDefMultiplier = c.Enemy.GetDefenseMultiplier(agent.DefPen.For(SkillTag.DirectHit),
+                agent.PenRatio, agent.Pen);
                 
             c.ActionsQueue.Add(new(
                 Id, // TODO: This uses Sunna's ID to de-clutter final dmg output.
@@ -131,7 +133,8 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
                     //       at the moment.
                 "cat's_gaze", 
                 SkillTag.DirectHit, 
-                baseDmg * critMultiplier * dmgBonus * resPen * c.Enemy.GetDefenseMultiplier(agent.PenRatio, agent.Pen) * stunBonus, 
+                baseDmg * critMultiplier * dmgBonus * resPen 
+                    * enemyDefMultiplier * stunBonus, 
                 0
             ));
 

@@ -126,7 +126,7 @@ public class MiyabiM1 : Miyabi {
     public MiyabiM1() {
         // While in Shimotsuki Stance, every 1 point of Fallen Frost consumed will allow
         // Basic Attack: Shimotsuki to ignore 6% of DEF, stacking up to 6 times
-        Skills["shimotsuki"].Affixes[Affix.ResPen] += 0.06 * 6;
+        Skills["shimotsuki"].Affixes[Affix.DefPen] += 0.06 * 6;
     }
 
     private bool IsM2BonusActive { get; set; } = false;

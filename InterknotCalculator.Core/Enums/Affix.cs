@@ -31,7 +31,10 @@ public enum Affix {
     EtherSheerDmgBonus,
 
     AnomalyBuildupBonus, AnomalyBuildupRes,
-    
+
+    // "DEF ignore" - fraction of the target's base DEF the attacker ignores
+    DefPen,
+
     _Flat,
 
     // Ratio affixes - apply as `Base * (1 + Sum(Ratio))`

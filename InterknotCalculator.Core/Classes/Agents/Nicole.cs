@@ -44,10 +44,10 @@ public class Nicole : SupportAgent, IAgentReference<Nicole> {
         base.RegisterHooks(ctx);
 
         ctx.Events.OnCalculationStarted.Add(c => {
+            c.Enemy.Defense.Subtract(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                0.4, ModifierType.CombatRatio));
+            
             foreach (var agent in c.Team.Values) {
-                agent.ResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                    0.4, ModifierType.CombatFlat));
-                
                 // M6
                 agent.CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 
                     0.15, ModifierType.CombatFlat));

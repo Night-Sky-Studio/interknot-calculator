@@ -6,7 +6,7 @@ using InterknotCalculator.Core.Interfaces;
 namespace InterknotCalculator.Core.Classes.Enemies;
 
 public abstract class Enemy(double defense, double levelFactor, double anomalyBuildupThreshold) {
-    public double Defense { get; } = defense;
+    public MutableStat Defense { get; } = new(defense);
     public double LevelFactor { get; } = levelFactor;
     private double BaseAnomalyBuildupThreshold { get; } = anomalyBuildupThreshold;
     public double AnomalyBuildupThreshold { get; private set; } = anomalyBuildupThreshold;
@@ -19,8 +19,21 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     private AnomalyBuildup GetBuildup(Element el) => 
         AnomalyBuildup.TryGetValue(el, out var buildup) ? buildup : AnomalyBuildup[el] = new();
     
-    public double GetDefenseMultiplier(double penRatio, double pen) => 
-        LevelFactor / (Math.Max(Defense * (1 - penRatio) - pen, 0) + LevelFactor);
+    /// <summary>
+    /// Enemy DEF multiplier of a single hit
+    /// </summary>
+    /// <remarks>See "DEF Modifier" in IKC-A-2</remarks>
+    /// <param name="defPen">Attacker's DEF ignore for this hit, as a positive fraction</param>
+    /// <param name="penRatio">Attacker's PEN Ratio</param>
+    /// <param name="pen">Attacker's flat PEN</param>
+    public double GetDefenseMultiplier(double defPen, double penRatio, double pen) {
+        // Target DEF = Base DEF * (1 + DEF% - DEF Reduction% - DEF Ignore%) + Flat DEF
+        // "DEF reduction" is untagged CombatRatio modifier
+        // "DEF ignore" belongs to the attacker
+        var targetDef = Defense.Value - Defense.BaseValue * defPen;
+        var effectiveDef = Math.Max(targetDef * (1 - penRatio) - pen, 0);
+        return LevelFactor / (effectiveDef + LevelFactor);
+    }
     
     private int AnomalyTriggerCount { get; set; }
     

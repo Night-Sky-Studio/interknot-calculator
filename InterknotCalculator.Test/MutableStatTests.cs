@@ -31,6 +31,18 @@ public class MutableStatTests {
         Assert.That(hp.Value, Is.EqualTo(10333.38).Within(1e-9));
     }
 
+
+    [Test]
+    public void NegativeValueFoldingTest() {
+        var def = new MutableStat(953);
+
+        def -= new Modifier(ModifierKey.Agent(AgentId.Nicole) + ModifierKey.CorePassive(), 53, ModifierType.CombatFlat);
+        Assert.That(def.Value, Is.EqualTo(900).Within(1e-9));
+        
+        def -= new Modifier(ModifierKey.Agent(AgentId.Nicole) + ModifierKey.CorePassive(), 0.4, ModifierType.CombatRatio);
+        Assert.That(def.Value, Is.EqualTo(518.8).Within(1e-9));
+    }
+
     [Test]
     public void BaseModifiersScaleWithRatios() {
         // A weapon's main stat scales with ATK%; a flat passive lands on top of it.

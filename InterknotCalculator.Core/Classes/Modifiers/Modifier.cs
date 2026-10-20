@@ -71,4 +71,6 @@ public readonly struct Modifier : IEquatable<Modifier> {
     
     public static bool operator ==(Modifier left, Modifier right) => left.Key == right.Key;
     public static bool operator !=(Modifier left, Modifier right) => !(left == right);
+    
+    public Modifier Negate() => new(Key, -Value, Type, Tags);
 }
