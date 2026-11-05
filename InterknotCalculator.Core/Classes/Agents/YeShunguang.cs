@@ -158,7 +158,7 @@ public class YeShunguang : Agent, ICustomAnomaly, IEtherVeilAgent<Verdict> {
             }
         });
         
-        ctx.Events.OnActionExecuted.Add((c, e) => {
+        ctx.Events.OnActionExecuting.Add((c, e) => {
             if (e.Agent != this) return;
 
             switch (e.Ability.Name) {
@@ -195,7 +195,7 @@ public class YeShunguang : Agent, ICustomAnomaly, IEtherVeilAgent<Verdict> {
 
     protected MutableStat? OriginalEnemyStunMultiplier { get; set; }
     
-    public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
+    public override AgentAction GetActionDamage(Context ctx, Ability ability) {
         OriginalEnemyStunMultiplier = ctx.Enemy.StunMultiplier; // 1
 
         // Core Passive: Burning Clarity
@@ -206,7 +206,7 @@ public class YeShunguang : Agent, ICustomAnomaly, IEtherVeilAgent<Verdict> {
         }
 
         try {
-            return base.GetActionDamage(ctx, ability).ToList();
+            return base.GetActionDamage(ctx, ability);
         } finally {
             ctx.Enemy.StunMultiplier = OriginalEnemyStunMultiplier;
 

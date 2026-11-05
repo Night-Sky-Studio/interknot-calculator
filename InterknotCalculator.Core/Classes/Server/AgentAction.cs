@@ -9,6 +9,7 @@ public record AgentAction(
     double Damage,
     double Daze
 ) {
+    public Guid Id { get; } = Guid.NewGuid();
     public string Name { get; set; } = Name;
     public double Damage { get; set; } = Damage;
     public double Daze { get; set; } = Daze;

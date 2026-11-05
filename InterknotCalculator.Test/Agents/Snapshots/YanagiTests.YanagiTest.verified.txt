@@ -2,31 +2,46 @@
   {
     AgentId: 1171,
     Tag: QuickAssist,
-    Name: energizing_speciality_drink
+    Id: Guid_1,
+    Name: energizing_speciality_drink,
+    Damage: 2918.66,
+    Daze: 105.66
   },
   {
     AgentId: 1171,
     Tag: ExSpecial,
-    Name: intense_heat_stirring_method 1
+    Id: Guid_2,
+    Name: intense_heat_stirring_method 1,
+    Damage: 18784.01,
+    Daze: 472.19
   },
   {
     AgentId: 1171,
     Tag: ExSpecial,
-    Name: intense_heat_stirring_method_double 1
+    Id: Guid_3,
+    Name: intense_heat_stirring_method_double 1,
+    Damage: 33073.53,
+    Daze: 729.9
   },
   {
     AgentId: 1171,
     Tag: AttributeAnomaly,
-    Name: burn
+    Id: Guid_4,
+    Name: burn,
+    Damage: 125282.02
   },
   {
     AgentId: 1171,
     Tag: Chain,
-    Name: fuel-fed_flame
+    Id: Guid_5,
+    Name: fuel-fed_flame,
+    Damage: 21778.61,
+    Daze: 301.29
   },
   {
     AgentId: 1221,
     Tag: ExSpecial,
+    Id: Guid_6,
     Name: gekka_ruten 1,
     Damage: 9001.66,
     Daze: 164.17
@@ -34,6 +49,7 @@
   {
     AgentId: 1221,
     Tag: ExSpecial,
+    Id: Guid_7,
     Name: gekka_ruten 2,
     Damage: 20682.01,
     Daze: 141.56
@@ -41,6 +57,7 @@
   {
     AgentId: 1221,
     Tag: AttributeAnomaly,
+    Id: Guid_8,
     Name: polarity_disorder,
     Damage: 113418.69,
     Daze: 249.4
@@ -48,6 +65,7 @@
   {
     AgentId: 1221,
     Tag: ExSpecial,
+    Id: Guid_9,
     Name: gekka_ruten 1,
     Damage: 9001.66,
     Daze: 164.17
@@ -55,6 +73,7 @@
   {
     AgentId: 1221,
     Tag: ExSpecial,
+    Id: Guid_10,
     Name: gekka_ruten 2,
     Damage: 20682.01,
     Daze: 141.56
@@ -62,6 +81,7 @@
   {
     AgentId: 1221,
     Tag: AttributeAnomaly,
+    Id: Guid_11,
     Name: polarity_disorder,
     Damage: 113418.69,
     Daze: 249.4
@@ -69,12 +89,14 @@
   {
     AgentId: 1221,
     Tag: AttributeAnomaly,
+    Id: Guid_12,
     Name: shock,
     Damage: 196543.55
   },
   {
     AgentId: 1221,
     Tag: AttributeAnomaly,
+    Id: Guid_13,
     Name: disorder,
     Damage: 219243.53,
     Daze: 249.4
@@ -82,6 +104,7 @@
   {
     AgentId: 1221,
     Tag: ExSpecial,
+    Id: Guid_14,
     Name: gekka_ruten 1,
     Damage: 9001.66,
     Daze: 164.17
@@ -89,6 +112,7 @@
   {
     AgentId: 1221,
     Tag: ExSpecial,
+    Id: Guid_15,
     Name: gekka_ruten 2,
     Damage: 20682.01,
     Daze: 141.56
@@ -96,6 +120,7 @@
   {
     AgentId: 1221,
     Tag: AttributeAnomaly,
+    Id: Guid_16,
     Name: polarity_disorder,
     Damage: 185344.91,
     Daze: 249.4

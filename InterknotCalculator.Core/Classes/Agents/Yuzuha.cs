@@ -59,7 +59,7 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
         });
     }
 
-    public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
+    public override AgentAction GetActionDamage(Context ctx, Ability ability) {
         if (ability.Name is "cavity_alert" or "cavity_alert_right_now") {
             SweetScareActive = true;
         }
@@ -90,7 +90,7 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
             }
         });
         
-        ctx.Events.OnActionExecuted.Add((c, e) => {
+        ctx.Events.OnActionExecuting.Add((c, e) => {
             // The Sweet Scare state lasts for 40.0s, repeated triggers reset the duration.
             //
             // When an enemy affected by Sweet Scare is first hit by an active character

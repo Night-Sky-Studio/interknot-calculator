@@ -170,7 +170,7 @@ public sealed class Vivian : SupportAgent, IAgentReference<Vivian> {
             }
         });
         
-        ctx.Events.OnActionExecuted.Add((c, e) => {
+        ctx.Events.OnActionExecuting.Add((c, e) => {
             if (e.Ability.Tag is not SkillTag.ExSpecial || c.Enemy.AfflictedAnomaly is null) return;
             ProcessAbloom(c, e.Agent, c.Enemy.AfflictedAnomaly.Element);
         });
@@ -186,7 +186,7 @@ public sealed class Vivian : SupportAgent, IAgentReference<Vivian> {
         });
     }
 
-    public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
+    public override AgentAction GetActionDamage(Context ctx, Ability ability) {
         switch (ability.Name) {
             case "fluttering_frock_suspension":
                 ConvertFeathers();

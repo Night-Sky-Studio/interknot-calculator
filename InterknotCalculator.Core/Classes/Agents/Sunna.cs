@@ -83,13 +83,13 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
             }
         });
         
-        ctx.Events.OnActionExecuted.Add((c, e) => {
+        ctx.Events.OnActionExecuting.Add((c, e) => {
             if (e.Ability is { Tag: SkillTag.ExSpecial, Name: "special_photography_technique" }) {
                 c.ReactivateEtherVeil(this, EtherVeil);
             }
         });
         
-        ctx.Events.OnActionExecuted.Add((c, e) => {
+        ctx.Events.OnActionExecuting.Add((c, e) => {
             if (e.Agent == this && e.Ability.Name is "naughty_cat_spotted"
                     or "bubblegum_barrage"
                     or "special_photography_technique"
@@ -106,7 +106,7 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
             }
         });
 
-        ctx.Events.OnActionExecuted.Add((c, e) => {
+        ctx.Events.OnActionExecuting.Add((c, e) => {
             if (!CatsGazeActive || CatsGazeCooldown != 0) return;
 
             var agent = e.Agent;

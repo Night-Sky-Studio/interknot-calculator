@@ -2,6 +2,7 @@
   {
     AgentId: 1241,
     Tag: Chain,
+    Id: Guid_1,
     Name: eradication_mode,
     Damage: 96718.88,
     Daze: 201.06
@@ -9,6 +10,7 @@
   {
     AgentId: 1241,
     Tag: QuickAssist,
+    Id: Guid_2,
     Name: covering_shot,
     Damage: 8493.8,
     Daze: 70.02
@@ -16,6 +18,7 @@
   {
     AgentId: 1241,
     Tag: ExSpecial,
+    Id: Guid_3,
     Name: full_barrage,
     Damage: 120980.98,
     Daze: 648.81
@@ -23,6 +26,7 @@
   {
     AgentId: 1241,
     Tag: BasicAtk,
+    Id: Guid_4,
     Name: please_do_not_resist 1,
     Damage: 35252.14,
     Daze: 81.36
@@ -30,6 +34,7 @@
   {
     AgentId: 1241,
     Tag: BasicAtk,
+    Id: Guid_5,
     Name: please_do_not_resist 2,
     Damage: 35252.14,
     Daze: 81.36
@@ -37,6 +42,7 @@
   {
     AgentId: 1241,
     Tag: BasicAtk,
+    Id: Guid_6,
     Name: please_do_not_resist 3,
     Damage: 105614.0,
     Daze: 242.01
@@ -44,6 +50,7 @@
   {
     AgentId: 1241,
     Tag: Dash,
+    Id: Guid_7,
     Name: overwhelming_firepower 1,
     Damage: 11397.25,
     Daze: 81.36
@@ -51,6 +58,7 @@
   {
     AgentId: 1241,
     Tag: BasicAtk,
+    Id: Guid_8,
     Name: please_do_not_resist 3,
     Damage: 105614.0,
     Daze: 242.01
@@ -58,6 +66,7 @@
   {
     AgentId: 1241,
     Tag: ExSpecial,
+    Id: Guid_9,
     Name: full_barrage,
     Damage: 120980.98,
     Daze: 648.81
@@ -65,6 +74,7 @@
   {
     AgentId: 1241,
     Tag: Ultimate,
+    Id: Guid_10,
     Name: max_eradication_mode,
     Damage: 325861.89,
     Daze: 174.6
@@ -72,6 +82,7 @@
   {
     AgentId: 1241,
     Tag: BasicAtk,
+    Id: Guid_11,
     Name: please_do_not_resist 1,
     Damage: 35252.14,
     Daze: 81.36
@@ -79,6 +90,7 @@
   {
     AgentId: 1241,
     Tag: BasicAtk,
+    Id: Guid_12,
     Name: please_do_not_resist 2,
     Damage: 35252.14,
     Daze: 81.36
@@ -86,6 +98,7 @@
   {
     AgentId: 1241,
     Tag: BasicAtk,
+    Id: Guid_13,
     Name: please_do_not_resist 3,
     Damage: 105614.0,
     Daze: 242.01
@@ -93,6 +106,7 @@
   {
     AgentId: 1241,
     Tag: Dash,
+    Id: Guid_14,
     Name: overwhelming_firepower 1,
     Damage: 11397.25,
     Daze: 81.36
@@ -100,6 +114,7 @@
   {
     AgentId: 1241,
     Tag: BasicAtk,
+    Id: Guid_15,
     Name: please_do_not_resist 3,
     Damage: 105614.0,
     Daze: 242.01
@@ -107,6 +122,7 @@
   {
     AgentId: 1241,
     Tag: ExSpecial,
+    Id: Guid_16,
     Name: full_barrage,
     Damage: 120980.98,
     Daze: 648.81
@@ -114,6 +130,7 @@
   {
     AgentId: 1241,
     Tag: AttributeAnomaly,
+    Id: Guid_17,
     Name: corruption,
     Damage: 46292.03
   }

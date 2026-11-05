@@ -29,9 +29,7 @@ public class EtherVeilTests {
            task.TrySetResult(e.EtherVeil);
         });
         
-        var action = zhao.GetActionDamage(Context, new(SkillTag.Entry, "burst_of_frost"));
-        
-        Assert.That(action, Has.Exactly(1).Items);
+        zhao.GetActionDamage(Context, new(SkillTag.Entry, "burst_of_frost"));
 
         var veil = await task.Task;
         
@@ -58,10 +56,8 @@ public class EtherVeilTests {
             }
         });
         
-        var action = zhao.GetActionDamage(Context, new(SkillTag.Entry, "burst_of_frost"));
-        Assert.That(action, Has.Exactly(1).Items);
-        action = sunna.GetActionDamage(Context, new(SkillTag.ExSpecial, "special_photography_technique"));
-        Assert.That(action, Has.Exactly(1).Items);
+        zhao.GetActionDamage(Context, new(SkillTag.Entry, "burst_of_frost"));
+        sunna.GetActionDamage(Context, new(SkillTag.ExSpecial, "special_photography_technique"));
 
         var veils = await task.Task;
         
@@ -88,10 +84,8 @@ public class EtherVeilTests {
 
         var statsBefore = sunna.CollectStats();
         
-        var action = sunna.GetActionDamage(Context, new(SkillTag.ExSpecial, "special_photography_technique"));
+        sunna.GetActionDamage(Context, new(SkillTag.ExSpecial, "special_photography_technique"));
         
-        Assert.That(action, Has.Exactly(1).Items);
-
         var veil = await task.Task;
         
         Assert.That(veil, Is.Not.Null);

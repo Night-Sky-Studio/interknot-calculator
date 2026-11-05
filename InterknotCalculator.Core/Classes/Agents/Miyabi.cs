@@ -132,7 +132,7 @@ public class MiyabiM1 : Miyabi {
     private bool IsM2BonusActive { get; set; } = false;
     
     public override void RegisterHooks(Context ctx) {
-        ctx.Events.OnActionExecuted.Add((c, e) => {
+        ctx.Events.OnActionExecuting.Add((c, e) => {
             // When the slash for charge level three of Shimotsuki hits an enemy under Frostburn,
             // it will immediately remove the Frostburn state and increase all squad members'
             // Anomaly Buildup Rate by 20%

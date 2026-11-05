@@ -2,8 +2,10 @@ namespace InterknotCalculator.Core.Classes.Events;
 
 public sealed class EventBus {
     public delegate void CalculationStartedEvent(Context ctx);
+    public delegate void ActionExecutingEvent(Context ctx, ActionExecutingEventArgs evt);
+
     public delegate void ActionExecutedEvent(Context ctx, ActionExecutedEventArgs evt);
-    public delegate void AftershockEvent(Context ctx, ActionExecutedEventArgs evt);
+    public delegate void AftershockEvent(Context ctx, ActionExecutingEventArgs evt);
     public delegate void AnomalyBuildupEvent(Context ctx, AnomalyBuildupEventArgs evt);
     public delegate void AnomalyThresholdEvent(Context ctx, AnomalyThresholdEventArgs evt);
     public delegate void AnomalyTriggeredEvent(Context ctx, AnomalyTriggeredEventArgs evt);
@@ -11,7 +13,8 @@ public sealed class EventBus {
     public delegate void EtherVeilDeactivatedEvent(Context ctx, EtherVeilEventArgs evt);
     
     public List<CalculationStartedEvent> OnCalculationStarted { get; } = [];
-    public List<ActionExecutedEvent> OnActionExecuted { get; } = [];
+    public List<ActionExecutingEvent> OnActionExecuting { get; } = [];
+    public event ActionExecutedEvent? OnActionExecuted;
     public List<AftershockEvent> OnAftershock { get; } = [];
     public List<AnomalyBuildupEvent> OnAnomalyBuildup { get; } = [];
     public List<AnomalyThresholdEvent> OnAnomalyThreshold { get; } = [];
@@ -24,12 +27,15 @@ public sealed class EventBus {
             calculationStartedEvent(ctx);
         }
     }
-    public void ActionExecuted(Context ctx, ActionExecutedEventArgs e) {
-        foreach (var actionExecutedEvent in OnActionExecuted) {
+    public void ActionExecuting(Context ctx, ActionExecutingEventArgs e) {
+        foreach (var actionExecutedEvent in OnActionExecuting) {
             actionExecutedEvent(ctx, e);
         }
     }
-    public void Aftershock(Context ctx, ActionExecutedEventArgs e) {
+    public void ActionExecuted(Context ctx, ActionExecutedEventArgs e) {
+        OnActionExecuted?.Invoke(ctx, e);
+    }
+    public void Aftershock(Context ctx, ActionExecutingEventArgs e) {
         foreach (var aftershockEvent in OnAftershock) {
             aftershockEvent(ctx, e);
         }

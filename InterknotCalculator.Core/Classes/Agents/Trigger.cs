@@ -107,22 +107,22 @@ public class Trigger : SupportAgent, IAgentReference<Trigger> {
         });
     }
 
-    public override IEnumerable<AgentAction> GetActionDamage(Context ctx, Ability ability) {
-        var result = base.GetActionDamage(ctx, ability).ToList();
+    public override AgentAction GetActionDamage(Context ctx, Ability ability) {
+        var result = base.GetActionDamage(ctx, ability);
 
-        result[0].Name = ability.Name switch {
+        result.Name = ability.Name switch {
             "silenced_shot" => ability.Scale switch {
                 1 => "silenced_shot_(counter)",  
                 2 => "silenced_shot_(finisher)",
-                _ => result[0].Name
+                _ => result.Name
             },
             "harmonizing_shot" => "harmonizing_shot_(x2)",
             "harmonizing_shot_tartarus" => ability.Scale switch {
                 0 => "harmonizing_shot_tartarus_(x3)",
                 1 => "harmonizing_shot_tartarus_(finisher)",
-                _ => result[0].Name
+                _ => result.Name
             },
-            _ => result[0].Name
+            _ => result.Name
         };
 
         return result;

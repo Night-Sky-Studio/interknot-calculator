@@ -66,7 +66,7 @@ public class Koleda : SupportAgent, IAgentReference<Koleda> {
         // ctx.Events.OnActionExecuted.Add(OnActionExecuted);
     }
 
-    private void OnActionExecuted(Context ctx, ActionExecutedEventArgs e) {
+    private void OnActionExecuted(Context ctx, ActionExecutingEventArgs e) {
         IsFurnaceFireActive = e.Ability switch {
             { Tag: SkillTag.FollowUpAssist, Name: "hammer_bell" }
                 or { Tag: SkillTag.ExSpecial, Name: "boiling_furnace" }

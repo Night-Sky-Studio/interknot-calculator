@@ -2,6 +2,7 @@
   {
     AgentId: 1171,
     Tag: Chain,
+    Id: Guid_1,
     Name: fuel-fed_flame,
     Damage: 44106.76,
     Daze: 301.29
@@ -9,12 +10,14 @@
   {
     AgentId: 1171,
     Tag: AttributeAnomaly,
+    Id: Guid_2,
     Name: burn,
     Damage: 166823.42
   },
   {
     AgentId: 1171,
     Tag: ExSpecial,
+    Id: Guid_3,
     Name: intense_heat_stirring_method_double 1,
     Damage: 92388.4,
     Daze: 729.9
@@ -22,6 +25,7 @@
   {
     AgentId: 1171,
     Tag: Ultimate,
+    Id: Guid_4,
     Name: glorious_inferno,
     Damage: 140702.58,
     Daze: 133.05
@@ -29,12 +33,14 @@
   {
     AgentId: 1171,
     Tag: AttributeAnomaly,
+    Id: Guid_5,
     Name: burn,
     Damage: 166823.42
   },
   {
     AgentId: 1171,
     Tag: QuickAssist,
+    Id: Guid_6,
     Name: energizing_speciality_drink,
     Damage: 8153.05,
     Daze: 105.66
