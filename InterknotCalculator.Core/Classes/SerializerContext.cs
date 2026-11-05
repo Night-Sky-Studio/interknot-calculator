@@ -6,7 +6,13 @@ using InterknotCalculator.Core.Classes.Server;
 
 namespace InterknotCalculator.Core.Classes;
 
-[JsonSourceGenerationOptions(WriteIndented = true, UseStringEnumConverter = true)]
+[JsonSourceGenerationOptions(
+    WriteIndented = true, 
+    UseStringEnumConverter = true,
+    RespectNullableAnnotations = true,
+    RespectRequiredConstructorParameters = true,
+    UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow
+)]
 [JsonSerializable(typeof(Agent))]
 [JsonSerializable(typeof(Stat))]
 [JsonSerializable(typeof(Enemy))]
