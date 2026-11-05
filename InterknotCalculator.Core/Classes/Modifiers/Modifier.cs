@@ -30,6 +30,10 @@ public readonly struct Modifier : IEquatable<Modifier> {
     public double Value { get; }
     public ModifierType Type { get; }
     public SkillTag Tags { get; }
+    public AbilityScope Scope { get; }
+    
+    /// <summary>True if the modifier only counts for some abilities and is excluded from <see cref="MutableStat.Value"/>.</summary>
+    public bool IsConditional => Tags is not SkillTag.None || !Scope.IsAny;
     
     /// <summary>
     /// A single contribution to a <see cref="MutableStat"/>.
@@ -42,15 +46,18 @@ public readonly struct Modifier : IEquatable<Modifier> {
     /// into <see cref="MutableStat.Value"/>; anything else makes it conditional and moves it to
     /// <see cref="MutableStat.Tagged"/>.
     /// </param>
+    /// <param name="scope">The abilities this modifier applies to. <see cref="AbilityScope.Any"/> means it always applies.</param>
     public Modifier(ModifierKey key,
         double value,
         ModifierType type,
-        SkillTag tags = SkillTag.None
+        SkillTag tags = SkillTag.None,
+        AbilityScope scope = default
     ) {
         Key = key;
         Value = value;
         Type = type;
         Tags = tags;
+        Scope = scope;
     }
 
     public Modifier(ModifierKey key, Stat stat, bool combat = false) {
@@ -72,5 +79,5 @@ public readonly struct Modifier : IEquatable<Modifier> {
     public static bool operator ==(Modifier left, Modifier right) => left.Key == right.Key;
     public static bool operator !=(Modifier left, Modifier right) => !(left == right);
     
-    public Modifier Negate() => new(Key, -Value, Type, Tags);
+    public Modifier Negate() => new(Key, -Value, Type, Tags, Scope);
 }

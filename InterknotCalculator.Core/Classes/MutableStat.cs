@@ -107,8 +107,23 @@ public class MutableStat {
         return total;
     }
 
+    /// <summary>
+    /// Sum of the conditional modifiers on <paramref name="ability"/>.
+    /// </summary>
+    public double Conditional(Ability ability) {
+        var total = 0.0;
+        foreach (var m in Modifiers) {
+            if (!m.IsConditional) continue;
+            var tagCheck = m.Tags is SkillTag.None || (m.Tags & ability.Tag) != 0;
+            if (tagCheck && m.Scope.Matches(ability)) total += m.Value;
+        }
+        return total;
+    }
+
     /// <summary><see cref="Value"/> plus the modifiers conditional on <paramref name="tag"/>.</summary>
     public double For(SkillTag tag) => Value + Tagged(tag);
+    
+    public double For(Ability ability) => Value + Conditional(ability);
 
     private void Fold() {
         double baseSum = 0.0, 
@@ -116,6 +131,8 @@ public class MutableStat {
                combatRatioSum = 0.0, combatFlatSum = 0.0;
         
         foreach (var m in Modifiers) {
+            // Conditional modifiers only count for the abilities they name; see Conditional().
+            if (m.IsConditional) continue;
             // Tagged modifiers only count for the abilities they name; see Tagged().
             if (m.Tags is not SkillTag.None) continue;
             switch (m.Type) {

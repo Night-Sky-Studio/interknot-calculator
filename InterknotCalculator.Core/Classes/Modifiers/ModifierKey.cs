@@ -59,6 +59,7 @@ public readonly struct ModifierKey : IEquatable<ModifierKey> {
     public static ModifierKey EtherVeil() => new("EtherVeil:Any");
     public static ModifierKey EtherVeil<T>() where T : EtherVeil => new($"EtherVeil:{typeof(T).Name}");
     public static ModifierKey Passive() => new("Passive");
+    public static ModifierKey AbilityPassive() => new("AbilityPassive");
     public static ModifierKey CorePassive() => new("CorePassive");
     public static ModifierKey TeamPassive() => new("TeamPassive");
     public static ModifierKey Mindscape(uint level) => new($"Mindscape:{level}");

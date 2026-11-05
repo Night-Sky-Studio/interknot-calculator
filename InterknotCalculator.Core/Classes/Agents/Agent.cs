@@ -229,6 +229,7 @@ public abstract class Agent(uint id) {
     /// </summary>
     /// <param name="ability">Ability name</param>
     /// <returns><see cref="Stat"/> or null if ability has none</returns>
+    [Obsolete("Use RegisterHooks(ctx) instead")]
     public virtual Stat? ApplyAbilityPassive(Ability ability) => null;
 
     /// <summary>
