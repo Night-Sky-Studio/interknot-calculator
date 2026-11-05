@@ -2,31 +2,47 @@
   {
     AgentId: 1491,
     Tag: ExSpecial,
-    Name: special_photography_technique 1
+    Id: Guid_1,
+    Name: special_photography_technique 1,
+    Damage: 119036.53,
+    Daze: 885.63
   },
   {
     AgentId: 1481,
     Tag: ExSpecial,
-    Name: rock
+    Id: Guid_2,
+    Name: rock,
+    Damage: 61268.12,
+    Daze: 946.25
   },
   {
     AgentId: 1481,
     Tag: ExSpecial,
-    Name: scissors
+    Id: Guid_3,
+    Name: scissors,
+    Damage: 79592.5,
+    Daze: 1240.96
   },
   {
     AgentId: 1481,
     Tag: ExSpecial,
-    Name: paper
+    Id: Guid_4,
+    Name: paper,
+    Damage: 106317.76,
+    Daze: 1710.61
   },
   {
     AgentId: 1481,
     Tag: ExSpecial,
-    Name: get_lost
+    Id: Guid_5,
+    Name: get_lost,
+    Damage: 83304.34,
+    Daze: 1346.3
   },
   {
     AgentId: 1431,
     Tag: Ultimate,
+    Id: Guid_6,
     Name: chasing_storms,
     Damage: 1685763.3,
     Daze: 68.47
@@ -34,11 +50,14 @@
   {
     AgentId: 1491,
     Tag: DirectHit,
-    Name: cat's_gaze
+    Id: Guid_7,
+    Name: cat's_gaze,
+    Damage: 193909.69
   },
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_8,
     Name: enlightened_mind_sunderlight 1,
     Damage: 105830.91,
     Daze: 42.83
@@ -46,11 +65,14 @@
   {
     AgentId: 1491,
     Tag: DirectHit,
-    Name: cat's_gaze
+    Id: Guid_9,
+    Name: cat's_gaze,
+    Damage: 193909.69
   },
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_10,
     Name: enlightened_mind_sunderlight 2,
     Damage: 137400.66,
     Daze: 54.78
@@ -58,11 +80,14 @@
   {
     AgentId: 1491,
     Tag: DirectHit,
-    Name: cat's_gaze
+    Id: Guid_11,
+    Name: cat's_gaze,
+    Damage: 193909.69
   },
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_12,
     Name: enlightened_mind_sunderlight_annihilation 2,
     Damage: 780836.8,
     Daze: 72.62
@@ -70,11 +95,14 @@
   {
     AgentId: 1491,
     Tag: DirectHit,
-    Name: cat's_gaze
+    Id: Guid_13,
+    Name: cat's_gaze,
+    Damage: 193909.69
   },
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_14,
     Name: enlightened_mind_sunderlight_maximum,
     Damage: 529723.75,
     Daze: 95.86
@@ -82,11 +110,14 @@
   {
     AgentId: 1491,
     Tag: DirectHit,
-    Name: cat's_gaze
+    Id: Guid_15,
+    Name: cat's_gaze,
+    Damage: 193909.69
   },
   {
     AgentId: 1431,
     Tag: ExSpecial,
+    Id: Guid_16,
     Name: enlightened_mind_soaring_light 1,
     Damage: 154433.43,
     Daze: 22.58
@@ -94,6 +125,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_17,
     Name: enlightened_mind_skyward_ascent,
     Damage: 79821.99,
     Daze: 45.24
@@ -101,6 +133,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_18,
     Name: enlightened_mind_sunderlight 1,
     Damage: 105830.91,
     Daze: 42.83
@@ -108,6 +141,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_19,
     Name: enlightened_mind_sunderlight 2,
     Damage: 137400.66,
     Daze: 54.78
@@ -115,6 +149,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_20,
     Name: enlightened_mind_sunderlight_annihilation 2,
     Damage: 780836.8,
     Daze: 72.62
@@ -122,6 +157,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_21,
     Name: enlightened_mind_sunderlight_maximum,
     Damage: 529723.75,
     Daze: 95.86
@@ -129,6 +165,7 @@
   {
     AgentId: 1431,
     Tag: ExSpecial,
+    Id: Guid_22,
     Name: enlightened_mind_soaring_light 1,
     Damage: 154433.43,
     Daze: 22.58
@@ -136,6 +173,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_23,
     Name: enlightened_mind_skyward_ascent,
     Damage: 79821.99,
     Daze: 45.24
@@ -143,6 +181,7 @@
   {
     AgentId: 1431,
     Tag: ExSpecial,
+    Id: Guid_24,
     Name: enlightened_mind_return_to_dust,
     Damage: 1017018.81,
     Daze: 174.13
@@ -150,11 +189,15 @@
   {
     AgentId: 1491,
     Tag: ExSpecial,
-    Name: special_photography_technique 1
+    Id: Guid_25,
+    Name: special_photography_technique 1,
+    Damage: 119036.53,
+    Daze: 885.63
   },
   {
     AgentId: 1431,
     Tag: Entry,
+    Id: Guid_26,
     Name: illuminating_darkness,
     Damage: 350638.77,
     Daze: 150.64
@@ -162,11 +205,14 @@
   {
     AgentId: 1491,
     Tag: DirectHit,
-    Name: cat's_gaze
+    Id: Guid_27,
+    Name: cat's_gaze,
+    Damage: 193909.69
   },
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_28,
     Name: enlightened_mind_sunderlight 1,
     Damage: 105830.91,
     Daze: 42.83
@@ -174,11 +220,14 @@
   {
     AgentId: 1491,
     Tag: DirectHit,
-    Name: cat's_gaze
+    Id: Guid_29,
+    Name: cat's_gaze,
+    Damage: 193909.69
   },
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_30,
     Name: enlightened_mind_sunderlight 2,
     Damage: 137400.66,
     Daze: 54.78
@@ -186,11 +235,14 @@
   {
     AgentId: 1491,
     Tag: DirectHit,
-    Name: cat's_gaze
+    Id: Guid_31,
+    Name: cat's_gaze,
+    Damage: 193909.69
   },
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_32,
     Name: enlightened_mind_sunderlight_annihilation 2,
     Damage: 780836.8,
     Daze: 72.62
@@ -198,11 +250,14 @@
   {
     AgentId: 1491,
     Tag: DirectHit,
-    Name: cat's_gaze
+    Id: Guid_33,
+    Name: cat's_gaze,
+    Damage: 193909.69
   },
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_34,
     Name: enlightened_mind_sunderlight_maximum,
     Damage: 529723.75,
     Daze: 95.86
@@ -210,11 +265,14 @@
   {
     AgentId: 1491,
     Tag: DirectHit,
-    Name: cat's_gaze
+    Id: Guid_35,
+    Name: cat's_gaze,
+    Damage: 193909.69
   },
   {
     AgentId: 1431,
     Tag: ExSpecial,
+    Id: Guid_36,
     Name: enlightened_mind_soaring_light 1,
     Damage: 154433.43,
     Daze: 22.58
@@ -222,6 +280,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_37,
     Name: enlightened_mind_skyward_ascent,
     Damage: 79821.99,
     Daze: 45.24
@@ -229,6 +288,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_38,
     Name: enlightened_mind_sunderlight 1,
     Damage: 105830.91,
     Daze: 42.83
@@ -236,6 +296,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_39,
     Name: enlightened_mind_sunderlight 2,
     Damage: 137400.66,
     Daze: 54.78
@@ -243,6 +304,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_40,
     Name: enlightened_mind_sunderlight_annihilation 2,
     Damage: 780836.8,
     Daze: 72.62
@@ -250,6 +312,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_41,
     Name: enlightened_mind_sunderlight_maximum,
     Damage: 529723.75,
     Daze: 95.86
@@ -257,6 +320,7 @@
   {
     AgentId: 1431,
     Tag: ExSpecial,
+    Id: Guid_42,
     Name: enlightened_mind_soaring_light 1,
     Damage: 154433.43,
     Daze: 22.58
@@ -264,6 +328,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_43,
     Name: enlightened_mind_skyward_ascent,
     Damage: 79821.99,
     Daze: 45.24
@@ -271,6 +336,7 @@
   {
     AgentId: 1431,
     Tag: ExSpecial,
+    Id: Guid_44,
     Name: enlightened_mind_return_to_dust,
     Damage: 1017018.81,
     Daze: 174.13
@@ -278,6 +344,7 @@
   {
     AgentId: 1431,
     Tag: Ultimate,
+    Id: Guid_45,
     Name: chasing_storms,
     Damage: 1685763.3,
     Daze: 68.47
@@ -285,6 +352,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_46,
     Name: enlightened_mind_sunderlight 1,
     Damage: 105830.91,
     Daze: 42.83
@@ -292,6 +360,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_47,
     Name: enlightened_mind_sunderlight 2,
     Damage: 137400.66,
     Daze: 54.78
@@ -299,12 +368,14 @@
   {
     AgentId: 1431,
     Tag: AttributeAnomaly,
+    Id: Guid_48,
     Name: assault,
     Damage: 75856.62
   },
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_49,
     Name: enlightened_mind_sunderlight_annihilation 2,
     Damage: 780836.8,
     Daze: 72.62
@@ -312,6 +383,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_50,
     Name: enlightened_mind_sunderlight_maximum,
     Damage: 529723.75,
     Daze: 95.86
@@ -319,6 +391,7 @@
   {
     AgentId: 1431,
     Tag: ExSpecial,
+    Id: Guid_51,
     Name: enlightened_mind_soaring_light 1,
     Damage: 154433.43,
     Daze: 22.58
@@ -326,6 +399,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_52,
     Name: enlightened_mind_skyward_ascent,
     Damage: 79821.99,
     Daze: 45.24
@@ -333,6 +407,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_53,
     Name: enlightened_mind_sunderlight 1,
     Damage: 105830.91,
     Daze: 42.83
@@ -340,6 +415,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_54,
     Name: enlightened_mind_sunderlight 2,
     Damage: 137400.66,
     Daze: 54.78
@@ -347,6 +423,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_55,
     Name: enlightened_mind_sunderlight_annihilation 2,
     Damage: 780836.8,
     Daze: 72.62
@@ -354,6 +431,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_56,
     Name: enlightened_mind_sunderlight_maximum,
     Damage: 529723.75,
     Daze: 95.86
@@ -361,6 +439,7 @@
   {
     AgentId: 1431,
     Tag: ExSpecial,
+    Id: Guid_57,
     Name: enlightened_mind_soaring_light 1,
     Damage: 154433.43,
     Daze: 22.58
@@ -368,6 +447,7 @@
   {
     AgentId: 1431,
     Tag: BasicAtk,
+    Id: Guid_58,
     Name: enlightened_mind_skyward_ascent,
     Damage: 79821.99,
     Daze: 45.24
@@ -375,6 +455,7 @@
   {
     AgentId: 1431,
     Tag: Ultimate,
+    Id: Guid_59,
     Name: cleaving_heavens,
     Damage: 2701030.66,
     Daze: 188.58

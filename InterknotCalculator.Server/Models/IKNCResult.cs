@@ -14,11 +14,19 @@ public record EnemyData(
 
 [MessagePackObject]
 public record AgentAction(
-    [property: Key(0)] uint AgentId, 
-    [property: Key(1)] string Name, 
-    [property: Key(2)] SkillTag Tag, 
-    [property: Key(3)] double Damage, 
-    [property: Key(4)] double Daze
+    [property: Key(0)] string Id,
+    [property: Key(1)] uint AgentId, 
+    [property: Key(2)] string Name, 
+    [property: Key(3)] SkillTag Tag, 
+    [property: Key(4)] double Damage, 
+    [property: Key(5)] double Daze
+);
+
+[MessagePackObject]
+public record ActionGroup(
+    [property: Key(0)] uint AgentId,    
+    [property: Key(1)] string Name,    
+    [property: Key(2)] IEnumerable<string> ActionIds    
 );
 
 [MessagePackObject]
@@ -26,7 +34,8 @@ public record ResultData(
     [property: Key(0)] Dictionary<Affix, double> BaseStats,
     [property: Key(1)] Dictionary<Affix, double> CalculatedStats,
     [property: Key(2)] IEnumerable<AgentAction> PerAction,
-    [property: Key(3)] double TotalDamage
+    [property: Key(3)] IEnumerable<ActionGroup> Groups,
+    [property: Key(4)] double TotalDamage
     // [property: Key(4)] EnemyData Enemy
 );
 

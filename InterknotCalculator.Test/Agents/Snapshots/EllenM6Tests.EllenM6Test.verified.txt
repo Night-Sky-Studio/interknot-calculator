@@ -2,6 +2,7 @@
   {
     AgentId: 1191,
     Tag: Chain,
+    Id: Guid_1,
     Name: avalanche,
     Damage: 342825.41,
     Daze: 556.79
@@ -9,6 +10,7 @@
   {
     AgentId: 1191,
     Tag: Ultimate,
+    Id: Guid_2,
     Name: endless_winter,
     Damage: 815384.82,
     Daze: 290.81
@@ -16,6 +18,7 @@
   {
     AgentId: 1191,
     Tag: ExSpecial,
+    Id: Guid_3,
     Name: tail_swipe,
     Damage: 144627.08,
     Daze: 634.82
@@ -23,6 +26,7 @@
   {
     AgentId: 1191,
     Tag: ExSpecial,
+    Id: Guid_4,
     Name: sharknami,
     Damage: 212115.39,
     Daze: 581.44
@@ -30,6 +34,7 @@
   {
     AgentId: 1191,
     Tag: BasicAtk,
+    Id: Guid_5,
     Name: icy_blade 2,
     Damage: 95179.62,
     Daze: 150.38
@@ -37,6 +42,7 @@
   {
     AgentId: 1191,
     Tag: BasicAtk,
+    Id: Guid_6,
     Name: flash_freeze_trimming 3,
     Damage: 214222.55,
     Daze: 384.56
@@ -44,6 +50,7 @@
   {
     AgentId: 1191,
     Tag: BasicAtk,
+    Id: Guid_7,
     Name: icy_blade 2,
     Damage: 95179.62,
     Daze: 150.38
@@ -51,6 +58,7 @@
   {
     AgentId: 1191,
     Tag: ExSpecial,
+    Id: Guid_8,
     Name: sharknami,
     Damage: 212115.39,
     Daze: 581.44
@@ -58,6 +66,7 @@
   {
     AgentId: 1191,
     Tag: BasicAtk,
+    Id: Guid_9,
     Name: icy_blade 2,
     Damage: 95179.62,
     Daze: 150.38
@@ -65,6 +74,7 @@
   {
     AgentId: 1191,
     Tag: BasicAtk,
+    Id: Guid_10,
     Name: flash_freeze_trimming 3,
     Damage: 214222.55,
     Daze: 384.56
@@ -72,12 +82,14 @@
   {
     AgentId: 1191,
     Tag: AttributeAnomaly,
+    Id: Guid_11,
     Name: shatter,
     Damage: 40497.51
   },
   {
     AgentId: 1191,
     Tag: BasicAtk,
+    Id: Guid_12,
     Name: icy_blade 2,
     Damage: 95179.62,
     Daze: 150.38

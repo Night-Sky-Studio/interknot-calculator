@@ -2,6 +2,7 @@
   {
     AgentId: 1371,
     Tag: Chain,
+    Id: Guid_1,
     Name: auric_ink_rush,
     Damage: 415126.81,
     Daze: 317.87
@@ -9,6 +10,7 @@
   {
     AgentId: 1371,
     Tag: ExSpecial,
+    Id: Guid_2,
     Name: ink_manifestation_charged,
     Damage: 380232.46,
     Daze: 347.91
@@ -16,6 +18,7 @@
   {
     AgentId: 1371,
     Tag: ExSpecial,
+    Id: Guid_3,
     Name: cloud_shaper,
     Damage: 643282.41,
     Daze: 670.44
@@ -23,6 +26,7 @@
   {
     AgentId: 1371,
     Tag: ExSpecial,
+    Id: Guid_4,
     Name: ashen_ink_becomes_shadows,
     Damage: 224303.99,
     Daze: 198.65
@@ -30,6 +34,7 @@
   {
     AgentId: 1371,
     Tag: Ultimate,
+    Id: Guid_5,
     Name: endless_talisman_suppression,
     Damage: 1458526.81,
     Daze: 348.56
@@ -37,6 +42,7 @@
   {
     AgentId: 1371,
     Tag: Ultimate,
+    Id: Guid_6,
     Name: qingming_skyshade,
     Damage: 1843687.31,
     Daze: 568.88
@@ -44,6 +50,7 @@
   {
     AgentId: 1371,
     Tag: BasicAtk,
+    Id: Guid_7,
     Name: auric_array,
     Damage: 218470.97,
     Daze: 409.94
@@ -51,6 +58,7 @@
   {
     AgentId: 1371,
     Tag: BasicAtk,
+    Id: Guid_8,
     Name: qingming_eruption,
     Damage: 79271.71,
     Daze: 148.99

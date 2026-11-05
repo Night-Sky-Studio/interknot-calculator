@@ -4,6 +4,7 @@ using InterknotCalculator.Core.Enums;
 using InterknotCalculator.Server.Models;
 using MessagePack;
 using Microsoft.AspNetCore.Mvc;
+using ActionGroup = InterknotCalculator.Server.Models.ActionGroup;
 using AgentAction = InterknotCalculator.Server.Models.AgentAction;
 
 namespace InterknotCalculator.Server;
@@ -134,7 +135,8 @@ public static class Program {
                             results[index] = new IKNCResult(character.Uid, leaderboard.Id, character.BuildId, character.IsPrimary, new(
                                 result.FinalStats.BaseStats,
                                 result.FinalStats.CalculatedStats,
-                                result.PerAction.Select(a => new AgentAction(a.AgentId, a.Name, a.Tag, a.Damage, a.Daze)),
+                                result.PerAction.Select(a => new AgentAction(a.Id.ToString(), a.AgentId, a.Name, a.Tag, a.Damage, a.Daze)),
+                                result.Groups.Select(g => new ActionGroup(g.AgentId, g.Name, g.ActionIds.Select(id => id.ToString()))),
                                 result.Total
                             ));
                             return ValueTask.CompletedTask;
