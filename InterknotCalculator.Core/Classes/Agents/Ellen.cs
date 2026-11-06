@@ -89,23 +89,21 @@ public class Ellen : Agent {
         ]);
     }
 
-    public override Stat? ApplyAbilityPassive(Ability ability) {
-        if (ability.Tag is SkillTag.Chain or SkillTag.Ultimate) {
-            return new(Affix.CritDamage, 1);
-        }
-        
-        switch (ability.Name) {
-            case "flash_freeze_trimming" or "icy_blade" or "glacial_blade_wave":
-                return new(Affix.CritDamage, 1);
-            default:
-                return null;
-        }
-    }
-
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
 
         ctx.Events.OnCalculationStarted += c => {
+            // TODO: this is potentially fragile
+            //       As it is currently, there's no way that Ellen would get 200% CD,
+            //       however, developers are dumb and may forget or miss that certain ability
+            //       already matches the tag, applying the modifier twice by accident.
+            CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                1, ModifierType.CombatFlat, 
+                tags: SkillTag.Chain | SkillTag.Ultimate));
+            CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(),
+                1, ModifierType.CombatFlat,
+                scope: AbilityScope.Of("flash_freeze_trimming", "icy_blade", "glacial_blade_wave")));
+            
             if (c.HasTeammates(a => a.Element == Element || a.Faction == Faction, Id)) {
                 ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
                     0.3, ModifierType.CombatFlat));
@@ -127,19 +125,19 @@ public class EllenM1 : Ellen {
         ctx.Events.OnCalculationStarted += _ => {
             // For each point of Flash Freeze Charge consumed, Ellen’s CRIT Rate
             // is increased by 2% for 15s, stacking up
-            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.TeamPassive(), 
                 0.02 * 6, ModifierType.CombatFlat));
         };
     }
 }
 
 public class EllenM2 : EllenM1 {
-    public override Stat? ApplyAbilityPassive(Ability ability) {
-        if (ability.Tag is SkillTag.ExSpecial) {
-            return new(Affix.CritDamage, 0.6);
-        }
+    public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
 
-        return base.ApplyAbilityPassive(ability);
+        CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(),
+            0.6, ModifierType.CombatFlat,
+            tags: SkillTag.ExSpecial));
     }
 }
 
@@ -190,16 +188,35 @@ public class EllenM6 : EllenM5 {
         Skills["endless_winter"] = new(SkillTag.Ultimate, [new(4469.3, 312.7, 168.33)]);
     }
 
-    private int FeastStacks { get; set => field = Math.Min(value, 3); } = 0;
+    private ModifierKey TheFeastBeginsKey => ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive();
+    
+    private int FeastStacks {
+        get;
+        set {
+            field = Math.Clamp(value, 0, 3);
+            // Keep the modifier in sync with the stack count
+            DmgBonus.RemoveKey(TheFeastBeginsKey);
+            if (field == 3) {
+                DmgBonus.Add(new(TheFeastBeginsKey, 2.5, ModifierType.CombatFlat,
+                    scope: AbilityScope.Of("arctic_ambush")));
+            }
+        }
+    }
 
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
 
         ctx.Events.OnCalculationStarted += _ => {
+            FeastStacks = 0;
+            
             PenRatio.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 
                 0.2, ModifierType.CombatFlat));
+            
+            DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 
+                2.5, ModifierType.CombatFlat,
+                scope: AbilityScope.Of("arctic_ambush")));
         };
-        
+
         ctx.Events.OnActionExecuting += (_, e) => {
             // When Ellen uses an EX Special Attack, Chain Attack, or gains Quick Charge [...]
             // She gains 1 stack of The Feast Begins, up to a maximum of 3 stacks.
@@ -207,14 +224,10 @@ public class EllenM6 : EllenM5 {
             if (e.Ability.Name is "icy_blade" or "vortex" or "shark_sentinel") {
                 FeastStacks++;
             }
-        };
-    }
 
-    public override Stat? ApplyAbilityPassive(Ability ability) {
-        if (ability.Name is "arctic_ambush" && FeastStacks == 3) {
-            return new(Affix.DmgBonus, 2.5);
-        }
-        
-        return base.ApplyAbilityPassive(ability);
+            if (e.Ability.Name is "arctic_ambush") {
+                FeastStacks = 0;
+            }
+        };
     }
 }

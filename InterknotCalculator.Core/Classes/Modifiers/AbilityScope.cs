@@ -8,7 +8,7 @@ public readonly record struct AbilityScope(string[]? Names = null, int? Scale = 
     public bool IsAny => Names is null && Scale is null;
     
     public static AbilityScope Of(params string[] names) => new(names);
-    public static AbilityScope Of(string name, int scale) => new([name], scale);
+    public static AbilityScope Of(string name, int? scale = null) => new([name], scale);
 
     public bool Matches(Ability ability) =>
         (Names is null || Array.IndexOf(Names, ability.Name) >= 0) &&
