@@ -259,39 +259,23 @@ public abstract class Agent(uint id) {
         Energy += multiplier.Energy;
 #endif
 
-        var tag = data.Tag;
-
-        // Apply ability passive if present. Ability passives are still one-off,
-        // so fold them into local accumulators rather than the stat set.
-        var abilityDmgBonus = new SafeDictionary<Affix, double>();
-        var abilityPassive = ApplyAbilityPassive(ability);
-        if (abilityPassive is { } passive) {
-            abilityDmgBonus[passive.Affix] += passive.Value;
-        }
-
         // Process anomalies
         var buildup = GetAnomalyBuildup(ability);
         ctx.Enemy.AddAnomalyBuildup(ctx, this, buildup);
 
         // Calculate damage according to formula
         var baseDmgAttacker = GetBaseDamage(data.Scales[ability.Scale].Damage);
-        var dmgBonusMultiplier = 1 + Stats[relatedAffixDmg].For(tag) + Stats[Affix.DmgBonus].For(tag)
-                                 + abilityDmgBonus[relatedAffixDmg] + abilityDmgBonus[Affix.DmgBonus]
-                                 + data.Affixes[relatedAffixDmg] + data.Affixes[Affix.DmgBonus];
-        var critMultiplier = 1 + Math.Min(Stats[Affix.CritRate].For(tag) + abilityDmgBonus[Affix.CritRate] + data.Affixes[Affix.CritRate], 1)
-            * (Stats[Affix.CritDamage].For(tag) + abilityDmgBonus[Affix.CritDamage] + data.Affixes[Affix.CritDamage]);
-        var resMultiplier = 1 + Stats[relatedAffixRes].For(tag) + Stats[Affix.ResPen].For(tag)
-                            + abilityDmgBonus[relatedAffixRes] + abilityDmgBonus[Affix.ResPen]
-                            + data.Affixes[relatedAffixRes] + data.Affixes[Affix.ResPen];
+        var dmgBonusMultiplier = 1 + Stats[relatedAffixDmg].For(ability) + Stats[Affix.DmgBonus].For(ability);
+        var critMultiplier = 1 + Math.Min(Stats[Affix.CritRate].For(ability), 1) * Stats[Affix.CritDamage].For(ability);
+        var resMultiplier = 1 + Stats[relatedAffixRes].For(ability) + Stats[Affix.ResPen].For(ability);
 
-        var defPen = Stats[Affix.DefPen].For(tag) + abilityDmgBonus[Affix.DefPen] + data.Affixes[Affix.DefPen];
+        var defPen = Stats[Affix.DefPen].For(ability);
         var enemyDefenseMultiplier = Speciality is Speciality.Rupture
             ? 1
             : ctx.Enemy.GetDefenseMultiplier(defPen, PenRatio, Pen);
 
         var sheerMultiplier = Speciality is Speciality.Rupture
-            ? 1 + Stats[relatedAffixSheer].For(tag) + Stats[Affix.SheerDmgBonus].For(tag)
-                + data.Affixes[relatedAffixSheer] + data.Affixes[Affix.SheerDmgBonus]
+            ? 1 + Stats[relatedAffixSheer].For(ability) + Stats[Affix.SheerDmgBonus].For(ability)
             : 1;
         
         var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * enemyDefenseMultiplier
