@@ -12,7 +12,7 @@ public class MoonlightLullaby : DriveDiscSet {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             var agent = c.Team[equipper];
             if (agent is not { Speciality: Speciality.Support }) return;
         
@@ -22,6 +22,6 @@ public class MoonlightLullaby : DriveDiscSet {
             foreach (var a in c.Team.Values) {
                 a.DmgBonus.Add(new(key, 0.18, ModifierType.CombatFlat));
             }
-        });
+        };
     }
 }

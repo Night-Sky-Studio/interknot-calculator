@@ -15,12 +15,12 @@ public class FlightOfFancy : Weapon {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
 
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             var agent = c.Team[equipper];
             if (!agent.Element.Matches(Element.Ether)) return;
             
             agent.AnomalyProficiency.Add(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(),
                 20 * 6, ModifierType.CombatFlat));
-        });
+        };
     }
 }

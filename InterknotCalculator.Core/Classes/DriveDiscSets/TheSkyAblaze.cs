@@ -12,7 +12,7 @@ public class TheSkyAblaze : DriveDiscSet {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             var agent = c.Team[equipper];
             
             var key = ModifierKey.DiscSet(Id, true);
@@ -22,6 +22,6 @@ public class TheSkyAblaze : DriveDiscSet {
             }
             
             agent.Atk.Add(new(key, 0.1, ModifierType.CombatRatio));
-        });
+        };
     }
 }

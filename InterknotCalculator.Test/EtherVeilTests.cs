@@ -23,11 +23,11 @@ public class EtherVeilTests {
         var cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
         await using var registration = cts.Token.Register(() => task.TrySetException(new TimeoutException()));
         
-        Context.Events.OnEtherVeilActivated.Add((_, e) => {
+        Context.Events.OnEtherVeilActivated += (_, e) => {
            Assert.That(e.Agent, Is.EqualTo(zhao));
            
            task.TrySetResult(e.EtherVeil);
-        });
+        };
         
         zhao.GetActionDamage(Context, new(SkillTag.Entry, "burst_of_frost"));
 
@@ -49,12 +49,12 @@ public class EtherVeilTests {
         var cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
         await using var registration = cts.Token.Register(() => task.TrySetException(new TimeoutException()));
 
-        Context.Events.OnEtherVeilActivated.Add((c, _) => {
+        Context.Events.OnEtherVeilActivated += (c, _) => {
             if (c.GetEtherVeil<Wellspring>() is { } wellspring && 
                 c.GetEtherVeil<DelusionReprise>() is { } reprise) {
                 task.SetResult([wellspring, reprise]);
             }
-        });
+        };
         
         zhao.GetActionDamage(Context, new(SkillTag.Entry, "burst_of_frost"));
         sunna.GetActionDamage(Context, new(SkillTag.ExSpecial, "special_photography_technique"));
@@ -76,11 +76,11 @@ public class EtherVeilTests {
         var cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
         await using var registration = cts.Token.Register(() => task.TrySetException(new TimeoutException()));
         
-        Context.Events.OnEtherVeilActivated.Add((_, e) => {
+        Context.Events.OnEtherVeilActivated += (_, e) => {
             Assert.That(e.Agent, Is.EqualTo(sunna));
            
             task.TrySetResult(e.EtherVeil);
-        });
+        };
 
         var statsBefore = sunna.CollectStats();
         

@@ -85,11 +85,11 @@ public class Harumasa : Agent {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
 
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             if (c.HasTeammates(a => a is { Speciality: Speciality.Stun or Speciality.Anomaly }, Id)) {
                 DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
                     0.4, ModifierType.CombatFlat));
             }
-        });
+        };
     }
 }

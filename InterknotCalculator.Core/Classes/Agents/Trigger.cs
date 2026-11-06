@@ -95,7 +95,7 @@ public class Trigger : SupportAgent, IAgentReference<Trigger> {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.35, ModifierType.CombatFlat));
 
             if (c.HasTeammates(a => a.Speciality is Speciality.Attack || a.Element.Matches(Element), Id)) {
@@ -104,7 +104,7 @@ public class Trigger : SupportAgent, IAgentReference<Trigger> {
                         Math.Min((CritRate - 0.4) * 1.5, 0.75), ModifierType.CombatFlat, SkillTag.Aftershock));
                 }
             }
-        });
+        };
     }
 
     public override AgentAction GetActionDamage(Context ctx, Ability ability) {

@@ -17,10 +17,10 @@ public class SpectralGaze : Weapon {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             if (c.Team[equipper].Element.Matches(Element.Electric)) {
                 c.Enemy.Defense.Subtract(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(), 0.25, ModifierType.CombatRatio));
             }
-        });
+        };
     }
 }

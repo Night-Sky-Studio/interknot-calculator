@@ -39,7 +39,7 @@ public sealed class AstraYao : SupportAgent, IAgentReference<AstraYao> {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
 
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             var key = ModifierKey.Agent(Id) + ModifierKey.CorePassive();
 
             if (!c.TryActivateGlobal(key)) return;
@@ -49,6 +49,6 @@ public sealed class AstraYao : SupportAgent, IAgentReference<AstraYao> {
                 agent.DmgBonus.Add(new(key, 0.2, ModifierType.CombatFlat));
                 agent.CritDamage.Add(new(key, 0.25, ModifierType.CombatFlat));
             }
-        });
+        };
     }
 }

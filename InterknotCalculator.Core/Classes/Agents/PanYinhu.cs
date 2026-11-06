@@ -40,7 +40,7 @@ public class PanYinhu : SupportAgent, IAgentReference<PanYinhu> {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             foreach (var agent in c.Team.Values) {
                 if (agent is RuptureAgent a) {
                     // M6
@@ -56,6 +56,6 @@ public class PanYinhu : SupportAgent, IAgentReference<PanYinhu> {
                         0.2 + 0.1, ModifierType.CombatFlat));
                 }   
             }
-        });
+        };
     }
 }

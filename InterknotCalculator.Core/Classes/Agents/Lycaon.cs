@@ -91,7 +91,7 @@ public sealed class Lycaon : SupportAgent, IAgentReference<Lycaon> {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 0.8, ModifierType.CombatFlat));
 
@@ -104,6 +104,6 @@ public sealed class Lycaon : SupportAgent, IAgentReference<Lycaon> {
                 c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                     0.35, ModifierType.CombatFlat));
             }
-        });
+        };
     }
 }

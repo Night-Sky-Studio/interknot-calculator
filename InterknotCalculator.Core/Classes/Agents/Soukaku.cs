@@ -40,7 +40,7 @@ public class Soukaku : SupportAgent, IAgentReference<Soukaku> {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             foreach (var agent in c.Team.Values) {
                 agent.Atk.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                     Math.Min(Atk.InitialValue * 2 * 0.2, 1000), ModifierType.CombatFlat));
@@ -52,6 +52,6 @@ public class Soukaku : SupportAgent, IAgentReference<Soukaku> {
                         0.2, ModifierType.CombatFlat));
                 }
             }
-        });
+        };
     }
 }

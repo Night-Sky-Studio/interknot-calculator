@@ -40,7 +40,7 @@ public class Lucy : SupportAgent, IAgentReference<Lucy> {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             foreach (var agent in c.Team.Values) {
                 // M6
                 agent.Atk.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 
@@ -50,6 +50,6 @@ public class Lucy : SupportAgent, IAgentReference<Lucy> {
                 agent.CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(4) + ModifierKey.CorePassive(), 
                     0.1, ModifierType.CombatFlat));
             }
-        });
+        };
     }
 }

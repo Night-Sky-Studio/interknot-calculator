@@ -20,14 +20,14 @@ public class InfernoMetal : DriveDiscSet {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             if (c.Enemy.AfflictedAnomaly?.Element.Matches(Element.Fire) is not true) return;
             Activate(c, equipper);
-        });
+        };
         
-        ctx.Events.OnAnomalyTriggered.Add((c, e) => {
+        ctx.Events.OnAnomalyTriggered += (c, e) => {
             if (!e.Element.Matches(Element.Fire)) return;
             Activate(c, equipper);
-        });
+        };
     }
 }

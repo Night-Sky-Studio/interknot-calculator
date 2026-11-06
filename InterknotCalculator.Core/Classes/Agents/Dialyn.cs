@@ -69,7 +69,7 @@ public class Dialyn : SupportAgent, IAgentReference<Dialyn> {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
 
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 0.3, ModifierType.CombatFlat));
             
@@ -92,6 +92,6 @@ public class Dialyn : SupportAgent, IAgentReference<Dialyn> {
                         0.4, ModifierType.CombatFlat));
                 }
             }
-        });
+        };
     }
 }

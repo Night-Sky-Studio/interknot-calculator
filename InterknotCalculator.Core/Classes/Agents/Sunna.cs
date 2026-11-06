@@ -77,19 +77,19 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
     }
 
     public override void RegisterHooks(Context ctx) {
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             if (c.HasTeammates(a => a.Speciality is Speciality.Attack || a.Faction == Faction, Id)) {
                 IsTeamPassiveActive = true;
             }
-        });
+        };
         
-        ctx.Events.OnActionExecuting.Add((c, e) => {
+        ctx.Events.OnActionExecuting += (c, e) => {
             if (e.Ability is { Tag: SkillTag.ExSpecial, Name: "special_photography_technique" }) {
                 c.ReactivateEtherVeil(this, EtherVeil);
             }
-        });
+        };
         
-        ctx.Events.OnActionExecuting.Add((c, e) => {
+        ctx.Events.OnActionExecuting += (c, e) => {
             if (e.Agent == this && e.Ability.Name is "naughty_cat_spotted"
                     or "bubblegum_barrage"
                     or "special_photography_technique"
@@ -104,9 +104,9 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
                     CatsGazeCooldown--;
                 }
             }
-        });
+        };
 
-        ctx.Events.OnActionExecuting.Add((c, e) => {
+        ctx.Events.OnActionExecuting += (c, e) => {
             if (!CatsGazeActive || CatsGazeCooldown != 0) return;
 
             var agent = e.Agent;
@@ -145,26 +145,26 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
                 ClawSharpenersCount--;
                 CatsGazeCooldown = 4;
             }
-        });
+        };
         
-        ctx.Events.OnAnomalyTriggered.Add((_, _) => {
+        ctx.Events.OnAnomalyTriggered += (_, _) => {
             ClawSharpenersCount += 1;
-        });
+        };
         
-        ctx.Events.OnEtherVeilActivated.Add((c, e) => {
+        ctx.Events.OnEtherVeilActivated += (c, e) => {
             ClawSharpenersCount += 2;
 
             if (IsTeamPassiveActive && e.Agent == this) {
                 c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
                     0.3, ModifierType.CombatFlat));
             }
-        });
+        };
         
-        ctx.Events.OnEtherVeilDeactivated.Add((c, e) => {
+        ctx.Events.OnEtherVeilDeactivated += (c, e) => {
             if (IsTeamPassiveActive && e.Agent == this) {
                 c.Enemy.StunMultiplier.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.TeamPassive());
             }
-        });
+        };
     }
     
     public DelusionReprise EtherVeil { get; } = new();

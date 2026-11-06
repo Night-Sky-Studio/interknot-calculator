@@ -106,7 +106,7 @@ public class Miyabi : Agent, ICustomAnomaly {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 0.3, ModifierType.CombatFlat));
 
@@ -118,7 +118,7 @@ public class Miyabi : Agent, ICustomAnomaly {
                     0.3, ModifierType.CombatFlat,
                     tags: SkillTag.BasicAtk));
             }
-        });
+        };
     }
 }
 
@@ -132,7 +132,7 @@ public class MiyabiM1 : Miyabi {
     private bool IsM2BonusActive { get; set; } = false;
     
     public override void RegisterHooks(Context ctx) {
-        ctx.Events.OnActionExecuting.Add((c, e) => {
+        ctx.Events.OnActionExecuting += (c, e) => {
             // When the slash for charge level three of Shimotsuki hits an enemy under Frostburn,
             // it will immediately remove the Frostburn state and increase all squad members'
             // Anomaly Buildup Rate by 20%
@@ -145,7 +145,7 @@ public class MiyabiM1 : Miyabi {
                 agent.AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
                     0.2, ModifierType.CombatFlat));
             } 
-        });
+        };
     }
 }
 
@@ -159,11 +159,11 @@ public class MiyabiM2 : MiyabiM1 {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(_ => {
+        ctx.Events.OnCalculationStarted += _ => {
             // Upon entering the battlefield, Hoshimi Miyabi immediately obtains 6 points
             // of Fallen Frost and her CRIT Rate increases by 15%.
             CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(), 
                 0.15, ModifierType.CombatFlat));
-        });
+        };
     }
 }

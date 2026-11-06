@@ -146,7 +146,7 @@ public class YeShunguang : Agent, ICustomAnomaly, IEtherVeilAgent<Verdict> {
     }
     
     public override void RegisterHooks(Context ctx) {
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             // Core Passive: Burning Clarity
             CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.3, ModifierType.CombatFlat));
             DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25, ModifierType.CombatFlat));
@@ -156,9 +156,9 @@ public class YeShunguang : Agent, ICustomAnomaly, IEtherVeilAgent<Verdict> {
             if (c.HasTeammates(a => a.Speciality is Speciality.Support or Speciality.Defense, Id)) {
                 IsTeamPassiveActive = true;
             }
-        });
+        };
         
-        ctx.Events.OnActionExecuting.Add((c, e) => {
+        ctx.Events.OnActionExecuting += (c, e) => {
             if (e.Agent != this) return;
 
             switch (e.Ability.Name) {
@@ -182,15 +182,15 @@ public class YeShunguang : Agent, ICustomAnomaly, IEtherVeilAgent<Verdict> {
                     QingmingSwordForce -= 2;
                     break;
             }
-        });
+        };
 
         // Additional Ability: Shadowtrace Flight 
         // when a squadmate activates any Ether Veil, gain 3 Qingming Sword Force
         // (converted to Bearer stacks if already in Enlightened Mind)
-        ctx.Events.OnEtherVeilActivated.Add((_, e) => {
+        ctx.Events.OnEtherVeilActivated += (_, e) => {
             if (!IsTeamPassiveActive || e.Agent == this) return;
             GainSwordForce(3);
-        });
+        };
     }
 
     protected MutableStat? OriginalEnemyStunMultiplier { get; set; }

@@ -43,7 +43,7 @@ public class Nicole : SupportAgent, IAgentReference<Nicole> {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
 
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             c.Enemy.Defense.Subtract(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 0.4, ModifierType.CombatRatio));
             
@@ -59,6 +59,6 @@ public class Nicole : SupportAgent, IAgentReference<Nicole> {
                         0.25, ModifierType.CombatFlat));
                 }
             }
-        });
+        };
     }
 }
