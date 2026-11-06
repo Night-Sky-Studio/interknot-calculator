@@ -46,7 +46,7 @@ public class Koleda : SupportAgent, IAgentReference<Koleda> {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
 
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 0.6, ModifierType.CombatFlat,
                 tags: SkillTag.ExSpecial));
@@ -61,9 +61,9 @@ public class Koleda : SupportAgent, IAgentReference<Koleda> {
                         tags: SkillTag.Chain));
                 }
             }
-        });
+        };
 
-        // ctx.Events.OnActionExecuted.Add(OnActionExecuted);
+        // ctx.Events.OnActionExecuted += OnActionExecuted;
     }
 
     private void OnActionExecuted(Context ctx, ActionExecutingEventArgs e) {

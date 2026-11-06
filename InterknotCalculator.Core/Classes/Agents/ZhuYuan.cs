@@ -79,12 +79,12 @@ public sealed class ZhuYuan : Agent {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             if (c.HasTeammates(a => a.Speciality is Speciality.Support || a.Faction == Faction, Id)) {
                 CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
                     0.3, ModifierType.CombatFlat));
             }
-        });
+        };
     }
 
     public override Stat? ApplyAbilityPassive(Ability ability) {

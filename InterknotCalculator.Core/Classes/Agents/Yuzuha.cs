@@ -67,7 +67,7 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
     }
 
     public override void RegisterHooks(Context ctx) {
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             foreach (var agent in c.Team.Values) {
                 // Tanuki Wish grants an ATK increase equal to 40% of Yuzuha's initial ATK,
                 // up to a maximum increase of 1,200, and increases the DMG dealt by those
@@ -88,9 +88,9 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
                         Math.Min(Math.Max(AnomalyMastery - 100, 0) * 0.002, 0.2), ModifierType.CombatFlat));
                 }
             }
-        });
+        };
         
-        ctx.Events.OnActionExecuting.Add((c, e) => {
+        ctx.Events.OnActionExecuting += (c, e) => {
             // The Sweet Scare state lasts for 40.0s, repeated triggers reset the duration.
             //
             // When an enemy affected by Sweet Scare is first hit by an active character
@@ -112,6 +112,6 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
             
             var buildup = GetAnomalyBuildup(new(SkillTag.BasicAtk, "sugarburst_sparkles"));
             c.Enemy.AddBuildupContribution(c, this, buildup, e.Agent.Element); // Flavor Match
-        });
+        };
     }
 }

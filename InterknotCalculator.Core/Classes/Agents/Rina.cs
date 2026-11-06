@@ -42,7 +42,7 @@ public sealed class Rina : SupportAgent, IAgentReference<Rina> {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             foreach (var agent in c.Team.Values) {
                 agent.PenRatio.Add(new(ModifierKey.Agent(AgentId.Rina) + ModifierKey.CorePassive(), 
                     Math.Min(PenRatio * 0.25 + 0.12, 0.3), ModifierType.CombatFlat));
@@ -56,6 +56,6 @@ public sealed class Rina : SupportAgent, IAgentReference<Rina> {
                     }
                 }
             }
-        });
+        };
     }
 }

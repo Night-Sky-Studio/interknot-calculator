@@ -76,7 +76,7 @@ public class Evelyn : Agent {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25, ModifierType.CombatFlat));
 
             if (c.HasTeammates(a => a is { Speciality: Speciality.Support or Speciality.Stun }, Id)) {
@@ -88,6 +88,6 @@ public class Evelyn : Agent {
                 DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), bonusValue, 
                     ModifierType.CombatFlat, SkillTag.Chain | SkillTag.Ultimate));
             }
-        });
+        };
     }
 }

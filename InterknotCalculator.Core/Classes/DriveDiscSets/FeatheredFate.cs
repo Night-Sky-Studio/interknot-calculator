@@ -12,7 +12,7 @@ public class FeatheredFate : DriveDiscSet {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             var agent = c.Team[equipper];
             
             agent.AnomalyProficiency.Add(new(ModifierKey.DiscSet(Id, true), 
@@ -28,7 +28,7 @@ public class FeatheredFate : DriveDiscSet {
                 agent.DisorderDmgBonus.Add(new(ModifierKey.DiscSet(Id, true), 
                     0.15, ModifierType.CombatFlat));
             }
-        });
+        };
         
     }
 }

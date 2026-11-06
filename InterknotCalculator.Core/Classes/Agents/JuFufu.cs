@@ -41,7 +41,7 @@ public class JuFufu : SupportAgent, IAgentReference<JuFufu> {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             // every 100 atk over 2800, crit dmg + 0.05
             const double atkThreshold = 2800;
             const double atkStep = 100;
@@ -62,6 +62,6 @@ public class JuFufu : SupportAgent, IAgentReference<JuFufu> {
             }
             
             Impact.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 50, ModifierType.CombatFlat));
-        });
+        };
     }
 }

@@ -17,7 +17,7 @@ public class MyriadEclipse : Weapon {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
 
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             // When the equipper's EX Special, Chain Attack or Ultimate deals Ice DMG,
             // the equipper's attacks ignore 25% of the target's DEF (Weapon_Ability_14129)
             var agent = c.Team[equipper];
@@ -26,6 +26,6 @@ public class MyriadEclipse : Weapon {
             agent.DefPen.Add(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(),
                 0.25, ModifierType.CombatFlat,
                 tags: SkillTag.ExSpecial | SkillTag.Chain | SkillTag.Ultimate));
-        });
+        };
     }
 }

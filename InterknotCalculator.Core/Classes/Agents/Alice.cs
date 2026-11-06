@@ -85,16 +85,16 @@ public class Alice : Agent, ICustomAnomaly {
     private bool BuildupBonusActive { get; set; }
     
     public override void RegisterHooks(Context ctx) {
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             // Team passive
             if (c.HasTeammates(a => a is { Speciality: Speciality.Anomaly or Speciality.Support }, Id)) {
                 AnomalyProficiency.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                     Math.Max(AnomalyMastery - 140, 0) * 1.6, ModifierType.CombatFlat));
             }
-        });
+        };
         
         // Core passive
-        ctx.Events.OnAnomalyTriggered.Add((c, e) => {
+        ctx.Events.OnAnomalyTriggered += (c, e) => {
             // After any squad member inflicts a Physical Anomaly on an enemy, Alice deals
             // additional DMG each 0.95s of its active duration, equal to 2.5% of the
             // original Physical Anomaly DMG.
@@ -105,9 +105,9 @@ public class Alice : Agent, ICustomAnomaly {
             action.Damage *= 0.175;
             action.Name = "twin_rainbows_of_the_swordheart";
             c.ActionsQueue.Add(action);
-        });
+        };
 
-        ctx.Events.OnAnomalyTriggered.Add((_, e) => {
+        ctx.Events.OnAnomalyTriggered += (_, e) => {
             // When Alice triggers Assault on an enemy, her Physical Anomaly Buildup
             // Rate increases by 25% for 30s.
             if (e.Agent != this || !e.Element.Matches(Element.Physical)) return;
@@ -116,10 +116,10 @@ public class Alice : Agent, ICustomAnomaly {
             BuildupBonusActive = true;
             AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 0.25, ModifierType.CombatFlat));
-        });
+        };
         
         // Hold BA for polarity assault
-        ctx.Events.OnAftershock.Add((c, e) => {
+        ctx.Events.OnAftershock += (c, e) => {
             if (e.Agent != this || e.Ability is not { Name: "starshine_waltz", Scale: 2 }) return;
             var polarityAssault = GetAnomalyDamage(c, Element.Physical, true) with {
                 Name = "polarity_assault"
@@ -131,7 +131,7 @@ public class Alice : Agent, ICustomAnomaly {
             if (c.Enemy.AfflictedAnomaly is null) return;
             var disorder = GetAnomalyDamage(c, Element.None, true);
             c.ActionsQueue.Add(disorder);
-        });
+        };
     }
 
     public override AgentAction GetAnomalyDamage(Context ctx, Element element, bool skipEvents = false) {

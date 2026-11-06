@@ -44,13 +44,13 @@ public class Zhao : SupportAgent, IAgentReference<Zhao>, IEtherVeilAgent<Wellspr
     private bool IsTeamPassiveActive { get; set; }
 
     public override void RegisterHooks(Context ctx) {
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             if (c.HasTeammates(a => a.Speciality is Speciality.Attack or Speciality.Anomaly or Speciality.Support, Id)) {
                 IsTeamPassiveActive = true;
             }
-        });
+        };
         
-        ctx.Events.OnActionExecuting.Add((c, e) => {
+        ctx.Events.OnActionExecuting += (c, e) => {
             // Zhao triggered an action
             if (e.Agent != this) return;
 
@@ -60,10 +60,10 @@ public class Zhao : SupportAgent, IAgentReference<Zhao>, IEtherVeilAgent<Wellspr
             // Assume always full Frostbite Points, because I can't be bothered.
             // Overwrites the existing Ether Veil if it already exists
             c.ReactivateEtherVeil(this, EtherVeil);
-        });
+        };
 
         // Core Passive
-        ctx.Events.OnEtherVeilActivated.Add((c, e) => {
+        ctx.Events.OnEtherVeilActivated += (c, e) => {
             var teamPassiveKey = ModifierKey.Agent(Id) + ModifierKey.TeamPassive();
             
             // Team passive
@@ -80,15 +80,15 @@ public class Zhao : SupportAgent, IAgentReference<Zhao>, IEtherVeilAgent<Wellspr
             foreach (var agent in c.Team.Values) {
                 agent.Atk.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 1000, ModifierType.CombatFlat));
             }
-        });
-        ctx.Events.OnEtherVeilDeactivated.Add((c, e) => {
+        };
+        ctx.Events.OnEtherVeilDeactivated += (c, e) => {
             if (e.Agent != this || e.EtherVeil is not Wellspring) return;
 
             foreach (var agent in c.Team.Values) {
                 agent.DmgBonus.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.TeamPassive());
                 agent.Atk.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.CorePassive());
             }
-        });
+        };
     }
 
     public Wellspring EtherVeil { get; } = new();

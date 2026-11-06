@@ -98,7 +98,7 @@ public class JaneDoe : SupportAgent, IAgentReference<JaneDoe> {
     }
 
     public override void RegisterHooks(Context ctx) {
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             double critRate = 0.05 + Math.Min(0.4 + AnomalyProficiency * 0.0016, 1), 
                 critDamage = 0.5;
 
@@ -115,7 +115,7 @@ public class JaneDoe : SupportAgent, IAgentReference<JaneDoe> {
                 AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
                     0.35, ModifierType.CombatFlat));
             }
-        });
+        };
     }
 }
 
@@ -123,12 +123,12 @@ public class JaneDoeM1 : JaneDoe {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(_ => {
+        ctx.Events.OnCalculationStarted += _ => {
             AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
                 0.15, ModifierType.CombatFlat));
             DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
                 AnomalyProficiency * 0.001, ModifierType.CombatFlat));
-        });
+        };
     }
 }
 
@@ -138,14 +138,14 @@ public class JaneDoeM2 : JaneDoeM1 {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             double critRate = 0.05 + Math.Min(0.4 + AnomalyProficiency * 0.0016, 1), 
                 critDamage = 1;
 
             c.AnomalyCritMultiplier = 1 + critRate * critDamage;
-        });
+        };
         
-        ctx.Events.OnAnomalyTriggered.Add((_, e) => {
+        ctx.Events.OnAnomalyTriggered += (_, e) => {
             if (e.Element is not (Element.Physical or Element.HonedEdge)) return;
             if (IgnoresEnemyDefense) return;
                 
@@ -153,6 +153,6 @@ public class JaneDoeM2 : JaneDoeM1 {
             DefPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(),
                 0.15, ModifierType.CombatFlat));
             IgnoresEnemyDefense = true;
-        });
+        };
     }
 }

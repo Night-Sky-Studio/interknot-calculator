@@ -161,29 +161,29 @@ public sealed class Vivian : SupportAgent, IAgentReference<Vivian> {
     }
     
     public override void RegisterHooks(Context ctx) {
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             if (!c.HasTeammates(a => a.Speciality == Speciality || a.Element.Matches(Element), Id)) return;
             
             foreach (var agent in c.Team.Values) {
                 agent.DisorderDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
                     0.12, ModifierType.CombatFlat));
             }
-        });
+        };
         
-        ctx.Events.OnActionExecuting.Add((c, e) => {
+        ctx.Events.OnActionExecuting += (c, e) => {
             if (e.Ability.Tag is not SkillTag.ExSpecial || c.Enemy.AfflictedAnomaly is null) return;
             ProcessAbloom(c, e.Agent, c.Enemy.AfflictedAnomaly.Element);
-        });
+        };
         
         // an additional "fuck you" from Alice
-        ctx.Events.OnAftershock.Add((c, e) => {
+        ctx.Events.OnAftershock += (c, e) => {
             if (e.Ability.Tag is not SkillTag.AttributeAnomaly || c.Enemy.AfflictedAnomaly is null) return;
             ProcessAbloom(c, e.Agent, c.Enemy.AfflictedAnomaly.Element);
-        });
+        };
         
-        ctx.Events.OnAnomalyTriggered.Add((c, e) => {
+        ctx.Events.OnAnomalyTriggered += (c, e) => {
             ProcessAbloom(c, e.Agent, e.Element);
-        });
+        };
     }
 
     public override AgentAction GetActionDamage(Context ctx, Ability ability) {

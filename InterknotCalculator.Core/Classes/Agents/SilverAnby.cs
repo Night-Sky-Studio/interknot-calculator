@@ -91,7 +91,7 @@ public class SilverAnby : SupportAgent, IAgentReference<SilverAnby> {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25, ModifierType.CombatFlat));
             CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), CritDamage * 0.3, 
                 ModifierType.CombatFlat, SkillTag.Aftershock));
@@ -104,6 +104,6 @@ public class SilverAnby : SupportAgent, IAgentReference<SilverAnby> {
                         0.25, ModifierType.CombatFlat, SkillTag.Aftershock));
                 }
             }
-        });
+        };
     }
 }

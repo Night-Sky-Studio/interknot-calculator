@@ -3,7 +3,6 @@ namespace InterknotCalculator.Core.Classes.Events;
 public sealed class EventBus {
     public delegate void CalculationStartedEvent(Context ctx);
     public delegate void ActionExecutingEvent(Context ctx, ActionExecutingEventArgs evt);
-
     public delegate void ActionExecutedEvent(Context ctx, ActionExecutedEventArgs evt);
     public delegate void AftershockEvent(Context ctx, ActionExecutingEventArgs evt);
     public delegate void AnomalyBuildupEvent(Context ctx, AnomalyBuildupEventArgs evt);
@@ -12,57 +11,41 @@ public sealed class EventBus {
     public delegate void EtherVeilActivatedEvent(Context ctx, EtherVeilEventArgs evt);
     public delegate void EtherVeilDeactivatedEvent(Context ctx, EtherVeilEventArgs evt);
     
-    public List<CalculationStartedEvent> OnCalculationStarted { get; } = [];
-    public List<ActionExecutingEvent> OnActionExecuting { get; } = [];
+    public event CalculationStartedEvent? OnCalculationStarted;
+    public event ActionExecutingEvent? OnActionExecuting;
     public event ActionExecutedEvent? OnActionExecuted;
-    public List<AftershockEvent> OnAftershock { get; } = [];
-    public List<AnomalyBuildupEvent> OnAnomalyBuildup { get; } = [];
-    public List<AnomalyThresholdEvent> OnAnomalyThreshold { get; } = [];
-    public List<AnomalyTriggeredEvent> OnAnomalyTriggered { get; } = [];
-    public List<EtherVeilActivatedEvent> OnEtherVeilActivated { get; } = [];
-    public List<EtherVeilDeactivatedEvent> OnEtherVeilDeactivated { get; } = [];
+    public event AftershockEvent? OnAftershock;
+    public event AnomalyBuildupEvent? OnAnomalyBuildup;
+    public event AnomalyThresholdEvent? OnAnomalyThreshold;
+    public event AnomalyTriggeredEvent? OnAnomalyTriggered;
+    public event EtherVeilActivatedEvent? OnEtherVeilActivated;
+    public event EtherVeilDeactivatedEvent? OnEtherVeilDeactivated;
 
     public void CalculationStarted(Context ctx) {
-        foreach (var calculationStartedEvent in OnCalculationStarted) {
-            calculationStartedEvent(ctx);
-        }
+        OnCalculationStarted?.Invoke(ctx);
     }
     public void ActionExecuting(Context ctx, ActionExecutingEventArgs e) {
-        foreach (var actionExecutedEvent in OnActionExecuting) {
-            actionExecutedEvent(ctx, e);
-        }
+        OnActionExecuting?.Invoke(ctx, e);
     }
     public void ActionExecuted(Context ctx, ActionExecutedEventArgs e) {
         OnActionExecuted?.Invoke(ctx, e);
     }
     public void Aftershock(Context ctx, ActionExecutingEventArgs e) {
-        foreach (var aftershockEvent in OnAftershock) {
-            aftershockEvent(ctx, e);
-        }
+        OnAftershock?.Invoke(ctx, e);
     }
     public void AnomalyBuildup(Context ctx, AnomalyBuildupEventArgs e) {
-        foreach (var anomalyBuildupEvent in OnAnomalyBuildup) {
-            anomalyBuildupEvent(ctx, e);
-        }
+        OnAnomalyBuildup?.Invoke(ctx, e);
     }
     public void AnomalyThreshold(Context ctx, AnomalyThresholdEventArgs e) {
-        foreach (var anomalyThresholdEvent in OnAnomalyThreshold) {
-            anomalyThresholdEvent(ctx, e);
-        }
+        OnAnomalyThreshold?.Invoke(ctx, e);
     }
     public void AnomalyTriggered(Context ctx, AnomalyTriggeredEventArgs e) {
-        foreach (var anomalyTriggeredEvent in OnAnomalyTriggered) {
-            anomalyTriggeredEvent(ctx, e);
-        }
+        OnAnomalyTriggered?.Invoke(ctx, e);
     }
     public void EtherVeilActivated(Context ctx, EtherVeilEventArgs evt) {
-        foreach (var etherVeilActivatedEvent in OnEtherVeilActivated) {
-            etherVeilActivatedEvent(ctx, evt);
-        }
+        OnEtherVeilActivated?.Invoke(ctx, evt);
     }
     public void EtherVeilDeactivated(Context ctx, EtherVeilEventArgs evt) {
-        foreach (var etherVeilDeactivatedEvent in OnEtherVeilDeactivated) {
-            etherVeilDeactivatedEvent(ctx, evt);
-        }
+        OnEtherVeilDeactivated?.Invoke(ctx, evt);
     }
 }

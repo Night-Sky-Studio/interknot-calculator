@@ -114,7 +114,7 @@ public sealed class Yanagi : Agent, IPolarityDisorderAgent {
     }
     
     public override void RegisterHooks(Context ctx) {
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 0.2, ModifierType.CombatFlat));
 
@@ -122,9 +122,9 @@ public sealed class Yanagi : Agent, IPolarityDisorderAgent {
                 AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
                     0.45, ModifierType.CombatFlat));
             }
-        });
+        };
         
-        ctx.Events.OnActionExecuting.Add((c, e) => {
+        ctx.Events.OnActionExecuting += (c, e) => {
             if (e.Agent != this) return;
             if (e.Ability.Tag is not (SkillTag.Ultimate or SkillTag.ExSpecial)) return;
             ToggleStance();
@@ -133,6 +133,6 @@ public sealed class Yanagi : Agent, IPolarityDisorderAgent {
             if (c.Enemy.AfflictedAnomaly is null) return;
 
             ctx.ActionsQueue.Add(GetPolarityDisorder(ctx));
-        });
+        };
     }
 }

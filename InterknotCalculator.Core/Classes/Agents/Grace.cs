@@ -62,7 +62,7 @@ public sealed class Grace : Agent {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 1.3, ModifierType.CombatFlat, 
                 tags: SkillTag.Special | SkillTag.ExSpecial));
@@ -72,6 +72,6 @@ public sealed class Grace : Agent {
                     0.36, ModifierType.CombatFlat,
                     tags: SkillTag.AttributeAnomaly));
             }
-        });
+        };
     }
 }

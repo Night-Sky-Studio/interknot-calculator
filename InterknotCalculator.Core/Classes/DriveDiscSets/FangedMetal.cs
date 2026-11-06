@@ -21,15 +21,15 @@ public class FangedMetal : DriveDiscSet {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             // If calculation parameters specified that enemy has Assault
             if (c.Enemy.AfflictedAnomaly?.Element.Matches(Element.Physical) is not true) return;
             Activate(c, equipper);
-        });
+        };
 
-        ctx.Events.OnAnomalyTriggered.Add((c, e) => {
+        ctx.Events.OnAnomalyTriggered += (c, e) => {
             if (!e.Element.Matches(Element.Physical)) return;
             Activate(c, equipper);
-        });
+        };
     }
 }

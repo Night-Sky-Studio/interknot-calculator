@@ -16,16 +16,16 @@ public class HalfSugarBunny : Weapon {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         var key = ModifierKey.Weapon(Id) + ModifierKey.Passive();
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             if (!c.TryActivateGlobal(key)) return;
             
             foreach (var agent in c.Team.Values) {
                 agent.Atk.Add(new(key, 0.1, ModifierType.CombatRatio));
                 agent.MaxHp.Add(new(key, 0.1, ModifierType.CombatRatio));
             }
-        });
+        };
         
-        ctx.Events.OnEtherVeilActivated.Add((c, _) => {
+        ctx.Events.OnEtherVeilActivated += (c, _) => {
             if (EtherVeilBonusActive) return;
 
             foreach (var (_, agent) in c.Team) {
@@ -33,6 +33,6 @@ public class HalfSugarBunny : Weapon {
             }
             
             EtherVeilBonusActive = true;
-        });
+        };
     }
 }

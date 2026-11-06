@@ -17,15 +17,15 @@ public class CloudcleaveRadiance : Weapon {
         
         var etherVeilPassiveKey = ModifierKey.Weapon(Id) + ModifierKey.Passive() + ModifierKey.EtherVeil();
         
-        ctx.Events.OnEtherVeilActivated.Add((c, _) => {
+        ctx.Events.OnEtherVeilActivated += (c, _) => {
             if (c.MainAgent.DmgBonus.Contains(etherVeilPassiveKey)) return;
             c.MainAgent.DmgBonus.AddUnique(new(etherVeilPassiveKey, 0.25, ModifierType.CombatFlat));
             c.MainAgent.CritDamage.AddUnique(new(etherVeilPassiveKey, 0.25, ModifierType.CombatFlat));
-        });
+        };
         
-        ctx.Events.OnEtherVeilDeactivated.Add((c, _) => {
+        ctx.Events.OnEtherVeilDeactivated += (c, _) => {
             c.MainAgent.DmgBonus.RemoveKey(etherVeilPassiveKey);
             c.MainAgent.CritDamage.RemoveKey(etherVeilPassiveKey);
-        });
+        };
     }
 }

@@ -65,7 +65,7 @@ public static class Calculator {
             ctx.Team[member.AgentId] = AgentRegistry.CreateReference(member);
         }
 
-        ctx.Events.OnAnomalyTriggered.Add((c, e) => {
+        ctx.Events.OnAnomalyTriggered += (c, e) => {
             var element = e.Element;
             var sender = c.Enemy;
             var agentId = e.Agent.Id;
@@ -83,7 +83,7 @@ public static class Calculator {
                     ctx.ActionsQueue.Add(ctx.Team[agentId].GetAnomalyDamage(ctx, Element.None));
                 }
             }
-        });
+        };
         
         foreach (var a in ctx.Team.Values) {
             a.RegisterHooks(ctx);

@@ -105,7 +105,7 @@ public class Ellen : Agent {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
 
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             if (c.HasTeammates(a => a.Element == Element || a.Faction == Faction, Id)) {
                 ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
                     0.3, ModifierType.CombatFlat));
@@ -116,7 +116,7 @@ public class Ellen : Agent {
                 ElementalResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
                     0.1, ModifierType.CombatFlat));
             }
-        });
+        };
     }
 }
 
@@ -124,12 +124,12 @@ public class EllenM1 : Ellen {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(_ => {
+        ctx.Events.OnCalculationStarted += _ => {
             // For each point of Flash Freeze Charge consumed, Ellen’s CRIT Rate
             // is increased by 2% for 15s, stacking up
             CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
                 0.02 * 6, ModifierType.CombatFlat));
-        });
+        };
     }
 }
 
@@ -195,19 +195,19 @@ public class EllenM6 : EllenM5 {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
 
-        ctx.Events.OnCalculationStarted.Add(_ => {
+        ctx.Events.OnCalculationStarted += _ => {
             PenRatio.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 
                 0.2, ModifierType.CombatFlat));
-        });
+        };
         
-        ctx.Events.OnActionExecuting.Add((_, e) => {
+        ctx.Events.OnActionExecuting += (_, e) => {
             // When Ellen uses an EX Special Attack, Chain Attack, or gains Quick Charge [...]
             // She gains 1 stack of The Feast Begins, up to a maximum of 3 stacks.
 
             if (e.Ability.Name is "icy_blade" or "vortex" or "shark_sentinel") {
                 FeastStacks++;
             }
-        });
+        };
     }
 
     public override Stat? ApplyAbilityPassive(Ability ability) {

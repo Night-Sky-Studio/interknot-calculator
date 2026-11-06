@@ -107,14 +107,14 @@ public class Yixuan : RuptureAgent, ICustomAnomaly {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             if (c.HasTeammates(a => a.Speciality is Speciality.Stun or Speciality.Defense or Speciality.Support
                                     || a.Faction == Faction, Id)) {
                 IsTeamPassiveActive = true;
                 CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
                     0.4, ModifierType.CombatFlat));
             }
-        });
+        };
     }
 
     public override AgentAction GetActionDamage(Context ctx, Ability ability) {

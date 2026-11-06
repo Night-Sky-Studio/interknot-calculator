@@ -18,11 +18,11 @@ public class Timeweaver : Weapon {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
 
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             var agent = c.Team[equipper];
         
             agent.DisorderDmgBonus.Add(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(), 
                 agent.AnomalyProficiency > 375 ? 0.25 : 0, ModifierType.CombatFlat));
-        });
+        };
     }
 }

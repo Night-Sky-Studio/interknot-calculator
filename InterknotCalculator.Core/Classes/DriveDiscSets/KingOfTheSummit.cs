@@ -12,7 +12,7 @@ public class KingOfTheSummit : DriveDiscSet {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
 
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             var agent = c.Team[equipper];
             if (agent is not { Speciality: Speciality.Stun }) return;
 
@@ -25,6 +25,6 @@ public class KingOfTheSummit : DriveDiscSet {
             foreach (var a in c.Team.Values) {
                 a.CritDamage.Add(new(key, bonus, ModifierType.CombatFlat));
             }
-        });
+        };
     }
 }

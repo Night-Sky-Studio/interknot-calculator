@@ -15,7 +15,7 @@ public class TheVault : Weapon {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             var key = ModifierKey.Weapon(Id) + ModifierKey.Passive();
 
             if (!c.TryActivateGlobal(key)) return;
@@ -23,6 +23,6 @@ public class TheVault : Weapon {
             foreach (var agent in c.Team.Values) {
                 agent.DmgBonus.Add(new(key, 0.24, ModifierType.CombatFlat));
             }
-        });
+        };
     }
 }

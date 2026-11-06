@@ -12,7 +12,7 @@ public class AstralVoice : DriveDiscSet {
     public override void RegisterHooks(Context ctx, uint equipper = 0) {
         base.RegisterHooks(ctx, equipper);
         
-        ctx.Events.OnCalculationStarted.Add(c => {
+        ctx.Events.OnCalculationStarted += c => {
             var key = ModifierKey.DiscSet(Id, true);
             
             if (!c.TryActivateGlobal(key)) return;
@@ -20,6 +20,6 @@ public class AstralVoice : DriveDiscSet {
             foreach (var agent in c.Team.Values) {
                 agent.DmgBonus.Add(new(key, 0.24, ModifierType.CombatFlat));
             }
-        });
+        };
     }
 }
