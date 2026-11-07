@@ -85,18 +85,26 @@ public sealed class ZhuYuan : Agent {
                     0.3, ModifierType.CombatFlat));
             }
         };
+        
+        var corePassiveKey = ModifierKey.Agent(Id) + ModifierKey.CorePassive();
+        
+        ctx.Events.OnActionExecuting += (c, _) => {
+            // When Zhu Yuan is under Suppressive Mode, using Enhanced Shotshells
+            // increases her DMG by 40%. When attacking Stunned enemies, this
+            // DMG buff is increased by an additional 40%
+            
+            // No need to recalculate if the enemy's stun status hasn't changed
+            if (c.Enemy.IsStunned == IsEnemyStunned) return;
+            
+            IsEnemyStunned = c.Enemy.IsStunned;
+            var bonus = IsEnemyStunned ? 0.8 : 0.4;
+            
+            if (DmgBonus.Contains(corePassiveKey)) {
+                DmgBonus.RemoveKey(corePassiveKey);
+            }
+            DmgBonus.AddUnique(new(corePassiveKey,
+                bonus, ModifierType.CombatFlat,
+                scope: AbilityScope.Of("please_do_not_resist", "overwhelming_firepower")));
+        };
     }
-
-    public override Stat? ApplyAbilityPassive(Ability ability) {
-        if (ability.Name is "please_do_not_resist" or "overwhelming_firepower") {
-            return new(Affix.DmgBonus, IsEnemyStunned ? 0.8 : 0.4);
-        }
-        return null;
-    }
-
-    public override AgentAction GetActionDamage(Context ctx, Ability ability) {
-        IsEnemyStunned = ctx.Enemy.IsStunned;
-
-        return base.GetActionDamage(ctx, ability);  
-    } 
 }
