@@ -298,12 +298,7 @@ public abstract class Agent(uint id) {
         var data = Skills[ability.Name];
         
         var dazeScale = data.Scales[ability.Scale].Daze / 100;
-        var dazeIncrease = Stats[Affix.DazeBonus].For(data.Tag);
-        
-        var abilityPassive = ApplyAbilityPassive(ability);
-        if (abilityPassive is { Affix: Affix.DazeBonus } passive) {
-            dazeIncrease += passive.Value;
-        }
+        var dazeIncrease = Stats[Affix.DazeBonus].For(ability);
         
         const double dazeReduction = 0.0;
         const double dazeRes = 0.0;
@@ -331,8 +326,7 @@ public abstract class Agent(uint id) {
         if (baseBuildup == 0) return 0;
 
         var amBonus = AnomalyMastery / 100;
-        var amBuildupBonus = 1 + Stats[Affix.AnomalyBuildupBonus].For(ability.Tag)
-                               + data.Affixes[Affix.AnomalyBuildupBonus];
+        var amBuildupBonus = 1 + Stats[Affix.AnomalyBuildupBonus].For(ability);
 
         const double amBuildupRes = 1d;
 
