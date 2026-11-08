@@ -1,0 +1,162 @@
+﻿[
+  {
+    AgentId: 1201,
+    Tag: Chain,
+    Id: Guid_1,
+    Name: kai_hanare,
+    Damage: 107905.41,
+    Daze: 248.22
+  },
+  {
+    AgentId: 1201,
+    Tag: BasicAtk,
+    Id: Guid_2,
+    Name: falling_feather,
+    Damage: 21983.24,
+    Daze: 71.19
+  },
+  {
+    AgentId: 1201,
+    Tag: Dash,
+    Id: Guid_3,
+    Name: hiten_no_tsuru_slash 1,
+    Damage: 64617.85,
+    Daze: 89.1
+  },
+  {
+    AgentId: 1201,
+    Tag: Dash,
+    Id: Guid_4,
+    Name: hiten_no_tsuru_slash 2,
+    Damage: 66347.08,
+    Daze: 62.1
+  },
+  {
+    AgentId: 1201,
+    Tag: Dash,
+    Id: Guid_5,
+    Name: hiten_no_tsuru_slash 3,
+    Damage: 75510.06,
+    Daze: 64.08
+  },
+  {
+    AgentId: 1201,
+    Tag: Dash,
+    Id: Guid_6,
+    Name: hiten_no_tsuru_slash 2,
+    Damage: 66347.08,
+    Daze: 62.1
+  },
+  {
+    AgentId: 1201,
+    Tag: BasicAtk,
+    Id: Guid_7,
+    Name: cloud_piercer 4,
+    Damage: 18784.73,
+    Daze: 121.23
+  },
+  {
+    AgentId: 1201,
+    Tag: BasicAtk,
+    Id: Guid_8,
+    Name: cloud_piercer 5,
+    Damage: 27713.47,
+    Daze: 156.33
+  },
+  {
+    AgentId: 1201,
+    Tag: BasicAtk,
+    Id: Guid_9,
+    Name: falling_feather,
+    Damage: 21983.24,
+    Daze: 71.19
+  },
+  {
+    AgentId: 1201,
+    Tag: Dash,
+    Id: Guid_10,
+    Name: hiten_no_tsuru_slash 1,
+    Damage: 64617.85,
+    Daze: 89.1
+  },
+  {
+    AgentId: 1201,
+    Tag: Dash,
+    Id: Guid_11,
+    Name: hiten_no_tsuru_slash 2,
+    Damage: 66347.08,
+    Daze: 62.1
+  },
+  {
+    AgentId: 1201,
+    Tag: Dash,
+    Id: Guid_12,
+    Name: hiten_no_tsuru_slash 3,
+    Damage: 75510.06,
+    Daze: 64.08
+  },
+  {
+    AgentId: 1201,
+    Tag: Dash,
+    Id: Guid_13,
+    Name: hiten_no_tsuru_slash 2,
+    Damage: 66347.08,
+    Daze: 62.1
+  },
+  {
+    AgentId: 1201,
+    Tag: ExSpecial,
+    Id: Guid_14,
+    Name: nowhere_to_run,
+    Damage: 93684.02,
+    Daze: 607.05
+  },
+  {
+    AgentId: 1201,
+    Tag: BasicAtk,
+    Id: Guid_15,
+    Name: falling_feather,
+    Damage: 21983.24,
+    Daze: 71.19
+  },
+  {
+    AgentId: 1201,
+    Tag: Dash,
+    Id: Guid_16,
+    Name: hiten_no_tsuru_slash 1,
+    Damage: 64617.85,
+    Daze: 89.1
+  },
+  {
+    AgentId: 1201,
+    Tag: Dash,
+    Id: Guid_17,
+    Name: hiten_no_tsuru_slash 2,
+    Damage: 66347.08,
+    Daze: 62.1
+  },
+  {
+    AgentId: 1201,
+    Tag: Dash,
+    Id: Guid_18,
+    Name: hiten_no_tsuru_slash 3,
+    Damage: 75510.06,
+    Daze: 64.08
+  },
+  {
+    AgentId: 1201,
+    Tag: Dash,
+    Id: Guid_19,
+    Name: hiten_no_tsuru_slash 2,
+    Damage: 66347.08,
+    Daze: 62.1
+  },
+  {
+    AgentId: 1201,
+    Tag: Ultimate,
+    Id: Guid_20,
+    Name: zanshin,
+    Damage: 407221.27,
+    Daze: 144.72
+  }
+]
