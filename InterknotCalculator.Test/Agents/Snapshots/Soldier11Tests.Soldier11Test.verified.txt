@@ -1,0 +1,130 @@
+﻿[
+  {
+    AgentId: 1041,
+    Tag: Chain,
+    Id: Guid_1,
+    Name: uplifting_flame,
+    Damage: 134584.04,
+    Daze: 298.9
+  },
+  {
+    AgentId: 1041,
+    Tag: QuickAssist,
+    Id: Guid_2,
+    Name: covering_fire,
+    Damage: 25725.23,
+    Daze: 168.61
+  },
+  {
+    AgentId: 1041,
+    Tag: BasicAtk,
+    Id: Guid_3,
+    Name: fire_suppression_basic 1,
+    Damage: 17745.94,
+    Daze: 25.95
+  },
+  {
+    AgentId: 1041,
+    Tag: BasicAtk,
+    Id: Guid_4,
+    Name: fire_suppression_basic 2,
+    Damage: 18256.62,
+    Daze: 47.62
+  },
+  {
+    AgentId: 1041,
+    Tag: BasicAtk,
+    Id: Guid_5,
+    Name: fire_suppression_basic 3,
+    Damage: 42130.66,
+    Daze: 105.74
+  },
+  {
+    AgentId: 1041,
+    Tag: BasicAtk,
+    Id: Guid_6,
+    Name: fire_suppression_basic 4,
+    Damage: 108789.65,
+    Daze: 267.56
+  },
+  {
+    AgentId: 1041,
+    Tag: ExSpecial,
+    Id: Guid_7,
+    Name: fervent_fire,
+    Damage: 143669.79,
+    Daze: 759.16
+  },
+  {
+    AgentId: 1041,
+    Tag: Ultimate,
+    Id: Guid_8,
+    Name: bellowing_flame,
+    Damage: 447499.9,
+    Daze: 398.04
+  },
+  {
+    AgentId: 1041,
+    Tag: BasicAtk,
+    Id: Guid_9,
+    Name: fire_suppression_basic 1,
+    Damage: 17745.94,
+    Daze: 25.95
+  },
+  {
+    AgentId: 1041,
+    Tag: BasicAtk,
+    Id: Guid_10,
+    Name: fire_suppression_basic 2,
+    Damage: 18256.62,
+    Daze: 47.62
+  },
+  {
+    AgentId: 1041,
+    Tag: BasicAtk,
+    Id: Guid_11,
+    Name: fire_suppression_basic 3,
+    Damage: 42130.66,
+    Daze: 105.74
+  },
+  {
+    AgentId: 1041,
+    Tag: BasicAtk,
+    Id: Guid_12,
+    Name: fire_suppression_basic 4,
+    Damage: 108789.65,
+    Daze: 267.56
+  },
+  {
+    AgentId: 1041,
+    Tag: BasicAtk,
+    Id: Guid_13,
+    Name: fire_suppression_basic 1,
+    Damage: 17745.94,
+    Daze: 25.95
+  },
+  {
+    AgentId: 1041,
+    Tag: BasicAtk,
+    Id: Guid_14,
+    Name: fire_suppression_basic 2,
+    Damage: 18256.62,
+    Daze: 47.62
+  },
+  {
+    AgentId: 1041,
+    Tag: BasicAtk,
+    Id: Guid_15,
+    Name: fire_suppression_basic 3,
+    Damage: 42130.66,
+    Daze: 105.74
+  },
+  {
+    AgentId: 1041,
+    Tag: BasicAtk,
+    Id: Guid_16,
+    Name: fire_suppression_basic 4,
+    Damage: 108789.65,
+    Daze: 267.56
+  }
+]
