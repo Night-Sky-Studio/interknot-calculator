@@ -5,7 +5,7 @@ namespace InterknotCalculator.Core.Classes.Agents;
 
 public sealed class Soldier11 : Agent {
     private bool IsTeamPassiveActive { get; set; }
-    private bool IsEnemyStunned { get; set; }
+    private bool? IsEnemyStunned { get; set; }
     
     public Soldier11() : base(AgentId.Soldier11) {
         Speciality = Speciality.Attack;
@@ -95,11 +95,9 @@ public sealed class Soldier11 : Agent {
             if (!IsTeamPassiveActive) return;
             if (c.Enemy.IsStunned == IsEnemyStunned) return;
             IsEnemyStunned = c.Enemy.IsStunned;
-            var bonus = IsEnemyStunned ? 0.325 : 0.1;
-            if (ElementalDmgBonus.Contains(teamPassiveKey)) {
-                ElementalDmgBonus.RemoveKey(teamPassiveKey);
-            }
-            ElementalDmgBonus.Add(new(teamPassiveKey, bonus, ModifierType.CombatFlat));
+            var bonus = IsEnemyStunned.Value ? 0.325 : 0.1;
+            ElementalDmgBonus.RemoveKey(teamPassiveKey);
+            ElementalDmgBonus.AddUnique(new(teamPassiveKey, bonus, ModifierType.CombatFlat));
         };
     }
 }

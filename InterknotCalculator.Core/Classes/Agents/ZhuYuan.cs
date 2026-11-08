@@ -5,8 +5,8 @@ using InterknotCalculator.Core.Enums;
 namespace InterknotCalculator.Core.Classes.Agents;
 
 public sealed class ZhuYuan : Agent {
-    private bool IsEnemyStunned { get; set; }
-    
+    private bool? IsEnemyStunned { get; set; }
+
     public ZhuYuan() : base(1241) {
         Speciality = Speciality.Attack;
         Element = Element.Ether;
@@ -97,11 +97,9 @@ public sealed class ZhuYuan : Agent {
             if (c.Enemy.IsStunned == IsEnemyStunned) return;
             
             IsEnemyStunned = c.Enemy.IsStunned;
-            var bonus = IsEnemyStunned ? 0.8 : 0.4;
+            var bonus = IsEnemyStunned.Value ? 0.8 : 0.4;
             
-            if (DmgBonus.Contains(corePassiveKey)) {
-                DmgBonus.RemoveKey(corePassiveKey);
-            }
+            DmgBonus.RemoveKey(corePassiveKey);
             DmgBonus.AddUnique(new(corePassiveKey,
                 bonus, ModifierType.CombatFlat,
                 scope: AbilityScope.Of("please_do_not_resist", "overwhelming_firepower")));
