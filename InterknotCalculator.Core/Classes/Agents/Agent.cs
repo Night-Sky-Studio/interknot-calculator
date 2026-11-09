@@ -208,30 +208,8 @@ public abstract class Agent(uint id) {
 
     public virtual void RegisterHooks(Context ctx) { }
     
-    /// <summary>
-    /// Applies the agent's passive to the team
-    /// </summary>
-    /// <param name="team">Current team, including current agent</param>
-    /// <returns>Collection of stats</returns>
-    [Obsolete("Use RegisterHooks(ctx) instead")]
-    public virtual IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) => [];
-
-    /// <summary>
-    /// Applies agent's passive to themselves
-    /// </summary>
-    [Obsolete("Use RegisterHooks(ctx) instead")]
-    public virtual void ApplyPassive() { }
-
     protected virtual double GetBaseDamage(double scale) => scale / 100 * Atk;
     
-    /// <summary>
-    /// Applies agent's ability's passive
-    /// </summary>
-    /// <param name="ability">Ability name</param>
-    /// <returns><see cref="Stat"/> or null if ability has none</returns>
-    [Obsolete("Use RegisterHooks(ctx) instead")]
-    public virtual Stat? ApplyAbilityPassive(Ability ability) => null;
-
     /// <summary>
     /// Calculates standard damage for a given agent and skill
     /// </summary>

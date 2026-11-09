@@ -54,19 +54,14 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
         // it by making 4 triggers of Sugarburst Sparkles.
         Skills["sugarburst_sparkles"] = new(SkillTag.BasicAtk, [
             new(55 * 4, 0, anomalyBuildup: 17.66 * 4)
-        ], new () {
-            [Affix.AnomalyBuildupBonus] = 0.25
-        });
-    }
-
-    public override AgentAction GetActionDamage(Context ctx, Ability ability) {
-        if (ability.Name is "cavity_alert" or "cavity_alert_right_now") {
-            SweetScareActive = true;
-        }
-        return base.GetActionDamage(ctx, ability);
+        ]);
     }
 
     public override void RegisterHooks(Context ctx) {
+        AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.AbilityPassive(), 
+            0.25, ModifierType.CombatFlat,
+            scope: AbilityScope.Of("sugarburst_sparkles")));
+        
         ctx.Events.OnCalculationStarted += c => {
             foreach (var agent in c.Team.Values) {
                 // Tanuki Wish grants an ATK increase equal to 40% of Yuzuha's initial ATK,
@@ -88,6 +83,12 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
                         Math.Min(Math.Max(AnomalyMastery - 100, 0) * 0.002, 0.2), ModifierType.CombatFlat));
                 }
             }
+        };
+
+        ctx.Events.OnActionExecuting += (c, e) => {
+            if (e.Agent != this || e.Ability is not { Name: "cavity_alert" or "cavity_alert_right_now" }) return;
+            
+            SweetScareActive = true;
         };
         
         ctx.Events.OnActionExecuting += (c, e) => {
