@@ -289,7 +289,7 @@ public abstract class Agent(uint id) {
             GetDaze(ability)
         );
         
-        ctx.Events.ActionExecuted(ctx, new(this, action));
+        ctx.Events.ActionExecuted(ctx, new(this, ability, action));
         
         return action;
     }

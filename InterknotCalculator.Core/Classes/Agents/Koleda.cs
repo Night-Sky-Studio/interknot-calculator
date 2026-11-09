@@ -41,7 +41,22 @@ public class Koleda : SupportAgent, IAgentReference<Koleda> {
         });
     }
 
-    private bool IsFurnaceFireActive { get; set; }
+    /// <summary>
+    /// Furnace Fire state. The setter keeps the daze modifier in sync, so the modifier
+    /// exists exactly while the effect is active.
+    /// </summary>
+    private bool IsFurnaceFireActive {
+        get;
+        set {
+            field = value;
+            DazeBonus.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + ModifierKey.AbilityPassive());
+            if (value) {
+                DazeBonus.AddUnique(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + ModifierKey.AbilityPassive(),
+                    0.6, ModifierType.CombatFlat,
+                    tags: SkillTag.BasicAtk));
+            }
+        }
+    }
 
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
@@ -50,6 +65,12 @@ public class Koleda : SupportAgent, IAgentReference<Koleda> {
             DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 0.6, ModifierType.CombatFlat,
                 tags: SkillTag.ExSpecial));
+            
+            // When Furnace Fire is consumed, all Agents deal 35% more damage for 40s.
+            foreach (var agent in c.Team.Values) {
+                agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.35, ModifierType.CombatFlat));
+            }
 
             if (c.HasTeammates(a => a.Element.Matches(Element)
                                     || a.Faction == Faction
@@ -57,34 +78,32 @@ public class Koleda : SupportAgent, IAgentReference<Koleda> {
                 && c.Enemy.IsStunned) {
                 foreach (var agent in c.Team.Values) {
                     agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                        0.35 * 2, ModifierType.CombatFlat,
+                        0.35, ModifierType.CombatFlat,
                         tags: SkillTag.Chain));
                 }
             }
         };
 
+        // ctx.Events.OnActionExecuting += OnActionExecuting;
         // ctx.Events.OnActionExecuted += OnActionExecuted;
     }
-
-    private void OnActionExecuted(Context ctx, ActionExecutingEventArgs e) {
-        IsFurnaceFireActive = e.Ability switch {
-            { Tag: SkillTag.FollowUpAssist, Name: "hammer_bell" }
-                or { Tag: SkillTag.ExSpecial, Name: "boiling_furnace" }
-                or { Tag: SkillTag.Chain, Name: "natural_disaster" }
-                or { Tag: SkillTag.Ultimate, Name: "hammerquake" }
-                => true,
-            { Tag: SkillTag.BasicAtk, Name: "smash_n_bash", Scale: 2 }
-                => false,
-            _ => IsFurnaceFireActive
-        };
+    
+    // Granting happens before damage, so it could affect the granting ability itself
+    private void OnActionExecuting(Context _, ActionExecutingEventArgs e) {
+        if (e.Agent != this || IsFurnaceFireActive) return;
+        if (e.Ability is { Tag: SkillTag.FollowUpAssist, Name: "hammer_bell" }
+            or { Tag: SkillTag.ExSpecial, Name: "boiling_furnace" }
+            or { Tag: SkillTag.Chain, Name: "natural_disaster" }
+            or { Tag: SkillTag.Ultimate, Name: "hammerquake" }) {
+            IsFurnaceFireActive = true;
+        }
     }
-
-    public override Stat? ApplyAbilityPassive(Ability ability) {
-        return ability.Tag switch {
-            SkillTag.BasicAtk => IsFurnaceFireActive
-                ? new(Affix.DazeBonus, 0.6)
-                : null,
-            _ => null
-        };
+    
+    // Consumption happens after damage, so the consuming hit still gets the bonus
+    private void OnActionExecuted(Context _, ActionExecutedEventArgs e) {
+        if (e.Agent != this || !IsFurnaceFireActive) return;
+        if (e.Ability is { Tag: SkillTag.BasicAtk, Name: "smash_n_bash", Scale: 2 }) {
+            IsFurnaceFireActive = false;
+        }
     }
 }
