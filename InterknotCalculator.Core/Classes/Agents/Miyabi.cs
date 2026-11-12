@@ -142,9 +142,9 @@ public class MiyabiM1 : Miyabi {
             // While in Shimotsuki Stance, every 1 point of Fallen Frost consumed will allow
             // Basic Attack: Shimotsuki to ignore 6% of DEF, stacking up to 6 times
             // 
-            // Remarks: Fallen Frost stacks aren't tracked, this bonus is always active
+            // Remarks: Fallen Frost stacks aren't tracked, this bonus is always active at max 6 stacks
             DefPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.AbilityPassive(), 
-                0.06 * 6, ModifierType.CombatRatio,
+                0.06 * 6, ModifierType.CombatFlat,
                 scope: AbilityScope.Of("shimotsuki")));
         };
         
@@ -152,12 +152,16 @@ public class MiyabiM1 : Miyabi {
             // When the slash for charge level three of Shimotsuki hits an enemy under Frostburn,
             // it will immediately remove the Frostburn state and increase all squad members'
             // Anomaly Buildup Rate by 20%
-            if (IsM1BonusActive) return;
             if (e.Ability is not { Name: "shimotsuki", Scale: 2 } || 
                 c.Enemy.AfflictedAnomaly?.Element is not Element.Frost) return;
             c.Enemy.AfflictedAnomaly = null;
             
+            if (IsM1BonusActive) return;
+            
             foreach (var agent in c.Team.Values) {
+                // Remove Frostburn buff
+                agent.AnomalyBuildupBonus.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + ModifierKey.AbilityPassive());
+                // Replace it with M1 buff
                 agent.AnomalyBuildupBonus.AddUnique(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
                     0.2, ModifierType.CombatFlat));
             }

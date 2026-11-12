@@ -224,10 +224,12 @@ public class EllenM6 : EllenM5 {
             if (e.Ability.Name is "icy_blade" or "vortex" or "shark_sentinel") {
                 FeastStacks++;
             }
+        };
 
-            if (e.Ability.Name is "arctic_ambush") {
-                FeastStacks = 0;
-            }
+        ctx.Events.OnActionExecuted += (_, e) => {
+            if (e.Agent != this || e.Ability.Name is not "arctic_ambush") return;
+            
+            FeastStacks = 0;
         };
     }
 }
