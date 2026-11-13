@@ -151,18 +151,25 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
             ClawSharpenersCount += 1;
         };
         
+        // Created on the first activation, toggled after that
+        Modifier? stunBonus = null;
+        
         ctx.Events.OnEtherVeilActivated += (c, e) => {
             ClawSharpenersCount += 2;
 
             if (IsTeamPassiveActive && e.Agent == this) {
-                c.Enemy.StunMultiplier.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    0.3, ModifierType.CombatFlat);
+                if (stunBonus is null) {
+                    stunBonus = c.Enemy.StunMultiplier.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                        0.3, ModifierType.CombatFlat);
+                } else {
+                    stunBonus.Active = true;
+                }
             }
         };
         
-        ctx.Events.OnEtherVeilDeactivated += (c, e) => {
-            if (IsTeamPassiveActive && e.Agent == this) {
-                c.Enemy.StunMultiplier.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.TeamPassive());
+        ctx.Events.OnEtherVeilDeactivated += (_, e) => {
+            if (IsTeamPassiveActive && e.Agent == this && stunBonus is not null) {
+                stunBonus.Active = false;
             }
         };
     }
