@@ -102,18 +102,6 @@ public class MutableStat {
                              AbilityFilter filter = default, Func<bool>? when = null, bool active = true)
         => Add(key, -value, type, filter, when, active);
 
-    /// <summary>
-    /// Temporary: adds a modifier unless one with the same key and filter is already attached.
-    /// </summary>
-    /// <exception cref="ArgumentException">A modifier with the same key and filter exists.</exception>
-    public Modifier AddUnique(ModifierKey key, double value, ModifierType type,
-                              AbilityFilter filter = default, Func<bool>? when = null, bool active = true) {
-        if (_modifiers.Exists(m => m.Key == key && m.Filter == filter)) {
-            throw new ArgumentException($"Modifier {key} is already applied to this stat", nameof(key));
-        }
-        return Add(key, value, type, filter, when, active);
-    }
-
     /// <summary>Permanently detaches <paramref name="modifier"/> from this stat.</summary>
     public void Remove(Modifier modifier) {
         if (!_modifiers.Remove(modifier)) return;
@@ -121,14 +109,15 @@ public class MutableStat {
         Invalidate();
     }
 
-    /// <summary>Detaches every modifier with <paramref name="key"/>. A provenance query.</summary>
-    public void RemoveKey(ModifierKey key) {
+    /// <summary>
+    /// Detaches every modifier with <paramref name="key"/>. A provenance query, used only to
+    /// re-apply equipment; agents keep their modifiers and toggle them instead.
+    /// </summary>
+    internal void RemoveKey(ModifierKey key) {
         for (var i = _modifiers.Count - 1; i >= 0; i--) {
             if (_modifiers[i].Key == key) Remove(_modifiers[i]);
         }
     }
-
-    public bool Contains(ModifierKey key) => _modifiers.Exists(m => m.Key == key);
 
     /// <summary>
     /// Drops every modifier, keeping <see cref="BaseValue"/>.
