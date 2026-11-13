@@ -5,8 +5,6 @@ using InterknotCalculator.Core.Enums;
 namespace InterknotCalculator.Core.Classes.Agents;
 
 public sealed class ZhuYuan : Agent {
-    private bool? IsEnemyStunned { get; set; }
-
     public ZhuYuan() : base(1241) {
         Speciality = Speciality.Attack;
         Element = Element.Ether;
@@ -86,23 +84,14 @@ public sealed class ZhuYuan : Agent {
             }
         };
         
+        // When Zhu Yuan is under Suppressive Mode, using Enhanced Shotshells
+        // increases her DMG by 40%. When attacking Stunned enemies, this
+        // DMG buff is increased by an additional 40%
         var corePassiveKey = ModifierKey.Agent(Id) + ModifierKey.CorePassive();
-        
-        ctx.Events.OnActionExecuting += (c, _) => {
-            // When Zhu Yuan is under Suppressive Mode, using Enhanced Shotshells
-            // increases her DMG by 40%. When attacking Stunned enemies, this
-            // DMG buff is increased by an additional 40%
-            
-            // No need to recalculate if the enemy's stun status hasn't changed
-            if (c.Enemy.IsStunned == IsEnemyStunned) return;
-            
-            IsEnemyStunned = c.Enemy.IsStunned;
-            var bonus = IsEnemyStunned.Value ? 0.8 : 0.4;
-            
-            DmgBonus.RemoveKey(corePassiveKey);
-            DmgBonus.AddUnique(corePassiveKey,
-                bonus, ModifierType.CombatFlat,
-                filter: AbilityFilter.Of("please_do_not_resist", "overwhelming_firepower"));
-        };
+        var enhancedShotshells = AbilityFilter.Of("please_do_not_resist", "overwhelming_firepower");
+        DmgBonus.Add(corePassiveKey, 0.8, ModifierType.CombatFlat,
+            filter: enhancedShotshells, when: () => ctx.Enemy.IsStunned);
+        DmgBonus.Add(corePassiveKey, 0.4, ModifierType.CombatFlat,
+            filter: enhancedShotshells, when: () => !ctx.Enemy.IsStunned);
     }
 }

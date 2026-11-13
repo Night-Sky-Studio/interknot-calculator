@@ -5,7 +5,6 @@ namespace InterknotCalculator.Core.Classes.Agents;
 
 public sealed class Soldier11 : Agent {
     private bool IsTeamPassiveActive { get; set; }
-    private bool? IsEnemyStunned { get; set; }
     
     public Soldier11() : base(AgentId.Soldier11) {
         Speciality = Speciality.Attack;
@@ -89,15 +88,11 @@ public sealed class Soldier11 : Agent {
             }
         };
         
+        // Team passive: Fire DMG increases by 10%, or by 32.5% against Stunned enemies.
         var teamPassiveKey = ModifierKey.Agent(Id) + ModifierKey.TeamPassive();
-
-        ctx.Events.OnActionExecuting += (c, _) => {
-            if (!IsTeamPassiveActive) return;
-            if (c.Enemy.IsStunned == IsEnemyStunned) return;
-            IsEnemyStunned = c.Enemy.IsStunned;
-            var bonus = IsEnemyStunned.Value ? 0.325 : 0.1;
-            ElementalDmgBonus.RemoveKey(teamPassiveKey);
-            ElementalDmgBonus.AddUnique(teamPassiveKey, bonus, ModifierType.CombatFlat);
-        };
+        ElementalDmgBonus.Add(teamPassiveKey, 0.325, ModifierType.CombatFlat,
+            when: () => IsTeamPassiveActive && ctx.Enemy.IsStunned);
+        ElementalDmgBonus.Add(teamPassiveKey, 0.1, ModifierType.CombatFlat,
+            when: () => IsTeamPassiveActive && !ctx.Enemy.IsStunned);
     }
 }

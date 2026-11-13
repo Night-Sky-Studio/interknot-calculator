@@ -41,25 +41,17 @@ public class Koleda : SupportAgent, IAgentReference<Koleda> {
         });
     }
 
-    /// <summary>
-    /// Furnace Fire state. The setter keeps the daze modifier in sync, so the modifier
-    /// exists exactly while the effect is active.
-    /// </summary>
-    private bool IsFurnaceFireActive {
-        get;
-        set {
-            field = value;
-            DazeBonus.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + ModifierKey.AbilityPassive());
-            if (value) {
-                DazeBonus.AddUnique(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + ModifierKey.AbilityPassive(),
-                    0.6, ModifierType.CombatFlat,
-                    filter: SkillTag.BasicAtk);
-            }
-        }
-    }
+    /// <summary>Furnace Fire state. The Basic Attack daze bonus is derived from it.</summary>
+    private bool IsFurnaceFireActive { get; set; }
 
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
+
+        // While Furnace Fire is active, Basic Attack Daze increases by 60%.
+        DazeBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + ModifierKey.AbilityPassive(),
+            0.6, ModifierType.CombatFlat,
+            filter: SkillTag.BasicAtk,
+            when: () => IsFurnaceFireActive);
 
         ctx.Events.OnCalculationStarted += c => {
             DazeBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 

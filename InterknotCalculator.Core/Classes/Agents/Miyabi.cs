@@ -113,32 +113,24 @@ public class Miyabi : Agent, ICustomAnomaly {
                 ElementalResPen.Add(corePassiveKey, 0.3, ModifierType.CombatFlat,
                     filter: AbilityFilter.Of("shimotsuki"));
             }
-        };
 
-        ctx.Events.OnActionExecuting += (c, _) => {
-            if (c.Enemy.AfflictedAnomaly?.Element is Element.Frost) {
-                foreach (var agent in c.Team.Values) {
-                    if (agent.AnomalyBuildupBonus.Contains(corePassiveKey + ModifierKey.AbilityPassive())) continue;
-
-                    agent.AnomalyBuildupBonus.AddUnique(corePassiveKey + ModifierKey.AbilityPassive(),
-                        0.2, ModifierType.CombatFlat);
-                }
-            } else {
-                foreach (var agent in c.Team.Values) {
-                    agent.AnomalyBuildupBonus.RemoveKey(corePassiveKey + ModifierKey.AbilityPassive());
-                }
+            // While the enemy is under Frostburn, all squad members' Anomaly Buildup Rate increases by 20%
+            foreach (var agent in c.Team.Values) {
+                agent.AnomalyBuildupBonus.Add(corePassiveKey + ModifierKey.AbilityPassive(),
+                    0.2, ModifierType.CombatFlat,
+                    when: () => c.Enemy.AfflictedAnomaly?.Element is Element.Frost);
             }
         };
     }
 }
 
 public class MiyabiM1 : Miyabi {
-    private bool IsM1BonusActive { get; set; }
+    private List<Modifier> M1Buffs { get; set; } = [];
     
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
-        ctx.Events.OnCalculationStarted += _ => {
+        ctx.Events.OnCalculationStarted += c => {
             // While in Shimotsuki Stance, every 1 point of Fallen Frost consumed will allow
             // Basic Attack: Shimotsuki to ignore 6% of DEF, stacking up to 6 times
             // 
@@ -146,26 +138,26 @@ public class MiyabiM1 : Miyabi {
             DefPen.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.AbilityPassive(), 
                 0.06 * 6, ModifierType.CombatFlat,
                 filter: AbilityFilter.Of("shimotsuki"));
+            
+            M1Buffs = c.Team.Values
+                .Select(agent => agent.AnomalyBuildupBonus.Add(
+                    ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
+                    0.2, ModifierType.CombatFlat, active: false))
+                .ToList();
         };
         
         ctx.Events.OnActionExecuting += (c, e) => {
             // When the slash for charge level three of Shimotsuki hits an enemy under Frostburn,
             // it will immediately remove the Frostburn state and increase all squad members'
-            // Anomaly Buildup Rate by 20%
+            // Anomaly Buildup Rate by 20%.
+            // Removing Frostburn also ends the base Frostburn buff, which is gated on it.
             if (e.Ability is not { Name: "shimotsuki", Scale: 2 } || 
                 c.Enemy.AfflictedAnomaly?.Element is not Element.Frost) return;
             c.Enemy.AfflictedAnomaly = null;
             
-            if (IsM1BonusActive) return;
-            
-            foreach (var agent in c.Team.Values) {
-                // Remove Frostburn buff
-                agent.AnomalyBuildupBonus.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + ModifierKey.AbilityPassive());
-                // Replace it with M1 buff
-                agent.AnomalyBuildupBonus.AddUnique(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
-                    0.2, ModifierType.CombatFlat);
+            foreach (var buff in M1Buffs) {
+                buff.Active = true;
             }
-            IsM1BonusActive = true;
         };
     }
 }
@@ -176,10 +168,10 @@ public class MiyabiM2 : MiyabiM1 {
         
         ctx.Events.OnCalculationStarted += _ => {
             // Basic Attack: Kazahana and Dodge Counter DMG increases by 30%.
-            DmgBonus.AddUnique(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.AbilityPassive(), 
+            DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.AbilityPassive(), 
                 0.3, ModifierType.CombatFlat,
                 filter: AbilityFilter.Of("kazahana"));
-            DmgBonus.AddUnique(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.AbilityPassive(), 
+            DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.AbilityPassive(), 
                 0.6, ModifierType.CombatFlat,
                 filter: AbilityFilter.Of("kan_suzume"));
             

@@ -115,27 +115,22 @@ public class Yixuan : RuptureAgent, ICustomAnomaly {
             }
         };
         
-        ctx.Events.OnActionExecuting += (c, e) => {
-            if (e.Agent != this) return;
-            
-            // EX Special Attack: Cloud-Shaper and EX Special Attack: Ashen Ink Becomes Shadows
-            // deal 30% increased DMG to Stunned enemies.
-            if (IsTeamPassiveActive && ctx.Enemy.IsStunned && e.Ability.Name is "cloud_shaper" or "ashen_ink_becomes_shadows") {
-                if (DmgBonus.Contains(teamPassiveKey)) return;
-                DmgBonus.AddUnique(teamPassiveKey, 
-                    0.3, ModifierType.CombatFlat,
-                    filter: AbilityFilter.Of("cloud_shaper", "ashen_ink_becomes_shadows"));
-            }
-        };
+        // EX Special Attack: Cloud-Shaper and EX Special Attack: Ashen Ink Becomes Shadows
+        // deal 30% increased DMG to Stunned enemies.
+        DmgBonus.Add(teamPassiveKey, 
+            0.3, ModifierType.CombatFlat,
+            filter: AbilityFilter.Of("cloud_shaper", "ashen_ink_becomes_shadows"),
+            when: () => IsTeamPassiveActive && ctx.Enemy.IsStunned);
+        
+        // After activating her Ultimate, Yixuan enters the Meditation state,
+        // increasing her CRIT DMG by 40% for 15s.
+        var meditation = CritDamage.Add(teamPassiveKey, 0.4, ModifierType.CombatFlat, active: false);
         
         ctx.Events.OnActionExecuting += (_, e) => {
             if (e.Agent != this) return;
             
-            // After activating her Ultimate, Yixuan enters the Meditation state,
-            // increasing her CRIT DMG by 40% for 15s.
             if (IsTeamPassiveActive && e.Ability.Tag is SkillTag.Ultimate) {
-                if (CritDamage.Contains(teamPassiveKey)) return;
-                CritDamage.AddUnique(teamPassiveKey, 0.4, ModifierType.CombatFlat);
+                meditation.Active = true;
             }
         };
     }

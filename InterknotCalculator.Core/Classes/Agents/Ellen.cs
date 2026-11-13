@@ -192,15 +192,7 @@ public class EllenM6 : EllenM5 {
     
     private int FeastStacks {
         get;
-        set {
-            field = Math.Clamp(value, 0, 3);
-            // Keep the modifier in sync with the stack count
-            DmgBonus.RemoveKey(TheFeastBeginsKey);
-            if (field == 3) {
-                DmgBonus.Add(TheFeastBeginsKey, 2.5, ModifierType.CombatFlat,
-                    filter: AbilityFilter.Of("arctic_ambush"));
-            }
-        }
+        set => field = Math.Clamp(value, 0, 3);
     }
 
     public override void RegisterHooks(Context ctx) {
@@ -209,12 +201,13 @@ public class EllenM6 : EllenM5 {
         ctx.Events.OnCalculationStarted += _ => {
             FeastStacks = 0;
             
-            PenRatio.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 
-                0.2, ModifierType.CombatFlat);
-            
-            DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 
-                2.5, ModifierType.CombatFlat,
-                filter: AbilityFilter.Of("arctic_ambush"));
+            PenRatio.Add(TheFeastBeginsKey, 0.2, ModifierType.CombatFlat);
+
+            // At 3 stacks of The Feast Begins, Arctic Ambush DMG increases by 250%.
+            // The stacks are consumed after the Arctic Ambush hit, so it still gets the bonus.
+            DmgBonus.Add(TheFeastBeginsKey, 2.5, ModifierType.CombatFlat,
+                filter: AbilityFilter.Of("arctic_ambush"),
+                when: () => FeastStacks == 3);
         };
 
         ctx.Events.OnActionExecuting += (_, e) => {
