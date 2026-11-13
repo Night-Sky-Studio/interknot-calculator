@@ -96,12 +96,12 @@ public class Trigger : SupportAgent, IAgentReference<Trigger> {
         base.RegisterHooks(ctx);
         
         ctx.Events.OnCalculationStarted += c => {
-            c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.35, ModifierType.CombatFlat));
+            c.Enemy.StunMultiplier.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.35, ModifierType.CombatFlat);
 
             if (c.HasTeammates(a => a.Speciality is Speciality.Attack || a.Element.Matches(Element), Id)) {
                 if (CritRate > 0.4) {
-                    DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                        Math.Min((CritRate - 0.4) * 1.5, 0.75), ModifierType.CombatFlat, SkillTag.Aftershock));
+                    DazeBonus.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                        Math.Min((CritRate - 0.4) * 1.5, 0.75), ModifierType.CombatFlat, SkillTag.Aftershock);
                 }
             }
         };

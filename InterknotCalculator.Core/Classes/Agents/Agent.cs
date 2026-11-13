@@ -50,16 +50,16 @@ public abstract class Agent(uint id) {
         if (Weapon is not { } w)
             return;
         if (!passiveOnly) {
-            Stats[w.MainStat.Affix.Flat()].Add(new(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.MainStat(),
-                w.MainStat.Value, ModifierType.Base));
-            Stats[w.SecondaryStat.Affix.Flat()].Add(new(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.SecondaryStat(),
-                w.SecondaryStat));
+            Stats[w.MainStat.Affix.Flat()].Add(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.MainStat(),
+                w.MainStat.Value, ModifierType.Base);
+            Stats[w.SecondaryStat.Affix.Flat()].Add(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.SecondaryStat(),
+                w.SecondaryStat);
         }
         if (w.Speciality != Speciality) 
             return;
         foreach (var passive in w.Passive) {
-            Stats[passive.Affix.Flat()].Add(new(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.Passive(), 
-                passive, true));
+            Stats[passive.Affix.Flat()].Add(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.Passive(), 
+                passive, true);
         }
     }
 
@@ -91,24 +91,24 @@ public abstract class Agent(uint id) {
 
             // Second pass: apply each disc's main stat and substats.
             foreach (var disc in DriveDiscs) {
-                Stats[disc.MainStat.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.Disc(disc.Slot) +
-                                                                  ModifierKey.Stat(disc.MainStat.Affix, disc.MainStat.Level), disc.MainStat);
+                Stats[disc.MainStat.Affix.Flat()].Add(ModifierKey.Agent(Id) + ModifierKey.Disc(disc.Slot) +
+                    ModifierKey.Stat(disc.MainStat.Affix, disc.MainStat.Level), disc.MainStat);
                 foreach (var subStat in disc.SubStats) {
-                    Stats[subStat.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.Disc(disc.Slot) +
-                                                                ModifierKey.Stat(subStat.Affix, subStat.Level), subStat);
+                    Stats[subStat.Affix.Flat()].Add(ModifierKey.Agent(Id) + ModifierKey.Disc(disc.Slot) +
+                        ModifierKey.Stat(subStat.Affix, subStat.Level), subStat);
                 }
             }
         }
         
         foreach (var set in PartialSets) {
             foreach (var bonus in set.PartialBonus) {
-                Stats[bonus.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.DiscSet(set.Id), bonus);
+                Stats[bonus.Affix.Flat()].Add(ModifierKey.Agent(Id) + ModifierKey.DiscSet(set.Id), bonus);
             }
         }
 
         foreach (var set in FullSets) {
             foreach (var bonus in set.FullBonus) {
-                Stats[bonus.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.DiscSet(set.Id, true),
+                Stats[bonus.Affix.Flat()].Add(ModifierKey.Agent(Id) + ModifierKey.DiscSet(set.Id, true),
                     bonus, true);
             }
         }

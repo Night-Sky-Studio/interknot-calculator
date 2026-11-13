@@ -58,19 +58,19 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
     }
 
     public override void RegisterHooks(Context ctx) {
-        AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.AbilityPassive(), 
+        AnomalyBuildupBonus.Add(ModifierKey.Agent(Id) + ModifierKey.AbilityPassive(), 
             0.25, ModifierType.CombatFlat,
-            scope: AbilityScope.Of("sugarburst_sparkles")));
+            filter: AbilityFilter.Of("sugarburst_sparkles"));
         
         ctx.Events.OnCalculationStarted += c => {
             foreach (var agent in c.Team.Values) {
                 // Tanuki Wish grants an ATK increase equal to 40% of Yuzuha's initial ATK,
                 // up to a maximum increase of 1,200, and increases the DMG dealt by those
                 // with the effect by 15%, lasting 40s. Repeated triggers reset the duration.
-                agent.Atk.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                    Math.Min(Atk.InitialValue * 0.4, 1200), ModifierType.CombatFlat));
-                agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                    0.15, ModifierType.CombatFlat));
+                agent.Atk.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    Math.Min(Atk.InitialValue * 0.4, 1200), ModifierType.CombatFlat);
+                agent.DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    0.15, ModifierType.CombatFlat);
             }
 
             if (c.HasTeammates(a => a.Speciality is Speciality.Anomaly || a.Faction == Faction, Id)) {
@@ -79,8 +79,8 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
                 // to a maximum of 20%, and all Attribute Anomaly DMG and Disorder DMG
                 // by 0.2%, up to a maximum of 20%.
                 foreach (var agent in c.Team.Values) {
-                    agent.AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(),
-                        Math.Min(Math.Max(AnomalyMastery - 100, 0) * 0.002, 0.2), ModifierType.CombatFlat));
+                    agent.AnomalyBuildupBonus.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(),
+                        Math.Min(Math.Max(AnomalyMastery - 100, 0) * 0.002, 0.2), ModifierType.CombatFlat);
                 }
             }
         };

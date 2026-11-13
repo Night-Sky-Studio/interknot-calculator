@@ -97,22 +97,22 @@ public class Ellen : Agent {
             //       As it is currently, there's no way that Ellen would get 200% CD,
             //       however, developers are dumb and may forget or miss that certain ability
             //       already matches the tag, applying the modifier twice by accident.
-            CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+            CritDamage.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 1, ModifierType.CombatFlat, 
-                tags: SkillTag.Chain | SkillTag.Ultimate));
-            CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(),
+                filter: SkillTag.Chain | SkillTag.Ultimate);
+            CritDamage.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(),
                 1, ModifierType.CombatFlat,
-                scope: AbilityScope.Of("flash_freeze_trimming", "icy_blade", "glacial_blade_wave")));
+                filter: AbilityFilter.Of("flash_freeze_trimming", "icy_blade", "glacial_blade_wave"));
             
             if (c.HasTeammates(a => a.Element == Element || a.Faction == Faction, Id)) {
-                ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    0.3, ModifierType.CombatFlat));
+                ElementalDmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.3, ModifierType.CombatFlat);
                 
                 // STR 6
-                CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    0.48, ModifierType.CombatFlat));
-                ElementalResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    0.1, ModifierType.CombatFlat));
+                CritDamage.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.48, ModifierType.CombatFlat);
+                ElementalResPen.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.1, ModifierType.CombatFlat);
             }
         };
     }
@@ -125,8 +125,8 @@ public class EllenM1 : Ellen {
         ctx.Events.OnCalculationStarted += _ => {
             // For each point of Flash Freeze Charge consumed, Ellen’s CRIT Rate
             // is increased by 2% for 15s, stacking up
-            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.TeamPassive(), 
-                0.02 * 6, ModifierType.CombatFlat));
+            CritRate.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.TeamPassive(), 
+                0.02 * 6, ModifierType.CombatFlat);
         };
     }
 }
@@ -135,9 +135,9 @@ public class EllenM2 : EllenM1 {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
 
-        CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(),
+        CritDamage.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(),
             0.6, ModifierType.CombatFlat,
-            tags: SkillTag.ExSpecial));
+            filter: SkillTag.ExSpecial);
     }
 }
 
@@ -197,8 +197,8 @@ public class EllenM6 : EllenM5 {
             // Keep the modifier in sync with the stack count
             DmgBonus.RemoveKey(TheFeastBeginsKey);
             if (field == 3) {
-                DmgBonus.Add(new(TheFeastBeginsKey, 2.5, ModifierType.CombatFlat,
-                    scope: AbilityScope.Of("arctic_ambush")));
+                DmgBonus.Add(TheFeastBeginsKey, 2.5, ModifierType.CombatFlat,
+                    filter: AbilityFilter.Of("arctic_ambush"));
             }
         }
     }
@@ -209,12 +209,12 @@ public class EllenM6 : EllenM5 {
         ctx.Events.OnCalculationStarted += _ => {
             FeastStacks = 0;
             
-            PenRatio.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 
-                0.2, ModifierType.CombatFlat));
+            PenRatio.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 
+                0.2, ModifierType.CombatFlat);
             
-            DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 
+            DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(), 
                 2.5, ModifierType.CombatFlat,
-                scope: AbilityScope.Of("arctic_ambush")));
+                filter: AbilityFilter.Of("arctic_ambush"));
         };
 
         ctx.Events.OnActionExecuting += (_, e) => {

@@ -80,9 +80,9 @@ public sealed class Soldier11 : Agent {
         
         ctx.Events.OnCalculationStarted += c => {
             // Heatwave passive
-            DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+            DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 0.7, ModifierType.CombatFlat,
-                scope: AbilityScope.Of("fire_suppression_basic", "fire_suppression_dash")));
+                filter: AbilityFilter.Of("fire_suppression_basic", "fire_suppression_dash"));
             
             if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
                 IsTeamPassiveActive = true;
@@ -97,7 +97,7 @@ public sealed class Soldier11 : Agent {
             IsEnemyStunned = c.Enemy.IsStunned;
             var bonus = IsEnemyStunned.Value ? 0.325 : 0.1;
             ElementalDmgBonus.RemoveKey(teamPassiveKey);
-            ElementalDmgBonus.AddUnique(new(teamPassiveKey, bonus, ModifierType.CombatFlat));
+            ElementalDmgBonus.AddUnique(teamPassiveKey, bonus, ModifierType.CombatFlat);
         };
     }
 }

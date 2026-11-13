@@ -15,7 +15,7 @@ public class FangedMetal : DriveDiscSet {
     void Activate(Context c, uint equipper) {
         if (IsActive) return;
         IsActive = true;
-        c.Team[equipper].DmgBonus.Add(new(ModifierKey.DiscSet(Id, true), 0.35, ModifierType.CombatFlat));
+        c.Team[equipper].DmgBonus.Add(ModifierKey.DiscSet(Id, true), 0.35, ModifierType.CombatFlat);
     }
     
     public override void RegisterHooks(Context ctx, uint equipper = 0) {

@@ -27,7 +27,7 @@ public class StatsDictionary : Dictionary<Affix, MutableStat> {
 
     public void RemoveAllModifiers(Func<Modifier, bool> predicate) {
         foreach (var stat in Values) {
-            var toRemove = stat.AppliedModifiers
+            var toRemove = stat.Modifiers
                 .Where(predicate)
                 .Select(m => m.Key)
                 .ToImmutableArray();

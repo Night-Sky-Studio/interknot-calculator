@@ -105,13 +105,13 @@ public class Miyabi : Agent, ICustomAnomaly {
         var corePassiveKey = ModifierKey.Agent(Id) + ModifierKey.CorePassive();
         
         ctx.Events.OnCalculationStarted += c => {
-            ElementalDmgBonus.Add(new(corePassiveKey, 0.3, ModifierType.CombatFlat));
+            ElementalDmgBonus.Add(corePassiveKey, 0.3, ModifierType.CombatFlat);
 
             if (c.HasTeammates(a => a.Faction == Faction || a.Speciality is Speciality.Support or Speciality.Anomaly, Id)) {
-                DmgBonus.Add(new(corePassiveKey, 0.6, ModifierType.CombatFlat,
-                    scope: AbilityScope.Of("shimotsuki")));
-                ElementalResPen.Add(new(corePassiveKey, 0.3, ModifierType.CombatFlat,
-                    scope: AbilityScope.Of("shimotsuki")));
+                DmgBonus.Add(corePassiveKey, 0.6, ModifierType.CombatFlat,
+                    filter: AbilityFilter.Of("shimotsuki"));
+                ElementalResPen.Add(corePassiveKey, 0.3, ModifierType.CombatFlat,
+                    filter: AbilityFilter.Of("shimotsuki"));
             }
         };
 
@@ -120,8 +120,8 @@ public class Miyabi : Agent, ICustomAnomaly {
                 foreach (var agent in c.Team.Values) {
                     if (agent.AnomalyBuildupBonus.Contains(corePassiveKey + ModifierKey.AbilityPassive())) continue;
 
-                    agent.AnomalyBuildupBonus.AddUnique(new(corePassiveKey + ModifierKey.AbilityPassive(),
-                        0.2, ModifierType.CombatFlat));
+                    agent.AnomalyBuildupBonus.AddUnique(corePassiveKey + ModifierKey.AbilityPassive(),
+                        0.2, ModifierType.CombatFlat);
                 }
             } else {
                 foreach (var agent in c.Team.Values) {
@@ -143,9 +143,9 @@ public class MiyabiM1 : Miyabi {
             // Basic Attack: Shimotsuki to ignore 6% of DEF, stacking up to 6 times
             // 
             // Remarks: Fallen Frost stacks aren't tracked, this bonus is always active at max 6 stacks
-            DefPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.AbilityPassive(), 
+            DefPen.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.AbilityPassive(), 
                 0.06 * 6, ModifierType.CombatFlat,
-                scope: AbilityScope.Of("shimotsuki")));
+                filter: AbilityFilter.Of("shimotsuki"));
         };
         
         ctx.Events.OnActionExecuting += (c, e) => {
@@ -162,8 +162,8 @@ public class MiyabiM1 : Miyabi {
                 // Remove Frostburn buff
                 agent.AnomalyBuildupBonus.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + ModifierKey.AbilityPassive());
                 // Replace it with M1 buff
-                agent.AnomalyBuildupBonus.AddUnique(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
-                    0.2, ModifierType.CombatFlat));
+                agent.AnomalyBuildupBonus.AddUnique(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
+                    0.2, ModifierType.CombatFlat);
             }
             IsM1BonusActive = true;
         };
@@ -176,17 +176,17 @@ public class MiyabiM2 : MiyabiM1 {
         
         ctx.Events.OnCalculationStarted += _ => {
             // Basic Attack: Kazahana and Dodge Counter DMG increases by 30%.
-            DmgBonus.AddUnique(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.AbilityPassive(), 
+            DmgBonus.AddUnique(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.AbilityPassive(), 
                 0.3, ModifierType.CombatFlat,
-                scope: AbilityScope.Of("kazahana")));
-            DmgBonus.AddUnique(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.AbilityPassive(), 
+                filter: AbilityFilter.Of("kazahana"));
+            DmgBonus.AddUnique(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.AbilityPassive(), 
                 0.6, ModifierType.CombatFlat,
-                scope: AbilityScope.Of("kan_suzume")));
+                filter: AbilityFilter.Of("kan_suzume"));
             
             // Upon entering the battlefield, Hoshimi Miyabi immediately obtains 6 points
             // of Fallen Frost and her CRIT Rate increases by 15%.
-            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(), 
-                0.15, ModifierType.CombatFlat));
+            CritRate.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(), 
+                0.15, ModifierType.CombatFlat);
         };
     }
 }

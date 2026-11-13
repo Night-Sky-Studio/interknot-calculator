@@ -21,7 +21,7 @@ public class YesterdayCalls : Weapon {
             if (!c.TryActivateGlobal(key)) return;
 
             foreach (var agent in c.Team.Values) {
-                agent.CritDamage.Add(new(key, 0.3, ModifierType.CombatFlat));
+                agent.CritDamage.Add(key, 0.3, ModifierType.CombatFlat);
             }
         };
     }

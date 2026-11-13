@@ -44,16 +44,16 @@ public class PanYinhu : SupportAgent, IAgentReference<PanYinhu> {
             foreach (var agent in c.Team.Values) {
                 if (agent is RuptureAgent a) {
                     // M6
-                    a.SheerForce.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(),
-                        Math.Min((0.18 + 0.06) * Atk.InitialValue, 540 + 180), ModifierType.CombatFlat));
+                    a.SheerForce.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(6) + ModifierKey.CorePassive(),
+                        Math.Min((0.18 + 0.06) * Atk.InitialValue, 540 + 180), ModifierType.CombatFlat);
                 }
             }
 
             if (c.HasTeammates(a => a.Speciality is Speciality.Rupture || a.Faction == Faction, Id)) {
                 foreach (var agent in c.Team.Values) {
                     // M1
-                    agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.TeamPassive(), 
-                        0.2 + 0.1, ModifierType.CombatFlat));
+                    agent.DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.TeamPassive(), 
+                        0.2 + 0.1, ModifierType.CombatFlat);
                 }   
             }
         };

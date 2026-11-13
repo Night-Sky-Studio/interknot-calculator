@@ -17,10 +17,10 @@ public class ThornedRose : DriveDiscSet {
             var agent = c.Team[equipper];
 
             if (agent.Def >= 1000) {
-                agent.CritRate.Add(new(ModifierKey.DiscSet(Id, true), 0.08, ModifierType.CombatFlat));
+                agent.CritRate.Add(ModifierKey.DiscSet(Id, true), 0.08, ModifierType.CombatFlat);
             }
             if (agent.Def >= 1800) {
-                agent.CritRate.Add(new(ModifierKey.DiscSet(Id, true), 0.08, ModifierType.CombatFlat));
+                agent.CritRate.Add(ModifierKey.DiscSet(Id, true), 0.08, ModifierType.CombatFlat);
             }
         };
     }

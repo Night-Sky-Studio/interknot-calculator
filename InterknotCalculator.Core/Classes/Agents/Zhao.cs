@@ -70,15 +70,15 @@ public class Zhao : SupportAgent, IAgentReference<Zhao>, IEtherVeilAgent<Wellspr
             if (IsTeamPassiveActive) {
                 foreach (var agent in c.Team.Values) {
                     if (agent.DmgBonus.Contains(teamPassiveKey)) continue;
-                    agent.DmgBonus.AddUnique(new(teamPassiveKey, 
-                        Math.Min(0.4, 0.1 + Math.Max(0, MaxHp.InitialValue - 15000) / 400 * 0.01), ModifierType.CombatFlat));
+                    agent.DmgBonus.AddUnique(teamPassiveKey, 
+                        Math.Min(0.4, 0.1 + Math.Max(0, MaxHp.InitialValue - 15000) / 400 * 0.01), ModifierType.CombatFlat);
                 }
             }
             
             if (e.Agent != this || e.EtherVeil is not Wellspring) return;
 
             foreach (var agent in c.Team.Values) {
-                agent.Atk.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 1000, ModifierType.CombatFlat));
+                agent.Atk.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 1000, ModifierType.CombatFlat);
             }
         };
         ctx.Events.OnEtherVeilDeactivated += (c, e) => {

@@ -21,8 +21,8 @@ public class Timeweaver : Weapon {
         ctx.Events.OnCalculationStarted += c => {
             var agent = c.Team[equipper];
         
-            agent.DisorderDmgBonus.Add(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(), 
-                agent.AnomalyProficiency > 375 ? 0.25 : 0, ModifierType.CombatFlat));
+            agent.DisorderDmgBonus.Add(ModifierKey.Weapon(Id) + ModifierKey.Passive(), 
+                agent.AnomalyProficiency > 375 ? 0.25 : 0, ModifierType.CombatFlat);
         };
     }
 }

@@ -18,12 +18,12 @@ public sealed class Yanagi : Agent, IPolarityDisorderAgent {
         KagenActive = !KagenActive;
         if (KagenActive) {
             ElementalDmgBonus.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + JougenKey);
-            PenRatio.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + KagenKey, 
-                0.1, ModifierType.CombatFlat));
+            PenRatio.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + KagenKey, 
+                0.1, ModifierType.CombatFlat);
         } else {
             PenRatio.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + KagenKey);
-            ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + JougenKey, 
-                0.1, ModifierType.CombatFlat));
+            ElementalDmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + JougenKey, 
+                0.1, ModifierType.CombatFlat);
         }
     }
     
@@ -115,12 +115,12 @@ public sealed class Yanagi : Agent, IPolarityDisorderAgent {
     
     public override void RegisterHooks(Context ctx) {
         ctx.Events.OnCalculationStarted += c => {
-            ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                0.2, ModifierType.CombatFlat));
+            ElementalDmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                0.2, ModifierType.CombatFlat);
 
             if (c.HasTeammates(a => a.Speciality == Speciality || a.Element.Matches(Element), Id)) {
-                AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    0.45, ModifierType.CombatFlat));
+                AnomalyBuildupBonus.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.45, ModifierType.CombatFlat);
             }
         };
         

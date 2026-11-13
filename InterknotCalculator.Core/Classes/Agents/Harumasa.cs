@@ -83,16 +83,16 @@ public class Harumasa : Agent {
         base.RegisterHooks(ctx);
 
         ctx.Events.OnCalculationStarted += c => {
-            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+            CritRate.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 0.25, ModifierType.CombatFlat,
-                scope: AbilityScope.Of("hiten_no_tsuru_slash")));
-            CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                filter: AbilityFilter.Of("hiten_no_tsuru_slash"));
+            CritDamage.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 0.72, ModifierType.CombatFlat,
-                scope: AbilityScope.Of("hiten_no_tsuru_slash")));
+                filter: AbilityFilter.Of("hiten_no_tsuru_slash"));
             
             if (c.HasTeammates(a => a is { Speciality: Speciality.Stun or Speciality.Anomaly }, Id)) {
-                DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    0.4, ModifierType.CombatFlat));
+                DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.4, ModifierType.CombatFlat);
             }
         };
     }

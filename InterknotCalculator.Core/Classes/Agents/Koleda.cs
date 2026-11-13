@@ -51,9 +51,9 @@ public class Koleda : SupportAgent, IAgentReference<Koleda> {
             field = value;
             DazeBonus.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + ModifierKey.AbilityPassive());
             if (value) {
-                DazeBonus.AddUnique(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + ModifierKey.AbilityPassive(),
+                DazeBonus.AddUnique(ModifierKey.Agent(Id) + ModifierKey.CorePassive() + ModifierKey.AbilityPassive(),
                     0.6, ModifierType.CombatFlat,
-                    tags: SkillTag.BasicAtk));
+                    filter: SkillTag.BasicAtk);
             }
         }
     }
@@ -62,14 +62,14 @@ public class Koleda : SupportAgent, IAgentReference<Koleda> {
         base.RegisterHooks(ctx);
 
         ctx.Events.OnCalculationStarted += c => {
-            DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+            DazeBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 0.6, ModifierType.CombatFlat,
-                tags: SkillTag.ExSpecial));
+                filter: SkillTag.ExSpecial);
             
             // When Furnace Fire is consumed, all Agents deal 35% more damage for 40s.
             foreach (var agent in c.Team.Values) {
-                agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    0.35, ModifierType.CombatFlat));
+                agent.DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.35, ModifierType.CombatFlat);
             }
 
             if (c.HasTeammates(a => a.Element.Matches(Element)
@@ -77,9 +77,9 @@ public class Koleda : SupportAgent, IAgentReference<Koleda> {
                                     || a.Speciality is Speciality.Rupture, Id)
                 && c.Enemy.IsStunned) {
                 foreach (var agent in c.Team.Values) {
-                    agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    agent.DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
                         0.35, ModifierType.CombatFlat,
-                        tags: SkillTag.Chain));
+                        filter: SkillTag.Chain);
                 }
             }
         };

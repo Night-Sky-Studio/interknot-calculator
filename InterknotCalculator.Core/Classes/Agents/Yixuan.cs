@@ -102,12 +102,12 @@ public class Yixuan : RuptureAgent, ICustomAnomaly {
         var teamPassiveKey = ModifierKey.Agent(Id) + ModifierKey.TeamPassive();
         
         ctx.Events.OnCalculationStarted += c => {
-            DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+            DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 0.6, ModifierType.CombatFlat,
-                tags: SkillTag.ExSpecial | SkillTag.FollowUpAssist | SkillTag.Chain | SkillTag.Ultimate));
-            DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                filter: SkillTag.ExSpecial | SkillTag.FollowUpAssist | SkillTag.Chain | SkillTag.Ultimate);
+            DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                 0.6, ModifierType.CombatFlat,
-                scope: AbilityScope.Of("auric_array", "qingming_eruption")));
+                filter: AbilityFilter.Of("auric_array", "qingming_eruption"));
             
             if (c.HasTeammates(a => a.Speciality is Speciality.Stun or Speciality.Defense or Speciality.Support
                                     || a.Faction == Faction, Id)) {
@@ -122,9 +122,9 @@ public class Yixuan : RuptureAgent, ICustomAnomaly {
             // deal 30% increased DMG to Stunned enemies.
             if (IsTeamPassiveActive && ctx.Enemy.IsStunned && e.Ability.Name is "cloud_shaper" or "ashen_ink_becomes_shadows") {
                 if (DmgBonus.Contains(teamPassiveKey)) return;
-                DmgBonus.AddUnique(new(teamPassiveKey, 
+                DmgBonus.AddUnique(teamPassiveKey, 
                     0.3, ModifierType.CombatFlat,
-                    scope: AbilityScope.Of("cloud_shaper", "ashen_ink_becomes_shadows")));
+                    filter: AbilityFilter.Of("cloud_shaper", "ashen_ink_becomes_shadows"));
             }
         };
         
@@ -135,7 +135,7 @@ public class Yixuan : RuptureAgent, ICustomAnomaly {
             // increasing her CRIT DMG by 40% for 15s.
             if (IsTeamPassiveActive && e.Ability.Tag is SkillTag.Ultimate) {
                 if (CritDamage.Contains(teamPassiveKey)) return;
-                CritDamage.AddUnique(new(teamPassiveKey, 0.4, ModifierType.CombatFlat));
+                CritDamage.AddUnique(teamPassiveKey, 0.4, ModifierType.CombatFlat);
             }
         };
     }

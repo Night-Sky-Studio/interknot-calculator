@@ -21,7 +21,7 @@ public class BashfulDemon : Weapon {
             if (!c.TryActivateGlobal(key)) return;
     
             foreach (var agent in c.Team.Values) {
-                agent.Atk.Add(new(key, 0.128, ModifierType.CombatRatio));
+                agent.Atk.Add(key, 0.128, ModifierType.CombatRatio);
             }
         };
         

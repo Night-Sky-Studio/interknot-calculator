@@ -19,8 +19,8 @@ public class CloudcleaveRadiance : Weapon {
         
         ctx.Events.OnEtherVeilActivated += (c, _) => {
             if (c.MainAgent.DmgBonus.Contains(etherVeilPassiveKey)) return;
-            c.MainAgent.DmgBonus.AddUnique(new(etherVeilPassiveKey, 0.25, ModifierType.CombatFlat));
-            c.MainAgent.CritDamage.AddUnique(new(etherVeilPassiveKey, 0.25, ModifierType.CombatFlat));
+            c.MainAgent.DmgBonus.AddUnique(etherVeilPassiveKey, 0.25, ModifierType.CombatFlat);
+            c.MainAgent.CritDamage.AddUnique(etherVeilPassiveKey, 0.25, ModifierType.CombatFlat);
         };
         
         ctx.Events.OnEtherVeilDeactivated += (c, _) => {

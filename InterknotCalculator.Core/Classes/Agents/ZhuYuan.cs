@@ -81,8 +81,8 @@ public sealed class ZhuYuan : Agent {
         
         ctx.Events.OnCalculationStarted += c => {
             if (c.HasTeammates(a => a.Speciality is Speciality.Support || a.Faction == Faction, Id)) {
-                CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    0.3, ModifierType.CombatFlat));
+                CritRate.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.3, ModifierType.CombatFlat);
             }
         };
         
@@ -100,9 +100,9 @@ public sealed class ZhuYuan : Agent {
             var bonus = IsEnemyStunned.Value ? 0.8 : 0.4;
             
             DmgBonus.RemoveKey(corePassiveKey);
-            DmgBonus.AddUnique(new(corePassiveKey,
+            DmgBonus.AddUnique(corePassiveKey,
                 bonus, ModifierType.CombatFlat,
-                scope: AbilityScope.Of("please_do_not_resist", "overwhelming_firepower")));
+                filter: AbilityFilter.Of("please_do_not_resist", "overwhelming_firepower"));
         };
     }
 }

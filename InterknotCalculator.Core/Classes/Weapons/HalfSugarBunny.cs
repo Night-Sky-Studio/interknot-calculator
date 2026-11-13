@@ -20,8 +20,8 @@ public class HalfSugarBunny : Weapon {
             if (!c.TryActivateGlobal(key)) return;
             
             foreach (var agent in c.Team.Values) {
-                agent.Atk.Add(new(key, 0.1, ModifierType.CombatRatio));
-                agent.MaxHp.Add(new(key, 0.1, ModifierType.CombatRatio));
+                agent.Atk.Add(key, 0.1, ModifierType.CombatRatio);
+                agent.MaxHp.Add(key, 0.1, ModifierType.CombatRatio);
             }
         };
         
@@ -29,7 +29,7 @@ public class HalfSugarBunny : Weapon {
             if (EtherVeilBonusActive) return;
 
             foreach (var (_, agent) in c.Team) {
-                agent.CritDamage.Add(new(key, 0.3, ModifierType.CombatFlat));
+                agent.CritDamage.Add(key, 0.3, ModifierType.CombatFlat);
             }
             
             EtherVeilBonusActive = true;
