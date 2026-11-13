@@ -5,13 +5,10 @@ namespace InterknotCalculator.Core.Classes.EtherVeils;
 
 public class ColdBlooded : EtherVeil {
     private ModifierKey Key { get; } = ModifierKey.EtherVeil<ColdBlooded>();
-    
-    public override void Enable(Agent agent) {
-        agent.CritDamage.AddUnique(Key, 0.05, ModifierType.CombatFlat);
-    }
-    public override void Disable(Agent agent) {
-        agent.CritDamage.RemoveKey(Key);
-    }
+
+    protected override IEnumerable<Modifier> Initialize(Agent agent) => [
+        agent.CritDamage.Add(Key, 0.05, ModifierType.CombatFlat)
+    ];
 
     public override string ToString() => nameof(ColdBlooded);
 }
