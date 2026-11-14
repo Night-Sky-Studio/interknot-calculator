@@ -172,7 +172,7 @@ public class MiyabiM2 : MiyabiM1 {
                 0.3, ModifierType.CombatFlat,
                 filter: AbilityFilter.Of("kazahana"));
             DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.AbilityPassive(), 
-                0.6, ModifierType.CombatFlat,
+                0.3, ModifierType.CombatFlat,
                 filter: AbilityFilter.Of("kan_suzume"));
             
             // Upon entering the battlefield, Hoshimi Miyabi immediately obtains 6 points
