@@ -11,14 +11,11 @@ public struct Scale(double damage, double daze, double anomalyBuildup = 0.0, dou
 }
 
 public struct Skill() {
-    public Skill(SkillTag tag, IEnumerable<Scale> scales, SafeDictionary<Affix, double>? affixes = null) : this() {
+    public Skill(SkillTag tag, IEnumerable<Scale> scales) : this() {
         Tag = tag;
         Scales.AddRange(scales);
-        if (affixes != null) {
-            Affixes = affixes;
-        }
     }
+    
     public SkillTag Tag { get; set; }
     public List<Scale> Scales { get; set; } = [];
-    public SafeDictionary<Affix, double> Affixes { get; set; } = new();
 }

@@ -5,13 +5,10 @@ namespace InterknotCalculator.Core.Classes.EtherVeils;
 
 public class DelusionReprise : EtherVeil {
     private ModifierKey Key { get; } = ModifierKey.EtherVeil<DelusionReprise>();
-    
-    public override void Enable(Agent agent) {
-        agent.Atk.AddUnique(new(Key, 50, ModifierType.CombatFlat));
-    }
-    public override void Disable(Agent agent) {
-        agent.Atk.RemoveKey(Key);
-    }
+
+    protected override IEnumerable<Modifier> Initialize(Agent agent) => [
+        agent.Atk.Add(Key, 50, ModifierType.CombatFlat)
+    ];
 
     public override string ToString() => nameof(DelusionReprise);
 }

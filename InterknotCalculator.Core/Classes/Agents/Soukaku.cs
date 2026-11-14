@@ -42,14 +42,14 @@ public class Soukaku : SupportAgent, IAgentReference<Soukaku> {
         
         ctx.Events.OnCalculationStarted += c => {
             foreach (var agent in c.Team.Values) {
-                agent.Atk.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                    Math.Min(Atk.InitialValue * 2 * 0.2, 1000), ModifierType.CombatFlat));
+                agent.Atk.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    Math.Min(Atk.InitialValue * 2 * 0.2, 1000), ModifierType.CombatFlat);
             }
             
             if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
                 foreach (var agent in c.Team.Values) {
-                    agent.GetStat(Affix.IceDmgBonus).Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                        0.2, ModifierType.CombatFlat));
+                    agent.GetStat(Affix.IceDmgBonus).Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                        0.2, ModifierType.CombatFlat);
                 }
             }
         };

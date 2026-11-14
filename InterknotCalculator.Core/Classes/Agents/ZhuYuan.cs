@@ -5,8 +5,6 @@ using InterknotCalculator.Core.Enums;
 namespace InterknotCalculator.Core.Classes.Agents;
 
 public sealed class ZhuYuan : Agent {
-    private bool IsEnemyStunned { get; set; }
-    
     public ZhuYuan() : base(1241) {
         Speciality = Speciality.Attack;
         Element = Element.Ether;
@@ -81,22 +79,19 @@ public sealed class ZhuYuan : Agent {
         
         ctx.Events.OnCalculationStarted += c => {
             if (c.HasTeammates(a => a.Speciality is Speciality.Support || a.Faction == Faction, Id)) {
-                CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    0.3, ModifierType.CombatFlat));
+                CritRate.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.3, ModifierType.CombatFlat);
             }
         };
+        
+        // When Zhu Yuan is under Suppressive Mode, using Enhanced Shotshells
+        // increases her DMG by 40%. When attacking Stunned enemies, this
+        // DMG buff is increased by an additional 40%
+        var corePassiveKey = ModifierKey.Agent(Id) + ModifierKey.CorePassive();
+        var enhancedShotshells = AbilityFilter.Of("please_do_not_resist", "overwhelming_firepower");
+        DmgBonus.Add(corePassiveKey, 0.8, ModifierType.CombatFlat,
+            filter: enhancedShotshells, when: () => ctx.Enemy.IsStunned);
+        DmgBonus.Add(corePassiveKey, 0.4, ModifierType.CombatFlat,
+            filter: enhancedShotshells, when: () => !ctx.Enemy.IsStunned);
     }
-
-    public override Stat? ApplyAbilityPassive(Ability ability) {
-        if (ability.Name is "please_do_not_resist" or "overwhelming_firepower") {
-            return new(Affix.DmgBonus, IsEnemyStunned ? 0.8 : 0.4);
-        }
-        return null;
-    }
-
-    public override AgentAction GetActionDamage(Context ctx, Ability ability) {
-        IsEnemyStunned = ctx.Enemy.IsStunned;
-
-        return base.GetActionDamage(ctx, ability);  
-    } 
 }

@@ -53,15 +53,15 @@ public class JuFufu : SupportAgent, IAgentReference<JuFufu> {
                 var steps = atkOverThreshold / atkStep;
                 var critDmgBonus = 0.2 + Math.Min(steps * critDmgPerStep, bonusCap);
                 
-                agent.CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                    critDmgBonus, ModifierType.CombatFlat));
-                agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                    0.2, ModifierType.CombatFlat, SkillTag.Chain));
-                agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                    0.4, ModifierType.CombatFlat, SkillTag.Ultimate));
+                agent.CritDamage.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    critDmgBonus, ModifierType.CombatFlat);
+                agent.DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    0.2, ModifierType.CombatFlat, SkillTag.Chain);
+                agent.DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    0.4, ModifierType.CombatFlat, SkillTag.Ultimate);
             }
             
-            Impact.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 50, ModifierType.CombatFlat));
+            Impact.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 50, ModifierType.CombatFlat);
         };
     }
 }

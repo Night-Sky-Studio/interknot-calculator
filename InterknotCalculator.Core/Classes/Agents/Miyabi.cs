@@ -44,11 +44,7 @@ public class Miyabi : Agent, ICustomAnomaly {
                 new(910.1, 66.0, 39.98),
                 new(1717.2, 97.2, 56.68),
                 new(4282.8, 567.0, 343.36),
-            ],
-            Affixes = {
-                { Affix.DmgBonus, 0.6 },
-                { Affix.IceResPen, 0.3 }
-            }
+            ]
         };
         
         Skills["fuyubachi"] = new() {
@@ -106,64 +102,83 @@ public class Miyabi : Agent, ICustomAnomaly {
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
+        var corePassiveKey = ModifierKey.Agent(Id) + ModifierKey.CorePassive();
+        
         ctx.Events.OnCalculationStarted += c => {
-            ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                0.3, ModifierType.CombatFlat));
+            ElementalDmgBonus.Add(corePassiveKey, 0.3, ModifierType.CombatFlat);
 
-            if (c.HasTeammates(a => a.Faction == Faction || a.Speciality is Speciality.Support, Id)) {
-                DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    0.6, ModifierType.CombatFlat,
-                    tags: SkillTag.BasicAtk));
-                ElementalResPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    0.3, ModifierType.CombatFlat,
-                    tags: SkillTag.BasicAtk));
+            if (c.HasTeammates(a => a.Faction == Faction || a.Speciality is Speciality.Support or Speciality.Anomaly, Id)) {
+                DmgBonus.Add(corePassiveKey, 0.6, ModifierType.CombatFlat,
+                    filter: AbilityFilter.Of("shimotsuki"));
+                ElementalResPen.Add(corePassiveKey, 0.3, ModifierType.CombatFlat,
+                    filter: AbilityFilter.Of("shimotsuki"));
+            }
+
+            // While the enemy is under Frostburn, all squad members' Anomaly Buildup Rate increases by 20%
+            foreach (var agent in c.Team.Values) {
+                agent.AnomalyBuildupBonus.Add(corePassiveKey + ModifierKey.AbilityPassive(),
+                    0.2, ModifierType.CombatFlat,
+                    when: () => c.Enemy.AfflictedAnomaly?.Element is Element.Frost);
             }
         };
     }
 }
 
 public class MiyabiM1 : Miyabi {
-    public MiyabiM1() {
-        // While in Shimotsuki Stance, every 1 point of Fallen Frost consumed will allow
-        // Basic Attack: Shimotsuki to ignore 6% of DEF, stacking up to 6 times
-        Skills["shimotsuki"].Affixes[Affix.DefPen] += 0.06 * 6;
-    }
-
-    private bool IsM2BonusActive { get; set; } = false;
+    private List<Modifier> M1Buffs { get; set; } = [];
     
     public override void RegisterHooks(Context ctx) {
+        base.RegisterHooks(ctx);
+        
+        ctx.Events.OnCalculationStarted += c => {
+            // While in Shimotsuki Stance, every 1 point of Fallen Frost consumed will allow
+            // Basic Attack: Shimotsuki to ignore 6% of DEF, stacking up to 6 times
+            // 
+            // Remarks: Fallen Frost stacks aren't tracked, this bonus is always active at max 6 stacks
+            DefPen.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.AbilityPassive(), 
+                0.06 * 6, ModifierType.CombatFlat,
+                filter: AbilityFilter.Of("shimotsuki"));
+            
+            M1Buffs = c.Team.Values
+                .Select(agent => agent.AnomalyBuildupBonus.Add(
+                    ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
+                    0.2, ModifierType.CombatFlat, active: false))
+                .ToList();
+        };
+        
         ctx.Events.OnActionExecuting += (c, e) => {
             // When the slash for charge level three of Shimotsuki hits an enemy under Frostburn,
             // it will immediately remove the Frostburn state and increase all squad members'
-            // Anomaly Buildup Rate by 20%
-            if (IsM2BonusActive) return;
+            // Anomaly Buildup Rate by 20%.
+            // Removing Frostburn also ends the base Frostburn buff, which is gated on it.
             if (e.Ability is not { Name: "shimotsuki", Scale: 2 } || 
                 c.Enemy.AfflictedAnomaly?.Element is not Element.Frost) return;
             c.Enemy.AfflictedAnomaly = null;
             
-            foreach (var agent in c.Team.Values) {
-                agent.AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
-                    0.2, ModifierType.CombatFlat));
-            } 
+            foreach (var buff in M1Buffs) {
+                buff.Active = true;
+            }
         };
     }
 }
 
 public class MiyabiM2 : MiyabiM1 {
-    public MiyabiM2() {
-        // Basic Attack: Kazahana and Dodge Counter DMG increases by 30%.
-        Skills["kazahana"].Affixes[Affix.DmgBonus] += 0.3;
-        Skills["kan_suzume"].Affixes[Affix.DmgBonus] += 0.3;
-    }
-
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
         ctx.Events.OnCalculationStarted += _ => {
+            // Basic Attack: Kazahana and Dodge Counter DMG increases by 30%.
+            DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.AbilityPassive(), 
+                0.3, ModifierType.CombatFlat,
+                filter: AbilityFilter.Of("kazahana"));
+            DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.AbilityPassive(), 
+                0.3, ModifierType.CombatFlat,
+                filter: AbilityFilter.Of("kan_suzume"));
+            
             // Upon entering the battlefield, Hoshimi Miyabi immediately obtains 6 points
             // of Fallen Frost and her CRIT Rate increases by 15%.
-            CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(), 
-                0.15, ModifierType.CombatFlat));
+            CritRate.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(), 
+                0.15, ModifierType.CombatFlat);
         };
     }
 }

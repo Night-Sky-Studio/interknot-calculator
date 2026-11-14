@@ -63,31 +63,42 @@ public class Zhao : SupportAgent, IAgentReference<Zhao>, IEtherVeilAgent<Wellspr
         };
 
         // Core Passive
+        // Created on the first activation, toggled after that
+        List<Modifier>? teamPassiveBuffs = null;
+        List<Modifier>? wellspringBuffs = null;
+        
         ctx.Events.OnEtherVeilActivated += (c, e) => {
-            var teamPassiveKey = ModifierKey.Agent(Id) + ModifierKey.TeamPassive();
-            
-            // Team passive
+            // Team passive: any Ether Veil turns it on.
+            // MaxHp.InitialValue excludes combat modifiers, so it is the same on every activation.
             if (IsTeamPassiveActive) {
-                foreach (var agent in c.Team.Values) {
-                    if (agent.DmgBonus.Contains(teamPassiveKey)) continue;
-                    agent.DmgBonus.AddUnique(new(teamPassiveKey, 
-                        Math.Min(0.4, 0.1 + Math.Max(0, MaxHp.InitialValue - 15000) / 400 * 0.01), ModifierType.CombatFlat));
+                if (teamPassiveBuffs is null) {
+                    var bonus = Math.Min(0.4, 0.1 + Math.Max(0, MaxHp.InitialValue - 15000) / 400 * 0.01);
+                    teamPassiveBuffs = c.Team.Values
+                        .Select(agent => agent.DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                            bonus, ModifierType.CombatFlat))
+                        .ToList();
+                } else {
+                    teamPassiveBuffs.ForEach(m => m.Active = true);
                 }
             }
             
             if (e.Agent != this || e.EtherVeil is not Wellspring) return;
 
-            foreach (var agent in c.Team.Values) {
-                agent.Atk.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 1000, ModifierType.CombatFlat));
+            if (wellspringBuffs is null) {
+                wellspringBuffs = c.Team.Values
+                    .Select(agent => agent.Atk.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                        1000, ModifierType.CombatFlat))
+                    .ToList();
+            } else {
+                wellspringBuffs.ForEach(m => m.Active = true);
             }
         };
-        ctx.Events.OnEtherVeilDeactivated += (c, e) => {
+        ctx.Events.OnEtherVeilDeactivated += (_, e) => {
+            // Both end only when Zhao's own Wellspring ends
             if (e.Agent != this || e.EtherVeil is not Wellspring) return;
 
-            foreach (var agent in c.Team.Values) {
-                agent.DmgBonus.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.TeamPassive());
-                agent.Atk.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.CorePassive());
-            }
+            teamPassiveBuffs?.ForEach(m => m.Active = false);
+            wellspringBuffs?.ForEach(m => m.Active = false);
         };
     }
 

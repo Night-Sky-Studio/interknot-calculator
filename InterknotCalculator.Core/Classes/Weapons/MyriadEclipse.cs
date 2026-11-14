@@ -23,9 +23,9 @@ public class MyriadEclipse : Weapon {
             var agent = c.Team[equipper];
             if (!agent.Element.Matches(Element.Ice)) return;
 
-            agent.DefPen.Add(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(),
+            agent.DefPen.Add(ModifierKey.Weapon(Id) + ModifierKey.Passive(),
                 0.25, ModifierType.CombatFlat,
-                tags: SkillTag.ExSpecial | SkillTag.Chain | SkillTag.Ultimate));
+                filter: SkillTag.ExSpecial | SkillTag.Chain | SkillTag.Ultimate);
         };
     }
 }

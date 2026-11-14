@@ -104,16 +104,16 @@ public class JaneDoe : SupportAgent, IAgentReference<JaneDoe> {
 
             c.AnomalyCritMultiplier = 1 + critRate * critDamage;
             
-            AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                0.25, ModifierType.CombatFlat));
+            AnomalyBuildupBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                0.25, ModifierType.CombatFlat);
             if (AnomalyProficiency > 120) {
-                Atk.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                    Math.Min((AnomalyProficiency - 120) * 2, 600), ModifierType.CombatFlat));
+                Atk.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    Math.Min((AnomalyProficiency - 120) * 2, 600), ModifierType.CombatFlat);
             }
 
             if (c.HasTeammates(a => a.Speciality == Speciality || a.Faction == Faction, Id)) {
-                AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    0.35, ModifierType.CombatFlat));
+                AnomalyBuildupBonus.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.35, ModifierType.CombatFlat);
             }
         };
     }
@@ -124,10 +124,10 @@ public class JaneDoeM1 : JaneDoe {
         base.RegisterHooks(ctx);
         
         ctx.Events.OnCalculationStarted += _ => {
-            AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
-                0.15, ModifierType.CombatFlat));
-            DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
-                AnomalyProficiency * 0.001, ModifierType.CombatFlat));
+            AnomalyBuildupBonus.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
+                0.15, ModifierType.CombatFlat);
+            DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(1) + ModifierKey.CorePassive(), 
+                AnomalyProficiency * 0.001, ModifierType.CombatFlat);
         };
     }
 }
@@ -150,8 +150,8 @@ public class JaneDoeM2 : JaneDoeM1 {
             if (IgnoresEnemyDefense) return;
                 
             // Ignores 15% of the target's DEF
-            DefPen.Add(new(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(),
-                0.15, ModifierType.CombatFlat));
+            DefPen.Add(ModifierKey.Agent(Id) + ModifierKey.Mindscape(2) + ModifierKey.CorePassive(),
+                0.15, ModifierType.CombatFlat);
             IgnoresEnemyDefense = true;
         };
     }

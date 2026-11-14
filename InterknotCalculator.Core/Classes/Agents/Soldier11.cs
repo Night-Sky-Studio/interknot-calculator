@@ -4,6 +4,8 @@ using InterknotCalculator.Core.Enums;
 namespace InterknotCalculator.Core.Classes.Agents;
 
 public sealed class Soldier11 : Agent {
+    private bool IsTeamPassiveActive { get; set; }
+    
     public Soldier11() : base(AgentId.Soldier11) {
         Speciality = Speciality.Attack;
         Element = Element.Fire;
@@ -33,18 +35,14 @@ public sealed class Soldier11 : Agent {
             new(114.4, 51.2, 31.91),
             new(264, 113.7, 71.57),
             new(681.7, 287.7, 182.8)
-        ], new() {
-            [Affix.DmgBonus] = 0.7 // Heatwave passive
-        });
+        ]);
 
         Skills["blazing_fire"] = new(SkillTag.Dash, [
             new(137.6, 51.8, element: Element.Physical)
         ]);
         Skills["fire_suppression_dash"] = new(SkillTag.Dash, [
             new(158, 118.4, 75)
-        ], new() {
-            [Affix.DmgBonus] = 0.7 // Heatwave passive
-        });
+        ]);
         Skills["backdraft"] = new(SkillTag.Counter, [
             new(524.9, 339.1, 114.99)
         ]);
@@ -80,10 +78,21 @@ public sealed class Soldier11 : Agent {
         base.RegisterHooks(ctx);
         
         ctx.Events.OnCalculationStarted += c => {
+            // Heatwave passive
+            DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                0.7, ModifierType.CombatFlat,
+                filter: AbilityFilter.Of("fire_suppression_basic", "fire_suppression_dash"));
+            
             if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
-                ElementalDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    0.325, ModifierType.CombatFlat));
+                IsTeamPassiveActive = true;
             }
         };
+        
+        // Team passive: Fire DMG increases by 10%, or by 32.5% against Stunned enemies.
+        var teamPassiveKey = ModifierKey.Agent(Id) + ModifierKey.TeamPassive();
+        ElementalDmgBonus.Add(teamPassiveKey, 0.325, ModifierType.CombatFlat,
+            when: () => IsTeamPassiveActive && ctx.Enemy.IsStunned);
+        ElementalDmgBonus.Add(teamPassiveKey, 0.1, ModifierType.CombatFlat,
+            when: () => IsTeamPassiveActive && !ctx.Enemy.IsStunned);
     }
 }

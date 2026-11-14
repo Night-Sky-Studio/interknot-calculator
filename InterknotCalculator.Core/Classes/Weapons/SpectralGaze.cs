@@ -19,7 +19,7 @@ public class SpectralGaze : Weapon {
         
         ctx.Events.OnCalculationStarted += c => {
             if (c.Team[equipper].Element.Matches(Element.Electric)) {
-                c.Enemy.Defense.Subtract(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(), 0.25, ModifierType.CombatRatio));
+                c.Enemy.Defense.Subtract(ModifierKey.Weapon(Id) + ModifierKey.Passive(), 0.25, ModifierType.CombatRatio);
             }
         };
     }

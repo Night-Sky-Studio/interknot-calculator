@@ -20,7 +20,7 @@ public class TremorTrigramVessel : Weapon {
             if (!c.TryActivateGlobal(key)) return;
 
             foreach (var agent in c.Team.Values) {
-                agent.DmgBonus.Add(new(key, 0.4, ModifierType.CombatFlat, SkillTag.ExSpecial | SkillTag.Ultimate));
+                agent.DmgBonus.Add(key, 0.4, ModifierType.CombatFlat, SkillTag.ExSpecial | SkillTag.Ultimate);
             }
         };
     }

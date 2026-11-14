@@ -109,6 +109,19 @@ public class StatsCollectionTest {
     }
 
     [Test]
+    public void ReEquippingReplacesEquipmentModifiers() {
+        var miyabi = Miyabi();
+        var expected = miyabi.CollectStats(true);
+
+        miyabi.SetWeapon(WeaponId.DeepSeaVisitor);
+        miyabi.SetWeapon(WeaponId.HailstormShrine);
+        miyabi.SetDriveDiscs(miyabi.DriveDiscs);
+
+        CheckStats(expected, miyabi.CollectStats(true));
+        Assert.That(miyabi.Atk.Modifiers.Count(m => m.Key.ComponentStartsWith("Weapon:")), Is.EqualTo(1));
+    }
+
+    [Test]
     public void MiyabiCombatStatsTest() {
         var reference = new Dictionary<Affix, double> {
             [Affix.Hp] = 11129.76,

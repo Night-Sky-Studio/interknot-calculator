@@ -88,8 +88,8 @@ public class Alice : Agent, ICustomAnomaly {
         ctx.Events.OnCalculationStarted += c => {
             // Team passive
             if (c.HasTeammates(a => a is { Speciality: Speciality.Anomaly or Speciality.Support }, Id)) {
-                AnomalyProficiency.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                    Math.Max(AnomalyMastery - 140, 0) * 1.6, ModifierType.CombatFlat));
+                AnomalyProficiency.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    Math.Max(AnomalyMastery - 140, 0) * 1.6, ModifierType.CombatFlat);
             }
         };
         
@@ -114,8 +114,8 @@ public class Alice : Agent, ICustomAnomaly {
             if (BuildupBonusActive) return;
             
             BuildupBonusActive = true;
-            AnomalyBuildupBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                0.25, ModifierType.CombatFlat));
+            AnomalyBuildupBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                0.25, ModifierType.CombatFlat);
         };
         
         // Hold BA for polarity assault
@@ -134,6 +134,9 @@ public class Alice : Agent, ICustomAnomaly {
         };
     }
 
+    /// <summary>Disorder bonus while the enemy suffers a Physical Anomaly; active for one call only.</summary>
+    private Modifier? DisorderBonus { get; set; }
+
     public override AgentAction GetAnomalyDamage(Context ctx, Element element, bool skipEvents = false) {
         if (element is Element.None && ctx.Enemy.AfflictedAnomaly?.Element.Matches(Element.Physical) == true) {
             // If Disorder is triggered while the enemy is suffering a Physical Anomaly,
@@ -142,12 +145,13 @@ public class Alice : Agent, ICustomAnomaly {
             
             // We assume that there are still 7s of physical anomaly left
             const double bonus = 0.18 * 7;
-            DisorderDmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                bonus, ModifierType.CombatFlat));
+            DisorderBonus ??= DisorderDmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                bonus, ModifierType.CombatFlat, active: false);
+            DisorderBonus.Active = true;
             try {
                 return base.GetAnomalyDamage(ctx, element, skipEvents);
             } finally {
-                DisorderDmgBonus.RemoveKey(ModifierKey.Agent(Id) + ModifierKey.CorePassive());
+                DisorderBonus.Active = false;
             }
         }
         

@@ -94,35 +94,44 @@ public class Yixuan : RuptureAgent, ICustomAnomaly {
         ]);
     }
 
-    public override Stat? ApplyAbilityPassive(Ability ability) => ability.Tag switch {
-        SkillTag.ExSpecial or 
-        SkillTag.FollowUpAssist or 
-        SkillTag.Chain or 
-        SkillTag.Ultimate => new(Affix.DmgBonus, 0.6),
-        _ => ability.Name is "auric_array" or "qingming_eruption" ? new(Affix.DmgBonus, 0.6) : null
-    };
-
     private bool IsTeamPassiveActive { get; set; }
 
     public override void RegisterHooks(Context ctx) {
         base.RegisterHooks(ctx);
         
+        var teamPassiveKey = ModifierKey.Agent(Id) + ModifierKey.TeamPassive();
+        
         ctx.Events.OnCalculationStarted += c => {
+            DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                0.6, ModifierType.CombatFlat,
+                filter: SkillTag.ExSpecial | SkillTag.FollowUpAssist | SkillTag.Chain | SkillTag.Ultimate);
+            DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                0.6, ModifierType.CombatFlat,
+                filter: AbilityFilter.Of("auric_array", "qingming_eruption"));
+            
             if (c.HasTeammates(a => a.Speciality is Speciality.Stun or Speciality.Defense or Speciality.Support
                                     || a.Faction == Faction, Id)) {
                 IsTeamPassiveActive = true;
-                CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    0.4, ModifierType.CombatFlat));
             }
         };
-    }
-
-    public override AgentAction GetActionDamage(Context ctx, Ability ability) {
-        if (IsTeamPassiveActive && ctx.Enemy.IsStunned
-                                && ability.Name is "cloud_shaper" or "ashen_ink_becomes_shadows") {
-            Skills[ability.Name].Affixes[Affix.DmgBonus] = 0.3;
-        }
-
-        return base.GetActionDamage(ctx, ability);
+        
+        // EX Special Attack: Cloud-Shaper and EX Special Attack: Ashen Ink Becomes Shadows
+        // deal 30% increased DMG to Stunned enemies.
+        DmgBonus.Add(teamPassiveKey, 
+            0.3, ModifierType.CombatFlat,
+            filter: AbilityFilter.Of("cloud_shaper", "ashen_ink_becomes_shadows"),
+            when: () => IsTeamPassiveActive && ctx.Enemy.IsStunned);
+        
+        // After activating her Ultimate, Yixuan enters the Meditation state,
+        // increasing her CRIT DMG by 40% for 15s.
+        var meditation = CritDamage.Add(teamPassiveKey, 0.4, ModifierType.CombatFlat, active: false);
+        
+        ctx.Events.OnActionExecuting += (_, e) => {
+            if (e.Agent != this) return;
+            
+            if (IsTeamPassiveActive && e.Ability.Tag is SkillTag.Ultimate) {
+                meditation.Active = true;
+            }
+        };
     }
 }

@@ -20,8 +20,8 @@ public class Thoughtbop : Weapon {
             if (!c.TryActivateGlobal(key)) return;
         
             foreach (var agent in c.Team.Values) {
-                agent.DmgBonus.Add(new(key, 0.125 * 2, ModifierType.CombatFlat));
-                agent.Atk.Add(new(key, 0.1, ModifierType.CombatRatio));
+                agent.DmgBonus.Add(key, 0.125 * 2, ModifierType.CombatFlat);
+                agent.Atk.Add(key, 0.1, ModifierType.CombatRatio);
             }
         };
     }

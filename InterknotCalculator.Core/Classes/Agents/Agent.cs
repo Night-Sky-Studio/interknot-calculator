@@ -50,16 +50,16 @@ public abstract class Agent(uint id) {
         if (Weapon is not { } w)
             return;
         if (!passiveOnly) {
-            Stats[w.MainStat.Affix.Flat()].Add(new(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.MainStat(),
-                w.MainStat.Value, ModifierType.Base));
-            Stats[w.SecondaryStat.Affix.Flat()].Add(new(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.SecondaryStat(),
-                w.SecondaryStat));
+            Stats[w.MainStat.Affix.Flat()].Add(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.MainStat(),
+                w.MainStat.Value, ModifierType.Base);
+            Stats[w.SecondaryStat.Affix.Flat()].Add(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.SecondaryStat(),
+                w.SecondaryStat);
         }
         if (w.Speciality != Speciality) 
             return;
         foreach (var passive in w.Passive) {
-            Stats[passive.Affix.Flat()].Add(new(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.Passive(), 
-                passive, true));
+            Stats[passive.Affix.Flat()].Add(ModifierKey.Agent(Id) + ModifierKey.Weapon(w.Id) + ModifierKey.Passive(), 
+                passive, true);
         }
     }
 
@@ -91,24 +91,24 @@ public abstract class Agent(uint id) {
 
             // Second pass: apply each disc's main stat and substats.
             foreach (var disc in DriveDiscs) {
-                Stats[disc.MainStat.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.Disc(disc.Slot) +
-                                                                  ModifierKey.Stat(disc.MainStat.Affix, disc.MainStat.Level), disc.MainStat);
+                Stats[disc.MainStat.Affix.Flat()].Add(ModifierKey.Agent(Id) + ModifierKey.Disc(disc.Slot) +
+                    ModifierKey.Stat(disc.MainStat.Affix, disc.MainStat.Level), disc.MainStat);
                 foreach (var subStat in disc.SubStats) {
-                    Stats[subStat.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.Disc(disc.Slot) +
-                                                                ModifierKey.Stat(subStat.Affix, subStat.Level), subStat);
+                    Stats[subStat.Affix.Flat()].Add(ModifierKey.Agent(Id) + ModifierKey.Disc(disc.Slot) +
+                        ModifierKey.Stat(subStat.Affix, subStat.Level), subStat);
                 }
             }
         }
         
         foreach (var set in PartialSets) {
             foreach (var bonus in set.PartialBonus) {
-                Stats[bonus.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.DiscSet(set.Id), bonus);
+                Stats[bonus.Affix.Flat()].Add(ModifierKey.Agent(Id) + ModifierKey.DiscSet(set.Id), bonus);
             }
         }
 
         foreach (var set in FullSets) {
             foreach (var bonus in set.FullBonus) {
-                Stats[bonus.Affix.Flat()] += new Modifier(ModifierKey.Agent(Id) + ModifierKey.DiscSet(set.Id, true),
+                Stats[bonus.Affix.Flat()].Add(ModifierKey.Agent(Id) + ModifierKey.DiscSet(set.Id, true),
                     bonus, true);
             }
         }
@@ -208,29 +208,8 @@ public abstract class Agent(uint id) {
 
     public virtual void RegisterHooks(Context ctx) { }
     
-    /// <summary>
-    /// Applies the agent's passive to the team
-    /// </summary>
-    /// <param name="team">Current team, including current agent</param>
-    /// <returns>Collection of stats</returns>
-    [Obsolete("Use RegisterHooks(ctx) instead")]
-    public virtual IEnumerable<Stat> ApplyTeamPassive(List<Agent> team) => [];
-
-    /// <summary>
-    /// Applies agent's passive to themselves
-    /// </summary>
-    [Obsolete("Use RegisterHooks(ctx) instead")]
-    public virtual void ApplyPassive() { }
-
     protected virtual double GetBaseDamage(double scale) => scale / 100 * Atk;
     
-    /// <summary>
-    /// Applies agent's ability's passive
-    /// </summary>
-    /// <param name="ability">Ability name</param>
-    /// <returns><see cref="Stat"/> or null if ability has none</returns>
-    public virtual Stat? ApplyAbilityPassive(Ability ability) => null;
-
     /// <summary>
     /// Calculates standard damage for a given agent and skill
     /// </summary>
@@ -258,39 +237,23 @@ public abstract class Agent(uint id) {
         Energy += multiplier.Energy;
 #endif
 
-        var tag = data.Tag;
-
-        // Apply ability passive if present. Ability passives are still one-off,
-        // so fold them into local accumulators rather than the stat set.
-        var abilityDmgBonus = new SafeDictionary<Affix, double>();
-        var abilityPassive = ApplyAbilityPassive(ability);
-        if (abilityPassive is { } passive) {
-            abilityDmgBonus[passive.Affix] += passive.Value;
-        }
-
         // Process anomalies
         var buildup = GetAnomalyBuildup(ability);
         ctx.Enemy.AddAnomalyBuildup(ctx, this, buildup);
 
         // Calculate damage according to formula
         var baseDmgAttacker = GetBaseDamage(data.Scales[ability.Scale].Damage);
-        var dmgBonusMultiplier = 1 + Stats[relatedAffixDmg].For(tag) + Stats[Affix.DmgBonus].For(tag)
-                                 + abilityDmgBonus[relatedAffixDmg] + abilityDmgBonus[Affix.DmgBonus]
-                                 + data.Affixes[relatedAffixDmg] + data.Affixes[Affix.DmgBonus];
-        var critMultiplier = 1 + Math.Min(Stats[Affix.CritRate].For(tag) + abilityDmgBonus[Affix.CritRate] + data.Affixes[Affix.CritRate], 1)
-            * (Stats[Affix.CritDamage].For(tag) + abilityDmgBonus[Affix.CritDamage] + data.Affixes[Affix.CritDamage]);
-        var resMultiplier = 1 + Stats[relatedAffixRes].For(tag) + Stats[Affix.ResPen].For(tag)
-                            + abilityDmgBonus[relatedAffixRes] + abilityDmgBonus[Affix.ResPen]
-                            + data.Affixes[relatedAffixRes] + data.Affixes[Affix.ResPen];
+        var dmgBonusMultiplier = 1 + Stats[relatedAffixDmg].For(ability) + Stats[Affix.DmgBonus].For(ability);
+        var critMultiplier = 1 + Math.Min(Stats[Affix.CritRate].For(ability), 1) * Stats[Affix.CritDamage].For(ability);
+        var resMultiplier = 1 + Stats[relatedAffixRes].For(ability) + Stats[Affix.ResPen].For(ability);
 
-        var defPen = Stats[Affix.DefPen].For(tag) + abilityDmgBonus[Affix.DefPen] + data.Affixes[Affix.DefPen];
+        var defPen = Stats[Affix.DefPen].For(ability);
         var enemyDefenseMultiplier = Speciality is Speciality.Rupture
             ? 1
             : ctx.Enemy.GetDefenseMultiplier(defPen, PenRatio, Pen);
 
         var sheerMultiplier = Speciality is Speciality.Rupture
-            ? 1 + Stats[relatedAffixSheer].For(tag) + Stats[Affix.SheerDmgBonus].For(tag)
-                + data.Affixes[relatedAffixSheer] + data.Affixes[Affix.SheerDmgBonus]
+            ? 1 + Stats[relatedAffixSheer].For(ability) + Stats[Affix.SheerDmgBonus].For(ability)
             : 1;
         
         var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * enemyDefenseMultiplier
@@ -304,7 +267,7 @@ public abstract class Agent(uint id) {
             GetDaze(ability)
         );
         
-        ctx.Events.ActionExecuted(ctx, new(this, action));
+        ctx.Events.ActionExecuted(ctx, new(this, ability, action));
         
         return action;
     }
@@ -313,12 +276,7 @@ public abstract class Agent(uint id) {
         var data = Skills[ability.Name];
         
         var dazeScale = data.Scales[ability.Scale].Daze / 100;
-        var dazeIncrease = Stats[Affix.DazeBonus].For(data.Tag);
-        
-        var abilityPassive = ApplyAbilityPassive(ability);
-        if (abilityPassive is { Affix: Affix.DazeBonus } passive) {
-            dazeIncrease += passive.Value;
-        }
+        var dazeIncrease = Stats[Affix.DazeBonus].For(ability);
         
         const double dazeReduction = 0.0;
         const double dazeRes = 0.0;
@@ -346,8 +304,7 @@ public abstract class Agent(uint id) {
         if (baseBuildup == 0) return 0;
 
         var amBonus = AnomalyMastery / 100;
-        var amBuildupBonus = 1 + Stats[Affix.AnomalyBuildupBonus].For(ability.Tag)
-                               + data.Affixes[Affix.AnomalyBuildupBonus];
+        var amBuildupBonus = 1 + Stats[Affix.AnomalyBuildupBonus].For(ability);
 
         const double amBuildupRes = 1d;
 

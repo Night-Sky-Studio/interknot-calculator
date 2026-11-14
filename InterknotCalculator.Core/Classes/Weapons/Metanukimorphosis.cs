@@ -21,7 +21,7 @@ public class Metanukimorphosis : Weapon {
             if (!c.TryActivateGlobal(key)) return;
 
             foreach (var agent in c.Team.Values) {
-                agent.AnomalyProficiency.Add(new(key, 60, ModifierType.CombatFlat));
+                agent.AnomalyProficiency.Add(key, 60, ModifierType.CombatFlat);
             }
         };
     }

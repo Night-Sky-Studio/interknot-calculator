@@ -16,8 +16,8 @@ public class ElegantVanity : Weapon {
 
         ctx.Events.OnCalculationStarted += c => {
             foreach (var agent in c.Team.Values) {
-                agent.DmgBonus.Add(new(ModifierKey.Weapon(Id) + ModifierKey.Passive(), 
-                    0.2, ModifierType.CombatFlat));
+                agent.DmgBonus.Add(ModifierKey.Weapon(Id) + ModifierKey.Passive(), 
+                    0.2, ModifierType.CombatFlat);
             }
         };
     }

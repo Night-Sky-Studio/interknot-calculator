@@ -50,10 +50,7 @@ public class Harumasa : Agent {
             new(325.1, 99, 41.97),
             new(333.8, 69, 29.16),
             new(379.9, 71.2, 31.47)
-        ], new() {
-            [Affix.CritRate] = 0.25, 
-            [Affix.CritDamage] = 0.72
-        });
+        ]);
 
         Skills["braced_bow"] = new(SkillTag.QuickAssist, [
             new(169, 127.2, 53.64)
@@ -86,9 +83,16 @@ public class Harumasa : Agent {
         base.RegisterHooks(ctx);
 
         ctx.Events.OnCalculationStarted += c => {
+            CritRate.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                0.25, ModifierType.CombatFlat,
+                filter: AbilityFilter.Of("hiten_no_tsuru_slash"));
+            CritDamage.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                0.72, ModifierType.CombatFlat,
+                filter: AbilityFilter.Of("hiten_no_tsuru_slash"));
+            
             if (c.HasTeammates(a => a is { Speciality: Speciality.Stun or Speciality.Anomaly }, Id)) {
-                DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                    0.4, ModifierType.CombatFlat));
+                DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                    0.4, ModifierType.CombatFlat);
             }
         };
     }

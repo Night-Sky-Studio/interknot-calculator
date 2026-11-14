@@ -18,10 +18,10 @@ public class TheSkyAblaze : DriveDiscSet {
             var key = ModifierKey.DiscSet(Id, true);
             
             if (agent.Element.Matches(Element.Ether)) {
-                agent.CritDamage.Add(new(key, 0.3, ModifierType.CombatFlat));
+                agent.CritDamage.Add(key, 0.3, ModifierType.CombatFlat);
             }
             
-            agent.Atk.Add(new(key, 0.1, ModifierType.CombatRatio));
+            agent.Atk.Add(key, 0.1, ModifierType.CombatRatio);
         };
     }
 }

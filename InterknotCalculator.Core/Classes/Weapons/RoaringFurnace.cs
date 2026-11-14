@@ -21,7 +21,7 @@ public class RoaringFurnace : Weapon {
             if (!c.TryActivateGlobal(key)) return;
 
             foreach (var agent in c.Team.Values) {
-                agent.DmgBonus.Add(new(key, 0.2, ModifierType.CombatFlat));
+                agent.DmgBonus.Add(key, 0.2, ModifierType.CombatFlat);
             }
         };
     }

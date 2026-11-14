@@ -92,17 +92,17 @@ public sealed class Lycaon : SupportAgent, IAgentReference<Lycaon> {
         base.RegisterHooks(ctx);
         
         ctx.Events.OnCalculationStarted += c => {
-            DazeBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                0.8, ModifierType.CombatFlat));
+            DazeBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                0.8, ModifierType.CombatFlat);
 
             foreach (var agent in c.Team.Values) {
-                agent.GetStat(Affix.IceResPen).Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                    0.25, ModifierType.CombatFlat));
+                agent.GetStat(Affix.IceResPen).Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    0.25, ModifierType.CombatFlat);
             }
 
             if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
-                c.Enemy.StunMultiplier.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
-                    0.35, ModifierType.CombatFlat));
+                c.Enemy.StunMultiplier.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
+                    0.35, ModifierType.CombatFlat);
             }
         };
     }

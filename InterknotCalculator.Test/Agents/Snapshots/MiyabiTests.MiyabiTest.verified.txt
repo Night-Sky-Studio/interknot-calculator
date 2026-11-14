@@ -44,7 +44,7 @@
     Tag: BasicAtk,
     Id: Guid_6,
     Name: shimotsuki 3,
-    Damage: 906581.84,
+    Damage: 515447.87,
     Daze: 487.62
   },
   {
@@ -75,7 +75,7 @@
     Tag: BasicAtk,
     Id: Guid_10,
     Name: shimotsuki 3,
-    Damage: 906581.84,
+    Damage: 515447.87,
     Daze: 487.62
   },
   {

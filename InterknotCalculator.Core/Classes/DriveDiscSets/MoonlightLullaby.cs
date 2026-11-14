@@ -13,14 +13,13 @@ public class MoonlightLullaby : DriveDiscSet {
         base.RegisterHooks(ctx, equipper);
         
         ctx.Events.OnCalculationStarted += c => {
-            var agent = c.Team[equipper];
-            if (agent is not { Speciality: Speciality.Support }) return;
-        
+            if (c.Team[equipper].Speciality is not Speciality.Support) return;
+            
             var key = ModifierKey.DiscSet(Id, true);
             if (!c.TryActivateGlobal(key)) return;
         
-            foreach (var a in c.Team.Values) {
-                a.DmgBonus.Add(new(key, 0.18, ModifierType.CombatFlat));
+            foreach (var agent in c.Team.Values) {
+                agent.DmgBonus.Add(key, 0.18, ModifierType.CombatFlat);
             }
         };
     }

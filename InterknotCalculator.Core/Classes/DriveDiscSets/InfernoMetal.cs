@@ -14,7 +14,7 @@ public class InfernoMetal : DriveDiscSet {
     void Activate(Context c, uint equipper) {
         if (IsActive) return;
         IsActive = true;
-        c.Team[equipper].CritRate.Add(new(ModifierKey.DiscSet(Id, true), 0.28, ModifierType.CombatFlat));
+        c.Team[equipper].CritRate.Add(ModifierKey.DiscSet(Id, true), 0.28, ModifierType.CombatFlat);
     }
     
     public override void RegisterHooks(Context ctx, uint equipper = 0) {

@@ -92,16 +92,16 @@ public class SilverAnby : SupportAgent, IAgentReference<SilverAnby> {
         base.RegisterHooks(ctx);
         
         ctx.Events.OnCalculationStarted += c => {
-            DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25, ModifierType.CombatFlat));
-            CritDamage.Add(new(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), CritDamage * 0.3, 
-                ModifierType.CombatFlat, SkillTag.Aftershock));
+            DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 0.25, ModifierType.CombatFlat);
+            CritDamage.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), CritDamage * 0.3, 
+                ModifierType.CombatFlat, SkillTag.Aftershock);
 
             if (c.HasTeammates(a => a is { Speciality: Speciality.Stun or Speciality.Support }, Id)) {
-                CritRate.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.1, ModifierType.CombatFlat));
+                CritRate.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 0.1, ModifierType.CombatFlat);
                 
                 foreach (var agent in c.Team.Values) {
-                    agent.DmgBonus.Add(new(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
-                        0.25, ModifierType.CombatFlat, SkillTag.Aftershock));
+                    agent.DmgBonus.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(), 
+                        0.25, ModifierType.CombatFlat, SkillTag.Aftershock);
                 }
             }
         };

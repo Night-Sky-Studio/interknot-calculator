@@ -4,7 +4,7 @@
     Tag: Chain,
     Id: Guid_1,
     Name: auric_ink_rush,
-    Damage: 415126.81,
+    Damage: 375584.77,
     Daze: 317.87
   },
   {
@@ -12,7 +12,7 @@
     Tag: ExSpecial,
     Id: Guid_2,
     Name: ink_manifestation_charged,
-    Damage: 380232.46,
+    Damage: 344014.21,
     Daze: 347.91
   },
   {
@@ -20,7 +20,7 @@
     Tag: ExSpecial,
     Id: Guid_3,
     Name: cloud_shaper,
-    Damage: 643282.41,
+    Damage: 582007.9,
     Daze: 670.44
   },
   {
@@ -28,7 +28,7 @@
     Tag: ExSpecial,
     Id: Guid_4,
     Name: ashen_ink_becomes_shadows,
-    Damage: 224303.99,
+    Damage: 202938.39,
     Daze: 198.65
   },
   {
