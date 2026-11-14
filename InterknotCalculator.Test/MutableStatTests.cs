@@ -149,6 +149,28 @@ public class MutableStatTests {
         Assert.That(dmgBonus.For(new Ability(SkillTag.BasicAtk, "shimotsuki", 2)), Is.EqualTo(0.2).Within(1e-9));
     }
 
+    [TestCase(ModifierType.Base)]
+    [TestCase(ModifierType.Ratio)]
+    [TestCase(ModifierType.CombatRatio)]
+    public void FilteredModifierMustBeFlat(ModifierType type) {
+        var atk = new MutableStat(1000);
+
+        Assert.Multiple(() => {
+            Assert.Throws<ArgumentException>(() => atk.Add(new("filtered"), 0.1, type, filter: SkillTag.BasicAtk));
+            Assert.That(atk.Modifiers, Is.Empty);
+            Assert.That(atk.For(SkillTag.BasicAtk), Is.EqualTo(1000).Within(1e-9));
+        });
+    }
+
+    [TestCase(ModifierType.Flat)]
+    [TestCase(ModifierType.CombatFlat)]
+    public void FilteredFlatModifierIsAllowed(ModifierType type) {
+        var atk = new MutableStat(1000);
+
+        Assert.DoesNotThrow(() => atk.Add(new("filtered"), 100, type, filter: SkillTag.BasicAtk));
+        Assert.That(atk.For(SkillTag.BasicAtk), Is.EqualTo(1100).Within(1e-9));
+    }
+
     [Test]
     public void TagQueryIgnoresNamedFilters() {
         var dmgBonus = new MutableStat();
