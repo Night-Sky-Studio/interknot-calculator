@@ -11,7 +11,7 @@ namespace InterknotCalculator.Core.Classes.Agents;
 /// Base Agent class
 /// </summary>
 public abstract class Agent(uint id) {
-    protected record struct Hit(Context Context, Ability Ability, Element Element, double MotionValue);
+    protected readonly record struct Hit(Context Context, Ability Ability, Element Element, double MotionValue);
     
     private const double DamageTakenMultiplier = 1;
 

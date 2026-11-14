@@ -29,6 +29,6 @@ public abstract class RuptureAgent : Agent {
     protected override double GetBaseDamage(in Hit hit) => hit.MotionValue / 100 * (BaseSheerForce + SheerForce);
     protected override double GetEnemyDefenseMultiplier(in Hit hit) => 1;
     protected override double GetSpecialityMultiplier(in Hit hit) => 
-        1 + GetStat(Helpers.GetRelatedSheerDmg(Element)).For(hit.Ability) 
+        1 + GetStat(Helpers.GetRelatedSheerDmg(hit.Element)).For(hit.Ability) 
           + GetStat(Affix.SheerDmgBonus).For(hit.Ability);
 }
