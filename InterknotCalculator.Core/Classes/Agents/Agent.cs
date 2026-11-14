@@ -11,6 +11,8 @@ namespace InterknotCalculator.Core.Classes.Agents;
 /// Base Agent class
 /// </summary>
 public abstract class Agent(uint id) {
+    protected readonly record struct Hit(Context Context, Ability Ability, Element Element, double MotionValue);
+    
     private const double DamageTakenMultiplier = 1;
 
     #region Information
@@ -208,7 +210,23 @@ public abstract class Agent(uint id) {
 
     public virtual void RegisterHooks(Context ctx) { }
     
-    protected virtual double GetBaseDamage(double scale) => scale / 100 * Atk;
+    protected virtual double GetBaseDamage(in Hit hit) => hit.MotionValue / 100 * Atk;
+    
+    protected virtual double GetDmgBonusMultiplier(in Hit hit) => 
+        1 + Stats[Helpers.GetRelatedAffixDmg(hit.Element)].For(hit.Ability) 
+          + Stats[Affix.DmgBonus].For(hit.Ability);
+    
+    protected virtual double GetCritMultiplier(in Hit hit) =>
+        1 + Math.Min(Stats[Affix.CritRate].For(hit.Ability), 1) * Stats[Affix.CritDamage].For(hit.Ability);
+
+    protected virtual double GetResMultiplier(in Hit hit) => 
+        1 + Stats[Helpers.GetRelatedAffixRes(hit.Element)].For(hit.Ability) 
+          + Stats[Affix.ResPen].For(hit.Ability);
+
+    protected virtual double GetEnemyDefenseMultiplier(in Hit hit) =>
+        hit.Context.Enemy.GetDefenseMultiplier(Stats[Affix.DefPen].For(hit.Ability), PenRatio, Pen);
+
+    protected virtual double GetSpecialityMultiplier(in Hit hit) => 1;
     
     /// <summary>
     /// Calculates standard damage for a given agent and skill
@@ -217,12 +235,12 @@ public abstract class Agent(uint id) {
     /// <param name="ability">Current skill</param>
     /// <returns><see cref="AgentAction"/> with calculated damage</returns>
     public virtual AgentAction GetActionDamage(Context ctx, Ability ability) {
-        var data = Skills[ability.Name];
-        var attribute = data.Scales[ability.Scale].Element ?? Element;
-        var relatedAffixDmg   = Helpers.GetRelatedAffixDmg(attribute);
-        var relatedAffixSheer = Helpers.GetRelatedSheerDmg(attribute);
-        var relatedAffixRes   = Helpers.GetRelatedAffixRes(attribute);
+        var skill = Skills[ability.Name];
+        var element = skill.Scales[ability.Scale].Element ?? Element;
+        var motionValue = skill.Scales[ability.Scale].Damage;
 
+        var hit = new Hit(ctx, ability, element, motionValue);
+        
         ctx.Events.ActionExecuting(ctx, new (this, ability));
         
 #if ENERGY_REQUIREMENT_CHECK
@@ -242,27 +260,20 @@ public abstract class Agent(uint id) {
         ctx.Enemy.AddAnomalyBuildup(ctx, this, buildup);
 
         // Calculate damage according to formula
-        var baseDmgAttacker = GetBaseDamage(data.Scales[ability.Scale].Damage);
-        var dmgBonusMultiplier = 1 + Stats[relatedAffixDmg].For(ability) + Stats[Affix.DmgBonus].For(ability);
-        var critMultiplier = 1 + Math.Min(Stats[Affix.CritRate].For(ability), 1) * Stats[Affix.CritDamage].For(ability);
-        var resMultiplier = 1 + Stats[relatedAffixRes].For(ability) + Stats[Affix.ResPen].For(ability);
-
-        var defPen = Stats[Affix.DefPen].For(ability);
-        var enemyDefenseMultiplier = Speciality is Speciality.Rupture
-            ? 1
-            : ctx.Enemy.GetDefenseMultiplier(defPen, PenRatio, Pen);
-
-        var sheerMultiplier = Speciality is Speciality.Rupture
-            ? 1 + Stats[relatedAffixSheer].For(ability) + Stats[Affix.SheerDmgBonus].For(ability)
-            : 1;
+        var baseDmgAttacker = GetBaseDamage(hit);
+        var dmgBonusMultiplier = GetDmgBonusMultiplier(hit);
+        var critMultiplier = GetCritMultiplier(hit);
+        var resMultiplier = GetResMultiplier(hit);
+        var enemyDefenseMultiplier = GetEnemyDefenseMultiplier(hit);
+        var specialityMultiplier = GetSpecialityMultiplier(hit);
         
         var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * enemyDefenseMultiplier
-                    * resMultiplier * sheerMultiplier * DamageTakenMultiplier * ctx.Enemy.StunMultiplier;
+                    * resMultiplier * specialityMultiplier * DamageTakenMultiplier * ctx.Enemy.StunMultiplier;
 
         var action = new AgentAction(
             Id,
-            $"{ability.Name} {(ability.Scale == 0 && data.Scales.Count == 1 ? "" : ability.Scale + 1)}".Trim(),
-            data.Tag,
+            $"{ability.Name} {(ability.Scale == 0 && skill.Scales.Count == 1 ? "" : ability.Scale + 1)}".Trim(),
+            skill.Tag,
             total,
             GetDaze(ability)
         );
