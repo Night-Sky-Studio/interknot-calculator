@@ -30,6 +30,16 @@ public enum Affix {
     ElectricSheerDmgBonus, 
     EtherSheerDmgBonus,
 
+    SharpDmgBonus,
+    IceSharpDmgBonus,
+    FireSharpDmgBonus,
+    PhysicalSharpDmgBonus,
+    ElectricSharpDmgBonus,
+    EtherSharpDmgBonus,
+    
+    LacerationDmg,
+    GashBuildupBonus,
+
     AnomalyBuildupBonus, AnomalyBuildupRes,
 
     // "DEF ignore" - fraction of the target's base DEF the attacker ignores

@@ -7,7 +7,8 @@ public readonly record struct Scale(
     double Daze,
     double AnomalyBuildup = 0.0,
     double Energy = 0.0,
-    Element? Element = null
+    Element? Element = null,
+    double GashBuildup = 0.0
 );
 
 public readonly record struct Skill(SkillTag Tag, List<Scale> Scales);

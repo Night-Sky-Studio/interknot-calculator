@@ -18,5 +18,9 @@ public enum Faction {
     SpookShack = 1 << 12,
     KrampusComplianceAuthority = 1 << 13,
     AngelsOfDelusion = 1 << 14,
+    ExternalStrategyDepartment = 1 << 15,
+    AirspacePatrolDepartment = 1 << 16,
+    FlintWorkshop = 1 << 17,
+    Roscaelifer = ExternalStrategyDepartment | AirspacePatrolDepartment | FlintWorkshop,
     NewEriduDefenseForce = SilverSquad | ObolSquad | LyreSquad
 }

@@ -40,7 +40,36 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     private bool WaitingForShatter { get; set; }
     
     public Anomaly? AfflictedAnomaly { get; set; }
-    
+
+    #region Gash
+    private const double GashPerStack = 600;
+    private const int MaxGashStacks = 3;
+
+    /// <summary>
+    /// Armorer Gash gauge: one bar of <see cref="MaxGashStacks"/> segments
+    /// per <see cref="GashPerStack"/> points
+    /// </summary>
+    /// <remarks>Overflow carries to the next segment</remarks>
+    public double GashBuildup {
+        get;
+        private set => field = Math.Clamp(value, 0, GashPerStack * MaxGashStacks);
+    }
+    public int GashStacks => (int)(GashBuildup / GashPerStack);
+
+    public void AddGashBuildup(Context ctx, Agent agent, double value) => GashBuildup += value;
+
+    /// <summary>Adds one full Gash stack directly, without buildup</summary>
+    public void AddGashStack() => GashBuildup += GashPerStack;
+
+    /// <summary>Consumes one Gash stack to trigger Maim</summary>
+    /// <returns><c>false</c> if the enemy has no Gash stack</returns>
+    public bool TryConsumeGash() {
+        if (GashStacks == 0) return false;
+        GashBuildup -= GashPerStack;
+        return true;
+    }
+    #endregion
+
     private void TryTriggerAnomaly(Context ctx, Agent agent, Element element) {
         var buildup = GetBuildup(element);
         

@@ -19,7 +19,11 @@ public class StatsCollectionTest {
     }
 
     private Agent WithContext(Agent agent) {
-        var context = new Context();
+        var context = new Context {
+            Team = {
+                [agent.Id] = agent
+            }
+        };
         agent.RegisterHooks(context);
         agent.Weapon?.RegisterHooks(context, agent.Id);
         foreach (var set in agent.FullSets) {
@@ -335,4 +339,96 @@ public class StatsCollectionTest {
         CheckStats(reference, WithContext(Yixuan()).CollectStats());
     }
 
+    private Agent Claret() {
+        var claret = new Claret();
+        claret.SetWeapon(WeaponId.CrimsonThirst);
+        claret.SetDriveDiscs([
+            new(DriveDiscSetId.WoodpeckerElectro, 1, Rarity.S,
+                Stat.MainStat.Get(Rarity.S, Affix.Hp, 15),
+                [
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate, 4),
+                    Stat.SubStat.Get(Rarity.S, Affix.DefRatio, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.AtkRatio)
+                ]),
+            new(DriveDiscSetId.ThornedRose, 2, Rarity.S,
+                Stat.MainStat.Get(Rarity.S, Affix.Atk, 15),
+                [
+                    Stat.SubStat.Get(Rarity.S, Affix.DefRatio, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.AnomalyProficiency, 2)
+                ]),
+            new(DriveDiscSetId.ThornedRose, 3, Rarity.S,
+                Stat.MainStat.Get(Rarity.S, Affix.Def, 15),
+                [
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.AtkRatio),
+                    Stat.SubStat.Get(Rarity.S, Affix.DefRatio, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate, 2)
+                ]),
+            new(DriveDiscSetId.ThornedRose, 4, Rarity.S,
+                Stat.MainStat.Get(Rarity.S, Affix.CritDamage, 15),
+                [
+                    Stat.SubStat.Get(Rarity.S, Affix.Atk),
+                    Stat.SubStat.Get(Rarity.S, Affix.AnomalyProficiency, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.HpRatio),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate, 4)
+                ]),
+            new(DriveDiscSetId.ThornedRose, 5, Rarity.S,
+                Stat.MainStat.Get(Rarity.S, Affix.PenRatio, 15),
+                [
+                    Stat.SubStat.Get(Rarity.S, Affix.Atk),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate, 4),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.Hp)
+                ]),
+            new(DriveDiscSetId.WoodpeckerElectro, 6, Rarity.S,
+                Stat.MainStat.Get(Rarity.S, Affix.DefRatio, 15),
+                [
+                    Stat.SubStat.Get(Rarity.S, Affix.CritDamage, 3),
+                    Stat.SubStat.Get(Rarity.S, Affix.CritRate, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.Atk, 2),
+                    Stat.SubStat.Get(Rarity.S, Affix.Hp, 2)
+                ])
+        ]);
+        
+        return claret;
+    }
+
+    [Test]
+    public void ClaretBaseStatsTest() {
+        var reference = new Dictionary<Affix, double> {
+            [Affix.Hp] = 8_357,
+            [Affix.Def] = 2_283,
+            [Affix.Impact] = 93,
+            [Affix.CritRate] = 1.411,
+            [Affix.CritDamage] = 1.604,
+            [Affix.LacerationDmg] = 1.5,
+            [Affix.AnomalyProficiency] = 115,
+            [Affix.AnomalyMastery] = 80,
+            [Affix.PenRatio] = 0.24
+        };
+
+        var claret = Claret();
+        CheckStats(reference, claret.CollectStats(true));
+    }
+
+    [Test]
+    public void ClaretCombatStatsTest() {
+        var reference = new Dictionary<Affix, double> {
+            [Affix.Hp] = 8357.56,
+            [Affix.Atk] = 1055.56,
+            [Affix.Def] = 2283.78,
+            [Affix.PenRatio] = 0.24,
+            [Affix.CritRate] = 1.8214,
+            [Affix.CritDamage] = 1.604,
+            [Affix.Impact] = 93,
+            [Affix.AnomalyMastery] = 80,
+            [Affix.AnomalyProficiency] = 115,
+            [Affix.LacerationDmg] = 1.5
+        };
+        
+        CheckStats(reference, WithContext(Claret()).CollectStats());
+    }
 }
