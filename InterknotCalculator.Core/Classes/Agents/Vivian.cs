@@ -55,9 +55,9 @@ public sealed class Vivian : SupportAgent, IAgentReference<Vivian> {
         });
 
         Skills["feathered_strike"] = new(SkillTag.BasicAtk, [
-            new (68.20, 64.40, element: Element.Physical, energy: 1.39),
-            new (48.40, 42.40, element: Element.Physical, energy: 0.92),
-            new (153.90, 123.60, element: Element.Physical, energy: 2.67),
+            new (68.20, 64.40, Element: Element.Physical, Energy: 1.39),
+            new (48.40, 42.40, Element: Element.Physical, Energy: 0.92),
+            new (153.90, 123.60, Element: Element.Physical, Energy: 2.67),
             new (257.10, 191.00, 86.61, 4.16),
         ]);
         Skills["noblewoman_waltz"] = new(SkillTag.BasicAtk, [
@@ -71,7 +71,7 @@ public sealed class Vivian : SupportAgent, IAgentReference<Vivian> {
         ]);
 
         Skills["silver_thorned_melody"] = new(SkillTag.Dash, [
-            new (100.20, 38.00, element: Element.Physical, energy: 0.81),
+            new (100.20, 38.00, Element: Element.Physical, Energy: 0.81),
         ]);
         Skills["wingblade_reverb"] = new(SkillTag.Counter, [
             new (472.90, 311.80, 70.69, 3.18),

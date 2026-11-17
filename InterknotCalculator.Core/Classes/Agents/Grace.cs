@@ -23,15 +23,15 @@ public sealed class Grace : Agent {
         });
         
         Skills["high-pressure_spike"] = new(SkillTag.BasicAtk, [
-            new(111.2, 27.9, element: Element.Physical, energy: 0.615),
-            new(120.2, 52.3, element: Element.Physical, energy: 1.189),
+            new(111.2, 27.9, Element: Element.Physical, Energy: 0.615),
+            new(120.2, 52.3, Element: Element.Physical, Energy: 1.189),
             new(250.2, 107.9, 64.6, 2.454),
-            new(373.3, 161.1, element: Element.Physical, energy: 4.081),
-            new(81, 61.2, element: Element.Physical, energy: 1.38)
+            new(373.3, 161.1, Element: Element.Physical, Energy: 4.081),
+            new(81, 61.2, Element: Element.Physical, Energy: 1.38)
         ]);
 
         Skills["quick_inspection"] = new(SkillTag.Dash, [
-            new(67.4, 25.5, element: Element.Physical, energy: 0.571)
+            new(67.4, 25.5, Element: Element.Physical, Energy: 0.571)
         ]);
         Skills["violation_penalty"] = new(SkillTag.Counter, [
             new(329.2, 226.4, 43.33, 1.56)

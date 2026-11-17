@@ -41,7 +41,7 @@ public class Burnice : SupportAgent, IAgentReference<Burnice> {
 
         Skills["direct_flame_blend"] = new(SkillTag.BasicAtk, [
             new(89.9, 28.6, 16.94, 0.61),
-            new(87.5, 46.2, element: Element.Physical, energy: 1.007),
+            new(87.5, 46.2, Element: Element.Physical, Energy: 1.007),
             new(144.3, 72, 43.37, 1.562),
             new(133.7, 45.8, 27.54, 0.992),
             new(193.1, 78.4, 47.19, 1.699)

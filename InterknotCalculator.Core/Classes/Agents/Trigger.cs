@@ -38,9 +38,9 @@ public class Trigger : SupportAgent, IAgentReference<Trigger> {
         });
         
         Skills["cold_bore_shot"] = new(SkillTag.BasicAtk, [
-            new (69.70, 26.10, element: Element.Physical, energy: 0.99),
-            new (114.10, 42.80, element: Element.Physical, energy: 2.00),
-            new (222.00, 91.60, element: Element.Physical, energy: 3.28),
+            new (69.70, 26.10, Element: Element.Physical, Energy: 0.99),
+            new (114.10, 42.80, Element: Element.Physical, Energy: 2.00),
+            new (222.00, 91.60, Element: Element.Physical, Energy: 3.28),
             new (486.10, 266.00, 174.41, 6.98),
         ]);
         Skills["silenced_shot"] = new(SkillTag.BasicAtk, [
@@ -57,7 +57,7 @@ public class Trigger : SupportAgent, IAgentReference<Trigger> {
         ]);
 
         Skills["vengeful_specter"] = new(SkillTag.Dash, [
-            new (103.10, 38.90, element: Element.Physical, energy: 0.84),
+            new (103.10, 38.90, Element: Element.Physical, Energy: 0.84),
         ]);
         Skills["condemned_soul"] = new(SkillTag.Counter, [
             new (439.70, 292.30, 76.66, 2.76),

@@ -23,9 +23,9 @@ public class Ellen : Agent {
         });
 
         Skills["saw_teeth_trimming"] = new(SkillTag.BasicAtk, [
-            new(98.3, 37.6, element: Element.Physical),
-            new(222.2, 130.8, element: Element.Physical),
-            new(478.6, 306.8, element: Element.Physical),
+            new(98.3, 37.6, Element: Element.Physical),
+            new(222.2, 130.8, Element: Element.Physical),
+            new(478.6, 306.8, Element: Element.Physical),
         ]);
         Skills["flash_freeze_trimming"] = new(SkillTag.BasicAtk, [
             new(199.7, 74.1, 44.35),
@@ -50,7 +50,7 @@ public class Ellen : Agent {
             new(316.6, 183.3, 110.56)
         ]);
         Skills["monstrous_wave"] = new(SkillTag.Dash, [
-            new(154, 58.3, element: Element.Physical)
+            new(154, 58.3, Element: Element.Physical)
         ]);
         Skills["cold_snap"] = new(SkillTag.Dash, [
             new(292, 118.4, 71.63)
@@ -148,9 +148,9 @@ public class EllenM5: EllenM4 { }
 public class EllenM6 : EllenM5 {
     public EllenM6() {
         Skills["saw_teeth_trimming"] = new(SkillTag.BasicAtk, [
-            new(116.3, 42.4, element: Element.Physical, energy: 0.679),
-            new(262.6, 146.8, element: Element.Physical, energy: 2.415),
-            new(703.8, 405.4, element: Element.Physical, energy: 6.688),
+            new(116.3, 42.4, Element: Element.Physical, Energy: 0.679),
+            new(262.6, 146.8, Element: Element.Physical, Energy: 2.415),
+            new(703.8, 405.4, Element: Element.Physical, Energy: 6.688),
         ]);
         Skills["flash_freeze_trimming"] = new(SkillTag.BasicAtk, [
             new(236.1, 83.3, 44.35, 1.358),
@@ -171,7 +171,7 @@ public class EllenM6 : EllenM5 {
             new(301.6, 165.7, 89.19, 3.211),
             new(374.2, 205.7, 110.56, 3.981),
         ]);
-        Skills["monstrous_wave"] = new(SkillTag.Dash, [new(182, 65.5, element: Element.Physical, energy: 1.26)]);
+        Skills["monstrous_wave"] = new(SkillTag.Dash, [new(182, 65.5, Element: Element.Physical, Energy: 1.26)]);
         Skills["cold_snap"] = new(SkillTag.Dash, [new(345.2, 132.8, 71.63, 2.579)]);
         Skills["reef_rock"] = new(SkillTag.Counter, [new(361.1, 383.4, 106.7, 3.842)]);
         Skills["shark_sentinel"] = new(SkillTag.QuickAssist, [new(287.6, 205.1, 110.03, 3.962)]);

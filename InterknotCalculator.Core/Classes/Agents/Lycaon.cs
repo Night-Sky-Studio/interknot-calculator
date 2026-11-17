@@ -37,21 +37,21 @@ public sealed class Lycaon : SupportAgent, IAgentReference<Lycaon> {
         });
         
         Skills["moon_hunter"] = new(SkillTag.BasicAtk, [
-            new (58.90, 22.30, element: Element.Physical, energy: 0.50),
+            new (58.90, 22.30, Element: Element.Physical, Energy: 0.50),
             new (74.50, 18.70, 11.48, 0.41),
-            new (70.10, 45.70, element: Element.Physical, energy: 1.04),
+            new (70.10, 45.70, Element: Element.Physical, Energy: 1.04),
             new (113.60, 49.40, 31.28, 1.13),
-            new (117.80, 68.70, element: Element.Physical, energy: 1.56),
+            new (117.80, 68.70, Element: Element.Physical, Energy: 1.56),
             new (199.60, 81.20, 51.13, 1.84),
-            new (304.90, 168.10, element: Element.Physical, energy: 3.84),
+            new (304.90, 168.10, Element: Element.Physical, Energy: 3.84),
             new (422.10, 161.00, 101.98, 3.67),
-            new (362.20, 222.50, element: Element.Physical, energy: 5.06),
+            new (362.20, 222.50, Element: Element.Physical, Energy: 5.06),
             new (555.90, 245.60, 155.24, 5.59),
             new (712.10, 309.00, 195.75, 7.05),
         ]);
 
         Skills["keep_it_clean"] = new(SkillTag.Dash, [
-            new (94.60, 35.80, element: Element.Physical, energy: 0.81),
+            new (94.60, 35.80, Element: Element.Physical, Energy: 0.81),
         ]);
         Skills["etiquette_manual"] = new(SkillTag.Counter, [
             new (374.00, 252.80, 60.03, 2.16),

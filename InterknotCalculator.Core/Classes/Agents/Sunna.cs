@@ -53,7 +53,7 @@ public class Sunna : SupportAgent, IAgentReference<Sunna>, IEtherVeilAgent<Delus
             new(362.7, 186.3, 56.74, 2.043),
             new(811.2, 378.2, 116.43, 4.192),
         ]);
-        Skills["naughty_cat_spotted"] = new(SkillTag.BasicAtk, [new(417, 0, element: Element.Physical)]);
+        Skills["naughty_cat_spotted"] = new(SkillTag.BasicAtk, [new(417, 0, Element: Element.Physical)]);
         Skills["skyward_hammer"] = new(SkillTag.Dash, [new(199.8, 75.2, 19.16, 1.381)]);
         Skills["delusion_strikeout"] = new(SkillTag.Counter, [new(637.8, 413.9, 55.84, 4.022)]);
         Skills["sonic_beatdown"] = new(SkillTag.QuickAssist, [new(146.4, 110.1, 27.92, 2.011)]);

@@ -36,12 +36,12 @@ public class YeShunguang : Agent, ICustomAnomaly, IEtherVeilAgent<Verdict> {
         Anomalies[Element.HonedEdge] = Anomaly.GetDefaultAnomalyByElement(Element.Physical);
         
         Skills["swiftedge"] = new(SkillTag.BasicAtk, [
-            new(159.7, 40.8, element: Element.Physical, energy: 1.734),
-            new(488.3, 117.1, element: Element.Physical, energy: 5.07),
-            new(250, 54.1, element: Element.Physical, energy: 2.315),
-            new(736.5, 161.2, element: Element.Physical, energy: 7.019),
+            new(159.7, 40.8, Element: Element.Physical, Energy: 1.734),
+            new(488.3, 117.1, Element: Element.Physical, Energy: 5.07),
+            new(250, 54.1, Element: Element.Physical, Energy: 2.315),
+            new(736.5, 161.2, Element: Element.Physical, Energy: 7.019),
         ]);
-        Skills["cloudstream_sword_will"] = new(SkillTag.BasicAtk, [new(234.4, 55.4, element: Element.Physical)]);
+        Skills["cloudstream_sword_will"] = new(SkillTag.BasicAtk, [new(234.4, 55.4, Element: Element.Physical)]);
         Skills["enlightened_mind_splitting_currents"] = new(SkillTag.BasicAtk, [
             new(225.9, 54.5, 65),
             new(312.1, 74.8, 90),
@@ -57,10 +57,10 @@ public class YeShunguang : Agent, ICustomAnomaly, IEtherVeilAgent<Verdict> {
             new(320.5, 68.1, 81.69),
             new(1783.3, 87.5, 105.03),
         ]);
-        Skills["phantasm_dash"] = new(SkillTag.Dash, [new(210.6, 31.7, element: Element.Physical, energy: 1.35)]);
-        Skills["swallow_strike"] = new(SkillTag.Counter, [new(692.8, 176.8, element: Element.Physical, energy: 4.08)]);
+        Skills["phantasm_dash"] = new(SkillTag.Dash, [new(210.6, 31.7, Element: Element.Physical, Energy: 1.35)]);
+        Skills["swallow_strike"] = new(SkillTag.Counter, [new(692.8, 176.8, Element: Element.Physical, Energy: 4.08)]);
         Skills["illuminating_darkness"] = new(SkillTag.Entry, [new(800.8, 181.5, 220)]);
-        Skills["support_guard"] = new(SkillTag.QuickAssist, [new(161.9, 48.2, element: Element.Physical, energy: 2.07)]);
+        Skills["support_guard"] = new(SkillTag.QuickAssist, [new(161.9, 48.2, Element: Element.Physical, Energy: 2.07)]);
         Skills["enlightened_mind_tactical_support"] = new(SkillTag.QuickAssist, [new(135.5, 50.7, 60)]);
         Skills["when_i_return"] = new(SkillTag.DefensiveAssist, [
             new(0, 293.2),
@@ -68,20 +68,20 @@ public class YeShunguang : Agent, ICustomAnomaly, IEtherVeilAgent<Verdict> {
             new(0, 179.7),
         ]);
         Skills["enlightened_mind_unification_illuminating_darkness"] = new(SkillTag.FollowUpAssist, [new(800.8, 181.5, 220)]);
-        Skills["cease_hostility"] = new(SkillTag.FollowUpAssist, [new(828.4, 210.4, element: Element.Physical)]);
+        Skills["cease_hostility"] = new(SkillTag.FollowUpAssist, [new(828.4, 210.4, Element: Element.Physical)]);
         Skills["enlightened_mind_unification"] = new(SkillTag.FollowUpAssist, [new(860.1, 219.7, 286.22)]);
         Skills["guiding_tides"] = new(SkillTag.Special, [
-            new(197.9, 37.5, element: Element.Physical),
-            new(632.7, 199.2, element: Element.Physical),
+            new(197.9, 37.5, Element: Element.Physical),
+            new(632.7, 199.2, Element: Element.Physical),
         ]);
         Skills["enlightened_mind_clean_exit"] = new(SkillTag.Special, [new(142.5, 26.3, 31.66)]);
-        Skills["gale_suppression"] = new(SkillTag.ExSpecial, [new(2357.6, 510.6, element: Element.Physical, energy: -60)]);
+        Skills["gale_suppression"] = new(SkillTag.ExSpecial, [new(2357.6, 510.6, Element: Element.Physical, Energy: -60)]);
         Skills["enlightened_mind_soaring_light"] = new(SkillTag.ExSpecial, [
             new(352.7, 27.2, 32.78),
             new(2116.2, 163.2, 196.66),
         ]);
         Skills["enlightened_mind_return_to_dust"] = new(SkillTag.ExSpecial, [new(2322.7, 209.8, 253.33)]);
-        Skills["smite_the_wicked"] = new(SkillTag.Chain, [new(1743.9, 272.8, element: Element.Physical)]);
+        Skills["smite_the_wicked"] = new(SkillTag.Chain, [new(1743.9, 272.8, Element: Element.Physical)]);
         Skills["enlightened_mind_lure_thunder"] = new(SkillTag.Chain, [new(1817.2, 206.8, 449.5)]);
         Skills["chasing_storms"] = new(SkillTag.Ultimate, [new(3850, 82.5, 100)]);
         Skills["cleaving_heavens"] = new(SkillTag.Ultimate, [new(6168.7, 227.2, 275)]);
