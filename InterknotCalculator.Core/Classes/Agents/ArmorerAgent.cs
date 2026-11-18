@@ -15,9 +15,11 @@ public abstract class ArmorerAgent : Agent {
     protected ArmorerAgent(uint id) : base(id) {
         Speciality = Speciality.Armorer;
     }
+    
+    protected abstract Skill Maim { get; }
 
     public Affix RelatedSharpDmgElement => Helpers.GetRelatedSharpDmg(Element);
-
+    
     public MutableStat LacerationDmg => GetStat(Affix.LacerationDmg);
     public MutableStat SharpDmgBonus => GetStat(Affix.SharpDmgBonus);
     public MutableStat ElementalSharpDmgBonus => GetStat(RelatedSharpDmgElement);
@@ -39,7 +41,7 @@ public abstract class ArmorerAgent : Agent {
         }
     }
 
-    protected override double GetBaseDamage(in Hit hit) => hit.MotionValue / 100 * Def;
+    protected override double GetBaseDamage(in Hit hit) => hit.MotionValue.Damage / 100 * Def;
 
     protected override double GetCritMultiplier(in Hit hit) =>
         GetLacerationMultiplier(CritRate.For(hit.Ability), LacerationDmg.For(hit.Ability));
@@ -64,7 +66,7 @@ public abstract class ArmorerAgent : Agent {
           + SharpDmgBonus.For(hit.Ability);
 
     public double GetGashBuildup(Ability ability) {
-        var baseBuildup = Skills[ability.Name].Scales[ability.Scale].GashBuildup;
+        var baseBuildup = GetSkill(ability).Scales[ability.Scale].GashBuildup;
         if (baseBuildup == 0) return 0;
 
         return baseBuildup * (1 + GashBuildupBonus.For(ability));
@@ -77,12 +79,15 @@ public abstract class ArmorerAgent : Agent {
         return action;
     }
 
+    protected override Skill GetSkill(in Ability ability) => 
+        ability.Name == "maim" ? Maim : base.GetSkill(ability);
+
     /// <summary>
     /// Deals the damage of the agent's "maim" skill and raises <see cref="Events.EventBus.OnMaim"/>.
     /// The caller consumes the Gash stack.
     /// </summary>
     protected AgentAction TriggerMaim(Context ctx) {
-        var action = GetActionDamage(ctx, new(Skills["maim"].Tag, "maim"));
+        var action = GetActionDamage(ctx, new(Maim.Tag, "maim"));
         ctx.Events.Maim(ctx, new(this));
         return action;
     }

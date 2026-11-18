@@ -111,7 +111,7 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
             
             c.ActionsQueue.Add(new(Id, "sugarburst_sparkles_x4", SkillTag.BasicAtk, 0, 0));
             
-            var buildup = GetAnomalyBuildup(new(SkillTag.BasicAtk, "sugarburst_sparkles"));
+            var buildup = GetAnomalyBuildup(c, new(SkillTag.BasicAtk, "sugarburst_sparkles"));
             c.Enemy.AddBuildupContribution(c, this, buildup, e.Agent.Element); // Flavor Match
         };
     }

@@ -42,6 +42,9 @@ public class Claret : ArmorerAgent {
     private const SkillTag CrimsonInscriptionTags =
         SkillTag.Chain | SkillTag.Ultimate | SkillTag.CounterAssist | SkillTag.FollowUpAssist;
 
+    // Maim DMG, triggered by consuming 1 Gash stack
+    protected override Skill Maim { get; } = new(SkillTag.Special, [new(1625.6, 0)]);
+
     public Claret() : base(AgentId.Claret) {
         Element = Element.Electric;
         Rarity = Rarity.S;
@@ -105,10 +108,6 @@ public class Claret : ArmorerAgent {
         ]);
         Skills["bloodbloom_oath_resonant_blood_pact"] = new(SkillTag.Chain, [new(2116.2, 415.5, 251.67, GashBuildup: 302)]);
         Skills["bloodbloom_oath_trial_after_trial"] = new(SkillTag.Ultimate, [new(4504.8, 530.9, 821.64, GashBuildup: 400.97)]);
-
-        // Maim DMG, triggered by consuming 1 Gash stack
-        // TODO: verify on Sunbringer if it should remain in Skills
-        Skills["maim"] = new(SkillTag.Special, [new(1625.6, 0)]);
     }
 
     /// <summary>
