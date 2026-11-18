@@ -23,9 +23,9 @@ public class Evelyn : Agent {
         });
 
         Skills["razor_wire"] = new(SkillTag.BasicAtk, [
-            new(102.9, 38.8, element: Element.Physical),
-            new(124.8, 81.3, element: Element.Physical),
-            new(157.4, 94, element: Element.Physical),
+            new(102.9, 38.8, Element: Element.Physical),
+            new(124.8, 81.3, Element: Element.Physical),
+            new(157.4, 94, Element: Element.Physical),
             new(373.7, 230, 139.03),
             new(447.8, 253, 152.91),
         ]);
@@ -35,7 +35,7 @@ public class Evelyn : Agent {
         ]);
 
         Skills["piercing_ambush"] = new(SkillTag.Dash, [
-            new(121, 45.7, element: Element.Physical)
+            new(121, 45.7, Element: Element.Physical)
         ]);
         Skills["strangling_reversal"] = new(SkillTag.Counter, [
             new(421.4, 281.7, 70.03)

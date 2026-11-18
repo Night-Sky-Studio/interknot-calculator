@@ -10,7 +10,8 @@ public sealed class EventBus {
     public delegate void AnomalyTriggeredEvent(Context ctx, AnomalyTriggeredEventArgs evt);
     public delegate void EtherVeilActivatedEvent(Context ctx, EtherVeilEventArgs evt);
     public delegate void EtherVeilDeactivatedEvent(Context ctx, EtherVeilEventArgs evt);
-    
+    public delegate void MaimEvent(Context ctx, MaimEventArgs evt);
+
     public event CalculationStartedEvent? OnCalculationStarted;
     public event ActionExecutingEvent? OnActionExecuting;
     public event ActionExecutedEvent? OnActionExecuted;
@@ -20,6 +21,7 @@ public sealed class EventBus {
     public event AnomalyTriggeredEvent? OnAnomalyTriggered;
     public event EtherVeilActivatedEvent? OnEtherVeilActivated;
     public event EtherVeilDeactivatedEvent? OnEtherVeilDeactivated;
+    public event MaimEvent? OnMaim;
 
     public void CalculationStarted(Context ctx) {
         OnCalculationStarted?.Invoke(ctx);
@@ -47,5 +49,8 @@ public sealed class EventBus {
     }
     public void EtherVeilDeactivated(Context ctx, EtherVeilEventArgs evt) {
         OnEtherVeilDeactivated?.Invoke(ctx, evt);
+    }
+    public void Maim(Context ctx, MaimEventArgs evt) {
+        OnMaim?.Invoke(ctx, evt);
     }
 }

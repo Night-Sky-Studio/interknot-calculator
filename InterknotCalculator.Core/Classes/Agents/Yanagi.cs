@@ -38,22 +38,22 @@ public sealed class Yanagi : Agent, IPolarityDisorderAgent {
         });
         
         Skills["tsukuyomi_kagura_jougen"] = new(SkillTag.BasicAtk, [
-            new(113.8, 42.1, element: Element.Physical, energy: 1.009),
-            new(199.8, 102.2, element: Element.Physical, energy: 2.474),
+            new(113.8, 42.1, Element: Element.Physical, Energy: 1.009),
+            new(199.8, 102.2, Element: Element.Physical, Energy: 2.474),
             new(226.4, 104.6, 79.91, 2.522),
             new(254.2, 117.2, 89.42, 2.822),
             new(474.5, 217.8, 167.35, 5.28),
         ]);
         Skills["tsukuyomi_kagura_kagen"] = new(SkillTag.BasicAtk, [
-            new(226.4, 84.1, element: Element.Physical, energy: 2.017),
-            new(259.0, 140.4, element: Element.Physical, energy: 3.385),
+            new(226.4, 84.1, Element: Element.Physical, Energy: 2.017),
+            new(259.0, 140.4, Element: Element.Physical, Energy: 3.385),
             new(146.5, 67.7, 51.38, 1.622),
             new(215.5, 100.2, 75.07, 2.401),
             new(544.6, 250.3, 192.04, 6.059),
         ]);
 
         Skills["fleeting_flight"] = new(SkillTag.Dash, [
-            new(101, 68.5, element: Element.Physical, energy: 1.65)
+            new(101, 68.5, Element: Element.Physical, Energy: 1.65)
         ]);
         Skills["rapid_retaliation"] = new(SkillTag.Counter, [
             new(463.7, 275.6, 76.52, 3.062)

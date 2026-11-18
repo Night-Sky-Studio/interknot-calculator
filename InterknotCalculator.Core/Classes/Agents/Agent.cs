@@ -11,7 +11,7 @@ namespace InterknotCalculator.Core.Classes.Agents;
 /// Base Agent class
 /// </summary>
 public abstract class Agent(uint id) {
-    protected readonly record struct Hit(Context Context, Ability Ability, Element Element, double MotionValue);
+    protected readonly record struct Hit(Context Context, Ability Ability, Element Element, Scale MotionValue);
     
     private const double DamageTakenMultiplier = 1;
 
@@ -210,7 +210,7 @@ public abstract class Agent(uint id) {
 
     public virtual void RegisterHooks(Context ctx) { }
     
-    protected virtual double GetBaseDamage(in Hit hit) => hit.MotionValue / 100 * Atk;
+    protected virtual double GetBaseDamage(in Hit hit) => hit.MotionValue.Damage / 100 * Atk;
     
     protected virtual double GetDmgBonusMultiplier(in Hit hit) => 
         1 + Stats[Helpers.GetRelatedAffixDmg(hit.Element)].For(hit.Ability) 
@@ -227,6 +227,16 @@ public abstract class Agent(uint id) {
         hit.Context.Enemy.GetDefenseMultiplier(Stats[Affix.DefPen].For(hit.Ability), PenRatio, Pen);
 
     protected virtual double GetSpecialityMultiplier(in Hit hit) => 1;
+
+    protected virtual Skill GetSkill(in Ability ability) => Skills[ability.Name];
+    
+    protected Hit GetHit(Context ctx, Ability ability) {
+        var skill = GetSkill(ability);
+        var element = skill.Scales[ability.Scale].Element ?? Element;
+        var motionValue = skill.Scales[ability.Scale];
+
+        return new(ctx, ability, element, motionValue);
+    }
     
     /// <summary>
     /// Calculates standard damage for a given agent and skill
@@ -235,11 +245,7 @@ public abstract class Agent(uint id) {
     /// <param name="ability">Current skill</param>
     /// <returns><see cref="AgentAction"/> with calculated damage</returns>
     public virtual AgentAction GetActionDamage(Context ctx, Ability ability) {
-        var skill = Skills[ability.Name];
-        var element = skill.Scales[ability.Scale].Element ?? Element;
-        var motionValue = skill.Scales[ability.Scale].Damage;
-
-        var hit = new Hit(ctx, ability, element, motionValue);
+        var hit = GetHit(ctx, ability);
         
         ctx.Events.ActionExecuting(ctx, new (this, ability));
         
@@ -247,16 +253,16 @@ public abstract class Agent(uint id) {
         // Energy requirement check
         // ExSpecial has negative energy (using energy)
         // everything else has positive (accumulating energy)
-        var multiplier = data.Scales[scale];
+        var multiplier = hit.MotionValue;
         if (Energy + multiplier.Energy < 0) {
-            throw new InvalidOperationException($"Agent does not have enough energy to perform {skill} at scale {scale + 1}. " +
+            throw new InvalidOperationException($"Agent does not have enough energy to perform {ability.Name} at scale {ability.Scale + 1}. " +
                                                 $"Required: {Math.Abs(multiplier.Energy)}, current: {Energy}");
         }
         Energy += multiplier.Energy;
 #endif
 
         // Process anomalies
-        var buildup = GetAnomalyBuildup(ability);
+        var buildup = GetAnomalyBuildup(ctx, ability);
         ctx.Enemy.AddAnomalyBuildup(ctx, this, buildup);
 
         // Calculate damage according to formula
@@ -272,10 +278,10 @@ public abstract class Agent(uint id) {
 
         var action = new AgentAction(
             Id,
-            $"{ability.Name} {(ability.Scale == 0 && skill.Scales.Count == 1 ? "" : ability.Scale + 1)}".Trim(),
-            skill.Tag,
+            GetSkill(ability).Scales.Count > 1 ? $"{ability.Name} {ability.Scale + 1}" : ability.Name,
+            ability.Tag,
             total,
-            GetDaze(ability)
+            GetDaze(ctx, ability)
         );
         
         ctx.Events.ActionExecuted(ctx, new(this, ability, action));
@@ -283,10 +289,10 @@ public abstract class Agent(uint id) {
         return action;
     }
 
-    public virtual double GetDaze(Ability ability) {
-        var data = Skills[ability.Name];
+    public virtual double GetDaze(Context ctx, Ability ability) {
+        var daze = GetHit(ctx, ability);
         
-        var dazeScale = data.Scales[ability.Scale].Daze / 100;
+        var dazeScale = daze.MotionValue.Daze / 100;
         var dazeIncrease = Stats[Affix.DazeBonus].For(ability);
         
         const double dazeReduction = 0.0;
@@ -309,9 +315,9 @@ public abstract class Agent(uint id) {
         return dazeMv * dazeLevelMultiplier * Impact * dazeRes * dazeMultiplier * dazeTakenMultiplier;
     }
     
-    public double GetAnomalyBuildup(Ability ability) {
-        var data = Skills[ability.Name];
-        var baseBuildup = data.Scales[ability.Scale].AnomalyBuildup;
+    public double GetAnomalyBuildup(Context ctx, Ability ability) {
+        var hit = GetHit(ctx, ability);
+        var baseBuildup = hit.MotionValue.AnomalyBuildup;
         if (baseBuildup == 0) return 0;
 
         var amBonus = AnomalyMastery / 100;

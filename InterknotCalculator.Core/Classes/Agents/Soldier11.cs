@@ -25,10 +25,10 @@ public sealed class Soldier11 : Agent {
         });
 
         Skills["warming_sparks"] = new(SkillTag.BasicAtk, [
-            new(69.6, 26, element: Element.Physical),
-            new(83, 52, element: Element.Physical),
-            new(206.2, 124.1, element: Element.Physical),
-            new(426.8, 252.3, element: Element.Physical)
+            new(69.6, 26, Element: Element.Physical),
+            new(83, 52, Element: Element.Physical),
+            new(206.2, 124.1, Element: Element.Physical),
+            new(426.8, 252.3, Element: Element.Physical)
         ]);
         Skills["fire_suppression_basic"] = new(SkillTag.BasicAtk, [
             new(111.2, 27.9, 17.05),
@@ -38,7 +38,7 @@ public sealed class Soldier11 : Agent {
         ]);
 
         Skills["blazing_fire"] = new(SkillTag.Dash, [
-            new(137.6, 51.8, element: Element.Physical)
+            new(137.6, 51.8, Element: Element.Physical)
         ]);
         Skills["fire_suppression_dash"] = new(SkillTag.Dash, [
             new(158, 118.4, 75)

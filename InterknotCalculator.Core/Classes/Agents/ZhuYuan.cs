@@ -24,16 +24,16 @@ public sealed class ZhuYuan : Agent {
         });
 
         Skills["dont_move"] = new(SkillTag.BasicAtk, [
-            new(87.1, 32.6, element: Element.Physical),
+            new(87.1, 32.6, Element: Element.Physical),
             new(252.9, 146.8, 104.77),
-            new(274.8, 143.1, element: Element.Physical),
+            new(274.8, 143.1, Element: Element.Physical),
             new(302.8, 187, 59.12),
             new(325, 209.6, 60.05)
         ]);
         Skills["please_do_not_resist_phys"] = new(SkillTag.BasicAtk, [
-            new(107.6, 90.4, element: Element.Physical),
-            new(107.6, 90.4, element: Element.Physical),
-            new(322.6, 268.9, element: Element.Physical)
+            new(107.6, 90.4, Element: Element.Physical),
+            new(107.6, 90.4, Element: Element.Physical),
+            new(322.6, 268.9, Element: Element.Physical)
         ]);
         Skills["please_do_not_resist"] = new(SkillTag.BasicAtk, [
             new(272.3, 90.4, 54.15),
@@ -45,7 +45,7 @@ public sealed class ZhuYuan : Agent {
             new(111.2, 41.9, 50)
         ]);
         Skills["overwhelming_firepower"] = new(SkillTag.Dash, [
-            new(107.6, 90.4, element: Element.Physical),
+            new(107.6, 90.4, Element: Element.Physical),
             new(272.3, 90.4, 54.15)
         ]);
         Skills["fire_blast"] = new(SkillTag.Counter, [

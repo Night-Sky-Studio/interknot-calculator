@@ -53,7 +53,7 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
         // To get any meaningful Anomaly Buildup buff, we estimate
         // it by making 4 triggers of Sugarburst Sparkles.
         Skills["sugarburst_sparkles"] = new(SkillTag.BasicAtk, [
-            new(55 * 4, 0, anomalyBuildup: 17.66 * 4)
+            new(55 * 4, 0, AnomalyBuildup: 17.66 * 4)
         ]);
     }
 
@@ -111,7 +111,7 @@ public class Yuzuha : SupportAgent, IAgentReference<Yuzuha> {
             
             c.ActionsQueue.Add(new(Id, "sugarburst_sparkles_x4", SkillTag.BasicAtk, 0, 0));
             
-            var buildup = GetAnomalyBuildup(new(SkillTag.BasicAtk, "sugarburst_sparkles"));
+            var buildup = GetAnomalyBuildup(c, new(SkillTag.BasicAtk, "sugarburst_sparkles"));
             c.Enemy.AddBuildupContribution(c, this, buildup, e.Agent.Element); // Flavor Match
         };
     }

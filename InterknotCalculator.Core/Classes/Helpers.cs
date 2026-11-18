@@ -47,6 +47,17 @@ public static class Helpers {
             _ => Affix.Unknown,
         };
     }
+
+    public static Affix GetRelatedSharpDmg(Element? element) {
+        return element switch {
+            Element.Ice or Element.Frost => Affix.IceSharpDmgBonus,
+            Element.Fire => Affix.FireSharpDmgBonus,
+            Element.Electric => Affix.ElectricSharpDmgBonus,
+            Element.Physical or Element.HonedEdge => Affix.PhysicalSharpDmgBonus,
+            Element.Ether or Element.AuricInk => Affix.EtherSharpDmgBonus,
+            _ => Affix.Unknown,
+        };
+    }
     
     /// <summary>
     /// Returns the related ResPen for the given element.
