@@ -227,6 +227,9 @@ public abstract class Agent(uint id) {
         hit.Context.Enemy.GetDefenseMultiplier(Stats[Affix.DefPen].For(hit.Ability), PenRatio, Pen);
 
     protected virtual double GetSpecialityMultiplier(in Hit hit) => 1;
+    
+    protected virtual double GetDirectDmgMultiplier(in Hit hit) => 
+        1 + hit.Context.Enemy.GetDirectDmgTaken(hit.Element);
 
     protected virtual Skill GetSkill(in Ability ability) => Skills[ability.Name];
     
@@ -272,9 +275,11 @@ public abstract class Agent(uint id) {
         var resMultiplier = GetResMultiplier(hit);
         var enemyDefenseMultiplier = GetEnemyDefenseMultiplier(hit);
         var specialityMultiplier = GetSpecialityMultiplier(hit);
+        var directDmgMultiplier = GetDirectDmgMultiplier(hit);
         
         var total = baseDmgAttacker * dmgBonusMultiplier * critMultiplier * enemyDefenseMultiplier
-                    * resMultiplier * specialityMultiplier * DamageTakenMultiplier * ctx.Enemy.StunMultiplier;
+                    * resMultiplier * specialityMultiplier * directDmgMultiplier * DamageTakenMultiplier 
+                    * ctx.Enemy.StunMultiplier;
 
         var action = new AgentAction(
             Id,
@@ -400,6 +405,7 @@ public abstract class Agent(uint id) {
             Element.Frost => mvReducer(6) + duration * 0.75,
             Element.Physical => mvReducer(4.5) + duration * 0.075,
             Element.Ether or Element.AuricInk => mvReducer(4.5) + duration / 0.5 * 0.625,
+            Element.Wind => mvReducer(1.0),
             _ => 0
         };
     }
