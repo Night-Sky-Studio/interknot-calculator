@@ -85,6 +85,28 @@ public class ClaretTests : AgentsTest {
         Console.WriteLine($"Enemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
     }
 
+    [Test]
+    public async Task ClaretTeamTest() {
+        var result = Calculator.Calculate(Request with {
+            Team = [
+                new(AgentId.Roxy, WeaponId.CrimsonMoonCasket, DriveDiscSetId.KingOfTheSummit),
+                new(AgentId.Rina, WeaponId.WeepingCradle, DriveDiscSetId.MoonlightLullaby)
+            ]
+        });
+        
+        Assert.That(result.PerAction, Is.Not.Empty);
+        Assert.That(result.PerAction, Has.Exactly(3)
+            .Matches<AgentAction>(a => a.Name == "maim"));
+
+        AssertRotationOrderPreserved(Request.Rotation, result.PerAction.ToImmutableList(), Request.AgentId);
+
+        await VerifyActions(result.PerAction);
+        
+        PrintActions(result.PerAction, result.Total);
+        Console.WriteLine($"\nGash: {result.Enemy.GashBuildup} ({result.Enemy.GashStacks} stacks)");
+        Console.WriteLine($"Enemy anomaly\n{string.Join('\n', result.Enemy.AnomalyBuildup)}");
+    }
+
     private const string EnterCrimsonInscription = "bloodbloom_oath_secret_forging_techniques";
     
     [Test]
