@@ -1,0 +1,103 @@
+﻿[
+  {
+    AgentId: 1611,
+    Tag: ExSpecial,
+    Id: Guid_1,
+    Name: bloodbloom_oath_secret_forging_techniques,
+    Damage: 449390.74,
+    Daze: 361.12
+  },
+  {
+    AgentId: 1611,
+    Tag: BasicAtk,
+    Id: Guid_2,
+    Name: bloodbloom_oath_starforging 1,
+    Damage: 107620.4,
+    Daze: 76.72
+  },
+  {
+    AgentId: 1611,
+    Tag: BasicAtk,
+    Id: Guid_3,
+    Name: bloodbloom_oath_starforging 2,
+    Damage: 287453.83,
+    Daze: 204.97
+  },
+  {
+    AgentId: 1611,
+    Tag: BasicAtk,
+    Id: Guid_4,
+    Name: bloodbloom_oath_starforging 3,
+    Damage: 451556.2,
+    Daze: 260.86
+  },
+  {
+    AgentId: 1611,
+    Tag: BasicAtk,
+    Id: Guid_5,
+    Name: bloodbloom_oath_starforging 1,
+    Damage: 107620.4,
+    Daze: 76.72
+  },
+  {
+    AgentId: 1611,
+    Tag: BasicAtk,
+    Id: Guid_6,
+    Name: bloodbloom_oath_starforging 2,
+    Damage: 287453.83,
+    Daze: 204.97
+  },
+  {
+    AgentId: 1611,
+    Tag: BasicAtk,
+    Id: Guid_7,
+    Name: bloodbloom_oath_starforging 3,
+    Damage: 451556.2,
+    Daze: 260.86
+  },
+  {
+    AgentId: 1611,
+    Tag: BasicAtk,
+    Id: Guid_8,
+    Name: bloodbloom_oath_starforging 1,
+    Damage: 107620.4,
+    Daze: 76.72
+  },
+  {
+    AgentId: 1611,
+    Tag: BasicAtk,
+    Id: Guid_9,
+    Name: bloodbloom_oath_starforging 2,
+    Damage: 287453.83,
+    Daze: 204.97
+  },
+  {
+    AgentId: 1611,
+    Tag: Special,
+    Id: Guid_10,
+    Name: bloodbloom_oath_blood_burial_assault,
+    Damage: 312773.33,
+    Daze: 355.72
+  },
+  {
+    AgentId: 1611,
+    Tag: Special,
+    Id: Guid_11,
+    Name: maim,
+    Damage: 811822.34
+  },
+  {
+    AgentId: 1611,
+    Tag: Special,
+    Id: Guid_12,
+    Name: maim,
+    Damage: 964266.13
+  },
+  {
+    AgentId: 1611,
+    Tag: Special,
+    Id: Guid_13,
+    Name: maim,
+    Damage: 964266.13
+  }
+]

@@ -65,4 +65,5 @@ public readonly struct ModifierKey : IEquatable<ModifierKey> {
     public static ModifierKey Mindscape(uint level) => new($"Mindscape:{level}");
     public static ModifierKey MainStat() => new("Main");
     public static ModifierKey SecondaryStat() => new("Secondary");
+    public static ModifierKey Contamination(Element element) => new($"Contamination:{element}");
 }

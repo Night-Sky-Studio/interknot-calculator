@@ -3,26 +3,6 @@
 namespace InterknotCalculator.Core.Classes;
 
 public static class Helpers {
-    
-    /// <summary>
-    /// Returns the related element for the given DmgBonus or ResPen.
-    /// </summary>
-    public static Element? GetRelatedElement(Affix affix) {
-        return affix switch {
-            Affix.IceDmgBonus => Element.Ice,
-            Affix.IceResPen => Element.Ice,
-            Affix.FireDmgBonus => Element.Fire,
-            Affix.FireResPen => Element.Fire,
-            Affix.ElectricDmgBonus => Element.Electric,
-            Affix.ElectricResPen => Element.Electric,
-            Affix.PhysicalDmgBonus => Element.Physical,
-            Affix.PhysicalResPen => Element.Physical,
-            Affix.EtherDmgBonus => Element.Ether,
-            Affix.EtherResPen => Element.Ether,
-            _ => null,
-        };
-    }
-
     /// <summary>
     /// Returns the related DmgBonus for the given element.
     /// </summary>
@@ -33,6 +13,7 @@ public static class Helpers {
             Element.Electric => Affix.ElectricDmgBonus,
             Element.Physical or Element.HonedEdge => Affix.PhysicalDmgBonus,
             Element.Ether or Element.AuricInk => Affix.EtherDmgBonus,
+            Element.Wind => Affix.WindDmgBonus,
             _ => Affix.Unknown,
         };
     }
@@ -44,6 +25,7 @@ public static class Helpers {
             Element.Electric => Affix.ElectricSheerDmgBonus,
             Element.Physical or Element.HonedEdge => Affix.PhysicalSheerDmgBonus,
             Element.Ether or Element.AuricInk => Affix.EtherSheerDmgBonus,
+            Element.Wind => Affix.WindSheerDmgBonus,
             _ => Affix.Unknown,
         };
     }
@@ -55,6 +37,7 @@ public static class Helpers {
             Element.Electric => Affix.ElectricSharpDmgBonus,
             Element.Physical or Element.HonedEdge => Affix.PhysicalSharpDmgBonus,
             Element.Ether or Element.AuricInk => Affix.EtherSharpDmgBonus,
+            Element.Wind => Affix.WindSharpDmgBonus,
             _ => Affix.Unknown,
         };
     }
@@ -69,6 +52,7 @@ public static class Helpers {
             Element.Electric => Affix.ElectricResPen,
             Element.Physical or Element.HonedEdge => Affix.PhysicalResPen,
             Element.Ether or Element.AuricInk => Affix.EtherResPen,
+            Element.Wind => Affix.WindResPen,
             _ => Affix.Unknown,
         };
     }
