@@ -4,7 +4,7 @@
     Tag: Chain,
     Id: Guid_1,
     Name: collaborative_construction,
-    Damage: 50821.63,
+    Damage: 60507.27,
     Daze: 190.32
   },
   {
@@ -12,7 +12,7 @@
     Tag: BasicAtk,
     Id: Guid_2,
     Name: high-pressure_spike 1,
-    Damage: 3295.35,
+    Damage: 4203.63,
     Daze: 23.16
   },
   {
@@ -20,7 +20,7 @@
     Tag: BasicAtk,
     Id: Guid_3,
     Name: high-pressure_spike 2,
-    Damage: 3562.06,
+    Damage: 4543.85,
     Daze: 43.41
   },
   {
@@ -28,7 +28,7 @@
     Tag: BasicAtk,
     Id: Guid_4,
     Name: high-pressure_spike 3,
-    Damage: 11121.82,
+    Damage: 13241.42,
     Daze: 89.56
   },
   {
@@ -36,7 +36,7 @@
     Tag: ExSpecial,
     Id: Guid_5,
     Name: supercharged_obstruction_removal,
-    Damage: 29702.63,
+    Damage: 35363.38,
     Daze: 334.16
   },
   {
@@ -44,7 +44,7 @@
     Tag: BasicAtk,
     Id: Guid_6,
     Name: high-pressure_spike 4,
-    Damage: 11062.55,
+    Damage: 14111.63,
     Daze: 133.71
   },
   {
@@ -52,7 +52,7 @@
     Tag: ExSpecial,
     Id: Guid_7,
     Name: supercharged_obstruction_removal,
-    Damage: 29702.63,
+    Damage: 35363.38,
     Daze: 334.16
   },
   {
@@ -60,7 +60,7 @@
     Tag: Ultimate,
     Id: Guid_8,
     Name: demolition_blast,
-    Damage: 131501.47,
+    Damage: 167746.24,
     Daze: 166.17
   },
   {
@@ -68,6 +68,6 @@
     Tag: AttributeAnomaly,
     Id: Guid_9,
     Name: shock,
-    Damage: 310145.43
+    Damage: 374358.15
   }
 ]

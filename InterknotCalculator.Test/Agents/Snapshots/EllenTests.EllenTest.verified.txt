@@ -4,7 +4,7 @@
     Tag: Chain,
     Id: Guid_1,
     Name: avalanche,
-    Damage: 624693.34,
+    Damage: 759292.87,
     Daze: 496.53
   },
   {
@@ -12,7 +12,7 @@
     Tag: ExSpecial,
     Id: Guid_2,
     Name: tail_swipe,
-    Damage: 221211.36,
+    Damage: 268874.65,
     Daze: 566.0
   },
   {
@@ -20,7 +20,7 @@
     Tag: BasicAtk,
     Id: Guid_3,
     Name: flash_freeze_trimming 3,
-    Damage: 390320.38,
+    Damage: 474420.74,
     Daze: 342.89
   },
   {
@@ -28,7 +28,7 @@
     Tag: Ultimate,
     Id: Guid_4,
     Name: endless_winter,
-    Damage: 1485881.39,
+    Damage: 1806036.75,
     Daze: 259.19
   },
   {
@@ -36,7 +36,7 @@
     Tag: ExSpecial,
     Id: Guid_5,
     Name: tail_swipe,
-    Damage: 221211.36,
+    Damage: 268874.65,
     Daze: 566.0
   },
   {
@@ -44,7 +44,7 @@
     Tag: ExSpecial,
     Id: Guid_6,
     Name: sharknami,
-    Damage: 324443.33,
+    Damage: 394349.49,
     Daze: 518.57
   },
   {
@@ -52,7 +52,7 @@
     Tag: BasicAtk,
     Id: Guid_7,
     Name: flash_freeze_trimming 3,
-    Damage: 390320.38,
+    Damage: 474420.74,
     Daze: 342.89
   }
 ]
