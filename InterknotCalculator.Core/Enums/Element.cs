@@ -12,6 +12,13 @@ public enum Element {
 }
 
 public static class ElementExtensions {
+    public static Element GetBaseElement(this Element el) => el switch {
+        Element.Ice or Element.Frost => Element.Ice,
+        Element.Physical or Element.HonedEdge => Element.Physical,
+        Element.Ether or Element.AuricInk => Element.Ether,
+        _ => el
+    };
+    
     /// <summary>
     /// Returns true if the given element belongs to the same element group as the other element.
     /// </summary>
@@ -19,14 +26,6 @@ public static class ElementExtensions {
     /// <param name="other"></param>
     /// <returns></returns>
     public static bool Matches(this Element element, Element other) {
-        return element switch {
-            Element.Ice or Element.Frost 
-                => other is Element.Ice or Element.Frost,
-            Element.Physical or Element.HonedEdge 
-                => other is Element.Physical or Element.HonedEdge,
-            Element.Ether or Element.AuricInk 
-                => other is Element.Ether or Element.AuricInk,
-            _ => element == other
-        };
+        return element.GetBaseElement() == other.GetBaseElement();
     }
 }

@@ -17,12 +17,13 @@ public record Anomaly(
     /// <returns>Anomaly instance</returns>
     /// <exception cref="ArgumentOutOfRangeException">Anomaly is not found for a given element</exception>
     public static Anomaly GetDefaultAnomalyByElement(Element element) => element switch {
-        Element.None     => new (0,          Element.None),
-        Element.Ice      => new (500.0,      Element.Ice),
-        Element.Fire     => new (50.0 * 20,  Element.Fire),
-        Element.Physical => new (713.0,      Element.Physical),
-        Element.Electric => new (125.0 * 10, Element.Electric),
-        Element.Ether    => new (62.5 * 20,  Element.Ether),
+        Element.None     => new(0,          Element.None),
+        Element.Ice      => new(500.0,      Element.Ice),
+        Element.Fire     => new(50.0 * 20,  Element.Fire),
+        Element.Physical => new(713.0,      Element.Physical),
+        Element.Electric => new(125.0 * 10, Element.Electric),
+        Element.Ether    => new(62.5 * 20,  Element.Ether),
+        Element.Wind     => new(1250.0,     Element.Wind),
         _ => throw new ArgumentOutOfRangeException(nameof(element), element, null)
     };
 
@@ -34,6 +35,7 @@ public record Anomaly(
         Element.Electric => "shock",
         Element.Ether or Element.AuricInk => "corruption",
         Element.Frost => "frostburn",
+        Element.Wind => "windswept",
         _ => throw new ArgumentOutOfRangeException()
     };
 }

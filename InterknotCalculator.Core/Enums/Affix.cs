@@ -29,6 +29,7 @@ public enum Affix {
     PhysicalSheerDmgBonus, 
     ElectricSheerDmgBonus, 
     EtherSheerDmgBonus,
+    WindSheerDmgBonus,
 
     SharpDmgBonus,
     IceSharpDmgBonus,
@@ -36,6 +37,7 @@ public enum Affix {
     PhysicalSharpDmgBonus,
     ElectricSharpDmgBonus,
     EtherSharpDmgBonus,
+    WindSharpDmgBonus,
     
     LacerationDmg,
     GashBuildupBonus,
