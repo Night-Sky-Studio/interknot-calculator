@@ -21,7 +21,9 @@ public abstract class Enemy(double defense, double levelFactor, double anomalyBu
     
     private Dictionary<Element, MutableStat> DirectDmgTaken { get; } = new();
     public MutableStat GetDirectDmgTaken(Element el) =>
-        DirectDmgTaken.TryGetValue(el.GetBaseElement(), out var stat) ? stat : DirectDmgTaken[el] = new();
+        DirectDmgTaken.TryGetValue(el.GetBaseElement(), out var stat) 
+            ? stat 
+            : DirectDmgTaken[el.GetBaseElement()] = new();
     
     /// <summary>
     /// Enemy DEF multiplier of a single hit

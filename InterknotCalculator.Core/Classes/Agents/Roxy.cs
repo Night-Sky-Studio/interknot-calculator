@@ -67,16 +67,27 @@ public class Roxy : SupportAgent, IAgentReference<Roxy> {
                 } else {
                     // ...for every 1% CRIT Rate Roxy has, when non-Armorer characters deal DMG of
                     // the corresponding attribute or Wind DMG, their CRIT DMG increases by 0.4%, up to 40%. 
+                    //
+                    // TODO(IKC-81): Ability Filter has no Element-based gating
+                    //               Applies to all hits, including Physical hits of non-Physical agents
                     a.CritDamage.Add(ModifierKey.Agent(Id) + ModifierKey.CorePassive(), 
                         Math.Min(critRate * 0.4, 0.4), ModifierType.CombatFlat);
                 }
             }
             
             // TODO(IKC-80): Wind anomaly and Contamination
-            var directDmgTaken = c.Enemy.GetDirectDmgTaken(c.MainAgent.Element);
-            directDmgTaken.Add(ModifierKey.Contamination(c.MainAgent.Element),
-                0.1, ModifierType.CombatFlat);
-            
+            var wind = c.Enemy.GetDirectDmgTaken(Element.Wind);
+            var contaminated = !c.MainAgent.Element.Matches(Element.Wind)
+                ? c.Enemy.GetDirectDmgTaken(c.MainAgent.Element)
+                : null;
+
+            if (contaminated is not null) {
+                wind.Add(ModifierKey.Contamination(c.MainAgent.Element),
+                    0.1, ModifierType.CombatFlat);
+                contaminated.Add(ModifierKey.Contamination(c.MainAgent.Element),
+                    0.1, ModifierType.CombatFlat);
+            }
+
             // When another character in your squad is an Attack, Rupture, or Armorer character
             if (c.HasTeammates(a => a.Speciality is Speciality.Attack or Speciality.Rupture or Speciality.Armorer, Id)) {
                 // Roxy's DMG increases by 8%. This effect increases with character level,
@@ -93,10 +104,10 @@ public class Roxy : SupportAgent, IAgentReference<Roxy> {
                 // While an enemy is in the Windswept state applied by a squad member,
                 // the direct Wind DMG they take and the direct DMG they take of the attribute
                 // that triggered Contamination are increased by 8%.
-                if (!c.MainAgent.Element.Matches(Element.Wind)) {
-                    directDmgTaken.Add(ModifierKey.Agent(Id) + ModifierKey.TeamPassive(),
-                        0.08, ModifierType.CombatFlat);
-                }
+                wind.Add(ModifierKey.Contamination(c.MainAgent.Element),
+                    0.08, ModifierType.CombatFlat);
+                contaminated?.Add(ModifierKey.Contamination(c.MainAgent.Element),
+                    0.08, ModifierType.CombatFlat);
             }
         };
     }
