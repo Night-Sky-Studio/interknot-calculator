@@ -62,6 +62,7 @@ public readonly struct ModifierKey : IEquatable<ModifierKey> {
     public static ModifierKey AbilityPassive() => new("AbilityPassive");
     public static ModifierKey CorePassive() => new("CorePassive");
     public static ModifierKey TeamPassive() => new("TeamPassive");
+    public static ModifierKey Potential(uint level) => new($"Potential:{level}");
     public static ModifierKey Mindscape(uint level) => new($"Mindscape:{level}");
     public static ModifierKey MainStat() => new("Main");
     public static ModifierKey SecondaryStat() => new("Secondary");

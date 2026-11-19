@@ -9,10 +9,8 @@ public sealed class Rina : SupportAgent, IAgentReference<Rina> {
         var rina = new Rina();
         
         rina.InitializeStats(new () {
-            [Affix.Atk] = 2600
+            [Affix.PenRatio] = 0.704 // with STR6 should be 72%
         });
-        rina.PenRatio.Add(ModifierKey.Agent(AgentId.Rina) + ModifierKey.CorePassive(), 
-            0.3, ModifierType.CombatFlat);
 
         rina.SetWeaponPassive(weaponId);
         rina.SetDriveDiscsPassive(setId);
@@ -43,17 +41,38 @@ public sealed class Rina : SupportAgent, IAgentReference<Rina> {
         base.RegisterHooks(ctx);
         
         ctx.Events.OnCalculationStarted += c => {
+            // STR 6:
+            // PEN Ratio increases by 1.6%.
+            PenRatio.Add(ModifierKey.Agent(AgentId.Rina) + ModifierKey.Potential(6), 0.016, ModifierType.CombatFlat);
+            
+            // Core Passive: Mini Destruction Partner
+            // When ordering Drusilla or Anastella to attack, other squad members' PEN Ratio
+            // increases together with Rina's, by 25% of Rina's PEN Ratio + 12%, up to 30%.
+
+            // STR 6:
+            // While the buff gained from Core Passive: Mini Destruction Partner is active,
+            // for every 1% of Rina's PEN Ratio, all squad members gain 8 ATK and 6.5 DEF,
+            // up to a maximum of 576 ATK and 468 DEF.
             foreach (var agent in c.Team.Values) {
-                agent.PenRatio.Add(ModifierKey.Agent(AgentId.Rina) + ModifierKey.CorePassive(), 
-                    Math.Min(PenRatio * 0.25 + 0.12, 0.3), ModifierType.CombatFlat);
+                if (agent.Id != Id) {
+                    agent.PenRatio.Add(ModifierKey.Agent(AgentId.Rina) + ModifierKey.CorePassive(),
+                        Math.Min(PenRatio * 0.25 + 0.12, 0.3), ModifierType.CombatFlat);
+                }
+                
+                // yes, STR6 buff applies to everyone, including Rina, but Pen% only to team members
+                agent.Atk.Add(ModifierKey.Agent(AgentId.Rina) + ModifierKey.Potential(6), 
+                    Math.Min(PenRatio * 100 * 8, 576), ModifierType.CombatFlat);
+                agent.Def.Add(ModifierKey.Agent(AgentId.Rina) + ModifierKey.Potential(6), 
+                    Math.Min(PenRatio * 100 * 6.5, 468), ModifierType.CombatFlat);
             }
 
+            // When another character in your squad shares the same Attribute or Faction
             if (c.HasTeammates(a => a.Element.Matches(Element) || a.Faction == Faction, Id)) {
+                // When Shocked enemies are on the field, all squad members' Electric DMG increases by 10%.
                 foreach (var agent in c.Team.Values) {
-                    if (agent.Element.Matches(Element.Electric)) {
-                        agent.ElementalDmgBonus.Add(ModifierKey.Agent(AgentId.Rina) + ModifierKey.TeamPassive(), 
-                            0.1, ModifierType.CombatFlat);
-                    }
+                    agent.GetStat(Affix.ElectricDmgBonus).Add(ModifierKey.Agent(AgentId.Rina) + ModifierKey.TeamPassive(), 
+                        0.1, ModifierType.CombatFlat,
+                        when: () => c.Enemy.AfflictedAnomaly?.Element.Matches(Element.Electric) ?? false);
                 }
             }
         };
