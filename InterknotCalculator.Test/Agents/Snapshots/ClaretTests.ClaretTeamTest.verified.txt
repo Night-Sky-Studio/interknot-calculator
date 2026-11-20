@@ -4,7 +4,7 @@
     Tag: ExSpecial,
     Id: Guid_1,
     Name: bloodbloom_oath_secret_forging_techniques,
-    Damage: 449390.74,
+    Damage: 528765.96,
     Daze: 361.12
   },
   {
@@ -12,7 +12,7 @@
     Tag: BasicAtk,
     Id: Guid_2,
     Name: bloodbloom_oath_starforging 1,
-    Damage: 107620.4,
+    Damage: 126629.23,
     Daze: 76.72
   },
   {
@@ -20,7 +20,7 @@
     Tag: BasicAtk,
     Id: Guid_3,
     Name: bloodbloom_oath_starforging 2,
-    Damage: 287453.83,
+    Damage: 338226.37,
     Daze: 204.97
   },
   {
@@ -28,7 +28,7 @@
     Tag: BasicAtk,
     Id: Guid_4,
     Name: bloodbloom_oath_starforging 3,
-    Damage: 451556.2,
+    Damage: 531313.9,
     Daze: 260.86
   },
   {
@@ -36,7 +36,7 @@
     Tag: BasicAtk,
     Id: Guid_5,
     Name: bloodbloom_oath_starforging 1,
-    Damage: 107620.4,
+    Damage: 126629.23,
     Daze: 76.72
   },
   {
@@ -44,7 +44,7 @@
     Tag: BasicAtk,
     Id: Guid_6,
     Name: bloodbloom_oath_starforging 2,
-    Damage: 287453.83,
+    Damage: 338226.37,
     Daze: 204.97
   },
   {
@@ -52,7 +52,7 @@
     Tag: BasicAtk,
     Id: Guid_7,
     Name: bloodbloom_oath_starforging 3,
-    Damage: 451556.2,
+    Damage: 531313.9,
     Daze: 260.86
   },
   {
@@ -60,7 +60,7 @@
     Tag: BasicAtk,
     Id: Guid_8,
     Name: bloodbloom_oath_starforging 1,
-    Damage: 107620.4,
+    Damage: 126629.23,
     Daze: 76.72
   },
   {
@@ -68,7 +68,7 @@
     Tag: BasicAtk,
     Id: Guid_9,
     Name: bloodbloom_oath_starforging 2,
-    Damage: 287453.83,
+    Damage: 338226.37,
     Daze: 204.97
   },
   {
@@ -76,7 +76,7 @@
     Tag: Special,
     Id: Guid_10,
     Name: bloodbloom_oath_blood_burial_assault,
-    Damage: 312773.33,
+    Damage: 368018.03,
     Daze: 355.72
   },
   {
@@ -84,20 +84,20 @@
     Tag: Special,
     Id: Guid_11,
     Name: maim,
-    Damage: 811822.34
+    Damage: 955213.32
   },
   {
     AgentId: 1611,
     Tag: Special,
     Id: Guid_12,
     Name: maim,
-    Damage: 964266.13
+    Damage: 1134583.03
   },
   {
     AgentId: 1611,
     Tag: Special,
     Id: Guid_13,
     Name: maim,
-    Damage: 964266.13
+    Damage: 1134583.03
   }
 ]
